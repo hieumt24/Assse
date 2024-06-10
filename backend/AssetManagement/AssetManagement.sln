@@ -5,11 +5,15 @@ VisualStudioVersion = 17.9.34701.34
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetManagement.API", "AssetManagement.API\AssetManagement.API.csproj", "{7D0AA13E-02C4-45B6-83B8-E835763E566C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetManagement.Domain", "AssetManagement.Domain\AssetManagement.Domain.csproj", "{F9DE0D70-CF98-4EF0-B956-14CE4ECA8E71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetManagement.Domain", "AssetManagement.Domain\AssetManagement.Domain.csproj", "{F9DE0D70-CF98-4EF0-B956-14CE4ECA8E71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetManagement.Infrastructure", "AssetManagement.Infrastructure\AssetManagement.Infrastructure.csproj", "{E80F3B34-C9CE-4FA8-B187-20C822F223C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetManagement.Infrastructure", "AssetManagement.Infrastructure\AssetManagement.Infrastructure.csproj", "{E80F3B34-C9CE-4FA8-B187-20C822F223C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetManagement.Application", "AssetManagement.Application\AssetManagement.Application.csproj", "{0D091C10-6817-4149-9C6A-F2D50BC836BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetManagement.Application", "AssetManagement.Application\AssetManagement.Application.csproj", "{0D091C10-6817-4149-9C6A-F2D50BC836BB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{89905FC1-7B3B-4FCB-9C70-EBD0B33FBE25}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{EA2B8A90-F969-4E86-89D3-22B42659DD7D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +40,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7D0AA13E-02C4-45B6-83B8-E835763E566C} = {89905FC1-7B3B-4FCB-9C70-EBD0B33FBE25}
+		{F9DE0D70-CF98-4EF0-B956-14CE4ECA8E71} = {89905FC1-7B3B-4FCB-9C70-EBD0B33FBE25}
+		{E80F3B34-C9CE-4FA8-B187-20C822F223C6} = {89905FC1-7B3B-4FCB-9C70-EBD0B33FBE25}
+		{0D091C10-6817-4149-9C6A-F2D50BC836BB} = {89905FC1-7B3B-4FCB-9C70-EBD0B33FBE25}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A054B180-1A02-4B8B-BE60-24B6CD8E125F}
