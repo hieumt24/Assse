@@ -4583,40 +4583,38 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Admin\\.nuget\\packages\\": {}
+    "C:\\Users\\admin\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Github\\Net\\AssetManagement\\backend\\AssetManagement\\AssetManagement.API\\AssetManagement.API.csproj",
+      "projectUniqueName": "D:\\NashTech\\final\\AssetManagement\\backend\\src\\AssetManagement.API\\AssetManagement.API.csproj",
       "projectName": "AssetManagement.API",
-      "projectPath": "D:\\Github\\Net\\AssetManagement\\backend\\AssetManagement\\AssetManagement.API\\AssetManagement.API.csproj",
-      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-      "outputPath": "D:\\Github\\Net\\AssetManagement\\backend\\AssetManagement\\AssetManagement.API\\obj\\",
+      "projectPath": "D:\\NashTech\\final\\AssetManagement\\backend\\src\\AssetManagement.API\\AssetManagement.API.csproj",
+      "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
+      "outputPath": "D:\\NashTech\\final\\AssetManagement\\backend\\src\\AssetManagement.API\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\Github\\Net\\AssetManagement\\backend\\AssetManagement\\AssetManagement.Application\\AssetManagement.Application.csproj": {
-              "projectPath": "D:\\Github\\Net\\AssetManagement\\backend\\AssetManagement\\AssetManagement.Application\\AssetManagement.Application.csproj"
+            "D:\\NashTech\\final\\AssetManagement\\backend\\src\\AssetManagement.Application\\AssetManagement.Application.csproj": {
+              "projectPath": "D:\\NashTech\\final\\AssetManagement\\backend\\src\\AssetManagement.Application\\AssetManagement.Application.csproj"
             },
-            "D:\\Github\\Net\\AssetManagement\\backend\\AssetManagement\\AssetManagement.Domain\\AssetManagement.Domain.csproj": {
-              "projectPath": "D:\\Github\\Net\\AssetManagement\\backend\\AssetManagement\\AssetManagement.Domain\\AssetManagement.Domain.csproj"
+            "D:\\NashTech\\final\\AssetManagement\\backend\\src\\AssetManagement.Domain\\AssetManagement.Domain.csproj": {
+              "projectPath": "D:\\NashTech\\final\\AssetManagement\\backend\\src\\AssetManagement.Domain\\AssetManagement.Domain.csproj"
             },
-            "D:\\Github\\Net\\AssetManagement\\backend\\AssetManagement\\AssetManagement.Infrastructure\\AssetManagement.Infrastructure.csproj": {
-              "projectPath": "D:\\Github\\Net\\AssetManagement\\backend\\AssetManagement\\AssetManagement.Infrastructure\\AssetManagement.Infrastructure.csproj"
+            "D:\\NashTech\\final\\AssetManagement\\backend\\src\\AssetManagement.Infrastructure\\AssetManagement.Infrastructure.csproj": {
+              "projectPath": "D:\\NashTech\\final\\AssetManagement\\backend\\src\\AssetManagement.Infrastructure\\AssetManagement.Infrastructure.csproj"
             }
           }
         }
@@ -4676,7 +4674,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
