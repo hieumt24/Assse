@@ -1,10 +1,5 @@
 ﻿using AssetManagement.Domain.Entites;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AssetManagement.Infrastructure.Contexts
 {
@@ -14,7 +9,16 @@ namespace AssetManagement.Infrastructure.Contexts
         : base(options)
         {
         }
+
         public DbSet<User> Users { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<User>()
+                .Property(p => p.StaffCode)
+                .HasComputedColumnSql("CONCAT('SD', RIGHT('0000' + CAST(StaffCodeId AS VARCHAR(4)), 4))");
+        }
     }
 }
