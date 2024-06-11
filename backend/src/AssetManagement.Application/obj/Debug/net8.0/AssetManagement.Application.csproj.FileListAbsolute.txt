@@ -16,3 +16,21 @@ D:\Github\Net\LibraryManagement\backend\AssetManagement.API\AssetManagement.Appl
 D:\Github\Net\LibraryManagement\backend\AssetManagement.API\AssetManagement.Application\obj\Debug\net8.0\AssetManagement.Application.pdb
 D:\Github\Net\LibraryManagement\backend\AssetManagement.API\AssetManagement.Application\obj\Debug\net8.0\AssetManagement.Application.genruntimeconfig.cache
 D:\Github\Net\LibraryManagement\backend\AssetManagement.API\AssetManagement.Application\obj\Debug\net8.0\ref\AssetManagement.Application.dll
+D:\DEV\Nashtech\Final Project\AssetManagement\backend\src\AssetManagement.Application\bin\Debug\net8.0\AssetManagement.Application.deps.json
+D:\DEV\Nashtech\Final Project\AssetManagement\backend\src\AssetManagement.Application\bin\Debug\net8.0\AssetManagement.Application.runtimeconfig.json
+D:\DEV\Nashtech\Final Project\AssetManagement\backend\src\AssetManagement.Application\bin\Debug\net8.0\AssetManagement.Application.dll
+D:\DEV\Nashtech\Final Project\AssetManagement\backend\src\AssetManagement.Application\bin\Debug\net8.0\AssetManagement.Application.pdb
+D:\DEV\Nashtech\Final Project\AssetManagement\backend\src\AssetManagement.Application\bin\Debug\net8.0\AssetManagement.Domain.dll
+D:\DEV\Nashtech\Final Project\AssetManagement\backend\src\AssetManagement.Application\bin\Debug\net8.0\AssetManagement.Domain.pdb
+D:\DEV\Nashtech\Final Project\AssetManagement\backend\src\AssetManagement.Application\obj\Debug\net8.0\AssetManagement.Application.csproj.AssemblyReference.cache
+D:\DEV\Nashtech\Final Project\AssetManagement\backend\src\AssetManagement.Application\obj\Debug\net8.0\AssetManagement.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\DEV\Nashtech\Final Project\AssetManagement\backend\src\AssetManagement.Application\obj\Debug\net8.0\AssetManagement.Application.AssemblyInfoInputs.cache
+D:\DEV\Nashtech\Final Project\AssetManagement\backend\src\AssetManagement.Application\obj\Debug\net8.0\AssetManagement.Application.AssemblyInfo.cs
+D:\DEV\Nashtech\Final Project\AssetManagement\backend\src\AssetManagement.Application\obj\Debug\net8.0\AssetManagement.Application.csproj.CoreCompileInputs.cache
+D:\DEV\Nashtech\Final Project\AssetManagement\backend\src\AssetManagement.Application\obj\Debug\net8.0\AssetManagement.Application.sourcelink.json
+D:\DEV\Nashtech\Final Project\AssetManagement\backend\src\AssetManagement.Application\obj\Debug\net8.0\AssetMan.546BE579.Up2Date
+D:\DEV\Nashtech\Final Project\AssetManagement\backend\src\AssetManagement.Application\obj\Debug\net8.0\AssetManagement.Application.dll
+D:\DEV\Nashtech\Final Project\AssetManagement\backend\src\AssetManagement.Application\obj\Debug\net8.0\refint\AssetManagement.Application.dll
+D:\DEV\Nashtech\Final Project\AssetManagement\backend\src\AssetManagement.Application\obj\Debug\net8.0\AssetManagement.Application.pdb
+D:\DEV\Nashtech\Final Project\AssetManagement\backend\src\AssetManagement.Application\obj\Debug\net8.0\AssetManagement.Application.genruntimeconfig.cache
+D:\DEV\Nashtech\Final Project\AssetManagement\backend\src\AssetManagement.Application\obj\Debug\net8.0\ref\AssetManagement.Application.dll

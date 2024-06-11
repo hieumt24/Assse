@@ -1,14 +1,8 @@
-﻿using AssetManagement.Domain.Common.Models;
-using AssetManagement.Domain.Common.Specifications;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AssetManagement.Domain.Common.Specifications;
 
-namespace AssetManagement.Application.Common.Repositories
+namespace AssetManagement.Application.Common
 {
-    public interface IBaseRepositoryAsync<T> where T : BaseEntity
+    public interface IBaseRepositoryAsync<T> where T : class
     {
         Task<T> GetByIdAsync(Guid id);
 

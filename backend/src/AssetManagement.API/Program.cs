@@ -1,7 +1,4 @@
-
-using AssetManagement.Domain.Entites;
 using AssetManagement.Infrastructure.Contexts;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace AssetManagement.API
@@ -19,7 +16,7 @@ namespace AssetManagement.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            //Add Connection To DataBase 
+            //Add Connection To DataBase
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -34,6 +31,9 @@ namespace AssetManagement.API
                 });
             });
 
+            AssetManagement.Application.ServiceExtensions.ConfigureServices(builder.Services);
+            AssetManagement.Infrastructure.ServiceRegistration.Configure(builder.Services, builder.Configuration);
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -46,7 +46,6 @@ namespace AssetManagement.API
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 

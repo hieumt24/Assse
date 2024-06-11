@@ -20,10 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\AssetManagement.Application\AssetManagement.Application.csproj" />
     <ProjectReference Include="..\AssetManagement.Domain\AssetManagement.Domain.csproj" />
     <ProjectReference Include="..\AssetManagement.Infrastructure\AssetManagement.Infrastructure.csproj" />
