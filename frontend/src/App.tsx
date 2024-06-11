@@ -1,5 +1,7 @@
+import { RouteProvider } from "./routes";
+
 function App() {
-  return <></>;
+  return <RouteProvider />;
 }
 
 export default App;
