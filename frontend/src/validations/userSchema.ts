@@ -4,14 +4,14 @@ const dateFormat = /^\d{4}-?\d{2}-?\d{2}$/;
 const nameFormat = /^[a-zA-Z]{2,50}$/;
 export const createUserSchema = z.object({
   firstName: z.string().regex(nameFormat, {
-    message: "The First Name length should be 2 - 50 letters",
+    message: "The First Name length should be 2 - 50 letters.",
   }),
   lastName: z.string().regex(nameFormat, {
-    message: "The Last Name length should be 2 - 50 letters",
+    message: "The Last Name length should be 2 - 50 letters.",
   }),
   dob: z
     .string()
-    .regex(dateFormat, { message: "Please select Date Of Birth" })
+    .regex(dateFormat, { message: "Please select Date Of Birth." })
     .refine(
       (dateString) => {
         // Parse the date
@@ -31,12 +31,12 @@ export const createUserSchema = z.object({
         return age >= 18 && age <= 65;
       },
       {
-        message: "Age must be between 18 and 65 years old, or after future day",
+        message: "Age must be between 18 and 65 years old, or after future day.",
       },
     ),
   joinedDate: z
     .string()
-    .regex(dateFormat, { message: "Please select Joined Date" })
+    .regex(dateFormat, { message: "Please select Joined Date." })
     .refine(
       (dateString) => {
         const parsedDate = parse(dateString, "yyyy-mm-dd", new Date());
@@ -63,7 +63,7 @@ export const createUserSchema = z.object({
       },
       {
         message:
-          "Joined date can't be on Saturday, Sunday, earlier than DOB, or after future date",
+          "Joined date can't be on Saturday, Sunday, earlier than DOB, or after future date.",
       },
     ),
   gender: z.enum(["0", "1", "2"]),
