@@ -11,13 +11,14 @@ namespace AssetManagement.Application.Validations
         {
             RuleFor(x => x.FirstName)
                 .NotEmpty().WithMessage("First name is required.")
-                .Matches("^[a-zA-Z]+$").WithMessage("First name must not contain special characters or numbers.")
+                .Matches("^[a-zA-Z]+$").WithMessage("First name must only contain alphabetic characters.")
                 .MinimumLength(2).WithMessage("First name must be at least 2 characters.")
                 .MaximumLength(50).WithMessage("First name must be at most 50 characters.");
 
             RuleFor(x => x.LastName)
                 .NotEmpty().WithMessage("Last name is required.")
-                .Matches("^[a-zA-Z]+$").WithMessage("Last name must not contain special characters or numbers.")
+                .Matches("^[a-zA-Z]+$").WithMessage("Last name must only contain alphabetic characters.")
+                .MinimumLength(2).WithMessage("Last name must be at least 2 characters.")
                 .MaximumLength(50).WithMessage("Last name must be at most 50 characters long.");
 
             RuleFor(x => x.DateOfBirth)
