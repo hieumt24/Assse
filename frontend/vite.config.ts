@@ -4,6 +4,9 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   plugins: [react()],
+  build: {
+    outDir: 'build', // Ensure the build output is set to 'build' directory
+  },
   server: {
     port: 3000,
   },

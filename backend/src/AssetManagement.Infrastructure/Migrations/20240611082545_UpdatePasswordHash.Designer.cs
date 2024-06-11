@@ -4,6 +4,7 @@ using AssetManagement.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AssetManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240611082545_UpdatePasswordHash")]
+    partial class UpdatePasswordHash
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,27 +95,8 @@ namespace AssetManagement.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-                    b.ToTable("Users", (string)null);
+
                     b.ToTable("Users");
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("fae12d3e-66e1-4351-85bb-904bbfe4acee"),
-                            CreatedOn = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "SuperUser",
-                            Gender = 0,
-                            IsDeleted = false,
-                            IsFirstTimeLogin = false,
-                            JoinedDate = new DateTime(2024, 6, 11, 0, 0, 0, 0, DateTimeKind.Local),
-                            LastName = "Admin",
-                            Location = 0,
-                            PasswordHash = "AQAAAAIAAYagAAAAEJw66/sCyKacVL7Z6QB30LxXT+WX1rBfW6ZEmCMDMipQkju+6NebkwlQq8ryGgP0wA==",
-                            Role = 0,
-                            StaffCode = "",
-                            StaffCodeId = 0,
-                            Username = "admin"
-                        });
                 });
 #pragma warning restore 612, 618
         }
