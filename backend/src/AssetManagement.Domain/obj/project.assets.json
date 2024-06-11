@@ -4106,19 +4106,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Admin\\.nuget\\packages\\": {}
+    "C:\\Users\\hieum\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Github\\Net\\AssetManagement\\backend\\AssetManagement\\AssetManagement.Domain\\AssetManagement.Domain.csproj",
+      "projectUniqueName": "D:\\DEV\\Nashtech\\Final Project\\AssetManagement\\backend\\src\\AssetManagement.Domain\\AssetManagement.Domain.csproj",
       "projectName": "AssetManagement.Domain",
-      "projectPath": "D:\\Github\\Net\\AssetManagement\\backend\\AssetManagement\\AssetManagement.Domain\\AssetManagement.Domain.csproj",
-      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-      "outputPath": "D:\\Github\\Net\\AssetManagement\\backend\\AssetManagement\\AssetManagement.Domain\\obj\\",
+      "projectPath": "D:\\DEV\\Nashtech\\Final Project\\AssetManagement\\backend\\src\\AssetManagement.Domain\\AssetManagement.Domain.csproj",
+      "packagesPath": "C:\\Users\\hieum\\.nuget\\packages\\",
+      "outputPath": "D:\\DEV\\Nashtech\\Final Project\\AssetManagement\\backend\\src\\AssetManagement.Domain\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\hieum\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -4126,6 +4131,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -4182,7 +4188,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
