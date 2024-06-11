@@ -4,6 +4,7 @@ using AssetManagement.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AssetManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240611090003_SeedAdmin")]
+    partial class SeedAdmin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,7 +101,7 @@ namespace AssetManagement.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("fae12d3e-66e1-4351-85bb-904bbfe4acee"),
+                            Id = new Guid("8b9f2c37-6c4c-4940-b8d8-0f7bc696bff4"),
                             CreatedOn = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "SuperUser",
@@ -108,11 +111,11 @@ namespace AssetManagement.Infrastructure.Migrations
                             JoinedDate = new DateTime(2024, 6, 11, 0, 0, 0, 0, DateTimeKind.Local),
                             LastName = "Admin",
                             Location = 0,
-                            PasswordHash = "AQAAAAIAAYagAAAAEJw66/sCyKacVL7Z6QB30LxXT+WX1rBfW6ZEmCMDMipQkju+6NebkwlQq8ryGgP0wA==",
+                            PasswordHash = "",
                             Role = 0,
                             StaffCode = "",
                             StaffCodeId = 0,
-                            Username = "admin"
+                            Username = ""
                         });
                 });
 #pragma warning restore 612, 618

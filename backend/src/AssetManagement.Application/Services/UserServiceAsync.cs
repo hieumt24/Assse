@@ -4,6 +4,7 @@ using AssetManagement.Application.Models.DTOs.Users.Requests;
 using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Entites;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 
 namespace AssetManagement.Application.Services
 {
@@ -11,11 +12,13 @@ namespace AssetManagement.Application.Services
     {
         private readonly IMapper _mapper;
         private readonly IUserRepositoriesAsync _userRepositoriesAsync;
+        private readonly PasswordHasher<User> _passwordHasher;
 
         public UserServiceAsync(IUserRepositoriesAsync userRepositoriesAsync, IMapper mapper)
         {
             _mapper = mapper;
             _userRepositoriesAsync = userRepositoriesAsync;
+            _passwordHasher = new PasswordHasher<User>();
         }
 
         public async Task<Response<UserDto>> AddUserAsync(AddUserRequestDto request)
@@ -27,7 +30,7 @@ namespace AssetManagement.Application.Services
 
                 //set prop
                 userDomain.Username = _userRepositoriesAsync.GenerateUsername(userDomain.FirstName, userDomain.LastName);
-                userDomain.Password = _userRepositoriesAsync.GeneratePassword(userDomain.Username, userDomain.DateOfBirth);
+                userDomain.PasswordHash = _passwordHasher.HashPassword(userDomain, _userRepositoriesAsync.GeneratePassword(userDomain.Username, userDomain.DateOfBirth));
 
                 userDomain.IsDeleted = false;
                 userDomain.CreatedOn = DateTime.Now;
