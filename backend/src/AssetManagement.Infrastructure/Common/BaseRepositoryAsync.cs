@@ -1,4 +1,4 @@
-﻿using AssetManagement.Application.Common.Repositories;
+﻿using AssetManagement.Application.Common;
 using AssetManagement.Domain.Common.Models;
 using AssetManagement.Domain.Common.Specifications;
 using AssetManagement.Infrastructure.Contexts;
@@ -72,4 +72,3 @@ namespace AssetManagement.Infrastructure.Common
         }
     }
 }
-
