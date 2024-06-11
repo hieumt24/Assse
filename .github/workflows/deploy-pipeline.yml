@@ -18,19 +18,25 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
+      - name: Install dotnet-ef tool
+        run: dotnet tool install --global dotnet-ef
+
+      - name: Add .NET tools to PATH
+        run: echo "${HOME}/.dotnet/tools" >> $GITHUB_PATH
+        
       - name: Restore dependencies
-        run: dotnet restore ./backend/AssetManagement.Api/AssetManagement.Api.csproj
+        run: dotnet restore ./backend/src/AssetManagement.API/AssetManagement.API.csproj
 
       - name: Build
-        run: dotnet build --configuration Release ./backend/AssetManagement.Api/AssetManagement.Api.csproj
+        run: dotnet build --configuration Release ./backend/src/AssetManagement.API/AssetManagement.API.csproj
 
       - name: Publish
-        run: dotnet publish --configuration Release -o ./backend/publish ./backend/AssetManagement.Api/AssetManagement.Api.csproj
+        run: dotnet publish --configuration Release -o ./backend/publish ./backend/src/AssetManagement.API/AssetManagement.API.csproj
 
       - name: Apply EF Core Migrations
         env:
           ConnectionStrings__DefaultConnection: ${{ secrets.CONNECTION_STRING }}
-        run: dotnet ef database update --project ./backend/AssetManagement.Api/AssetManagement.Api.csproj
+        run: dotnet ef database update --project ./backend/src/AssetManagement.API/AssetManagement.API.csproj
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
@@ -51,7 +57,31 @@ jobs:
 
       - name: Zip Artifact
         run: zip -r backend.zip ./backend/publish
+        
+      - name: Install AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip
+          pip3 install awscli --upgrade --user
 
+      - name: Install Elastic Beanstalk CLI
+        run: |
+          pip3 install awsebcli --upgrade --user
+
+      - name: Add AWS CLI and EB CLI to PATH
+        run: |
+          echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
+          
+      - name: Add AWS CLI and EB CLI to PATH
+        run: |
+          echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
+
+      - name: Configure AWS credentials
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set default.region ${{ secrets.AWS_REGION }}
+          
       - name: Deploy to Elastic Beanstalk
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -60,7 +90,7 @@ jobs:
           EB_APPLICATION_NAME: ${{ secrets.EB_APPLICATION_NAME }}
           EB_ENVIRONMENT_NAME: ${{ secrets.EB_ENVIRONMENT_NAME }}
         run: |
-          eb init -p "dotnet-core" $EB_APPLICATION_NAME --region $AWS_REGION
+          eb init -p "64bit Amazon Linux 2023 v3.1.1 running .NET 8" $EB_APPLICATION_NAME --region $AWS_REGION
           eb use $EB_ENVIRONMENT_NAME
           eb deploy --staged --profile default
 
