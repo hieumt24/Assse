@@ -4,6 +4,7 @@ using AssetManagement.Application.Models.DTOs.Users.Requests;
 using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Entites;
 using AutoMapper;
+using FluentValidation;
 
 namespace AssetManagement.Application.Services
 {
@@ -11,36 +12,46 @@ namespace AssetManagement.Application.Services
     {
         private readonly IMapper _mapper;
         private readonly IUserRepositoriesAsync _userRepositoriesAsync;
+        private readonly IValidator<AddUserRequestDto> _validator;
 
-        public UserServiceAsync(IUserRepositoriesAsync userRepositoriesAsync, IMapper mapper)
+        public UserServiceAsync(IUserRepositoriesAsync userRepositoriesAsync, 
+            IMapper mapper, 
+            IValidator<AddUserRequestDto> validator)
         {
             _mapper = mapper;
             _userRepositoriesAsync = userRepositoriesAsync;
+            _validator = validator;
         }
 
         public async Task<Response<UserDto>> AddUserAsync(AddUserRequestDto request)
         {
+            var validationResult = await _validator.ValidateAsync(request);
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return new Response<UserDto> { Succeeded = false, Errors = errors };
+            }
+
             try
             {
-                //Map request to Domain Entity
                 var userDomain = _mapper.Map<User>(request);
 
-                //set prop
                 userDomain.Username = _userRepositoriesAsync.GenerateUsername(userDomain.FirstName, userDomain.LastName);
                 userDomain.Password = _userRepositoriesAsync.GeneratePassword(userDomain.Username, userDomain.DateOfBirth);
 
                 userDomain.IsDeleted = false;
                 userDomain.CreatedOn = DateTime.Now;
 
-                //Add user to database
                 var user = await _userRepositoriesAsync.AddAsync(userDomain);
 
-                return new Response<UserDto>();
+                var userDto = _mapper.Map<UserDto>(user);
+
+                return new Response<UserDto>(userDto);
             }
             catch (Exception ex)
             {
-                //return error message
-                throw new Exception(ex.Message);
+            
+                return new Response<UserDto> { Succeeded = false, Errors = { ex.Message } };
             }
         }
     }
