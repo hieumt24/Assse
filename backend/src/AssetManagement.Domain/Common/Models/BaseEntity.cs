@@ -2,7 +2,7 @@
 {
     public class BaseEntity
     {
-        public virtual Guid Id { get; set; }
+        public virtual Guid Id { get; set; } = Guid.NewGuid();
         public string? CreatedBy { get; set; }
         public DateTimeOffset CreatedOn { get; set; }
         public string? LastModifiedBy { get; set; }
