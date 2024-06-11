@@ -26,7 +26,6 @@ namespace AssetManagement.Application.Services
                 var userDomain = _mapper.Map<User>(request);
 
                 //set prop
-                userDomain.StaffCode = _userRepositoriesAsync.GenerateStaffCode();
                 userDomain.Username = _userRepositoriesAsync.GenerateUsername(userDomain.FirstName, userDomain.LastName);
                 userDomain.Password = _userRepositoriesAsync.GeneratePassword(userDomain.Username, userDomain.DateOfBirth);
 
@@ -36,9 +35,7 @@ namespace AssetManagement.Application.Services
                 //Add user to database
                 var user = await _userRepositoriesAsync.AddAsync(userDomain);
 
-                //Map Domain Entity to Dto
-                var userDto = _mapper.Map<UserDto>(user);
-                return new Response<UserDto>(userDto);
+                return new Response<UserDto>();
             }
             catch (Exception ex)
             {
