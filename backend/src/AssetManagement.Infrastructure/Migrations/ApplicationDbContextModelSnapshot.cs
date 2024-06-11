@@ -92,9 +92,8 @@ namespace AssetManagement.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
+                    b.ToTable("Users", (string)null);
                     b.ToTable("Users");
-
                     b.HasData(
                         new
                         {
