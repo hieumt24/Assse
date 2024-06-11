@@ -9,6 +9,7 @@
 
         public Response()
         {
+            Succeeded = true;
         }
 
         public Response(T data, string message = null)

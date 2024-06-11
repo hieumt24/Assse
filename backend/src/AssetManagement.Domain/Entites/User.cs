@@ -3,6 +3,7 @@ using AssetManagement.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace AssetManagement.Domain.Entites
     public class User : BaseEntity
     {
         [Required]
-        [MinLength(2, ErrorMessage ="Min length of First Name is 2 characters")]
+        [MinLength(2, ErrorMessage = "Min length of First Name is 2 characters")]
         [MaxLength(50, ErrorMessage = "Max length of First Name is 50 characters")]
         public string FirstName { get; set; } = string.Empty;
 
@@ -29,41 +30,28 @@ namespace AssetManagement.Domain.Entites
 
         [Required]
         public GenderEnum Gender { get; set; } = GenderEnum.Unknown;
-        
+
         [Required]
         public RoleType Role { get; set; } = RoleType.Staff;
 
         [Required]
         [RegularExpression(@"^SD\d{4}$", ErrorMessage = "StaffCode must be in the format SDxxxx where xxxx are digits.")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public string StaffCode { get; set; } = string.Empty;
 
-        [Required]
-        public string Username { get; set; } = string.Empty ;
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int StaffCodeId { get; set; }
 
         [Required]
-        //[RegularExpression(@"^[a-z]{2,}@[0-3][0-9][0-1][0-9]\d{4}$", ErrorMessage = "Password must be in the format [username]@[DOB in ddmmyyyy]")]
+        public string Username { get; set; } = string.Empty;
+
+        [Required]
         public string Password { get; set; } = string.Empty;
-        
+
         [Required]
         public EnumLocation Location { get; set; }
 
-        [Required] 
+        [Required]
         public bool IsFirstTimeLogin { get; set; } = true;
-
-        public void GenerateStaffCode(int number)
-        {
-            StaffCode = $"SD{number:D4}";
-        }
-
-        public void GenerateUsername()
-        {
-            Username = $"{FirstName.ToLower()[0]}{LastName.ToLower()}";
-        }
-
-        public void GeneratePassword()
-        {
-            string dob = DateOfBirth.ToString("ddMMyyyy");
-            Password = $"{Username}@{dob}";
-        }    
     }
 }

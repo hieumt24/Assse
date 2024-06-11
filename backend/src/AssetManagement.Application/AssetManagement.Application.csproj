@@ -8,8 +8,11 @@
 
   <ItemGroup>
     <Compile Remove="Common\Specifications\**" />
+    <Compile Remove="Models\DTOs\Users\Responses\**" />
     <EmbeddedResource Remove="Common\Specifications\**" />
+    <EmbeddedResource Remove="Models\DTOs\Users\Responses\**" />
     <None Remove="Common\Specifications\**" />
+    <None Remove="Models\DTOs\Users\Responses\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,10 +31,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AssetManagement.Domain\AssetManagement.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\DTOs\Users\Responses\" />
   </ItemGroup>
 
 </Project>

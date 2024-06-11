@@ -18,12 +18,6 @@ namespace AssetManagement.Infrastructure.Repositories
             return $"{userName}@{dob}";
         }
 
-        public string GenerateStaffCode()
-        {
-            var nextValue = _dbContext.Database.ExecuteSqlRaw("select next value for UserIdSequence");
-            return $"SD{nextValue:D4}";
-        }
-
         public string GenerateUsername(string firstName, string lastName)
         {
             // Normalize names to lower case
