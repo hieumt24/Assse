@@ -1,4 +1,4 @@
-﻿using AssetManagement.API.CustomActionFilters;
+using AssetManagement.API.CustomActionFilters;
 using AssetManagement.Application.Interfaces;
 using AssetManagement.Application.Models.DTOs.Users.Requests;
 using AssetManagement.Application.Models.DTOs.Users.Responses;

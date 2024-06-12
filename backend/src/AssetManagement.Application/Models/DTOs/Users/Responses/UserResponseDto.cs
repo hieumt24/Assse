@@ -1,4 +1,4 @@
-﻿using AssetManagement.Domain.Enums;
+using AssetManagement.Domain.Enums;
 
 namespace AssetManagement.Application.Models.DTOs.Users.Responses
 {
