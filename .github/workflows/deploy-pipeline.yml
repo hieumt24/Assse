@@ -109,7 +109,7 @@ jobs:
 
       - name: Build
         env:
-          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+          VITE_REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
         run: npm run build --prefix ./frontend
 
       - name: Deploy to S3
