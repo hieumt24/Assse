@@ -1,9 +1,11 @@
-import { FaUsers } from "react-icons/fa";
 export const ADMIN_NAV_FUNCTIONS = [
+  {
+    name: "Home",
+    path: "/admin",
+  },
   {
     name: "Manage User",
     path: "/user",
-    icon: <FaUsers size={24} />,
   },
 ];
 
