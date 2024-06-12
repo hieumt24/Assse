@@ -43,6 +43,8 @@ namespace AssetManagement.API
                 app.UseSwaggerUI();
             }
 
+            app.UseCors("AllowAllOrigins");
+
             app.UseHttpsRedirection();
 
             app.UseAuthorization();

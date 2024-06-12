@@ -9,7 +9,7 @@ export const createUserSchema = z.object({
   lastName: z.string().regex(nameFormat, {
     message: "The Last Name length should be 2 - 50 letters.",
   }),
-  dob: z
+  dateOfBirth: z
     .string()
     .regex(dateFormat, { message: "Please select Date Of Birth." })
     .refine(
@@ -31,7 +31,8 @@ export const createUserSchema = z.object({
         return age >= 18 && age <= 65;
       },
       {
-        message: "Age must be between 18 and 65 years old, or after future day.",
+        message:
+          "Age must be between 18 and 65 years old, or after future day.",
       },
     ),
   joinedDate: z
