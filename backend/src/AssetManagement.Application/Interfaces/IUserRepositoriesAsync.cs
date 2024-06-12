@@ -7,6 +7,8 @@ namespace AssetManagement.Application.Interfaces
     {
         string GeneratePassword(string userName, DateTime dateOfBirth);
 
-        string GenerateUsername(string firstName, string lastName);
+        Task<string> GenerateUsername(string firstName, string lastName);
+
+        Task<bool> IsUsernameExist(string username);
     }
 }
