@@ -36,18 +36,18 @@ export const CreateUserForm = () => {
       lastName: "",
       dateOfBirth: "",
       joinedDate: "",
-      gender: "0",
-      role: "1",
-      location: "0",
+      gender: "2",
+      roleId: "2",
+      location: "1",
     },
   });
 
   // Function handle onSubmit
   const onSubmit = async (values: z.infer<typeof createUserSchema>) => {
     const gender = parseInt(values.gender);
-    const role = parseInt(values.role);
+    const roleId = parseInt(values.roleId);
     const location = parseInt(values.location);
-    const res = await createUserService({ ...values, gender, role, location });
+    const res = await createUserService({ ...values, gender, roleId, location });
     if (res.success) {
       toast.success(res.message);
     } else {
@@ -157,7 +157,7 @@ export const CreateUserForm = () => {
         {/* Role */}
         <FormField
           control={form.control}
-          name="role"
+          name="roleId"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Types</FormLabel>

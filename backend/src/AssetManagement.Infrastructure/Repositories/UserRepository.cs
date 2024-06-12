@@ -1,8 +1,7 @@
-﻿using AssetManagement.Application.Interfaces;
+using AssetManagement.Application.Interfaces;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Infrastructure.Common;
 using AssetManagement.Infrastructure.Contexts;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace AssetManagement.Infrastructure.Repositories
