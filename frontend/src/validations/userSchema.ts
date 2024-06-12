@@ -1,22 +1,31 @@
 import { differenceInYears, isAfter, isValid } from "date-fns";
 import { z } from "zod";
 const dateFormat = /^\d{4}-?\d{2}-?\d{2}$/;
-const firstNameFormat = /^\s*(?=.{2,50}\s*$)[a-zA-Z]+(?:\s+[a-zA-Z]+)*\s*$/;
-const lastNameFormat = /^\s*(?=.{2,50}\s*$)[a-zA-Z]+(?:\s+[a-zA-Z]+)*\s*$/;
+const nameFormat = /^[a-zA-Z\s]*$/;
 export const createUserSchema = z.object({
-  firstName: z.string().trim().regex(firstNameFormat, {
-    message: "The First Name length should be 2 - 50 letters.",
-  }),
-  lastName: z.string().trim().regex(lastNameFormat, {
-    message: "The Last Name length should be 2 - 50 letters.",
-  }),
+  firstName: z
+    .string()
+    .trim()
+    .min(2, { message: "The First Name must be at least 2 letters long." })
+    .max(50, { message: "The First Name must be no longer than 50 letters." })
+    .regex(nameFormat, {
+      message: "The First Name must only contain letters and spaces.",
+    }),
+  lastName: z
+    .string()
+    .trim()
+    .min(2, { message: "The Last Name must be at least 2 letters long." })
+    .max(50, { message: "The Last Name must be no longer than 50 letters." })
+    .regex(nameFormat, {
+      message: "The Last Name must only contain letters and spaces.",
+    }),
   dateOfBirth: z
     .string()
     .regex(dateFormat, { message: "Please select Date Of Birth." })
     .refine(
       (dateString) => {
         // Parse the date
-        const [year, month, day] = dateString.split('-').map(Number);
+        const [year, month, day] = dateString.split("-").map(Number);
 
         // Create a new Date object
         // Note: Months are 0-indexed in JavaScript Date objects, so subtract 1 from the month.
@@ -46,7 +55,7 @@ export const createUserSchema = z.object({
     .refine(
       (dateString) => {
         // Parse the date
-        const [year, month, day] = dateString.split('-').map(Number);
+        const [year, month, day] = dateString.split("-").map(Number);
 
         // Create a new Date object
         // Note: Months are 0-indexed in JavaScript Date objects, so subtract 1 from the month.
@@ -62,7 +71,7 @@ export const createUserSchema = z.object({
         if (isAfter(parsedDate, futureDate)) return false;
 
         // Check if the day is not Saturday (1) or Sunday (2)
-        const dayOfWeek = parsedDate.toString().substring(0,3);
+        const dayOfWeek = parsedDate.toString().substring(0, 3);
         if (dayOfWeek === "Sat" || dayOfWeek === "Sun") {
           return false;
         }
