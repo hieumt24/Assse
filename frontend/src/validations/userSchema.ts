@@ -1,12 +1,13 @@
 import { differenceInYears, getDay, isAfter, isValid, parse } from "date-fns";
 import { z } from "zod";
 const dateFormat = /^\d{4}-?\d{2}-?\d{2}$/;
-const nameFormat = /^[a-zA-Z]{2,50}$/;
+const firstNameFormat = /^[a-zA-Z]{2,50}$/;
+const lastNameFormat = /^(?!\s)([a-zA-Z]+\s?){1,2}[a-zA-Z]+(?!\s)$/;
 export const createUserSchema = z.object({
-  firstName: z.string().regex(nameFormat, {
+  firstName: z.string().regex(firstNameFormat, {
     message: "The First Name length should be 2 - 50 letters.",
   }),
-  lastName: z.string().regex(nameFormat, {
+  lastName: z.string().regex(lastNameFormat, {
     message: "The Last Name length should be 2 - 50 letters.",
   }),
   dateOfBirth: z
