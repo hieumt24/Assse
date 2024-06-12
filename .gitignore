@@ -1,5 +1,4 @@
 appsettings.Development.json
-
 # Ignore .NET build output directories
 bin/
 obj/
