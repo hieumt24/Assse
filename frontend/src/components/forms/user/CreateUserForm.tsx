@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { GENDERS, LOCATIONS, ROLES } from "@/constants";
+import { removeExtraWhitespace } from "@/lib/utils";
 import { createUserService } from "@/services";
 import { createUserSchema } from "@/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -48,7 +49,12 @@ export const CreateUserForm = () => {
     const gender = parseInt(values.gender);
     const roleId = parseInt(values.roleId);
     const location = parseInt(values.location);
-    const res = await createUserService({ ...values, gender, roleId, location });
+    const res = await createUserService({
+      ...values,
+      gender,
+      roleId,
+      location,
+    });
     if (res.success) {
       toast.success(res.message);
     } else {
@@ -71,9 +77,18 @@ export const CreateUserForm = () => {
           name="firstName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>First Name*</FormLabel>
+              <FormLabel>
+                First Name <span className="text-red-600">*</span>
+              </FormLabel>
               <FormControl>
-                <Input placeholder="Enter first name" {...field} />
+                <Input
+                  placeholder="Enter first name"
+                  {...field}
+                  onBlur={(e) => {
+                    const cleanedValue = removeExtraWhitespace(e.target.value); // Clean the input value
+                    field.onChange(cleanedValue); // Update the form state
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -85,9 +100,18 @@ export const CreateUserForm = () => {
           name="lastName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Last Name*</FormLabel>
+              <FormLabel>
+                Last Name <span className="text-red-600">*</span>
+              </FormLabel>
               <FormControl>
-                <Input placeholder="Enter last name" {...field} />
+                <Input
+                  placeholder="Enter last name"
+                  {...field}
+                  onBlur={(e) => {
+                    const cleanedValue = removeExtraWhitespace(e.target.value); // Clean the input value
+                    field.onChange(cleanedValue); // Update the form state
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -99,9 +123,11 @@ export const CreateUserForm = () => {
           name="dateOfBirth"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Date of birth*</FormLabel>
+              <FormLabel>
+                Date of birth <span className="text-red-600">*</span>
+              </FormLabel>
               <FormControl>
-                <Input {...field} type="date" className="justify-center"/>
+                <Input {...field} type="date" className="justify-center" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -113,7 +139,9 @@ export const CreateUserForm = () => {
           name="joinedDate"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Joined Date*</FormLabel>
+              <FormLabel>
+                Joined Date <span className="text-red-600">*</span>
+              </FormLabel>
               <FormControl>
                 <Input {...field} type="date" className="justify-center" />
               </FormControl>
@@ -220,14 +248,14 @@ export const CreateUserForm = () => {
         <div className="flex justify-end gap-4">
           <Button
             type="submit"
-            className="bg-red-500 hover:bg-white hover:text-red-500 w-[76px]"
+            className="w-[76px] bg-red-500 hover:bg-white hover:text-red-500"
             disabled={!form.formState.isValid}
           >
             Save
           </Button>
           <Button
             type="button"
-            className="border bg-white text-black shadow-none hover:text-white w-[76px]"
+            className="w-[76px] border bg-white text-black shadow-none hover:text-white"
             onClick={() => {
               navigate("/admin/user");
             }}
