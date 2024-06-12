@@ -21,33 +21,42 @@ export const createUserSchema = z.object({
     }),
   dateOfBirth: z
     .string()
-    .regex(dateFormat, { message: "Please select Date Of Birth." })
+    .regex(dateFormat, {
+      message: "Please select Date Of Birth.",
+    })
     .refine(
       (dateString) => {
-        // Parse the date
         const [year, month, day] = dateString.split("-").map(Number);
-
-        // Create a new Date object
-        // Note: Months are 0-indexed in JavaScript Date objects, so subtract 1 from the month.
         const parsedDate = new Date(year, month - 1, day);
-
-        // Check if it's a valid date
-        if (!isValid(parsedDate)) {
-          return false;
-        }
-
-        // Check if the day is after future day
-        const futureDate = new Date();
-        if (isAfter(parsedDate, futureDate)) return false;
-
-        // Check if the date is at least 18 years ago
+        return isValid(parsedDate);
+      },
+      { message: "Invalid Date of Birth. Please enter a valid date." },
+    )
+    .refine(
+      (dateString) => {
+        const [year, month, day] = dateString.split("-").map(Number);
+        const parsedDate = new Date(year, month - 1, day);
+        return !isAfter(parsedDate, new Date());
+      },
+      { message: "Date of Birth cannot be in the future." },
+    )
+    .refine(
+      (dateString) => {
+        const [year, month, day] = dateString.split("-").map(Number);
+        const parsedDate = new Date(year, month - 1, day);
         const age = differenceInYears(new Date(), parsedDate);
-        return age >= 18 && age <= 65;
+        return age >= 18;
       },
-      {
-        message:
-          "Age must be between 18 and 65 years old, or after future day.",
+      { message: "Age must be at least 18 years old." },
+    )
+    .refine(
+      (dateString) => {
+        const [year, month, day] = dateString.split("-").map(Number);
+        const parsedDate = new Date(year, month - 1, day);
+        const age = differenceInYears(new Date(), parsedDate);
+        return age <= 65;
       },
+      { message: "Age must be no more than 65 years old." },
     ),
   joinedDate: z
     .string()
