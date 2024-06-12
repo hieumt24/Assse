@@ -17,10 +17,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { GENDERS, LOCATIONS, ROLES } from "@/constants";
+import { createUserService } from "@/services";
 import { createUserSchema } from "@/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { z } from "zod";
 
 export const CreateUserForm = () => {
@@ -31,7 +34,7 @@ export const CreateUserForm = () => {
     defaultValues: {
       firstName: "",
       lastName: "",
-      dob: "",
+      dateOfBirth: "",
       joinedDate: "",
       gender: "0",
       role: "1",
@@ -40,11 +43,16 @@ export const CreateUserForm = () => {
   });
 
   // Function handle onSubmit
-  const onSubmit = (values: z.infer<typeof createUserSchema>) => {
+  const onSubmit = async (values: z.infer<typeof createUserSchema>) => {
     const gender = parseInt(values.gender);
     const role = parseInt(values.role);
     const location = parseInt(values.location);
-    console.log({ ...values, gender, role, location });
+    const res = await createUserService({ ...values, gender, role, location });
+    if (res.success) {
+      toast.success(res.message);
+    } else {
+      toast.error(res.message);
+    }
   };
 
   const navigate = useNavigate();
@@ -87,12 +95,12 @@ export const CreateUserForm = () => {
         {/* Date of birth */}
         <FormField
           control={form.control}
-          name="dob"
+          name="dateOfBirth"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Date of birth</FormLabel>
               <FormControl>
-                <Input {...field} type="date" className="justify-center" />
+                <Input {...field} type="date" className="justify-center"/>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -208,17 +216,17 @@ export const CreateUserForm = () => {
             </FormItem>
           )}
         />
-        <div className="flex justify-end gap-8">
+        <div className="flex justify-end gap-4">
           <Button
             type="submit"
-            className="bg-red-500 hover:bg-white hover:text-red-500"
+            className="bg-red-500 hover:bg-white hover:text-red-500 w-[76px]"
             disabled={!form.formState.isValid}
           >
             Save
           </Button>
           <Button
             type="button"
-            className="border bg-white text-black shadow-none hover:text-white"
+            className="border bg-white text-black shadow-none hover:text-white w-[76px]"
             onClick={() => {
               navigate("/admin/user");
             }}

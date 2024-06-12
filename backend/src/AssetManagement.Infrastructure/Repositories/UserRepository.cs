@@ -13,6 +13,13 @@ namespace AssetManagement.Infrastructure.Repositories
         {
         }
 
+        public async Task<UserRoles> AddUserRolesAysnc(UserRoles userRoles)
+        {
+            await _dbContext.UserRoles.AddAsync(userRoles);
+            await _dbContext.SaveChangesAsync();
+            return userRoles;
+        }
+
         public string GeneratePassword(string userName, DateTime dateOfBirth)
         {
             string dob = dateOfBirth.ToString("ddMMyyyy");
@@ -23,7 +30,7 @@ namespace AssetManagement.Infrastructure.Repositories
         {
             // Normalize names to lower case
             firstName = firstName.ToLower().Replace(" ", "");
-            lastName = lastName.ToLower();
+            lastName = string.Join("", lastName.ToLower().Split(' ', StringSplitOptions.RemoveEmptyEntries));
 
             // Get the first letter of each part of the last name
             var lastNameParts = lastName.Split(' ');
