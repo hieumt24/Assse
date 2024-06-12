@@ -39,6 +39,7 @@ export const createUserSchema = z.object({
     .regex(dateFormat, { message: "Please select Joined Date." })
     .refine(
       (dateString) => {
+        // Parse the date
         const parsedDate = parse(dateString, "yyyy-mm-dd", new Date());
 
         // Check if it's a valid date
@@ -46,20 +47,16 @@ export const createUserSchema = z.object({
           return false;
         }
 
+        // Check if the day is after future day
+        const futureDate = new Date();
+        if (isAfter(parsedDate, futureDate)) return false;
+
         // Check if the day is not Saturday (1) or Sunday (2)
         const dayOfWeek = getDay(parsedDate);
         if (dayOfWeek === 1 || dayOfWeek === 2) {
           return false;
         }
-
-        // Check if the day is after future day
-        const futureDate = new Date();
-        if (isAfter(parsedDate, futureDate)) return false;
-
-        // Check if joinedDate is not earlier than dob
-        const dobValue = z.string().parse(createUserSchema.shape.dob._output);
-        const parsedDob = parse(dobValue, "yyyy-mm-dd", new Date());
-        return isAfter(parsedDate, parsedDob);
+        return true;
       },
       {
         message:
