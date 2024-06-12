@@ -1,5 +1,6 @@
 ﻿using AssetManagement.Domain.Common.Models;
 using AssetManagement.Domain.Enums;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

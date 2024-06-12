@@ -37,6 +37,8 @@ namespace AssetManagement.Application.Services
 
                 //Add user to database
                 var user = await _userRepositoriesAsync.AddAsync(userDomain);
+                user.Username = user.Username + user.StaffCodeId;
+                await _userRepositoriesAsync.UpdateAsync(user);
 
                 return new Response<UserDto>();
             }
