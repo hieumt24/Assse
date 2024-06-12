@@ -11,7 +11,6 @@ namespace AssetManagement.Infrastructure.Repositories
     {
         public UserRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
-
         }
 
         public string GeneratePassword(string userName, DateTime dateOfBirth)
@@ -20,7 +19,7 @@ namespace AssetManagement.Infrastructure.Repositories
             return $"{userName}@{dob}";
         }
 
-        public string GenerateUsername(string firstName, string lastName)
+        public async Task<string> GenerateUsername(string firstName, string lastName)
         {
             // Normalize names to lower case
             firstName = firstName.ToLower().Replace(" ", "");
@@ -31,9 +30,23 @@ namespace AssetManagement.Infrastructure.Repositories
             var lastNameInitials = string.Join("", lastNameParts.Select(part => part[0]));
 
             // Combine first name and initials of last names
-            string username = firstName + lastNameInitials;
+            string baseUserName = firstName + lastNameInitials;
+
+            string username = baseUserName;
+            int count = 1;
+
+            while (await IsUsernameExist(username))
+            {
+                username = baseUserName + count;
+                count++;
+            }
 
             return username;
+        }
+
+        public async Task<bool> IsUsernameExist(string username)
+        {
+            return await _dbContext.Users.AnyAsync(u => u.Username == username);
         }
     }
 }

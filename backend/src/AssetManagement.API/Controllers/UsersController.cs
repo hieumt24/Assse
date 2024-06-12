@@ -1,4 +1,5 @@
-﻿using AssetManagement.Application.Interfaces;
+﻿using AssetManagement.API.CustomActionFilters;
+using AssetManagement.Application.Interfaces;
 using AssetManagement.Application.Models.DTOs.Users.Requests;
 using AssetManagement.Application.Wrappers;
 using FluentValidation;
@@ -22,13 +23,14 @@ namespace AssetManagement.API.Controllers
 
         [HttpPost]
         [Route("users")]
+        [ValidateModel]
         public async Task<IActionResult> Create([FromBody] AddUserRequestDto request)
         {
-            if (!ModelState.IsValid)
-            {
-                //var res = new Response<AddUserRequestDto>("Invalid input");
-                return BadRequest(ModelState);
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    //var res = new Response<AddUserRequestDto>("Invalid input");
+            //    return BadRequest(ModelState);
+            //}
             var response = await _userService.AddUserAsync(request);
             if (!response.Succeeded)
             {

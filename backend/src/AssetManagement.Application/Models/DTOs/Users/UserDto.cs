@@ -36,7 +36,7 @@ namespace AssetManagement.Application.Models.DTOs.Users
         public string Username { get; set; } = string.Empty;
 
         [Required]
-        public string Password { get; set; } = string.Empty;
+        public string PasswordHash { get; set; } = string.Empty;
 
         [Required]
         public EnumLocation Location { get; set; }
