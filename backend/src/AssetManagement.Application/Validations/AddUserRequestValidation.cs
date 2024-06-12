@@ -36,9 +36,9 @@ namespace AssetManagement.Application.Validations
                 .NotNull().WithMessage("Please enter Gender")
                 .Must(gender => Enum.IsDefined(typeof(GenderEnum), gender)).WithMessage("Invalid Gender");
 
-            RuleFor(x => x.Role)
+            RuleFor(x => x.RoleId)
                 .NotNull().WithMessage("Please enter Role")
-                .Must(role => Enum.IsDefined(typeof(RoleType), role)).WithMessage("Invalid Role");
+                .Must(roleId => Enum.IsDefined(typeof(RoleType), roleId)).WithMessage("Invalid Gender");
 
             RuleFor(x => x.Location)
                 .NotNull().WithMessage("Please enter Location")

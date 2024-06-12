@@ -13,6 +13,13 @@ namespace AssetManagement.Infrastructure.Repositories
         {
         }
 
+        public async Task<UserRoles> AddUserRolesAysnc(UserRoles userRoles)
+        {
+            await _dbContext.UserRoles.AddAsync(userRoles);
+            await _dbContext.SaveChangesAsync();
+            return userRoles;
+        }
+
         public string GeneratePassword(string userName, DateTime dateOfBirth)
         {
             string dob = dateOfBirth.ToString("ddMMyyyy");

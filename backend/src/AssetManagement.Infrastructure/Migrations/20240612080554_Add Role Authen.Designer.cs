@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AssetManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240611090003_SeedAdmin")]
-    partial class SeedAdmin
+    [Migration("20240612080554_Add Role Authen")]
+    partial class AddRoleAuthen
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,36 @@ namespace AssetManagement.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("AssetManagement.Domain.Entites.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Staff"
+                        });
+                });
 
             modelBuilder.Entity("AssetManagement.Domain.Entites.User", b =>
                 {
@@ -75,9 +105,6 @@ namespace AssetManagement.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
-
                     b.Property<string>("StaffCode")
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
@@ -92,31 +119,84 @@ namespace AssetManagement.Infrastructure.Migrations
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
 
                     b.ToTable("Users");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("8b9f2c37-6c4c-4940-b8d8-0f7bc696bff4"),
+                            Id = new Guid("7ec2391c-1067-4a37-a2bc-e8d25f2f1439"),
                             CreatedOn = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "SuperUser",
                             Gender = 0,
                             IsDeleted = false,
                             IsFirstTimeLogin = false,
-                            JoinedDate = new DateTime(2024, 6, 11, 0, 0, 0, 0, DateTimeKind.Local),
+                            JoinedDate = new DateTime(2024, 6, 12, 0, 0, 0, 0, DateTimeKind.Local),
                             LastName = "Admin",
                             Location = 0,
-                            PasswordHash = "",
-                            Role = 0,
+                            PasswordHash = "AQAAAAIAAYagAAAAEJHeI7j/PLhkuOZNj4MdAjkgY+kbMILAmRAf9X51XhzlLet0dmz9v5HoyOTFHPMEKQ==",
                             StaffCode = "",
                             StaffCodeId = 0,
-                            Username = ""
+                            Username = "admin"
                         });
+                });
+
+            modelBuilder.Entity("AssetManagement.Domain.Entites.UserRoles", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("UserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = new Guid("7ec2391c-1067-4a37-a2bc-e8d25f2f1439"),
+                            RoleId = 1
+                        });
+                });
+
+            modelBuilder.Entity("AssetManagement.Domain.Entites.UserRoles", b =>
+                {
+                    b.HasOne("AssetManagement.Domain.Entites.Role", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AssetManagement.Domain.Entites.User", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AssetManagement.Domain.Entites.Role", b =>
+                {
+                    b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("AssetManagement.Domain.Entites.User", b =>
+                {
+                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }
