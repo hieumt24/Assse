@@ -30,7 +30,7 @@ namespace AssetManagement.Infrastructure.Repositories
         {
             // Normalize names to lower case
             firstName = firstName.ToLower().Replace(" ", "");
-            lastName = lastName.ToLower();
+            lastName = string.Join("", lastName.ToLower().Split(' ', StringSplitOptions.RemoveEmptyEntries));
 
             // Get the first letter of each part of the last name
             var lastNameParts = lastName.Split(' ');

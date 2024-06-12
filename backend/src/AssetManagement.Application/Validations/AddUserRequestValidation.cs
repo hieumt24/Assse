@@ -33,14 +33,17 @@ namespace AssetManagement.Application.Validations
                 .GreaterThan(x => x.DateOfBirth).WithMessage("Joined Date must be after Date of Birth.");
 
             RuleFor(x => x.Gender)
+                .NotEmpty().WithMessage("Please enter Gender")
                 .NotNull().WithMessage("Please enter Gender")
                 .Must(gender => Enum.IsDefined(typeof(GenderEnum), gender)).WithMessage("Invalid Gender");
 
             RuleFor(x => x.RoleId)
+                .NotEmpty().WithMessage("Please enter Role")
                 .NotNull().WithMessage("Please enter Role")
-                .Must(roleId => Enum.IsDefined(typeof(RoleType), roleId)).WithMessage("Invalid Gender");
+                .Must(roleId => Enum.IsDefined(typeof(RoleType), roleId)).WithMessage("Invalid Role");
 
             RuleFor(x => x.Location)
+                .NotEmpty().WithMessage("Please enter Location")
                 .NotNull().WithMessage("Please enter Location")
                 .Must(role => Enum.IsDefined(typeof(EnumLocation), role)).WithMessage("Invalid Location");
         }
