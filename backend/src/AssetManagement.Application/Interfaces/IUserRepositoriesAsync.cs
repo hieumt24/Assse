@@ -10,5 +10,7 @@ namespace AssetManagement.Application.Interfaces
         Task<string> GenerateUsername(string firstName, string lastName);
 
         Task<bool> IsUsernameExist(string username);
+
+        Task<UserRoles> AddUserRolesAysnc(UserRoles userRoles);
     }
 }

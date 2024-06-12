@@ -11,41 +11,41 @@ export const ADMIN_NAV_FUNCTIONS = [
 
 export const GENDERS = [
   {
-    value: 0,
-    label: "Female",
-  },
-  {
     value: 1,
-    label: "Male",
+    label: "Unknown",
   },
   {
     value: 2,
-    label: "Others",
+    label: "Male",
+  },
+  {
+    value: 3,
+    label: "Female",
   },
 ];
 
 export const ROLES = [
   {
-    value: 0,
+    value: 1,
     label: "Admin",
   },
   {
-    value: 1,
+    value: 2,
     label: "Staff",
   },
 ];
 
 export const LOCATIONS = [
   {
-    value: 0,
+    value: 1,
     label: "Hanoi",
   },
   {
-    value: 1,
+    value: 2,
     label: "Danang",
   },
   {
-    value: 2,
+    value: 3,
     label: "HCM",
   },
 ];

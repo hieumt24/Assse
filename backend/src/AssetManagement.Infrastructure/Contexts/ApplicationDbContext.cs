@@ -15,6 +15,8 @@ namespace AssetManagement.Infrastructure.Contexts
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<UserRoles> UserRoles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,10 +30,37 @@ namespace AssetManagement.Infrastructure.Contexts
                 .HasIndex(u => u.Username)
                 .IsUnique();
 
-            var user = new User { FirstName = "SuperUser", LastName = "Admin", Role = RoleType.Admin, Location = EnumLocation.HaNoi, IsFirstTimeLogin = false, Username = "admin" };
+            modelBuilder.Entity<UserRoles>()
+                .HasKey(ur => new { ur.UserId, ur.RoleId });
+
+            modelBuilder.Entity<UserRoles>()
+                .HasOne(ur => ur.User)
+                .WithMany(u => u.UserRoles)
+                .HasForeignKey(ur => ur.UserId);
+
+            modelBuilder.Entity<UserRoles>()
+                .HasOne(ur => ur.Role)
+                .WithMany(r => r.UserRoles)
+                .HasForeignKey(ur => ur.RoleId);
+
+            //seed data
+
+            modelBuilder.Entity<Role>()
+                .HasData(
+                        new Role { Id = 1, Name = "Admin" },
+                        new Role { Id = 2, Name = "Staff" }
+                );
+
+            //seed admin user
+            var user = new User { FirstName = "SuperUser", LastName = "Admin", Location = EnumLocation.HaNoi, IsFirstTimeLogin = false, Username = "admin" };
             user.PasswordHash = _passwordHasher.HashPassword(user, "adminpassword");
+            user.CreatedOn = DateTime.Now;
+            user.CreatedBy = "System";
             modelBuilder.Entity<User>()
                 .HasData(user);
+            modelBuilder.Entity<UserRoles>().HasData(
+                               new UserRoles { UserId = user.Id, RoleId = 2 }
+            );
         }
     }
 }
