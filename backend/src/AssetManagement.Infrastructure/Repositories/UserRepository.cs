@@ -1,8 +1,7 @@
-﻿using AssetManagement.Application.Interfaces;
+using AssetManagement.Application.Interfaces;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Infrastructure.Common;
 using AssetManagement.Infrastructure.Contexts;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace AssetManagement.Infrastructure.Repositories
@@ -30,7 +29,7 @@ namespace AssetManagement.Infrastructure.Repositories
         {
             // Normalize names to lower case
             firstName = firstName.ToLower().Replace(" ", "");
-            lastName = string.Join("", lastName.ToLower().Split(' ', StringSplitOptions.RemoveEmptyEntries));
+            lastName = string.Join(" ", lastName.ToLower().Split(' ', StringSplitOptions.RemoveEmptyEntries));
 
             // Get the first letter of each part of the last name
             var lastNameParts = lastName.Split(' ');
