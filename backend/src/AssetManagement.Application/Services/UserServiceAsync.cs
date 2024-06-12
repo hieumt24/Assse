@@ -16,8 +16,8 @@ namespace AssetManagement.Application.Services
         private readonly IValidator<AddUserRequestDto> _validator;
         private readonly PasswordHasher<User> _passwordHasher;
 
-        public UserServiceAsync(IUserRepositoriesAsync userRepositoriesAsync, 
-            IMapper mapper, 
+        public UserServiceAsync(IUserRepositoriesAsync userRepositoriesAsync,
+            IMapper mapper,
             IValidator<AddUserRequestDto> validator)
         {
             _mapper = mapper;
@@ -39,7 +39,7 @@ namespace AssetManagement.Application.Services
             {
                 var userDomain = _mapper.Map<User>(request);
 
-                userDomain.Username = _userRepositoriesAsync.GenerateUsername(userDomain.FirstName, userDomain.LastName);
+                userDomain.Username = await _userRepositoriesAsync.GenerateUsername(userDomain.FirstName, userDomain.LastName);
                 userDomain.PasswordHash = _passwordHasher.HashPassword(userDomain, _userRepositoriesAsync.GeneratePassword(userDomain.Username, userDomain.DateOfBirth));
 
                 userDomain.IsDeleted = false;
@@ -53,7 +53,6 @@ namespace AssetManagement.Application.Services
             }
             catch (Exception ex)
             {
-            
                 return new Response<UserDto> { Succeeded = false, Errors = { ex.Message } };
             }
         }

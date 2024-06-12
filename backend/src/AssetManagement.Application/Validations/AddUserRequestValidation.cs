@@ -17,7 +17,7 @@ namespace AssetManagement.Application.Validations
 
             RuleFor(x => x.LastName)
                 .NotEmpty().WithMessage("Last name is required.")
-                .Matches("^[a-zA-Z]+$").WithMessage("Last name must only contain alphabetic characters.")
+                .Matches("^[a-zA-Z ]+$").WithMessage("Last name must only contain alphabetic characters and spaces.")
                 .MinimumLength(2).WithMessage("Last name must be at least 2 characters.")
                 .MaximumLength(50).WithMessage("Last name must be at most 50 characters long.");
 
@@ -57,7 +57,5 @@ namespace AssetManagement.Application.Validations
             if (dob.Date > today.AddYears(-calculatedAge)) calculatedAge--;
             return calculatedAge >= age;
         }
-
-        
     }
 }
