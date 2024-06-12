@@ -124,7 +124,7 @@ namespace AssetManagement.Application.Services
                 "dateofbirth" => u => u.DateOfBirth,
                 "joineddate" => u => u.JoinedDate,
                 "gender" => u => u.Gender,
-                "role" => u => u.Role,
+          
                 _ => u => u.FirstName,
             };;
         }
