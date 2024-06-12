@@ -8,8 +8,8 @@ namespace AssetManagement.Domain.Enums
 {
     public enum EnumLocation
     {
-        HaNoi = 0,
-        DaNang = 1,
-        HoChiMinh = 2,
+        HaNoi = 1,
+        DaNang = 2,
+        HoChiMinh = 3,
     }
 }

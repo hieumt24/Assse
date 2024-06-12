@@ -1,6 +1,8 @@
 ﻿using AssetManagement.Domain.Common.Models;
+using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AssetManagement.Application.Models.DTOs.Users
 {
@@ -26,11 +28,12 @@ namespace AssetManagement.Application.Models.DTOs.Users
         public GenderEnum Gender { get; set; } = GenderEnum.Unknown;
 
         [Required]
-        public RoleType Role { get; set; } = RoleType.Staff;
-
-        [Required]
         [RegularExpression(@"^SD\d{4}$", ErrorMessage = "StaffCode must be in the format SDxxxx where xxxx are digits.")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public string StaffCode { get; set; } = string.Empty;
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int StaffCodeId { get; set; }
 
         [Required]
         public string Username { get; set; } = string.Empty;
@@ -43,5 +46,7 @@ namespace AssetManagement.Application.Models.DTOs.Users
 
         [Required]
         public bool IsFirstTimeLogin { get; set; } = true;
+
+        //public ICollection<UserRoles> UserRoles { get; set; } = new List<UserRoles>();
     }
 }
