@@ -4,7 +4,7 @@ import { RouteProvider } from "./routes";
 function App() {
   return (
     <>
-      <RouteProvider />;
+      <RouteProvider />
       <ToastContainer />
     </>
   );

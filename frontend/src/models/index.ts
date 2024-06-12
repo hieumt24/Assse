@@ -8,3 +8,8 @@ export interface CreateUserReq {
   roleId: number;
   location: number;
 }
+
+export interface LoginReq {
+  username: string;
+  password: string;
+}
