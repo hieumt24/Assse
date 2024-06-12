@@ -44,9 +44,9 @@ namespace AssetManagement.Infrastructure.Repositories
             return username;
         }
 
-        public Task<bool> IsUsernameExist(string username)
+        public async Task<bool> IsUsernameExist(string username)
         {
-            return _dbContext.Users.AnyAsync(u => u.Username == username);
+            return await _dbContext.Users.AnyAsync(u => u.Username == username);
         }
     }
 }

@@ -51,7 +51,7 @@ namespace AssetManagement.Application.Services
 
                 var userDto = _mapper.Map<UserDto>(user);
 
-                return new Response<UserDto>(userDto);
+                return new Response<UserDto>();
             }
             catch (Exception ex)
             {

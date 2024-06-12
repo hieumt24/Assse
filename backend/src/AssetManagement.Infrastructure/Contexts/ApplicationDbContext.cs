@@ -8,6 +8,7 @@ namespace AssetManagement.Infrastructure.Contexts
     public class ApplicationDbContext : DbContext
     {
         private readonly PasswordHasher<User> _passwordHasher = new PasswordHasher<User>();
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
         {
