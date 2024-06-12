@@ -100,7 +100,7 @@ export const CreateUserForm = () => {
             <FormItem>
               <FormLabel>Date of birth</FormLabel>
               <FormControl>
-                <Input {...field} type="date" className="justify-center" />
+                <Input {...field} type="date" className="justify-center"/>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -216,17 +216,17 @@ export const CreateUserForm = () => {
             </FormItem>
           )}
         />
-        <div className="flex justify-end gap-8">
+        <div className="flex justify-end gap-4">
           <Button
             type="submit"
-            className="bg-red-500 hover:bg-white hover:text-red-500"
+            className="bg-red-500 hover:bg-white hover:text-red-500 w-[76px]"
             disabled={!form.formState.isValid}
           >
             Save
           </Button>
           <Button
             type="button"
-            className="border bg-white text-black shadow-none hover:text-white"
+            className="border bg-white text-black shadow-none hover:text-white w-[76px]"
             onClick={() => {
               navigate("/admin/user");
             }}
