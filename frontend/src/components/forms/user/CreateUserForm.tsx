@@ -16,7 +16,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
 import { GENDERS, LOCATIONS, ROLES } from "@/constants";
 import { createUserSchema } from "@/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -54,12 +53,9 @@ export const CreateUserForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-1/3 space-y-5 rounded-2xl bg-white p-6 shadow-lg"
+        className="w-1/3 space-y-5 rounded-2xl bg-white p-6"
       >
-        <h1 className="text-center text-3xl font-bold uppercase">
-          Create User
-        </h1>
-        <Separator />
+        <h1 className="text-xl font-bold text-red-600">Create New User</h1>
         {/* First name */}
         <FormField
           control={form.control}
@@ -222,6 +218,7 @@ export const CreateUserForm = () => {
           </Button>
           <Button
             type="button"
+            className="border bg-white text-black shadow-none hover:text-white"
             onClick={() => {
               navigate("/admin/user");
             }}
