@@ -1,4 +1,4 @@
-﻿using AssetManagement.API.CustomActionFilters;
+using AssetManagement.API.CustomActionFilters;
 using AssetManagement.Application.Interfaces;
 using AssetManagement.Application.Models.DTOs.Users.Requests;
 using AssetManagement.Application.Models.DTOs.Users.Responses;
@@ -40,7 +40,7 @@ namespace AssetManagement.API.Controllers
 
         [HttpGet]
         [Route("users")]
-        public async Task<IActionResult> GetAllUsers([FromQuery] string? search, [FromQuery] string? orderBy, [FromQuery] bool isDescending = false, [FromQuery] int skip = 0, [FromQuery] int take = 10, [FromQuery] EnumLocation? adminLocation = null)
+        public async Task<IActionResult> GetAllUsers([FromQuery] string? search, [FromQuery] string? orderBy, [FromQuery] bool isDescending = false, [FromQuery] int skip = 0, [FromQuery] int take = 10, [FromQuery] EnumLocation? adminLocation = EnumLocation.HaNoi)
         {
             var response = await _userService.GetAllUsersAsync(search, orderBy, isDescending, skip, take, adminLocation);
             if (!response.Succeeded)
