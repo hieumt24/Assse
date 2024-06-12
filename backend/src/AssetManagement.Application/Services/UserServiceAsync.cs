@@ -114,6 +114,7 @@ namespace AssetManagement.Application.Services
                 take: take
             );
         }
+
         private Expression<Func<User, object>> GetOrderByExpression(string orderBy)
         {
             return orderBy.ToLower() switch
@@ -124,9 +125,9 @@ namespace AssetManagement.Application.Services
                 "dateofbirth" => u => u.DateOfBirth,
                 "joineddate" => u => u.JoinedDate,
                 "gender" => u => u.Gender,
-                "role" => u => u.Role,
+                "role" => u => u.UserRoles,
                 _ => u => u.FirstName,
-            };;
+            }; ;
         }
     }
 
@@ -158,4 +159,3 @@ namespace AssetManagement.Application.Services
         public bool IsPagingEnabled { get; }
     }
 }
-
