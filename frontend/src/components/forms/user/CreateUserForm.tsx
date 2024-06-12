@@ -28,6 +28,7 @@ import { z } from "zod";
 
 export const CreateUserForm = () => {
   // Define form
+
   const form = useForm<z.infer<typeof createUserSchema>>({
     mode: "all",
     resolver: zodResolver(createUserSchema),
@@ -70,7 +71,7 @@ export const CreateUserForm = () => {
           name="firstName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>First Name</FormLabel>
+              <FormLabel>First Name*</FormLabel>
               <FormControl>
                 <Input placeholder="Enter first name" {...field} />
               </FormControl>
@@ -84,7 +85,7 @@ export const CreateUserForm = () => {
           name="lastName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Last Name</FormLabel>
+              <FormLabel>Last Name*</FormLabel>
               <FormControl>
                 <Input placeholder="Enter last name" {...field} />
               </FormControl>
@@ -98,7 +99,7 @@ export const CreateUserForm = () => {
           name="dateOfBirth"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Date of birth</FormLabel>
+              <FormLabel>Date of birth*</FormLabel>
               <FormControl>
                 <Input {...field} type="date" className="justify-center"/>
               </FormControl>
@@ -112,7 +113,7 @@ export const CreateUserForm = () => {
           name="joinedDate"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Joined Date</FormLabel>
+              <FormLabel>Joined Date*</FormLabel>
               <FormControl>
                 <Input {...field} type="date" className="justify-center" />
               </FormControl>
@@ -131,7 +132,7 @@ export const CreateUserForm = () => {
                 <RadioGroup
                   onValueChange={field.onChange}
                   defaultValue={field.value}
-                  className="flex"
+                  className="flex gap-8"
                 >
                   {GENDERS.map((gender) => {
                     return (
@@ -193,7 +194,7 @@ export const CreateUserForm = () => {
                 <RadioGroup
                   onValueChange={field.onChange}
                   defaultValue={field.value}
-                  className="flex"
+                  className="flex gap-8"
                 >
                   {LOCATIONS.map((location) => {
                     return (

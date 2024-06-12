@@ -11,10 +11,6 @@ export const ADMIN_NAV_FUNCTIONS = [
 
 export const GENDERS = [
   {
-    value: 1,
-    label: "Unknown",
-  },
-  {
     value: 2,
     label: "Male",
   },
