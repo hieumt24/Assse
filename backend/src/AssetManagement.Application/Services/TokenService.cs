@@ -1,6 +1,8 @@
 ﻿using AssetManagement.Application.Interfaces;
 using AssetManagement.Domain.Common.Settings;
 using AssetManagement.Domain.Entites;
+using AssetManagement.Domain.Enums;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -12,27 +14,21 @@ namespace AssetManagement.Application.Services
     {
         private readonly JWTSettings _jwtSettings;
 
-        public TokenService(JWTSettings jwtSettings)
+        public TokenService(IOptions<JWTSettings> jwtSettings)
         {
-            _jwtSettings = jwtSettings;
+            _jwtSettings = jwtSettings.Value;
         }
 
-        public string GenerateJwtToken(User user, List<string> roles)
+        public string GenerateJwtToken(User user, RoleType role)
         {
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.GivenName, user.FirstName),
-                new Claim(ClaimTypes.Surname, user.LastName),
                 new Claim(ClaimTypes.UserData, user.StaffCode),
-                new Claim(ClaimTypes.Locality, user.Location.ToString())
+                new Claim(ClaimTypes.Locality, user.Location.ToString()),
+                new Claim(ClaimTypes.Role, role.ToString())
             };
-
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

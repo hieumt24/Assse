@@ -1,5 +1,9 @@
+using AssetManagement.Domain.Common.Settings;
 using AssetManagement.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 namespace AssetManagement.API
 {
@@ -31,8 +35,33 @@ namespace AssetManagement.API
                 });
             });
 
-            AssetManagement.Application.ServiceExtensions.ConfigureServices(builder.Services);
-            AssetManagement.Infrastructure.ServiceRegistration.Configure(builder.Services, builder.Configuration);
+            builder.Services.AddSwaggerGen(options =>
+            {
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                options.IncludeXmlComments(xmlPath);
+                var securitySchema = new OpenApiSecurityScheme
+                {
+                    Name = "JWT Authentication",
+                    Description = "Enter JWT Bearer",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                };
+                options.AddSecurityDefinition("Bearer", securitySchema);
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                { securitySchema, new[] { "Bearer" } }
+            });
+            });
+
+            Application.ServiceExtensions.ConfigureServices(builder.Services, builder.Configuration);
+            Infrastructure.ServiceRegistration.Configure(builder.Services, builder.Configuration);
 
             var app = builder.Build();
 
@@ -48,6 +77,7 @@ namespace AssetManagement.API
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.MapControllers();
 
