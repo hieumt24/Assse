@@ -12,7 +12,6 @@ namespace AssetManagement.Application.Mappings
         {
             CreateMap<UserDto, User>().ReverseMap();
             CreateMap<User, UserResponseDto>().ReverseMap();
-            CreateMap<UserDto, UpdateUserRequestDto>().ReverseMap();
             CreateMap<AddUserRequestDto, User>().ReverseMap();
         }
     }

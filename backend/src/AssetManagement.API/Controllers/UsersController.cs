@@ -64,14 +64,15 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpPut("UpdateUser")]
-        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequestDto request)
+        //[ValidateModel]
+        public async Task<IActionResult> UpdateUser([FromBody] EditUserRequestDto request)
         {
             if (request == null)
             {
                 return BadRequest(new Response<UserDto> { Succeeded = false, Errors = { "Invalid request data" } });
             }
 
-            var result = await _userService.UpdateUserAsync(request);
+            var result = await _userService.EditUserAsync(request);
 
             if (result.Succeeded)
             {

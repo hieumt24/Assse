@@ -17,7 +17,7 @@ namespace AssetManagement.Application.Models.DTOs.Users.Requests
 
         public GenderEnum Gender { get; set; } 
 
-        public RoleType RoleId { get; set; } 
+        public RoleType Role { get; set; } 
 
         public EnumLocation Location { get; set; }
     }

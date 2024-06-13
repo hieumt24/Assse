@@ -8,6 +8,7 @@ namespace AssetManagement.Application.Models.DTOs.Users
 {
     public class UserDto : BaseEntity
     {
+    
         [Required]
         [MinLength(2, ErrorMessage = "Min length of First Name is 2 characters")]
         [MaxLength(50, ErrorMessage = "Max length of First Name is 50 characters")]

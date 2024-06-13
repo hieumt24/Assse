@@ -1,25 +1,19 @@
 ﻿using AssetManagement.Application.Models.DTOs.Users.Requests;
-using FluentValidation;
 using AssetManagement.Domain.Enums;
+using FluentValidation;
 using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace AssetManagement.Application.Validations
 {
-    public class AddUserRequestValidation : AbstractValidator<AddUserRequestDto>
+    public class EditUserRequestValidation : AbstractValidator<EditUserRequestDto>
     {
-        public AddUserRequestValidation()
+        public EditUserRequestValidation() 
         {
-            RuleFor(x => x.FirstName)
-                .NotEmpty().WithMessage("First name is required.")
-                .Matches("^[a-zA-Z]+$").WithMessage("First name must only contain alphabetic characters.")
-                .MinimumLength(2).WithMessage("First name must be at least 2 characters.")
-                .MaximumLength(50).WithMessage("First name must be at most 50 characters.");
-
-            RuleFor(x => x.LastName)
-                .NotEmpty().WithMessage("Last name is required.")
-                .Matches("^[a-zA-Z ]+$").WithMessage("Last name must only contain alphabetic characters and spaces.")
-                .MinimumLength(2).WithMessage("Last name must be at least 2 characters.")
-                .MaximumLength(50).WithMessage("Last name must be at most 50 characters long.");
 
             RuleFor(x => x.DateOfBirth)
                 .NotEmpty().WithMessage("Date of birth is required.")
@@ -41,11 +35,6 @@ namespace AssetManagement.Application.Validations
                 .NotEmpty().WithMessage("Please enter Role")
                 .NotNull().WithMessage("Please enter Role")
                 .Must(roleId => Enum.IsDefined(typeof(RoleType), roleId)).WithMessage("Invalid Role");
-
-            RuleFor(x => x.Location)
-                .NotEmpty().WithMessage("Please enter Location")
-                .NotNull().WithMessage("Please enter Location")
-                .Must(role => Enum.IsDefined(typeof(EnumLocation), role)).WithMessage("Invalid Location");
         }
 
         private bool BeAValidDate(DateTime date)
