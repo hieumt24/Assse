@@ -17,11 +17,7 @@ namespace AssetManagement.Application.Models.DTOs.Users.Requests
 
         public GenderEnum Gender { get; set; }
 
-<<<<<<< HEAD
-        public RoleType Role { get; set; } 
-=======
         public RoleType Role { get; set; } = RoleType.Staff;
->>>>>>> 7ee37336f7f0ecff18698061f2b2699022809a98
 
         public EnumLocation Location { get; set; }
     }
