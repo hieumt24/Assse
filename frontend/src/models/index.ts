@@ -5,6 +5,11 @@ export interface CreateUserReq {
   dateOfBirth: string;
   joinedDate: string;
   gender: number;
-  role: number;
+  roleId: number;
   location: number;
+}
+
+export interface LoginReq {
+  username: string;
+  password: string;
 }

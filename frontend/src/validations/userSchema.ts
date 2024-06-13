@@ -73,7 +73,7 @@ export const createUserSchema = z.object({
           "Joined date can't be on Saturday, Sunday, earlier than DOB, or after future date.",
       },
     ),
-  gender: z.enum(["0", "1", "2"]),
-  role: z.enum(["0", "1"]),
-  location: z.enum(["0", "1", "2"]),
+  gender: z.enum(["1", "2", "3"]),
+  roleId: z.enum(["2", "1"]),
+  location: z.enum(["3", "1", "2"]),
 });

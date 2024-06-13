@@ -1,4 +1,4 @@
-import { Admin, NotFound } from "@/pages";
+import { Admin, Login, NotFound } from "@/pages";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 export const RouteProvider: React.FC = () => {
@@ -7,6 +7,9 @@ export const RouteProvider: React.FC = () => {
       <Routes>
         <Route path="/admin/*" element={<Admin />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/auth">
+          <Route path="login" element={<Login />} />
+        </Route>
       </Routes>
     </Router>
   );
