@@ -18,15 +18,19 @@ namespace AssetManagement.Application
     {
         public static void ConfigureServices(IServiceCollection service, IConfiguration configuration)
         {
-            service.AddScoped<IUserServiceAsync, UserServiceAsync>();
             service.AddAutoMapper(typeof(GeneralProfile));
             service.AddScoped<IValidator<AddUserRequestDto>, AddUserRequestValidation>();
             service.AddScoped<IValidator<EditUserRequestDto>, EditUserRequestValidation>();
             service.AddScoped<IValidator<ChangePasswordRequest>, PasswordValidation>();
-
-
             service.AddScoped<ITokenService, TokenService>();
             service.AddScoped<IAccountServicecs, AccountService>();
+            service.AddScoped<IUserServiceAsync, UserServiceAsync>();
+            service.AddScoped<IUriService, UriService>(provider =>
+             {
+                 var configuration = provider.GetRequiredService<IConfiguration>();
+                 var baseUri = configuration["ApplicationSettings:BaseUri"];
+                 return new UriService(baseUri);
+             });
 
             var jwtSettings = service.Configure<JWTSettings>(configuration.GetSection("JWTSettings"));
             service.AddSingleton(jwtSettings);
