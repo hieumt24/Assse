@@ -49,7 +49,6 @@ namespace AssetManagement.Application.Services
 
                 userDomain.Username = await _userRepositoriesAsync.GenerateUsername(userDomain.FirstName, userDomain.LastName);
                 userDomain.PasswordHash = _passwordHasher.HashPassword(userDomain, _userRepositoriesAsync.GeneratePassword(userDomain.Username, userDomain.DateOfBirth));
-
                 userDomain.IsDeleted = false;
                 userDomain.CreatedOn = DateTime.Now;
 

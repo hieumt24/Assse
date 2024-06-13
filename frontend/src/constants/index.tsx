@@ -34,14 +34,14 @@ export const ROLES = [
 export const LOCATIONS = [
   {
     value: 1,
-    label: "Hanoi",
+    label: "Ha Noi",
   },
   {
     value: 2,
-    label: "Danang",
+    label: "Da Nang",
   },
   {
     value: 3,
-    label: "HCM",
+    label: "Ho Chi Minh City",
   },
 ];

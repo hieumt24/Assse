@@ -39,7 +39,7 @@ export const CreateUserForm = () => {
       dateOfBirth: "",
       joinedDate: "",
       gender: "2",
-      roleId: "2",
+      role: "2",
       location: "1",
     },
   });
@@ -47,12 +47,12 @@ export const CreateUserForm = () => {
   // Function handle onSubmit
   const onSubmit = async (values: z.infer<typeof createUserSchema>) => {
     const gender = parseInt(values.gender);
-    const roleId = parseInt(values.roleId);
+    const role = parseInt(values.role);
     const location = parseInt(values.location);
     const res = await createUserService({
       ...values,
       gender,
-      roleId,
+      role,
       location,
     });
     if (res.success) {
@@ -68,16 +68,16 @@ export const CreateUserForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-1/3 space-y-5 rounded-2xl bg-white p-6"
+        className="w-1/3 h-[740px] space-y-5 rounded-2xl bg-white p-6 shadow-md"
       >
-        <h1 className="text-xl font-bold text-red-600">Create New User</h1>
+        <h1 className="text-2xl font-bold text-red-600">Create New User</h1>
         {/* First name */}
         <FormField
           control={form.control}
           name="firstName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>
+              <FormLabel className="text-md">
                 First Name <span className="text-red-600">*</span>
               </FormLabel>
               <FormControl>
@@ -100,7 +100,7 @@ export const CreateUserForm = () => {
           name="lastName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>
+              <FormLabel className="text-md">
                 Last Name <span className="text-red-600">*</span>
               </FormLabel>
               <FormControl>
@@ -123,7 +123,7 @@ export const CreateUserForm = () => {
           name="dateOfBirth"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>
+              <FormLabel className="text-md">
                 Date of birth <span className="text-red-600">*</span>
               </FormLabel>
               <FormControl>
@@ -139,7 +139,7 @@ export const CreateUserForm = () => {
           name="joinedDate"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>
+              <FormLabel className="text-md">
                 Joined Date <span className="text-red-600">*</span>
               </FormLabel>
               <FormControl>
@@ -155,7 +155,7 @@ export const CreateUserForm = () => {
           name="gender"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Gender</FormLabel>
+              <FormLabel className="text-md">Gender</FormLabel>
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
@@ -186,10 +186,10 @@ export const CreateUserForm = () => {
         {/* Role */}
         <FormField
           control={form.control}
-          name="roleId"
+          name="role"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Types</FormLabel>
+              <FormLabel className="text-md">Types</FormLabel>
               <FormControl>
                 <Select value={field.value} onValueChange={field.onChange}>
                   <SelectTrigger>
@@ -217,7 +217,7 @@ export const CreateUserForm = () => {
           name="location"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Location</FormLabel>
+              <FormLabel className="text-md">Location</FormLabel>
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}

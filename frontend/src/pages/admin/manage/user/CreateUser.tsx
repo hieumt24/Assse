@@ -2,7 +2,7 @@ import { CreateUserForm } from "@/components";
 
 export const CreateUser = () => {
   return (
-    <div className="mt-1 flex h-full flex-grow flex-col items-center justify-center">
+    <div className="mt-16 flex w-full justify-center">
       <CreateUserForm />
     </div>
   );
