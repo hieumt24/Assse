@@ -1,4 +1,5 @@
-﻿using AssetManagement.Application.Services;
+﻿using AssetManagement.Application.Filter;
+using AssetManagement.Application.Services;
 using AssetManagement.Domain.Common.Specifications;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
@@ -13,14 +14,14 @@ namespace AssetManagement.Application.Helper
 {
     public static class UserSpecificationHelper
     {
-        public static ISpecification<User> CreateSpecification(string? search, string? orderBy, bool isDescending, int skip, int take, EnumLocation? adminLocation)
+        public static ISpecification<User> CreateSpecification(PaginationFilter filter, string? search, string? orderBy, bool isDescending, EnumLocation? adminLocation)
         {
             return new UserSpecification<User>(
                 criteria: u => (string.IsNullOrEmpty(search) || u.Username.Contains(search) || u.StaffCode.Contains(search)) && u.Location == adminLocation,
                 orderBy: !string.IsNullOrEmpty(orderBy) && !isDescending ? GetOrderByExpression(orderBy) : null,
                 orderByDescending: !string.IsNullOrEmpty(orderBy) && isDescending ? GetOrderByExpression(orderBy) : null,
-                skip: skip,
-                take: take
+                skip: (filter.PageNumber - 1) * filter.PageSize,
+                take: filter.PageSize
             );
         }
 
@@ -36,6 +37,14 @@ namespace AssetManagement.Application.Helper
                 "gender" => u => u.Gender,
                 _ => u => u.FirstName,
             };
+        }
+
+        //Count User
+        public static ISpecification<User> TotalUser()
+        {
+            return new UserSpecification<User>(
+                               criteria: u => u.IsDeleted == false
+                                            );
         }
     }
 }
