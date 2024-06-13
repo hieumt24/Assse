@@ -61,16 +61,21 @@ export const createUserSchema = z.object({
     .refine(
       (dateString) => {
         const parsedDate = new Date(dateString);
+        return isValid(parsedDate);
+      },
+      { message: "Invalid Joined Date. Please enter a valid date." },
+    )
+    .refine(
+      (dateString) => {
+        const parsedDate = new Date(dateString);
+        return !isAfter(parsedDate, new Date());
+      },
+      { message: "Joined Date cannot be in the future." },
+    )
+    .refine(
+      (dateString) => {
+        const parsedDate = new Date(dateString);
 
-        if (!isValid(parsedDate)) {
-          return false;
-        }
-
-        // Check if the day is after future day
-        const futureDate = new Date();
-        if (isAfter(parsedDate, futureDate)) return false;
-
-        // Check if the day is not Saturday (1) or Sunday (2)
         const dayOfWeek = parsedDate.toString().substring(0, 3);
         if (dayOfWeek === "Sat" || dayOfWeek === "Sun") {
           return false;
@@ -79,7 +84,7 @@ export const createUserSchema = z.object({
       },
       {
         message:
-          "Joined date can't be on Saturday, Sunday, earlier than DOB, or after future date.",
+          "Joined date can't be on Saturday, Sunday.",
       },
     ),
   gender: z.enum(["1", "2", "3"]),
