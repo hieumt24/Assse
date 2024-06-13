@@ -6,10 +6,13 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { useAuth } from "@/hooks";
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export const Header = () => {
+  const {user} = useAuth();
+  console.log(user);
   const location = useLocation();
   const pathnames = location.pathname.split("/").filter(Boolean);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -42,7 +45,7 @@ export const Header = () => {
               asChild
             >
               <Button variant="ghost" size="sm" className="text-white text-xl hover:text-red-600 hover:bg-white">
-                <span className="mr-2">usernamemockup</span>
+                <span className="mr-2">{user.username}</span>
                 <span className="text-xs">&#9660;</span>
               </Button>
             </CollapsibleTrigger>

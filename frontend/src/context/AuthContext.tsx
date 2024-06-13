@@ -18,12 +18,16 @@ interface User {
 
 export interface AuthContextProps {
   token: string | null;
+  isAuthenticated: boolean;
+  setIsAuthenticated: (value: boolean) => void;
   user: User;
   setUser: (value: User) => void;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
   token: null,
+  isAuthenticated: false,
+  setIsAuthenticated: () => {},
   user: {
     id: "",
     username: "",
@@ -59,10 +63,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     role: 2,
   });
 
-  useEffect(() => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+
+  const fetchUserFromToken = () => {
     const storedToken = localStorage.getItem("token");
 
     if (storedToken) {
+      setIsAuthenticated(true);
       setToken(storedToken);
       const decodedToken = jwtDecode<Token>(storedToken);
       setUser({
@@ -74,11 +81,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         role: parseInt(decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]),
       })
     }
-  }, [token]);
+  }
+
+  useEffect(() => {
+    fetchUserFromToken();
+  }, [token, isAuthenticated]);
 
   const authContextValue: AuthContextProps = useMemo(
     () => ({
       token,
+      isAuthenticated,
+      setIsAuthenticated,
       user,
       setUser
     }),
