@@ -1,6 +1,6 @@
 ﻿using AssetManagement.Application.Models.DTOs.Users.Requests;
 using AssetManagement.Application.Models.DTOs.Users.Responses;
-using Azure;
+using AssetManagement.Application.Wrappers;
 
 namespace AssetManagement.Application.Interfaces
 {

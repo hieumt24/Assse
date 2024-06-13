@@ -1,5 +1,6 @@
 using AssetManagement.Application.Interfaces;
 using AssetManagement.Domain.Entites;
+using AssetManagement.Domain.Enums;
 using AssetManagement.Infrastructure.Common;
 using AssetManagement.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,16 @@ namespace AssetManagement.Infrastructure.Repositories
     {
         public UserRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
+        }
+
+        public async Task<User> FindByUsernameAsync(string username)
+        {
+            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == username);
+            if (user == null)
+            {
+                return null;
+            }
+            return user;
         }
 
         public string GeneratePassword(string userName, DateTime dateOfBirth)
@@ -41,6 +52,16 @@ namespace AssetManagement.Infrastructure.Repositories
             }
 
             return username;
+        }
+
+        public async Task<RoleType> GetRoleAsync(Guid userId)
+        {
+            var user = await _dbContext.Users.FindAsync(userId);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+            return user.Role;
         }
 
         public async Task<bool> IsUsernameExist(string username)
