@@ -51,11 +51,6 @@ namespace AssetManagement.Application.Services
 
                 var user = await _userRepositoriesAsync.AddAsync(userDomain);
 
-                //assign roles to the user
-
-                var userRole = new UserRoles { UserId = user.Id, RoleId = (int)request.RoleId };
-                await _userRepositoriesAsync.AddUserRolesAysnc(userRole);
-
                 var userDto = _mapper.Map<UserDto>(user);
 
                 return new Response<UserDto>();
@@ -121,7 +116,7 @@ namespace AssetManagement.Application.Services
                 "dateofbirth" => u => u.DateOfBirth,
                 "joineddate" => u => u.JoinedDate,
                 "gender" => u => u.Gender,
-                "role" => u => u.UserRoles,
+                "role" => u => u.Role,
                 _ => u => u.FirstName,
             };
         }
