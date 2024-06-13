@@ -29,11 +29,11 @@ namespace AssetManagement.Application.Services
             {
                 return new Response<AuthenticationResponse> { Succeeded = false, Message = "Invalid username or password" };
             }
-            if (!user.IsFirstTimeLogin)
+            if (user.IsFirstTimeLogin)
             {
                 return new Response<AuthenticationResponse>
                 {
-                    Succeeded = false,
+                    Succeeded = true,
                     Message = "You need to change your password before login"
                 };
             }
