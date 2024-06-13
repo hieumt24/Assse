@@ -19,6 +19,21 @@ namespace AssetManagement.Application.Services
             _tokenService = tokenService;
         }
 
+        public async Task<Response<string>> ChangePasswordAsync(ChangePasswordRequest request)
+        {
+            var user = await _userRepositoriesAsync.FindByUsernameAsync(request.Username);
+            if (user == null || !_passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.CurrentPassword).Equals(PasswordVerificationResult.Success))
+            {
+                return new Response<string> { Succeeded = false, Message = "Invalid username or password" };
+            }
+
+            user.PasswordHash = _passwordHasher.HashPassword(user, request.NewPassword);
+            user.IsFirstTimeLogin = false;
+            await _userRepositoriesAsync.UpdateUserAysnc(user);
+
+            return new Response<string> { Succeeded = true, Message = "Password changed successfully" };
+        }
+
         public async Task<Response<AuthenticationResponse>> LoginAsync(AuthenticationRequest request)
         {
             var user = await _userRepositoriesAsync.FindByUsernameAsync(request.Username);
@@ -29,14 +44,6 @@ namespace AssetManagement.Application.Services
             {
                 return new Response<AuthenticationResponse> { Succeeded = false, Message = "Invalid username or password" };
             }
-            if (user.IsFirstTimeLogin)
-            {
-                return new Response<AuthenticationResponse>
-                {
-                    Succeeded = true,
-                    Message = "You need to change your password before login"
-                };
-            }
 
             var role = await _userRepositoriesAsync.GetRoleAsync(user.Id);
             var token = _tokenService.GenerateJwtToken(user, role);
@@ -46,6 +53,21 @@ namespace AssetManagement.Application.Services
                 Role = role.ToString(),
                 Token = token
             };
+            if (user.IsFirstTimeLogin)
+            {
+                return new Response<AuthenticationResponse>
+                {
+                    Succeeded = true,
+                    Message = "You need to change your password before login",
+                    Data = new AuthenticationResponse
+                    {
+                        Username = user.Username,
+                        Role = user.Role.ToString(),
+                        IsFirstTimeLogin = user.IsFirstTimeLogin,
+                        Token = token
+                    }
+                };
+            }
             return new Response<AuthenticationResponse>
             {
                 Succeeded = true,

@@ -44,7 +44,7 @@ namespace AssetManagement.Infrastructure.Common
             return await ApplySpecification(spec).FirstOrDefaultAsync();
         }
 
-        public async Task<T> GetByIdAsync(Guid id)
+        public virtual async Task<T> GetByIdAsync(Guid id)
         {
             return await _dbContext.Set<T>().FindAsync(id);
         }
