@@ -13,8 +13,8 @@ export const Admin = () => {
   const pathnames = location.pathname.split("/").filter(Boolean);
 
   return (
-    <div className="h-screen items-start">
-      <Breadcrumb className="bg-red-600 p-6">
+    <div className="h-full items-start">
+      <Breadcrumb className="bg-red-600 p-6 flex justify-between">
         <BreadcrumbList className="text-xl font-bold text-white">
           {pathnames.length > 0 && (
             <>
@@ -24,10 +24,16 @@ export const Admin = () => {
               <BreadcrumbSeparator />
             </>
           )}
+
+        </BreadcrumbList>
+        <BreadcrumbList className="text-xl font-bold text-white">
+          <BreadcrumbItem>
+            
+          </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="flex flex-grow">
-        <Sidebar />
+      <div className="flex flex-grow h-full">
+          <Sidebar />  
         <Routes>
           <Route path="user" element={<ManageUser />} />
           <Route path="user/create-user" element={<CreateUser />} />

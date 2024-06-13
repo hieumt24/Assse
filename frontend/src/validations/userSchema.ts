@@ -83,7 +83,7 @@ export const createUserSchema = z.object({
       },
     ),
   gender: z.enum(["1", "2", "3"]),
-  roleId: z.enum(["2", "1"]),
+  role: z.enum(["2", "1"]),
   location: z.enum(["3", "1", "2"]),
 })
 .refine(

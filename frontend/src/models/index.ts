@@ -4,7 +4,7 @@ export interface CreateUserReq {
   dateOfBirth: string;
   joinedDate: string;
   gender: number;
-  roleId: number;
+  role: number;
   location: number;
 }
 
