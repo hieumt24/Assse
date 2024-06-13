@@ -22,28 +22,25 @@ export const createUserSchema = z.object({
   dateOfBirth: z
     .string()
     .regex(dateFormat, {
-      message: "Please select Date Of Birth.",
+      message: "Please select a valid Date Of Birth.",
     })
     .refine(
       (dateString) => {
-        const [year, month, day] = dateString.split("-").map(Number);
-        const parsedDate = new Date(year, month - 1, day);
+        const parsedDate = new Date(dateString);
         return isValid(parsedDate);
       },
       { message: "Invalid Date of Birth. Please enter a valid date." },
     )
     .refine(
       (dateString) => {
-        const [year, month, day] = dateString.split("-").map(Number);
-        const parsedDate = new Date(year, month - 1, day);
+        const parsedDate = new Date(dateString);
         return !isAfter(parsedDate, new Date());
       },
       { message: "Date of Birth cannot be in the future." },
     )
     .refine(
       (dateString) => {
-        const [year, month, day] = dateString.split("-").map(Number);
-        const parsedDate = new Date(year, month - 1, day);
+        const parsedDate = new Date(dateString);
         const age = differenceInYears(new Date(), parsedDate);
         return age >= 18;
       },
@@ -60,17 +57,11 @@ export const createUserSchema = z.object({
     ),
   joinedDate: z
     .string()
-    .regex(dateFormat, { message: "Please select Joined Date." })
+    .regex(dateFormat, { message: "Please select a valid Joined Date." })
     .refine(
       (dateString) => {
-        // Parse the date
-        const [year, month, day] = dateString.split("-").map(Number);
+        const parsedDate = new Date(dateString);
 
-        // Create a new Date object
-        // Note: Months are 0-indexed in JavaScript Date objects, so subtract 1 from the month.
-        const parsedDate = new Date(year, month - 1, day);
-
-        // Check if it's a valid date
         if (!isValid(parsedDate)) {
           return false;
         }
@@ -94,4 +85,16 @@ export const createUserSchema = z.object({
   gender: z.enum(["1", "2", "3"]),
   roleId: z.enum(["2", "1"]),
   location: z.enum(["3", "1", "2"]),
-});
+})
+.refine(
+  (data) => {
+    const dateOfBirth = new Date(data.dateOfBirth);
+    const joinedDate = new Date(data.joinedDate);
+
+    return isAfter(joinedDate, dateOfBirth);
+  },
+  {
+    message: "Joined date must be after the date of birth.",
+    path: ["joinedDate"],
+  }
+);
