@@ -13,7 +13,7 @@ export const loginService = (req: LoginReq) => {
       };
     })
     .catch((err) => {
-      return { success: false, message: "Failed to login.", error: err };
+      return { success: false, message: "Failed to login.", data: err };
     });
 };
 
@@ -31,7 +31,7 @@ export const firstTimeService = (req: FirstTimeLoginReq) => {
       return {
         success: false,
         message: "Failed to change password.",
-        error: err,
+        data: err,
       };
     });
 };
