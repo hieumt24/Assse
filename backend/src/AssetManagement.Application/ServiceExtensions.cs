@@ -22,6 +22,8 @@ namespace AssetManagement.Application
             service.AddAutoMapper(typeof(GeneralProfile));
             service.AddScoped<IValidator<AddUserRequestDto>, AddUserRequestValidation>();
             service.AddScoped<IValidator<EditUserRequestDto>, EditUserRequestValidation>();
+            service.AddScoped<IValidator<ChangePasswordRequest>, PasswordValidation>();
+
 
             service.AddScoped<ITokenService, TokenService>();
             service.AddScoped<IAccountServicecs, AccountService>();
