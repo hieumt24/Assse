@@ -68,5 +68,20 @@ namespace AssetManagement.Infrastructure.Repositories
         {
             return await _dbContext.Users.AnyAsync(u => u.Username == username);
         }
+
+        public async Task<User> UpdateUserAysnc(User user)
+        {
+            var existingUser = await _dbContext.Users.FindAsync(user.Id);
+            if (existingUser == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            _dbContext.Entry(existingUser).CurrentValues.SetValues(user);
+            _dbContext.Entry(existingUser).Property(e => e.StaffCodeId).IsModified = false;
+
+            await _dbContext.SaveChangesAsync();
+            return existingUser;
+        }
     }
 }

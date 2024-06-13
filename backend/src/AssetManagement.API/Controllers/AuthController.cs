@@ -27,5 +27,18 @@ namespace AssetManagement.API.Controllers
             }
             return Ok(response);
         }
+
+        //POST api/v1/auth/change-password
+        [HttpPost]
+        [Route("auth/change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
+        {
+            var response = await _accountService.ChangePasswordAsync(request);
+            if (!response.Succeeded)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
     }
 }
