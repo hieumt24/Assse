@@ -1,4 +1,4 @@
-﻿using AssetManagement.Application.Interfaces;
+using AssetManagement.Application.Interfaces;
 using AssetManagement.Application.Models.DTOs.Users;
 using AssetManagement.Application.Models.DTOs.Users.Requests;
 using AssetManagement.Application.Models.DTOs.Users.Responses;
@@ -9,11 +9,7 @@ using AssetManagement.Domain.Enums;
 using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace AssetManagement.Application.Services
 {
@@ -114,6 +110,7 @@ namespace AssetManagement.Application.Services
                 take: take
             );
         }
+
         private Expression<Func<User, object>> GetOrderByExpression(string orderBy)
         {
             return orderBy.ToLower() switch
