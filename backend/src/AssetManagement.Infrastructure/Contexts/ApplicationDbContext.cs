@@ -2,6 +2,7 @@
 using AssetManagement.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace AssetManagement.Infrastructure.Contexts
 {
@@ -29,6 +30,11 @@ namespace AssetManagement.Infrastructure.Contexts
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Username)
                 .IsUnique();
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.StaffCodeId)
+                .ValueGeneratedOnAdd()
+                .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
 
             modelBuilder.Entity<UserRoles>()
                 .HasKey(ur => new { ur.UserId, ur.RoleId });

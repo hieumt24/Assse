@@ -15,6 +15,8 @@ namespace AssetManagement.Application
             service.AddScoped<IUserServiceAsync, UserServiceAsync>();
             service.AddAutoMapper(typeof(GeneralProfile));
             service.AddScoped<IValidator<AddUserRequestDto>, AddUserRequestValidation>();
+            //services.AddTransient<IValidator<UpdateUserRequestDto>, UpdateUserRequestDtoValidator>();
+
         }
     }
 }

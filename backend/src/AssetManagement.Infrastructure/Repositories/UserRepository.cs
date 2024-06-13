@@ -12,6 +12,11 @@ namespace AssetManagement.Infrastructure.Repositories
         {
         }
 
+        public override async Task<User> GetByIdAsync(Guid id)
+        {
+            return await _dbContext.Users.Include(u => u.UserRoles).Where(u => u.Id == id).FirstOrDefaultAsync();
+        }
+
         public async Task<UserRoles> AddUserRolesAysnc(UserRoles userRoles)
         {
             await _dbContext.UserRoles.AddAsync(userRoles);
@@ -53,6 +58,12 @@ namespace AssetManagement.Infrastructure.Repositories
         public async Task<bool> IsUsernameExist(string username)
         {
             return await _dbContext.Users.AnyAsync(u => u.Username == username);
+        }
+
+        public async Task RemoveUserRolesAsync(UserRoles userRoles)
+        {
+            _dbContext.UserRoles.Remove(userRoles);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

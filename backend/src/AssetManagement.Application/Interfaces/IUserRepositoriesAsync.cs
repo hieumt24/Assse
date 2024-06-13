@@ -12,5 +12,7 @@ namespace AssetManagement.Application.Interfaces
         Task<bool> IsUsernameExist(string username);
 
         Task<UserRoles> AddUserRolesAysnc(UserRoles userRoles);
+
+        Task RemoveUserRolesAsync(UserRoles userRole);
     }
 }

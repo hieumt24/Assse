@@ -77,7 +77,7 @@ namespace AssetManagement.Application.Services
                 var user = await _userRepositoriesAsync.GetByIdAsync(userId);
                 if (user == null)
                 {
-                    return new Response<UserResponseDto> { Succeeded = false, Errors = { "User not found" } };
+                    return new Response<UserResponseDto>("User not found");
                 }
 
                 var userDto = _mapper.Map<UserResponseDto>(user);
@@ -124,10 +124,118 @@ namespace AssetManagement.Application.Services
                 "dateofbirth" => u => u.DateOfBirth,
                 "joineddate" => u => u.JoinedDate,
                 "gender" => u => u.Gender,
-          
+
                 _ => u => u.FirstName,
-            };;
+            }; ;
         }
+
+        public async Task<Response<UserDto>> UpdateUserAsync(UpdateUserRequestDto request)
+        {
+            try
+            {
+                // Fetch the existing user
+                var existingUser = await _userRepositoriesAsync.GetByIdAsync(request.UserId);
+                if (existingUser == null)
+                {
+                    return new Response<UserDto>("User not found");
+                }
+
+                // Update the user fields
+                existingUser.DateOfBirth = request.DateOfBirth;
+                existingUser.Gender = request.Gender;
+                existingUser.JoinedDate = request.JoinedDate;
+
+                // Update the user's roles
+                var existingRoles = existingUser.UserRoles.ToList();
+                var newRoles = request.RoleIds.Except(existingRoles.Select(ur => ur.RoleId)).ToList();
+                var removedRoles = existingRoles.Where(ur => !request.RoleIds.Contains(ur.RoleId)).ToList();
+
+                foreach (var role in removedRoles)
+                {
+                    existingUser.UserRoles.Remove(role);
+                    await _userRepositoriesAsync.RemoveUserRolesAsync(role);
+                }
+
+                foreach (var roleId in newRoles)
+                {
+                    var userRole = new UserRoles { UserId = existingUser.Id, RoleId = roleId };
+                    existingUser.UserRoles.Add(userRole);
+                    await _userRepositoriesAsync.AddUserRolesAysnc(userRole);
+                }
+
+                // Save the updated user
+                await _userRepositoriesAsync.UpdateAsync(existingUser);
+
+                // Map the updated user to a UserDto and return a response
+                var updatedUserDto = _mapper.Map<UserDto>(existingUser);
+                return new Response<UserDto> { Data = updatedUserDto, Succeeded = true };
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (optional)
+                //_logger.LogError(ex, "An error occurred while updating the user.");
+                return new Response<UserDto> { Succeeded = false, Errors = { ex.Message } };
+            }
+        }
+
+        //    public async Task<Response<UserDto>> UpdateUserAsync(UpdateUserRequestDto request)
+        //    {
+        //        try
+        //        {
+        //            // Fetch the existing user
+        //            var existingUser = await _userRepositoriesAsync.GetByIdAsync(request.UserId);
+        //            if (existingUser == null)
+        //            {
+        //                return new Response<UserDto> { Succeeded = false, Errors = { "User not found" } };
+        //            }
+
+        //            // Update the user fields
+        //            existingUser.DateOfBirth = request.DateOfBirth;
+        //            existingUser.Gender = request.Gender;
+        //            existingUser.JoinedDate = request.JoinedDate;
+
+        //            // Update the user's roles
+        //            var existingRoles = existingUser.UserRoles.ToList();
+        //            var newRoles = request.RoleIds.Except(existingRoles.Select(ur => ur.RoleId)).ToList();
+        //            var removedRoles = existingRoles.Where(ur => !request.RoleIds.Contains(ur.RoleId)).ToList();
+
+        //            foreach (var role in removedRoles)
+        //            {
+        //                existingUser.UserRoles.Remove(role);
+        //                await _userRepositoriesAsync.RemoveUserRolesAsync(role);
+        //            }
+
+        //            foreach (var roleId in newRoles)
+        //            {
+        //                if (!existingRoles.Any(ur => ur.RoleId == roleId))
+        //                {
+        //                    var userRole = new UserRoles { UserId = existingUser.Id, RoleId = roleId };
+        //                    existingUser.UserRoles.Add(userRole);
+        //                    await _userRepositoriesAsync.AddUserRolesAysnc(userRole);
+        //                }
+        //            }
+
+        //            // Save the updated user
+        //            await _userRepositoriesAsync.UpdateAsync(existingUser);
+
+        //            // Map the updated user to a UserDto and return a response
+        //            var updatedUserDto = _mapper.Map<UserDto>(existingUser);
+        //            return new Response<UserDto> { Data = updatedUserDto, Succeeded = true };
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            // Log the exception (optional)
+        //            //_logger.LogError(ex, "An error occurred while updating the user.");
+        //            return new Response<UserDto> ( ex.Message.ToString() ) ;
+        //        }
+        //    //}
+
+
+
+
+
+
+        //}
     }
 
     public class DynamicSpecification<T> : ISpecification<T>
@@ -158,4 +266,7 @@ namespace AssetManagement.Application.Services
         public bool IsPagingEnabled { get; }
     }
 }
+
+
+
 
