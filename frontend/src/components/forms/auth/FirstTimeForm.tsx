@@ -23,9 +23,7 @@ export const FirstTimeForm = () => {
   const isFirstTime = user.isFirstTimeLogin;
   const [showModal, setShowModal] = useState<boolean>(isFirstTime);
   let dateParts = user.dateOfBirth.split('-');
-    
-    // Join the parts into a single string without any separators
-    let newDateStr = dateParts.join('');
+  let newDateStr = dateParts.join('');
   const oldPassword = user.username + "@" + newDateStr;
   useEffect(() => {
     if (isFirstTime) {
@@ -45,7 +43,7 @@ export const FirstTimeForm = () => {
 
   // Function handle onSubmit
   const onSubmit = async (values: z.infer<typeof firstTimeLoginSchema>) => {
-    console.log(values.newPassword);
+
     setShowModal(false);
   };
 
