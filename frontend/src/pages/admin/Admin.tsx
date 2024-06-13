@@ -14,7 +14,7 @@ export const Admin = () => {
 
   return (
     <div className="h-screen items-start">
-      <Breadcrumb className="bg-red-500 p-6">
+      <Breadcrumb className="bg-red-600 p-6">
         <BreadcrumbList className="text-xl font-bold text-white">
           {pathnames.length > 0 && (
             <>

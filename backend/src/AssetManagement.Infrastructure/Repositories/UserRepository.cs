@@ -12,18 +12,6 @@ namespace AssetManagement.Infrastructure.Repositories
         {
         }
 
-        public override async Task<User> GetByIdAsync(Guid id)
-        {
-            return await _dbContext.Users.Include(u => u.UserRoles).Where(u => u.Id == id).FirstOrDefaultAsync();
-        }
-
-        public async Task<UserRoles> AddUserRolesAysnc(UserRoles userRoles)
-        {
-            await _dbContext.UserRoles.AddAsync(userRoles);
-            await _dbContext.SaveChangesAsync();
-            return userRoles;
-        }
-
         public string GeneratePassword(string userName, DateTime dateOfBirth)
         {
             string dob = dateOfBirth.ToString("ddMMyyyy");
@@ -60,10 +48,6 @@ namespace AssetManagement.Infrastructure.Repositories
             return await _dbContext.Users.AnyAsync(u => u.Username == username);
         }
 
-        public async Task RemoveUserRolesAsync(UserRoles userRoles)
-        {
-            _dbContext.UserRoles.Remove(userRoles);
-            await _dbContext.SaveChangesAsync();
-        }
+     
     }
 }
