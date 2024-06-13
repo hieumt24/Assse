@@ -7,5 +7,7 @@ namespace AssetManagement.Application.Interfaces
     public interface IAccountServicecs
     {
         Task<Response<AuthenticationResponse>> LoginAsync(AuthenticationRequest request);
+
+        Task<Response<string>> ChangePasswordAsync(ChangePasswordRequest request);
     }
 }

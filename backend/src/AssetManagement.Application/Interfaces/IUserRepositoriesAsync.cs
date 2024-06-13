@@ -15,5 +15,7 @@ namespace AssetManagement.Application.Interfaces
         Task<RoleType> GetRoleAsync(Guid userId);
 
         Task<bool> IsUsernameExist(string username);
+
+        Task<User> UpdateUserAysnc(User user);
     }
 }

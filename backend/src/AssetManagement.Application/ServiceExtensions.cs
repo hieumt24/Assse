@@ -21,6 +21,7 @@ namespace AssetManagement.Application
             service.AddScoped<IUserServiceAsync, UserServiceAsync>();
             service.AddAutoMapper(typeof(GeneralProfile));
             service.AddScoped<IValidator<AddUserRequestDto>, AddUserRequestValidation>();
+
             service.AddScoped<ITokenService, TokenService>();
             service.AddScoped<IAccountServicecs, AccountService>();
 
@@ -52,6 +53,7 @@ namespace AssetManagement.Application
                 options.AddPolicy($"{RoleType.Admin}", policy => policy.RequireRole("Admin"));
                 options.AddPolicy($"{RoleType.Staff}", policy => policy.RequireRole("Staff"));
             });
+
         }
     }
 }
