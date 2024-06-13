@@ -19,6 +19,21 @@ namespace AssetManagement.Application.Services
             _tokenService = tokenService;
         }
 
+        public async Task<Response<string>> ChangePasswordAsync(ChangePasswordRequest request)
+        {
+            var user = await _userRepositoriesAsync.FindByUsernameAsync(request.Username);
+            if (user == null || !_passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.CurrentPassword).Equals(PasswordVerificationResult.Success))
+            {
+                return new Response<string> { Succeeded = false, Message = "Invalid username or password" };
+            }
+
+            user.PasswordHash = _passwordHasher.HashPassword(user, request.NewPassword);
+            user.IsFirstTimeLogin = false;
+            await _userRepositoriesAsync.UpdateUserAysnc(user);
+
+            return new Response<string> { Succeeded = true, Message = "Password changed successfully" };
+        }
+
         public async Task<Response<AuthenticationResponse>> LoginAsync(AuthenticationRequest request)
         {
             var user = await _userRepositoriesAsync.FindByUsernameAsync(request.Username);
