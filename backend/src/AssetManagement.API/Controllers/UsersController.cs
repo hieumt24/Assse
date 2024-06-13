@@ -1,5 +1,6 @@
 using AssetManagement.API.CustomActionFilters;
 using AssetManagement.Application.Interfaces;
+using AssetManagement.Application.Models.DTOs.Users;
 using AssetManagement.Application.Models.DTOs.Users.Requests;
 using AssetManagement.Application.Models.DTOs.Users.Responses;
 using AssetManagement.Application.Wrappers;
@@ -61,5 +62,24 @@ namespace AssetManagement.API.Controllers
             }
             return Ok(response);
         }
+
+        [HttpPut("UpdateUser")]
+        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequestDto request)
+        {
+            if (request == null)
+            {
+                return BadRequest(new Response<UserDto> { Succeeded = false, Errors = { "Invalid request data" } });
+            }
+
+            var result = await _userService.UpdateUserAsync(request);
+
+            if (result.Succeeded)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest(result);
+        }
+
     }
 }
