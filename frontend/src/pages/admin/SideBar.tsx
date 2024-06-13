@@ -5,7 +5,7 @@ export const Sidebar = () => {
   const location = useLocation();
 
   return (
-    <div className="flex h-full flex-col items-center bg-transparent p-6 text-white">
+    <div className="flex h-full flex-col items-center bg-transparent p-6 text-white shadow-md">
       {/* Logo */}
       <Link to="/" className="mb-6 flex flex-col items-start justify-center">
         <div className="h-16 w-16">
