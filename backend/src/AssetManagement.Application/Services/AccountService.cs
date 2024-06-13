@@ -29,14 +29,6 @@ namespace AssetManagement.Application.Services
             {
                 return new Response<AuthenticationResponse> { Succeeded = false, Message = "Invalid username or password" };
             }
-            if (user.IsFirstTimeLogin)
-            {
-                return new Response<AuthenticationResponse>
-                {
-                    Succeeded = true,
-                    Message = "You need to change your password before login"
-                };
-            }
 
             var role = await _userRepositoriesAsync.GetRoleAsync(user.Id);
             var token = _tokenService.GenerateJwtToken(user, role);
@@ -46,6 +38,21 @@ namespace AssetManagement.Application.Services
                 Role = role.ToString(),
                 Token = token
             };
+            if (user.IsFirstTimeLogin)
+            {
+                return new Response<AuthenticationResponse>
+                {
+                    Succeeded = true,
+                    Message = "You need to change your password before login",
+                    Data = new AuthenticationResponse
+                    {
+                        Username = user.Username,
+                        Role = user.Role.ToString(),
+                        IsFirstTimeLogin = user.IsFirstTimeLogin,
+                        Token = token
+                    }
+                };
+            }
             return new Response<AuthenticationResponse>
             {
                 Succeeded = true,
