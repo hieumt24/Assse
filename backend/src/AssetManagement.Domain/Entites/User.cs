@@ -27,6 +27,9 @@ namespace AssetManagement.Domain.Entites
         public GenderEnum Gender { get; set; } = GenderEnum.Unknown;
 
         [Required]
+        public RoleType Role { get; set; } = RoleType.Staff;
+
+        [Required]
         [RegularExpression(@"^SD\d{4}$", ErrorMessage = "StaffCode must be in the format SDxxxx where xxxx are digits.")]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public string StaffCode { get; set; } = string.Empty;
@@ -45,7 +48,5 @@ namespace AssetManagement.Domain.Entites
 
         [Required]
         public bool IsFirstTimeLogin { get; set; } = true;
-
-        public ICollection<UserRoles> UserRoles { get; set; } = new List<UserRoles>();
     }
 }
