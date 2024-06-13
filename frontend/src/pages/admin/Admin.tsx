@@ -1,3 +1,4 @@
+import { FirstTimeForm } from "@/components";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -14,7 +15,8 @@ export const Admin = () => {
 
   return (
     <div className="h-full items-start">
-      <Breadcrumb className="bg-red-600 p-6 flex justify-between">
+      <FirstTimeForm />
+      <Breadcrumb className="flex justify-between bg-red-600 p-6">
         <BreadcrumbList className="text-xl font-bold text-white">
           {pathnames.length > 0 && (
             <>
@@ -24,16 +26,13 @@ export const Admin = () => {
               <BreadcrumbSeparator />
             </>
           )}
-
         </BreadcrumbList>
         <BreadcrumbList className="text-xl font-bold text-white">
-          <BreadcrumbItem>
-            
-          </BreadcrumbItem>
+          <BreadcrumbItem></BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="flex flex-grow h-full">
-          <Sidebar />  
+      <div className="flex h-full flex-grow">
+        <Sidebar />
         <Routes>
           <Route path="user" element={<ManageUser />} />
           <Route path="user/create-user" element={<CreateUser />} />

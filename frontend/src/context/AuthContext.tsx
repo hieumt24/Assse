@@ -8,10 +8,14 @@ import React, {
 
 export interface AuthContextProps {
   token: string | null;
+  isFirstTime: boolean;
+  setIsFirstTime: (value: boolean) => void;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
   token: null,
+  isFirstTime: false,
+  setIsFirstTime: () => {},
 });
 
 interface AuthProviderProps {
@@ -20,6 +24,7 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [token, setToken] = useState<string | null>(null);
+  const [isFirstTime, setIsFirstTime] = useState(true);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -32,8 +37,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const authContextValue: AuthContextProps = useMemo(
     () => ({
       token,
+      isFirstTime,
+      setIsFirstTime,
     }),
-    [token],
+    [token, isFirstTime],
   );
 
   return (
