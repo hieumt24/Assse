@@ -13,11 +13,11 @@ namespace AssetManagement.Application.Models.DTOs.Users.Requests
         public DateTime DateOfBirth { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime JoinedDate { get; set; } 
+        public DateTime JoinedDate { get; set; }
 
-        public GenderEnum Gender { get; set; } 
+        public GenderEnum Gender { get; set; }
 
-        public RoleType RoleId { get; set; } 
+        public RoleType Role { get; set; } = RoleType.Staff;
 
         public EnumLocation Location { get; set; }
     }

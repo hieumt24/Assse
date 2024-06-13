@@ -18,7 +18,7 @@ export const NotFound: React.FC = () => {
           className="mt-6 transform rounded-full bg-red-700 px-6 py-3 text-white transition-transform duration-300 hover:scale-105 hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-300"
           onClick={() => navigate("/")}
         >
-          Go Back
+          Back to Home
         </button>
       </div>
     </div>
