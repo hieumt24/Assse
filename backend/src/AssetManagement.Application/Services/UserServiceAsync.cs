@@ -1,3 +1,4 @@
+using AssetManagement.Application.Filter;
 using AssetManagement.Application.Helper;
 using AssetManagement.Application.Interfaces;
 using AssetManagement.Application.Models.DTOs.Users;
@@ -8,8 +9,10 @@ using AssetManagement.Domain.Common.Specifications;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
 using AutoMapper;
+using Azure.Core;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using System.Linq.Expressions;
 
 namespace AssetManagement.Application.Services
@@ -21,17 +24,21 @@ namespace AssetManagement.Application.Services
         private readonly IValidator<AddUserRequestDto> _addUserValidator;
         private readonly IValidator<EditUserRequestDto> _editUserValidator;
         private readonly PasswordHasher<User> _passwordHasher;
+        private readonly IUriService _uriService;
 
         public UserServiceAsync(IUserRepositoriesAsync userRepositoriesAsync,
             IMapper mapper,
             IValidator<AddUserRequestDto> addUserValidator,
-            IValidator<EditUserRequestDto> editUserValidator)
+            IValidator<EditUserRequestDto> editUserValidator,
+            IUriService uriService
+        )
         {
             _mapper = mapper;
             _userRepositoriesAsync = userRepositoriesAsync;
             _addUserValidator = addUserValidator;
             _editUserValidator = editUserValidator;
             _passwordHasher = new PasswordHasher<User>();
+            _uriService = uriService;
         }
 
         public async Task<Response<UserDto>> AddUserAsync(AddUserRequestDto request)
@@ -83,20 +90,24 @@ namespace AssetManagement.Application.Services
             }
         }
 
-        public async Task<Response<List<UserResponseDto>>> GetAllUsersAsync(string? search, string? orderBy, bool isDescending, int skip, int take, EnumLocation? adminLocation)
+        public async Task<PagedResponse<List<UserResponseDto>>> GetAllUsersAsync(PaginationFilter validFilter, string? search, string? orderBy, bool isDescending, EnumLocation? adminLocation, string route)
         {
             try
             {
-                var specification = UserSpecificationHelper.CreateSpecification(search, orderBy, isDescending, skip, take, adminLocation);
+                var specification = UserSpecificationHelper.CreateSpecification(validFilter, search, orderBy, isDescending, adminLocation);
                 var users = await _userRepositoriesAsync.ListAsync(specification);
+                var totalRecords = await _userRepositoriesAsync.CountAsync(UserSpecificationHelper.TotalUser());
                 var userDtos = _mapper.Map<List<UserResponseDto>>(users);
 
-                return new Response<List<UserResponseDto>> { Data = userDtos, Succeeded = true };
+                //return new Response<List<UserResponseDto>> { Data = userDtos, Succeeded = true };
+                //return new PagedResponse<List<UserResponseDto>>(userDtos, filter.PageNumber, filter.PageSize);
+
+                var pagedResponse = PaginationHelper.CreatePagedReponse(userDtos, validFilter, totalRecords, _uriService, route);
+                return pagedResponse;
             }
             catch (Exception ex)
             {
-                return new Response<List<UserResponseDto>> { Succeeded = false, Errors = { ex.Message } };
-
+                return new PagedResponse<List<UserResponseDto>> { Succeeded = false, Errors = { ex.Message } };
             }
         }
 
@@ -120,7 +131,7 @@ namespace AssetManagement.Application.Services
                 existingUser.DateOfBirth = request.DateOfBirth;
                 existingUser.Gender = request.Gender;
                 existingUser.JoinedDate = request.JoinedDate;
-                existingUser.Role = request.Role; 
+                existingUser.Role = request.Role;
 
                 await _userRepositoriesAsync.UpdateAsync(existingUser);
 
@@ -129,7 +140,6 @@ namespace AssetManagement.Application.Services
             }
             catch (Exception ex)
             {
-
                 return new Response<UserDto> { Succeeded = false, Errors = { ex.Message } };
             }
         }
