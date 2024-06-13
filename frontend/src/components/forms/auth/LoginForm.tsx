@@ -8,7 +8,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useAuth } from "@/hooks";
 import { removeExtraWhitespace } from "@/lib/utils";
 import { loginService } from "@/services";
 import { loginSchema } from "@/validations";
@@ -20,7 +19,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { z } from "zod";
 
 export const LoginForm = () => {
-  const { setIsFirstTime } = useAuth();
   // Define form
   const form = useForm<z.infer<typeof loginSchema>>({
     mode: "all",
@@ -35,7 +33,8 @@ export const LoginForm = () => {
   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     const res = await loginService({ ...values });
     if (res.success) {
-      setIsFirstTime(res.data.isFirstTimeLogin);
+      localStorage.setItem("token", res.data.token);
+      console.log(res.data);
       toast.success(res.message);
       navigate("/admin");
     } else {
@@ -81,7 +80,7 @@ export const LoginForm = () => {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input placeholder="Enter password" {...field} />
+                <Input placeholder="Enter password" {...field} type="password"/>
               </FormControl>
               <FormMessage />
             </FormItem>

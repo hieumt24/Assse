@@ -3,6 +3,7 @@ using AssetManagement.Application.Models.DTOs.Users.Requests;
 using AssetManagement.Application.Models.DTOs.Users.Responses;
 using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Entites;
+using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 
 namespace AssetManagement.Application.Services
@@ -11,16 +12,25 @@ namespace AssetManagement.Application.Services
     {
         private readonly IUserRepositoriesAsync _userRepositoriesAsync;
         private readonly ITokenService _tokenService;
+        private readonly IValidator<ChangePasswordRequest> _changePasswordValidator;
         private readonly PasswordHasher<User> _passwordHasher = new PasswordHasher<User>();
 
-        public AccountService(IUserRepositoriesAsync userRepositoriesAsync, ITokenService tokenService)
+        public AccountService(IUserRepositoriesAsync userRepositoriesAsync, ITokenService tokenService, IValidator<ChangePasswordRequest> changePasswordValidator)
         {
+            _changePasswordValidator = changePasswordValidator;
             _userRepositoriesAsync = userRepositoriesAsync;
             _tokenService = tokenService;
         }
 
         public async Task<Response<string>> ChangePasswordAsync(ChangePasswordRequest request)
         {
+            var validationResult = await _changePasswordValidator.ValidateAsync(request);
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return new Response<string> { Succeeded = false, Errors = errors };
+            }
+
             var user = await _userRepositoriesAsync.FindByUsernameAsync(request.Username);
             if (user == null || !_passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.CurrentPassword).Equals(PasswordVerificationResult.Success))
             {
