@@ -1,3 +1,4 @@
+import { FirstTimeForm } from "@/components";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -21,6 +22,7 @@ export const Admin = () => {
   return (
     <div className="h-full items-start">
       <div className="w-full bg-red-600 flex justify-between p-6">
+        <FirstTimeForm />
         <Breadcrumb className="flex">
           <BreadcrumbList className="text-xl font-bold text-white">
             {pathnames.length > 0 && (
