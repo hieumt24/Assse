@@ -2,6 +2,7 @@
 using AssetManagement.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace AssetManagement.Infrastructure.Contexts
 {
@@ -15,6 +16,7 @@ namespace AssetManagement.Infrastructure.Contexts
         }
 
         public DbSet<User> Users { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -35,6 +37,9 @@ namespace AssetManagement.Infrastructure.Contexts
             user.CreatedBy = "System";
             modelBuilder.Entity<User>()
                 .HasData(user);
+
+            modelBuilder.Entity<User>().Property(u => u.StaffCodeId).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
+
         }
     }
 }

@@ -2,8 +2,10 @@ using AssetManagement.Domain.Enums;
 
 namespace AssetManagement.Application.Models.DTOs.Users.Responses
 {
-    public class UserResponseDto
+    public class UserResponseDto 
     {
+        public Guid Id { get; set; }
+
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
