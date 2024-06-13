@@ -1,4 +1,3 @@
-
 export interface CreateUserReq {
   firstName: string;
   lastName: string;
@@ -12,4 +11,9 @@ export interface CreateUserReq {
 export interface LoginReq {
   username: string;
   password: string;
+}
+
+export interface FirstTimeLoginReq {
+  token: string;
+  newPassword: string;
 }
