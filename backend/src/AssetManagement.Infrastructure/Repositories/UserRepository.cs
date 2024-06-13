@@ -1,5 +1,6 @@
 using AssetManagement.Application.Interfaces;
 using AssetManagement.Domain.Entites;
+using AssetManagement.Domain.Enums;
 using AssetManagement.Infrastructure.Common;
 using AssetManagement.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,16 @@ namespace AssetManagement.Infrastructure.Repositories
     {
         public UserRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
+        }
+
+        public async Task<User> FindByUsernameAsync(string username)
+        {
+            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == username);
+            if (user == null)
+            {
+                return null;
+            }
+            return user;
         }
 
         public string GeneratePassword(string userName, DateTime dateOfBirth)
@@ -43,11 +54,36 @@ namespace AssetManagement.Infrastructure.Repositories
             return username;
         }
 
+        public async Task<RoleType> GetRoleAsync(Guid userId)
+        {
+            var user = await _dbContext.Users.FindAsync(userId);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+            return user.Role;
+        }
+
         public async Task<bool> IsUsernameExist(string username)
         {
             return await _dbContext.Users.AnyAsync(u => u.Username == username);
         }
 
-     
+
+        public async Task<User> UpdateUserAysnc(User user)
+        {
+            var existingUser = await _dbContext.Users.FindAsync(user.Id);
+            if (existingUser == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            _dbContext.Entry(existingUser).CurrentValues.SetValues(user);
+            _dbContext.Entry(existingUser).Property(e => e.StaffCodeId).IsModified = false;
+
+            await _dbContext.SaveChangesAsync();
+            return existingUser;
+        }
+
     }
 }
