@@ -96,6 +96,7 @@ namespace AssetManagement.Application.Services
             catch (Exception ex)
             {
                 return new Response<List<UserResponseDto>> { Succeeded = false, Errors = { ex.Message } };
+
             }
         }
 
