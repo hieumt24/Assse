@@ -124,42 +124,7 @@ namespace AssetManagement.Application.Services
         {
             try
             {
-                // Fetch the existing user
-                var existingUser = await _userRepositoriesAsync.GetByIdAsync(request.UserId);
-                if (existingUser == null)
-                {
-                    return new Response<UserDto>("User not found");
-                }
-
-                // Update the user fields
-                existingUser.DateOfBirth = request.DateOfBirth;
-                existingUser.Gender = request.Gender;
-                existingUser.JoinedDate = request.JoinedDate;
-
-                // Update the user's roles
-                var existingRoles = existingUser.UserRoles.ToList();
-                var newRoles = request.RoleIds.Except(existingRoles.Select(ur => ur.RoleId)).ToList();
-                var removedRoles = existingRoles.Where(ur => !request.RoleIds.Contains(ur.RoleId)).ToList();
-
-                foreach (var role in removedRoles)
-                {
-                    existingUser.UserRoles.Remove(role);
-                    await _userRepositoriesAsync.RemoveUserRolesAsync(role);
-                }
-
-                foreach (var roleId in newRoles)
-                {
-                    var userRole = new UserRoles { UserId = existingUser.Id, RoleId = roleId };
-                    existingUser.UserRoles.Add(userRole);
-                    await _userRepositoriesAsync.AddUserRolesAysnc(userRole);
-                }
-
-                // Save the updated user
-                await _userRepositoriesAsync.UpdateAsync(existingUser);
-
-                // Map the updated user to a UserDto and return a response
-                var updatedUserDto = _mapper.Map<UserDto>(existingUser);
-                return new Response<UserDto> { Data = updatedUserDto, Succeeded = true };
+                return new Response<UserDto>();
             }
             catch (Exception ex)
             {

@@ -19,20 +19,27 @@ import "react-toastify/dist/ReactToastify.css";
 import { z } from "zod";
 
 export const FirstTimeForm = () => {
-  const { isFirstTime } = useAuth();
+  const { user } = useAuth();
+  const isFirstTime = user.isFirstTimeLogin;
   const [showModal, setShowModal] = useState<boolean>(isFirstTime);
-
+  let dateParts = user.dateOfBirth.split('-');
+    
+    // Join the parts into a single string without any separators
+    let newDateStr = dateParts.join('');
+  const oldPassword = user.username + "@" + newDateStr;
   useEffect(() => {
     if (isFirstTime) {
       setShowModal(true);
     }
-  }, [isFirstTime]);
+  }, [user]);
   // Define form
   const form = useForm<z.infer<typeof firstTimeLoginSchema>>({
     mode: "all",
     resolver: zodResolver(firstTimeLoginSchema),
     defaultValues: {
       newPassword: "",
+      oldPassword: oldPassword,
+      username: user.username,
     },
   });
 
@@ -66,6 +73,7 @@ export const FirstTimeForm = () => {
                   <FormLabel>New password</FormLabel>
                   <FormControl>
                     <Input
+                      type="password"
                       placeholder="Enter your new password"
                       {...field}
                       onBlur={(e) => {
@@ -74,6 +82,36 @@ export const FirstTimeForm = () => {
                         ); // Clean the input value
                         field.onChange(cleanedValue); // Update the form state
                       }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="oldPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      type="hidden"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      type="hidden"
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />

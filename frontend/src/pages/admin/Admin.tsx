@@ -1,4 +1,5 @@
 
+import { FirstTimeForm } from "@/components";
 import { Header } from "@/components/Header";
 import { CreateUser, ManageUser } from "@/pages/admin/";
 import { } from "@radix-ui/react-collapsible";
@@ -9,7 +10,7 @@ export const Admin = () => {
 
   return (
     <div className="h-full items-start">
-      
+      <FirstTimeForm/>
       <Header/>
       <div className="flex flex-grow h-full">
         <Sidebar />  

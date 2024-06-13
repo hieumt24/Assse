@@ -34,4 +34,6 @@ export const firstTimeLoginSchema = z.object({
     .regex(/[^a-zA-Z0-9]/, {
       message: "Password must contain at least one special character",
     }),
+  oldPassword: z.string(),
+  username: z.string()
 });
