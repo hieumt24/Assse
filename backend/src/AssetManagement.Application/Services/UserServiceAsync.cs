@@ -128,12 +128,9 @@ namespace AssetManagement.Application.Services
             }
             catch (Exception ex)
             {
+
                 return new Response<UserDto> { Succeeded = false, Errors = { ex.Message } };
             }
         }
     }
 }
-
-
-
-

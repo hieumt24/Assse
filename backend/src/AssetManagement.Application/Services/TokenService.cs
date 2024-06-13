@@ -23,11 +23,13 @@ namespace AssetManagement.Application.Services
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim("UserId", user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.UserData, user.StaffCode),
-                new Claim(ClaimTypes.Locality, user.Location.ToString()),
-                new Claim(ClaimTypes.Role, role.ToString())
+                new Claim("StaffCode", user.StaffCode),
+                new Claim("Location", user.Location.ToString()),
+                new Claim(ClaimTypes.Role, role.ToString()),
+                new Claim("IsFirstTimeLogin", user.IsFirstTimeLogin.ToString().ToLowerInvariant()),
+                new Claim("DateOfBirth", user.DateOfBirth.ToString("dd-MM-yyyy"))
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
