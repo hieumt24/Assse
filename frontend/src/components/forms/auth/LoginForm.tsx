@@ -8,7 +8,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useAuth } from "@/hooks";
 import { removeExtraWhitespace } from "@/lib/utils";
 import { loginService } from "@/services";
 import { loginSchema } from "@/validations";
@@ -20,7 +19,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { z } from "zod";
 
 export const LoginForm = () => {
-  const { user } = useAuth();
   // Define form
   const form = useForm<z.infer<typeof loginSchema>>({
     mode: "all",
