@@ -43,7 +43,7 @@ export const FirstTimeForm = () => {
 
   // Function handle onSubmit
   const onSubmit = async (values: z.infer<typeof firstTimeLoginSchema>) => {
-
+    console.log(values);
     setShowModal(false);
   };
 
