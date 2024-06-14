@@ -19,7 +19,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useAuth } from "@/hooks";
-import { useState } from "react";
+import useClickOutside from "@/hooks/useClickOutside";
+import { useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Separator } from "./ui/separator";
 
@@ -29,12 +30,18 @@ export const Header = () => {
   const pathnames = location.pathname.split("/").filter(Boolean);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [openPopup, setOpenPopup] = useState(false);
+  const collapsibleRef = useRef<HTMLDivElement>(null);
+
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsAuthenticated(false);
     navigate("/auth/login");
   };
+
+  useClickOutside(collapsibleRef, () => {
+    setIsUserMenuOpen(false);
+  });
   
   return (
     <div className="flex w-full justify-between bg-red-600 p-6">
@@ -54,6 +61,7 @@ export const Header = () => {
         open={isUserMenuOpen}
         onOpenChange={setIsUserMenuOpen}
         className="relative"
+        ref={collapsibleRef}
       >
         <CollapsibleTrigger asChild>
           <Button
