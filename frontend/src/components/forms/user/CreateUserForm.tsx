@@ -68,7 +68,7 @@ export const CreateUserForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-1/3 h-[740px] space-y-5 rounded-2xl bg-white p-6 shadow-md"
+        className="h-[740px] w-1/3 space-y-5 rounded-2xl bg-white p-6 shadow-md"
       >
         <h1 className="text-2xl font-bold text-red-600">Create New User</h1>
         {/* First name */}
@@ -88,6 +88,7 @@ export const CreateUserForm = () => {
                     const cleanedValue = removeExtraWhitespace(e.target.value); // Clean the input value
                     field.onChange(cleanedValue); // Update the form state
                   }}
+                  autoFocus
                 />
               </FormControl>
               <FormMessage />

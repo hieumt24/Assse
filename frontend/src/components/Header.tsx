@@ -83,7 +83,7 @@ export const Header = () => {
           <Separator />
           <Dialog open={openPopup} onOpenChange={setOpenPopup}>
             <DialogTrigger className="w-full py-2 text-start text-sm transition-all hover:bg-zinc-200">
-              <p className="ms-4 font-medium">Logout</p>
+              <p className="ms-4 font-medium">Log out</p>
             </DialogTrigger>
             <DialogContent className="border-2">
               <DialogHeader>
