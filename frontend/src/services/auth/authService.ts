@@ -13,13 +13,13 @@ export const loginService = (req: LoginReq) => {
       };
     })
     .catch((err) => {
-      return { success: false, message: "Failed to login.", data: err };
+      return { success: false, message: "Failed to login.", data: err.response.data };
     });
 };
 
 export const firstTimeService = (req: FirstTimeLoginReq) => {
   return axiosInstance
-    .post("/auth/first-time", req.newPassword)
+    .post("/auth/change-password", req)
     .then((res) => {
       return {
         success: true,

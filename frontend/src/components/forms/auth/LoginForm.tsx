@@ -42,7 +42,7 @@ export const LoginForm = () => {
       toast.success(res.message);
       navigate("/admin");
     } else {
-      toast.error(res.message);
+      toast.error(res.data.message);
     }
   };
 
@@ -97,15 +97,6 @@ export const LoginForm = () => {
             disabled={!form.formState.isValid}
           >
             Login
-          </Button>
-          <Button
-            type="button"
-            className="border bg-white text-black shadow-none hover:text-white"
-            onClick={() => {
-              navigate("/admin/user");
-            }}
-          >
-            Cancel
           </Button>
         </div>
       </form>

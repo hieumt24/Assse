@@ -15,6 +15,6 @@ export interface LoginReq {
 
 export interface FirstTimeLoginReq {
   username: string;
-  oldPassword: string;
+  currentPassword: string;
   newPassword: string;
 }
