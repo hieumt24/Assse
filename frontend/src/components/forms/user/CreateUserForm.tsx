@@ -222,12 +222,12 @@ export const CreateUserForm = () => {
                 <RadioGroup
                   onValueChange={field.onChange}
                   defaultValue={field.value}
-                  className="flex gap-8"
+                  className="flex gap-5"
                 >
                   {LOCATIONS.map((location) => {
                     return (
                       <FormItem
-                        className="flex items-center space-x-3 space-y-0"
+                        className="flex items-center gap-1 space-y-0"
                         key={location.value}
                       >
                         <FormControl>
