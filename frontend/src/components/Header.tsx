@@ -35,6 +35,7 @@ export const Header = () => {
     setIsAuthenticated(false);
     navigate("/auth/login");
   };
+  
   return (
     <div className="flex w-full justify-between bg-red-600 p-6">
       <Breadcrumb className="flex">

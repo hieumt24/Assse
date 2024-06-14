@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import * as React from "react";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-
+import { LuEye, LuEyeOff } from "react-icons/lu";
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
 
@@ -23,7 +22,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         ref={ref}
         {...props}
       />
-      {type === "password" && ( showPassword ? <FaEyeSlash className="absolute right-2 top-2" onClick={handleTogglePassword}/> : <FaEye className="absolute right-2 top-2" onClick={handleTogglePassword}/>)}
+      {type === "password" && ( showPassword ? <LuEyeOff className="absolute right-2 top-2" onClick={handleTogglePassword}/> : <LuEye  className="absolute right-2 top-2" onClick={handleTogglePassword}/>)}
       </div>
       
       
