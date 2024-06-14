@@ -55,6 +55,7 @@ export const FirstTimeForm = () => {
     if (result.success) {
       setIsAuthenticated(false);
       localStorage.removeItem("token");
+      await toast.success(result.message);
       setShowModal(false);
       navigate("/auth/login");
     } else {
