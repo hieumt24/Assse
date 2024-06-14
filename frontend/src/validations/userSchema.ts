@@ -1,6 +1,7 @@
 import { differenceInYears, isAfter, isValid } from "date-fns";
 import { z } from "zod";
 const dateFormat = /^\d{4}-?\d{2}-?\d{2}$/;
+const firstNameFormat = /^[A-Za-z]+$/;
 const nameFormat = /^[a-zA-Z\s]*$/;
 export const createUserSchema = z.object({
   firstName: z
@@ -8,8 +9,8 @@ export const createUserSchema = z.object({
     .trim()
     .min(2, { message: "The First Name must be at least 2 letters long." })
     .max(50, { message: "The First Name must be no longer than 50 letters." })
-    .regex(nameFormat, {
-      message: "The First Name must only contain letters and spaces.",
+    .regex(firstNameFormat, {
+      message: "The First Name must only contain letters",
     }),
   lastName: z
     .string()
