@@ -52,6 +52,11 @@ namespace AssetManagement.Application.Services
                 return new Response<AuthenticationResponse> { Succeeded = false, Message = "Invalid username or password" };
             }
 
+            if (user == null)
+            {
+                return new Response<AuthenticationResponse> { Succeeded = false, Message = "Invalid username or password" };
+            }
+
             var verificationResult = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
 
             if (verificationResult != PasswordVerificationResult.Success)
