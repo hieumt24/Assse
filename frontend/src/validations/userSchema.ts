@@ -1,8 +1,8 @@
 import { differenceInYears, isAfter, isValid } from "date-fns";
 import { z } from "zod";
 const dateFormat = /^\d{4}-?\d{2}-?\d{2}$/;
+const firstNameFormat = /^[A-Za-z]+$/;
 const nameFormat = /^[a-zA-Z\s]*$/;
-const firstNameFormat = /^[a-zA-Z]+$/;
 
 export const createUserSchema = z
   .object({
