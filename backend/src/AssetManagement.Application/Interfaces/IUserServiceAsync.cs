@@ -11,7 +11,7 @@ namespace AssetManagement.Application.Interfaces
     {
         Task<Response<UserDto>> AddUserAsync(AddUserRequestDto request);
 
-        Task<PagedResponse<List<UserResponseDto>>> GetAllUsersAsync(PaginationFilter validFilter, string? search, string? orderBy, bool isDescending, EnumLocation? adminLocation, string route);
+        Task<PagedResponse<List<UserResponseDto>>> GetAllUsersAsync(PaginationFilter filter, string? search, string? orderBy, bool isDescending, EnumLocation? adminLocation, string route);
 
         Task<Response<UserResponseDto>> GetUserByIdAsync(Guid userId);
 

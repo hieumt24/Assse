@@ -3,12 +3,7 @@ using AssetManagement.Application.Services;
 using AssetManagement.Domain.Common.Specifications;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AssetManagement.Application.Helper
 {
@@ -16,13 +11,40 @@ namespace AssetManagement.Application.Helper
     {
         public static ISpecification<User> CreateSpecification(PaginationFilter filter, string? search, string? orderBy, bool isDescending, EnumLocation? adminLocation)
         {
-            return new UserSpecification<User>(
-                criteria: u => (string.IsNullOrEmpty(search) || u.Username.Contains(search) || u.StaffCode.Contains(search)) && u.Location == adminLocation,
-                orderBy: !string.IsNullOrEmpty(orderBy) && !isDescending ? GetOrderByExpression(orderBy) : null,
-                orderByDescending: !string.IsNullOrEmpty(orderBy) && isDescending ? GetOrderByExpression(orderBy) : null,
-                skip: (filter.PageNumber - 1) * filter.PageSize,
-                take: filter.PageSize
-            );
+            Expression<Func<User, bool>> criteria = user => true;
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                criteria = user => user.FirstName.Contains(search) || user.LastName.Contains(search) || user.Username.Contains(search);
+            }
+
+            if (adminLocation.HasValue)
+            {
+                Expression<Func<User, bool>> locationCriteria = user => user.Location == adminLocation.Value;
+                criteria = criteria.And(locationCriteria);
+            }
+
+            var spec = new UserSpecification(criteria);
+
+            if (!string.IsNullOrEmpty(orderBy))
+            {
+                if (isDescending)
+                {
+                    spec.ApplyOrderByDescending(GetOrderByExpression(orderBy));
+                }
+                else
+                {
+                    spec.ApplyOrderBy(GetOrderByExpression(orderBy));
+                }
+            }
+            else
+            {
+                spec.ApplyOrderByDescending(u => u.CreatedOn);
+            }
+
+            spec.ApplyPaging((filter.PageNumber - 1) * filter.PageSize, filter.PageSize);
+
+            return spec;
         }
 
         private static Expression<Func<User, object>> GetOrderByExpression(string orderBy)
@@ -39,12 +61,21 @@ namespace AssetManagement.Application.Helper
             };
         }
 
-        //Count User
         public static ISpecification<User> TotalUser()
         {
-            return new UserSpecification<User>(
-                               criteria: u => u.IsDeleted == false
-                                            );
+            return new UserSpecification(user => !user.IsDeleted);
+        }
+
+        public static Expression<Func<T, bool>> And<T>(this Expression<Func<T, bool>> expr1, Expression<Func<T, bool>> expr2)
+        {
+            var parameter = Expression.Parameter(typeof(T));
+
+            var body = Expression.AndAlso(
+                Expression.Invoke(expr1, parameter),
+                Expression.Invoke(expr2, parameter)
+            );
+
+            return Expression.Lambda<Func<T, bool>>(body, parameter);
         }
     }
 }

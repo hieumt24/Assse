@@ -46,8 +46,8 @@ namespace AssetManagement.API.Controllers
         public async Task<IActionResult> GetAllUsers([FromQuery] PaginationFilter filter, [FromQuery] string? search, [FromQuery] string? orderBy, [FromQuery] bool isDescending = false, [FromQuery] EnumLocation? adminLocation = EnumLocation.HaNoi)
         {
             var route = Request.Path.Value;
-            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
-            var response = await _userService.GetAllUsersAsync(validFilter, search, orderBy, isDescending, adminLocation, route);
+            //var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+            var response = await _userService.GetAllUsersAsync(filter, search, orderBy, isDescending, adminLocation, route);
             if (!response.Succeeded)
             {
                 return BadRequest(response);

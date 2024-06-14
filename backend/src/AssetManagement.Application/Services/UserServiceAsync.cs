@@ -90,19 +90,19 @@ namespace AssetManagement.Application.Services
             }
         }
 
-        public async Task<PagedResponse<List<UserResponseDto>>> GetAllUsersAsync(PaginationFilter validFilter, string? search, string? orderBy, bool isDescending, EnumLocation? adminLocation, string route)
+        public async Task<PagedResponse<List<UserResponseDto>>> GetAllUsersAsync(PaginationFilter filter, string? search, string? orderBy, bool isDescending, EnumLocation? adminLocation, string route)
         {
             try
             {
-                var specification = UserSpecificationHelper.CreateSpecification(validFilter, search, orderBy, isDescending, adminLocation);
-                var users = await _userRepositoriesAsync.ListAsync(specification);
                 var totalRecords = await _userRepositoriesAsync.CountAsync(UserSpecificationHelper.TotalUser());
+                var specification = UserSpecificationHelper.CreateSpecification(filter, search, orderBy, isDescending, adminLocation);
+                var users = await _userRepositoriesAsync.ListAsync(specification);
                 var userDtos = _mapper.Map<List<UserResponseDto>>(users);
 
                 //return new Response<List<UserResponseDto>> { Data = userDtos, Succeeded = true };
                 //return new PagedResponse<List<UserResponseDto>>(userDtos, filter.PageNumber, filter.PageSize);
 
-                var pagedResponse = PaginationHelper.CreatePagedReponse(userDtos, validFilter, totalRecords, _uriService, route);
+                var pagedResponse = PaginationHelper.CreatePagedReponse(userDtos, filter, totalRecords, _uriService, route);
                 return pagedResponse;
             }
             catch (Exception ex)
