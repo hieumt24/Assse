@@ -12,14 +12,15 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export const Header = () => {
   const {user} = useAuth();
-  console.log(user);
   const location = useLocation();
   const pathnames = location.pathname.split("/").filter(Boolean);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const navigate = useNavigate();
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/");
+    if (confirm("Do you really want to log out")) {
+      localStorage.removeItem("token");
+      navigate("/auth/login");
+    }
   }
     return (
         <div className="w-full bg-red-600 flex justify-between p-6">

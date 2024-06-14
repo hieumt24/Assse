@@ -4,7 +4,7 @@ import { Header } from "@/components/Header";
 import { CreateUser, ManageUser } from "@/pages/admin/";
 import { } from "@radix-ui/react-collapsible";
 import { Route, Routes } from "react-router-dom";
-import { Sidebar } from "./SideBar";
+import { Sidebar } from "../../components/SideBar";
 
 export const Admin = () => {
 

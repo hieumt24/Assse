@@ -48,12 +48,12 @@ interface Token {
   "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name": string;
   StaffCode: string;
   "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": string;
-  "IsFirstTimeLogin" : boolean;
+  "IsFirstTimeLogin" : string;
   "DateOfBirth" : string;
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [token, setToken] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
   const [user, setUser] = useState<User>({
     id: "",
     username: "",
@@ -63,7 +63,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     role: 2,
   });
 
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!token);
 
   const fetchUserFromToken = () => {
     const storedToken = localStorage.getItem("token");
@@ -76,7 +76,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         id: decodedToken.UserId,
         username: decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],
         dateOfBirth: decodedToken.DateOfBirth,
-        isFirstTimeLogin: decodedToken.IsFirstTimeLogin,
+        isFirstTimeLogin: decodedToken.IsFirstTimeLogin === "true",
         staffCode: decodedToken.StaffCode,
         role: parseInt(decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]),
       })
