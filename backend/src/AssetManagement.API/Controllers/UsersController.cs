@@ -27,7 +27,6 @@ namespace AssetManagement.API.Controllers
 
         [HttpPost]
         [Route("users")]
-        [Authorize(Roles = "Admin")]
         [ValidateModel]
         public async Task<IActionResult> Create([FromBody] AddUserRequestDto request)
         {
@@ -41,7 +40,6 @@ namespace AssetManagement.API.Controllers
 
         [HttpGet]
         [Route("users")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllUsers([FromQuery] PaginationFilter filter, [FromQuery] string? search, [FromQuery] string? orderBy, [FromQuery] bool isDescending = false, [FromQuery] EnumLocation? adminLocation = EnumLocation.HaNoi)
         {
             string route = Request.Path.Value;
@@ -56,7 +54,6 @@ namespace AssetManagement.API.Controllers
 
         [HttpGet]
         [Route("users/{userId:guid}")]
-        [Authorize(Roles = "Staff,Admin")]
         public async Task<IActionResult> GetUserById(Guid userId)
         {
             var response = await _userService.GetUserByIdAsync(userId);
@@ -68,7 +65,6 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpPut("UpdateUser")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateUser([FromBody] EditUserRequestDto request)
 
         {

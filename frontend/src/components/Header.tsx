@@ -19,10 +19,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useAuth } from "@/hooks";
-import useClickOutside from "@/hooks/useClickOutside";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Separator } from "./ui/separator";
 
 export const Header = () => {
   const { user, setIsAuthenticated } = useAuth();
@@ -30,19 +28,12 @@ export const Header = () => {
   const pathnames = location.pathname.split("/").filter(Boolean);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [openPopup, setOpenPopup] = useState(false);
-  const collapsibleRef = useRef<HTMLDivElement>(null);
-
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsAuthenticated(false);
     navigate("/auth/login");
   };
-
-  useClickOutside(collapsibleRef, () => {
-    setIsUserMenuOpen(false);
-  });
-  
   return (
     <div className="flex w-full justify-between bg-red-600 p-6">
       <Breadcrumb className="flex">
@@ -61,7 +52,6 @@ export const Header = () => {
         open={isUserMenuOpen}
         onOpenChange={setIsUserMenuOpen}
         className="relative"
-        ref={collapsibleRef}
       >
         <CollapsibleTrigger asChild>
           <Button
@@ -76,14 +66,13 @@ export const Header = () => {
         <CollapsibleContent className="absolute right-0 mt-1 w-40 rounded-md bg-white font-semibold shadow-md">
           <Link
             to="/changepassword"
-            className="block rounded-t-md px-4 py-3 text-sm font-medium transition-all hover:bg-zinc-200"
+            className="block rounded-t-md px-4 py-3 text-sm transition-all hover:bg-zinc-200"
           >
             Change password
           </Link>
-          <Separator />
           <Dialog open={openPopup} onOpenChange={setOpenPopup}>
-            <DialogTrigger className="w-full py-2 text-start text-sm transition-all hover:bg-zinc-200">
-              <p className="ms-4 font-medium">Log out</p>
+            <DialogTrigger className="mt-0 w-full py-2 text-center text-sm transition-all hover:bg-zinc-200">
+              Logout
             </DialogTrigger>
             <DialogContent className="border-2">
               <DialogHeader>
