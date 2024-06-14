@@ -4,13 +4,11 @@ using AssetManagement.Application.Models.DTOs.Users;
 using AssetManagement.Application.Models.DTOs.Users.Requests;
 using AssetManagement.Application.Models.DTOs.Users.Responses;
 using AssetManagement.Application.Wrappers;
-using AssetManagement.Domain.Common.Specifications;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
 using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
-using System.Linq.Expressions;
 
 namespace AssetManagement.Application.Services
 {
@@ -133,5 +131,35 @@ namespace AssetManagement.Application.Services
                 return new Response<UserDto> { Succeeded = false, Errors = { ex.Message } };
             }
         }
+
+        public async Task<Response<UserDto>> DisableUserAsync(Guid userId)
+        {
+            try
+            {
+                var user = await _userRepositoriesAsync.GetByIdAsync(userId);
+                if (user == null)
+                {
+                    return new Response<UserDto> { Succeeded = false, Message = "User not found" };
+                }
+
+                user.IsDisable = !user.IsDisable;
+                await _userRepositoriesAsync.UpdateAsync(user);
+                if (user.IsDisable == true)
+                {
+                    return new Response<UserDto> { Succeeded = true, Message = "User disabled successfully" };
+                }
+                else
+                {
+                    return new Response<UserDto> { Succeeded = true, Message = "User enable successfully" };
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return new Response<UserDto> { Succeeded = false, Errors = { ex.Message } };
+            }
+        }
+
     }
 }

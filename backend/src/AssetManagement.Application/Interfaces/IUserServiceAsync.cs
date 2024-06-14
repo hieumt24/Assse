@@ -12,5 +12,8 @@ namespace AssetManagement.Application.Interfaces
         Task<Response<List<UserResponseDto>>> GetAllUsersAsync(string? search, string? orderBy, bool isDescending, int skip, int take, EnumLocation? adminLocation);
         Task<Response<UserResponseDto>> GetUserByIdAsync(Guid userId);
         Task<Response<UserDto>> EditUserAsync(EditUserRequestDto request);
+
+        Task<Response<UserDto>> DisableUserAsync(Guid userId);
+
     }
 }
