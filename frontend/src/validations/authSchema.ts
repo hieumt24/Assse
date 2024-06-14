@@ -9,7 +9,7 @@ const passwordSchema = z
 export const loginSchema = z.object({
   username: z
     .string()
-    .trim()
+    .regex(/^[A-Za-z0-9]+$/, {message: "Username must not contains any special character"})
     .min(2, { message: "Username must be at least 2 characters" })
     .max(50, { message: "Username must be less than 50 characters" }),
   password: passwordSchema,
