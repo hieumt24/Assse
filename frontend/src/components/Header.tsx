@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/dialog";
 import { useAuth } from "@/hooks";
 import useClickOutside from "@/hooks/useClickOutside";
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Separator } from "./ui/separator";
 
@@ -39,9 +39,12 @@ export const Header = () => {
     navigate("/auth/login");
   };
 
-  useClickOutside(collapsibleRef, () => {
+  const handleClickOutside = useCallback(() => {
+    if (openPopup) return; // Do not close if the popup is open
     setIsUserMenuOpen(false);
-  });
+  }, [openPopup]);
+
+  useClickOutside(collapsibleRef, handleClickOutside);
   
   return (
     <div className="flex w-full justify-between bg-red-600 p-6">
