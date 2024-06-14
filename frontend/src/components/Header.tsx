@@ -21,6 +21,7 @@ import {
 import { useAuth } from "@/hooks";
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Separator } from "./ui/separator";
 
 export const Header = () => {
   const { user, setIsAuthenticated } = useAuth();
@@ -34,7 +35,6 @@ export const Header = () => {
     setIsAuthenticated(false);
     navigate("/auth/login");
   };
-  
   return (
     <div className="flex w-full justify-between bg-red-600 p-6">
       <Breadcrumb className="flex">
@@ -67,13 +67,14 @@ export const Header = () => {
         <CollapsibleContent className="absolute right-0 mt-1 w-40 rounded-md bg-white font-semibold shadow-md">
           <Link
             to="/changepassword"
-            className="block rounded-t-md px-4 py-3 text-sm transition-all hover:bg-zinc-200"
+            className="block rounded-t-md px-4 py-3 text-sm font-medium transition-all hover:bg-zinc-200"
           >
             Change password
           </Link>
+          <Separator />
           <Dialog open={openPopup} onOpenChange={setOpenPopup}>
-            <DialogTrigger className="mt-0 w-full py-2 text-center text-sm transition-all hover:bg-zinc-200">
-              Logout
+            <DialogTrigger className="w-full py-2 text-start text-sm transition-all hover:bg-zinc-200">
+              <p className="ms-4 font-medium">Logout</p>
             </DialogTrigger>
             <DialogContent className="border-2">
               <DialogHeader>
