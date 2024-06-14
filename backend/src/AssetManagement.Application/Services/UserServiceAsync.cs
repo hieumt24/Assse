@@ -1,3 +1,4 @@
+using AssetManagement.Application.Filter;
 using AssetManagement.Application.Helper;
 using AssetManagement.Application.Interfaces;
 using AssetManagement.Application.Models.DTOs.Users;
@@ -19,17 +20,21 @@ namespace AssetManagement.Application.Services
         private readonly IValidator<AddUserRequestDto> _addUserValidator;
         private readonly IValidator<EditUserRequestDto> _editUserValidator;
         private readonly PasswordHasher<User> _passwordHasher;
+        private readonly IUriService _uriService;
 
         public UserServiceAsync(IUserRepositoriesAsync userRepositoriesAsync,
             IMapper mapper,
             IValidator<AddUserRequestDto> addUserValidator,
-            IValidator<EditUserRequestDto> editUserValidator)
+            IValidator<EditUserRequestDto> editUserValidator,
+            IUriService uriService
+        )
         {
             _mapper = mapper;
             _userRepositoriesAsync = userRepositoriesAsync;
             _addUserValidator = addUserValidator;
             _editUserValidator = editUserValidator;
             _passwordHasher = new PasswordHasher<User>();
+            _uriService = uriService;
         }
 
         public async Task<Response<UserDto>> AddUserAsync(AddUserRequestDto request)
@@ -81,20 +86,21 @@ namespace AssetManagement.Application.Services
             }
         }
 
-        public async Task<Response<List<UserResponseDto>>> GetAllUsersAsync(string? search, string? orderBy, bool isDescending, int skip, int take, EnumLocation? adminLocation)
+        public async Task<PagedResponse<List<UserResponseDto>>> GetAllUsersAsync(PaginationFilter filter, string? search, string? orderBy, bool isDescending, EnumLocation? adminLocation, string route)
         {
             try
             {
-                var specification = UserSpecificationHelper.CreateSpecification(search, orderBy, isDescending, skip, take, adminLocation);
+                var totalRecords = await _userRepositoriesAsync.CountAsync(UserSpecificationHelper.TotalUser());
+                var specification = UserSpecificationHelper.CreateSpecification(filter, search, orderBy, isDescending, adminLocation);
                 var users = await _userRepositoriesAsync.ListAsync(specification);
                 var userDtos = _mapper.Map<List<UserResponseDto>>(users);
 
-                return new Response<List<UserResponseDto>> { Data = userDtos, Succeeded = true };
+                var pagedResponse = PaginationHelper.CreatePagedReponse(userDtos, filter, totalRecords, _uriService, route);
+                return pagedResponse;
             }
             catch (Exception ex)
             {
-                return new Response<List<UserResponseDto>> { Succeeded = false, Errors = { ex.Message } };
-
+               return new PagedResponse<List<UserResponseDto>> { Succeeded = false, Errors = { ex.Message } };
             }
         }
 
@@ -118,7 +124,7 @@ namespace AssetManagement.Application.Services
                 existingUser.DateOfBirth = request.DateOfBirth;
                 existingUser.Gender = request.Gender;
                 existingUser.JoinedDate = request.JoinedDate;
-                existingUser.Role = request.Role; 
+                existingUser.Role = request.Role;
 
                 await _userRepositoriesAsync.UpdateAsync(existingUser);
 
@@ -127,7 +133,6 @@ namespace AssetManagement.Application.Services
             }
             catch (Exception ex)
             {
-
                 return new Response<UserDto> { Succeeded = false, Errors = { ex.Message } };
             }
         }

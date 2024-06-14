@@ -20,7 +20,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { z } from "zod";
 
 export const LoginForm = () => {
-  const { user } = useAuth();
   // Define form
   const form = useForm<z.infer<typeof loginSchema>>({
     mode: "all",
@@ -31,16 +30,17 @@ export const LoginForm = () => {
     },
   });
 
+  const { setIsAuthenticated } = useAuth();
+
   // Function handle onSubmit
   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     const res = await loginService({ ...values });
     if (res.success) {
-      localStorage.setItem("token", res.data.token);
-      console.log(res.data);
+      setIsAuthenticated(true);
       toast.success(res.message);
       navigate("/admin");
     } else {
-      toast.error(res.message);
+      toast.error(res.data.message);
     }
   };
 
@@ -59,7 +59,7 @@ export const LoginForm = () => {
           name="username"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>Username <span className="text-red-600">*</span></FormLabel>
               <FormControl>
                 <Input
                   placeholder="Enter username"
@@ -68,6 +68,7 @@ export const LoginForm = () => {
                     const cleanedValue = removeExtraWhitespace(e.target.value); // Clean the input value
                     field.onChange(cleanedValue); // Update the form state
                   }}
+                  autoFocus
                 />
               </FormControl>
               <FormMessage />
@@ -80,9 +81,13 @@ export const LoginForm = () => {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel> Password <span className="text-red-600">*</span></FormLabel>
               <FormControl>
-                <Input placeholder="Enter password" {...field} type="password"/>
+                <Input
+                  placeholder="Enter password"
+                  {...field}
+                  type="password"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -95,15 +100,6 @@ export const LoginForm = () => {
             disabled={!form.formState.isValid}
           >
             Login
-          </Button>
-          <Button
-            type="button"
-            className="border bg-white text-black shadow-none hover:text-white"
-            onClick={() => {
-              navigate("/admin/user");
-            }}
-          >
-            Cancel
           </Button>
         </div>
       </form>

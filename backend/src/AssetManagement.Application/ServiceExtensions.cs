@@ -1,4 +1,4 @@
-﻿using AssetManagement.Application.Interfaces;
+using AssetManagement.Application.Interfaces;
 using AssetManagement.Application.Mappings;
 using AssetManagement.Application.Models.DTOs.Users.Requests;
 using AssetManagement.Application.Services;
@@ -7,6 +7,7 @@ using AssetManagement.Domain.Common.Settings;
 using AssetManagement.Domain.Enums;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -18,15 +19,20 @@ namespace AssetManagement.Application
     {
         public static void ConfigureServices(IServiceCollection service, IConfiguration configuration)
         {
-            service.AddScoped<IUserServiceAsync, UserServiceAsync>();
             service.AddAutoMapper(typeof(GeneralProfile));
             service.AddScoped<IValidator<AddUserRequestDto>, AddUserRequestValidation>();
             service.AddScoped<IValidator<EditUserRequestDto>, EditUserRequestValidation>();
             service.AddScoped<IValidator<ChangePasswordRequest>, PasswordValidation>();
-
-
             service.AddScoped<ITokenService, TokenService>();
             service.AddScoped<IAccountServicecs, AccountService>();
+            service.AddScoped<IUserServiceAsync, UserServiceAsync>();
+            service.AddSingleton<IUriService>(options =>
+            {
+                var accessor = options.GetRequiredService<IHttpContextAccessor>();
+                var request = accessor.HttpContext.Request;
+                var uri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
+                return new UriService(uri);
+            });
 
             var jwtSettings = service.Configure<JWTSettings>(configuration.GetSection("JWTSettings"));
             service.AddSingleton(jwtSettings);

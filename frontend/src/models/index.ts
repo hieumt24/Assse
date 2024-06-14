@@ -14,6 +14,7 @@ export interface LoginReq {
 }
 
 export interface FirstTimeLoginReq {
-  token: string;
+  username: string;
+  currentPassword: string;
   newPassword: string;
 }

@@ -5,58 +5,96 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useAuth } from "@/hooks";
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export const Header = () => {
+  const { user, setIsAuthenticated } = useAuth();
   const location = useLocation();
   const pathnames = location.pathname.split("/").filter(Boolean);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [openPopup, setOpenPopup] = useState(false);
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/");
-  }
-    return (
-        <div className="w-full bg-red-600 flex justify-between p-6">
-        <Breadcrumb className="flex">
-          <BreadcrumbList className="text-xl font-bold text-white">
-            {pathnames.length > 0 && (
-              <>
-                <BreadcrumbItem>
-                  <Link to="/admin">Admin</Link>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-              </>
-            )}
-
-          </BreadcrumbList>
-        </Breadcrumb>
-        <Collapsible
-          open={isUserMenuOpen}
-          onOpenChange={setIsUserMenuOpen}
-          className="relative"
-        >
-            <CollapsibleTrigger
-              asChild
-            >
-              <Button variant="ghost" size="sm" className="text-white text-xl hover:text-red-600 hover:bg-white">
-                <span className="mr-2">usernamemockup</span>
-                <span className="text-xs">&#9660;</span>
-              </Button>
-            </CollapsibleTrigger>
-            <CollapsibleContent className="space-y-2 absolute right-0 mt-1 bg-white w-[150px] shadow-md font-semibold">
-              <Link to="/changepassword" className="block px-4 py-3 text-sm hover:bg-zinc-200 transition-all">
-                Change password
-              </Link>
-              <div 
-                className=" px-4 py-3 text-sm hover:bg-zinc-200 transition-all hover:cursor-pointer"
-                onClick={handleLogout}>
-                Log out
-              </div>
-            </CollapsibleContent>
-        </Collapsible>
-      </div>
-    )
-}
+    setIsAuthenticated(false);
+    navigate("/auth/login");
+  };
+  return (
+    <div className="flex w-full justify-between bg-red-600 p-6">
+      <Breadcrumb className="flex">
+        <BreadcrumbList className="text-xl font-bold text-white">
+          {pathnames.length > 0 && (
+            <>
+              <BreadcrumbItem>
+                <Link to="/admin">Admin</Link>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+            </>
+          )}
+        </BreadcrumbList>
+      </Breadcrumb>
+      <Collapsible
+        open={isUserMenuOpen}
+        onOpenChange={setIsUserMenuOpen}
+        className="relative"
+      >
+        <CollapsibleTrigger asChild>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-xl text-white hover:bg-white hover:text-red-600"
+          >
+            <span className="mr-2">{user.username}</span>
+            <span className="text-xs">&#9660;</span>
+          </Button>
+        </CollapsibleTrigger>
+        <CollapsibleContent className="absolute right-0 mt-1 w-40 rounded-md bg-white font-semibold shadow-md">
+          <Link
+            to="/changepassword"
+            className="block rounded-t-md px-4 py-3 text-sm transition-all hover:bg-zinc-200"
+          >
+            Change password
+          </Link>
+          <Dialog open={openPopup} onOpenChange={setOpenPopup}>
+            <DialogTrigger className="mt-0 w-full py-2 text-center text-sm transition-all hover:bg-zinc-200">
+              Logout
+            </DialogTrigger>
+            <DialogContent className="border-2">
+              <DialogHeader>
+                <DialogTitle className="text-center text-2xl font-bold text-red-600">
+                  Are you sure?
+                </DialogTitle>
+                <DialogDescription className="text-center text-lg">
+                  Do you want to logout?
+                </DialogDescription>
+                <div className="items-ceter flex justify-center gap-4">
+                  <Button variant={"destructive"} onClick={handleLogout}>
+                    Log out
+                  </Button>
+                  <Button variant="outline" onClick={() => setOpenPopup(false)}>
+                    Cancel
+                  </Button>
+                </div>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+        </CollapsibleContent>
+      </Collapsible>
+    </div>
+  );
+};

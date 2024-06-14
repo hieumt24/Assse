@@ -1,15 +1,14 @@
 using AssetManagement.API.CustomActionFilters;
+using AssetManagement.Application.Filter;
 using AssetManagement.Application.Interfaces;
 using AssetManagement.Application.Models.DTOs.Users;
 using AssetManagement.Application.Models.DTOs.Users.Requests;
-using AssetManagement.Application.Models.DTOs.Users.Responses;
 using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Enums;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Data;
 
 namespace AssetManagement.API.Controllers
 {
@@ -41,13 +40,15 @@ namespace AssetManagement.API.Controllers
 
         [HttpGet]
         [Route("users")]
-        public async Task<IActionResult> GetAllUsers([FromQuery] string? search, [FromQuery] string? orderBy, [FromQuery] bool isDescending = false, [FromQuery] int skip = 0, [FromQuery] int take = 10, [FromQuery] EnumLocation? adminLocation = EnumLocation.HaNoi)
+        public async Task<IActionResult> GetAllUsers([FromQuery] PaginationFilter filter, [FromQuery] string? search, [FromQuery] string? orderBy, [FromQuery] bool isDescending = false, [FromQuery] EnumLocation? adminLocation = EnumLocation.HaNoi)
         {
-            var response = await _userService.GetAllUsersAsync(search, orderBy, isDescending, skip, take, adminLocation);
+            string route = Request.Path.Value;
+            var response = await _userService.GetAllUsersAsync(filter, search, orderBy, isDescending, adminLocation, route);
             if (!response.Succeeded)
             {
                 return BadRequest(response);
             }
+
             return Ok(response);
         }
 
@@ -64,8 +65,6 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpPut("UpdateUser")]
-
-        //[ValidateModel]
         public async Task<IActionResult> UpdateUser([FromBody] EditUserRequestDto request)
 
         {
@@ -74,9 +73,7 @@ namespace AssetManagement.API.Controllers
                 return BadRequest(new Response<UserDto> { Succeeded = false, Errors = { "Invalid request data" } });
             }
 
-
             var result = await _userService.EditUserAsync(request);
-
 
             if (result.Succeeded)
             {
@@ -85,6 +82,7 @@ namespace AssetManagement.API.Controllers
 
             return BadRequest(result);
         }
+
 
         [HttpPost]
         [Route("disable/{id}")]
@@ -97,6 +95,7 @@ namespace AssetManagement.API.Controllers
             }
             return BadRequest(response);
         }
+
 
     }
 }

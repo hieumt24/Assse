@@ -11,42 +11,57 @@ import {
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks";
 import { removeExtraWhitespace } from "@/lib/utils";
+import { firstTimeService } from "@/services";
 import { firstTimeLoginSchema } from "@/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { z } from "zod";
 
 export const FirstTimeForm = () => {
-  const { user } = useAuth();
+  const { user, setIsAuthenticated } = useAuth();
+  
   const isFirstTime = user.isFirstTimeLogin;
   const [showModal, setShowModal] = useState<boolean>(isFirstTime);
-  let dateParts = user.dateOfBirth.split('-');
-    
-    // Join the parts into a single string without any separators
-    let newDateStr = dateParts.join('');
+  const dateParts = user.dateOfBirth.split('-');
+  const newDateStr = dateParts.join('');
   const oldPassword = user.username + "@" + newDateStr;
-  useEffect(() => {
-    if (isFirstTime) {
-      setShowModal(true);
-    }
-  }, [user]);
+  
   // Define form
   const form = useForm<z.infer<typeof firstTimeLoginSchema>>({
     mode: "all",
     resolver: zodResolver(firstTimeLoginSchema),
     defaultValues: {
       newPassword: "",
-      oldPassword: oldPassword,
+      currentPassword: oldPassword,
       username: user.username,
     },
   });
 
-  // Function handle onSubmit
+  useEffect(() => {
+    if (isFirstTime) {
+      setShowModal(true);
+    }
+    form.setValue("currentPassword", oldPassword);
+    form.setValue("username", user.username);
+  }, [user]);
+
+  const navigate = useNavigate();
   const onSubmit = async (values: z.infer<typeof firstTimeLoginSchema>) => {
-    console.log(values.newPassword);
-    setShowModal(false);
+    const result = await firstTimeService({...values});
+    if (result.success) {
+      setIsAuthenticated(false);
+      localStorage.removeItem("token");
+      await toast.success(result.message);
+      setShowModal(false);
+      navigate("/auth/login");
+    } else {
+      toast.error(result.message);
+    }
+    
   };
 
   return (
@@ -90,7 +105,7 @@ export const FirstTimeForm = () => {
             />
             <FormField
               control={form.control}
-              name="oldPassword"
+              name="currentPassword"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
