@@ -68,7 +68,7 @@ export const CreateUserForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-1/3 h-[740px] space-y-5 rounded-2xl bg-white p-6 shadow-md"
+        className="h-[740px] w-1/3 space-y-5 rounded-2xl bg-white p-6 shadow-md"
       >
         <h1 className="text-2xl font-bold text-red-600">Create New User</h1>
         {/* First name */}
@@ -88,6 +88,7 @@ export const CreateUserForm = () => {
                     const cleanedValue = removeExtraWhitespace(e.target.value); // Clean the input value
                     field.onChange(cleanedValue); // Update the form state
                   }}
+                  autoFocus
                 />
               </FormControl>
               <FormMessage />
@@ -222,12 +223,12 @@ export const CreateUserForm = () => {
                 <RadioGroup
                   onValueChange={field.onChange}
                   defaultValue={field.value}
-                  className="flex gap-8"
+                  className="flex gap-5"
                 >
                   {LOCATIONS.map((location) => {
                     return (
                       <FormItem
-                        className="flex items-center space-x-3 space-y-0"
+                        className="flex items-center gap-1 space-y-0"
                         key={location.value}
                       >
                         <FormControl>

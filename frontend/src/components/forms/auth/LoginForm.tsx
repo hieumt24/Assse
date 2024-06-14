@@ -30,14 +30,12 @@ export const LoginForm = () => {
     },
   });
 
-  const {setIsAuthenticated} = useAuth();
+  const { setIsAuthenticated } = useAuth();
 
   // Function handle onSubmit
   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     const res = await loginService({ ...values });
     if (res.success) {
-      localStorage.setItem("token", res.data.token);
-      console.log(res.data);
       setIsAuthenticated(true);
       toast.success(res.message);
       navigate("/admin");
@@ -70,6 +68,7 @@ export const LoginForm = () => {
                     const cleanedValue = removeExtraWhitespace(e.target.value); // Clean the input value
                     field.onChange(cleanedValue); // Update the form state
                   }}
+                  autoFocus
                 />
               </FormControl>
               <FormMessage />
@@ -84,7 +83,11 @@ export const LoginForm = () => {
             <FormItem>
               <FormLabel> Password <span className="text-red-600">*</span></FormLabel>
               <FormControl>
-                <Input placeholder="Enter password" {...field} type="password"/>
+                <Input
+                  placeholder="Enter password"
+                  {...field}
+                  type="password"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
