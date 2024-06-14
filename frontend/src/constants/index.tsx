@@ -1,7 +1,7 @@
 export const ADMIN_NAV_FUNCTIONS = [
   {
     name: "Home",
-    path: "/admin",
+    path: "/",
   },
   {
     name: "Manage User",
