@@ -2,7 +2,7 @@ using AssetManagement.Domain.Enums;
 
 namespace AssetManagement.Application.Models.DTOs.Users.Responses
 {
-    public class UserResponseDto 
+    public class UserResponseDto
     {
         public Guid Id { get; set; }
 
@@ -23,5 +23,7 @@ namespace AssetManagement.Application.Models.DTOs.Users.Responses
         public string Username { get; set; }
 
         public EnumLocation Location { get; set; }
+
+        public DateTimeOffset CreatedOn { get; set; }
     }
 }
