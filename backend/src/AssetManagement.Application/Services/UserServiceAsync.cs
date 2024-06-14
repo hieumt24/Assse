@@ -5,15 +5,11 @@ using AssetManagement.Application.Models.DTOs.Users;
 using AssetManagement.Application.Models.DTOs.Users.Requests;
 using AssetManagement.Application.Models.DTOs.Users.Responses;
 using AssetManagement.Application.Wrappers;
-using AssetManagement.Domain.Common.Specifications;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
 using AutoMapper;
-using Azure.Core;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
-using System.Linq.Expressions;
 
 namespace AssetManagement.Application.Services
 {
@@ -90,19 +86,16 @@ namespace AssetManagement.Application.Services
             }
         }
 
-        public async Task<PagedResponse<List<UserResponseDto>>> GetAllUsersAsync(PaginationFilter validFilter, string? search, string? orderBy, bool isDescending, EnumLocation? adminLocation, string route)
+        public async Task<PagedResponse<List<UserResponseDto>>> GetAllUsersAsync(PaginationFilter filter, string? search, string? orderBy, bool isDescending, EnumLocation? adminLocation, string route)
         {
             try
             {
-                var specification = UserSpecificationHelper.CreateSpecification(validFilter, search, orderBy, isDescending, adminLocation);
-                var users = await _userRepositoriesAsync.ListAsync(specification);
                 var totalRecords = await _userRepositoriesAsync.CountAsync(UserSpecificationHelper.TotalUser());
+                var specification = UserSpecificationHelper.CreateSpecification(filter, search, orderBy, isDescending, adminLocation);
+                var users = await _userRepositoriesAsync.ListAsync(specification);
                 var userDtos = _mapper.Map<List<UserResponseDto>>(users);
 
-                //return new Response<List<UserResponseDto>> { Data = userDtos, Succeeded = true };
-                //return new PagedResponse<List<UserResponseDto>>(userDtos, filter.PageNumber, filter.PageSize);
-
-                var pagedResponse = PaginationHelper.CreatePagedReponse(userDtos, validFilter, totalRecords, _uriService, route);
+                var pagedResponse = PaginationHelper.CreatePagedReponse(userDtos, filter, totalRecords, _uriService, route);
                 return pagedResponse;
             }
             catch (Exception ex)
