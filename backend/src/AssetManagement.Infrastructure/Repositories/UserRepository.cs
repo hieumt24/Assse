@@ -15,12 +15,16 @@ namespace AssetManagement.Infrastructure.Repositories
 
         public async Task<User> FindByUsernameAsync(string username)
         {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == username);
-            if (user == null)
+            var user = await _dbContext.Users
+           .Where(u => u.Username.ToLower() == username.ToLower())
+           .FirstOrDefaultAsync();
+
+            if (user != null && user.Username.Equals(username, StringComparison.Ordinal))
             {
-                return null;
+                return user;
             }
-            return user;
+
+            return null;
         }
 
         public string GeneratePassword(string userName, DateTime dateOfBirth)

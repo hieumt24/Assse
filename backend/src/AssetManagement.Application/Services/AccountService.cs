@@ -48,9 +48,14 @@ namespace AssetManagement.Application.Services
         {
             var user = await _userRepositoriesAsync.FindByUsernameAsync(request.Username);
 
+            if (user == null)
+            {
+                return new Response<AuthenticationResponse> { Succeeded = false, Message = "Invalid username or password" };
+            }
+
             var verificationResult = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
 
-            if (user == null || verificationResult != PasswordVerificationResult.Success)
+            if (verificationResult != PasswordVerificationResult.Success)
             {
                 return new Response<AuthenticationResponse> { Succeeded = false, Message = "Invalid username or password" };
             }
