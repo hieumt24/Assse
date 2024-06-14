@@ -3,7 +3,6 @@ import { z } from "zod";
 // Define a custom validation function for the password
 const passwordSchema = z
   .string()
-  .min(8, { message: "Password must be at least 8 characters long" })
   .max(50, { message: "Password must be less than 50 characters" });
 
 export const loginSchema = z.object({
