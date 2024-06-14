@@ -14,15 +14,15 @@ export const ADMIN_NAV_FUNCTIONS = [
   {
     name: "Manage Assignment",
     path: "/assignment",
-  },
+  }, 
   {
     name: "Request for Returning",
-    path: "/return",
+    path: "/return"
   },
   {
     name: "Report",
-    path: "/report",
-  },
+    path: "/report"
+  }
 ];
 
 export const GENDERS = [
