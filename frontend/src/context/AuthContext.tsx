@@ -1,4 +1,3 @@
-import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import React, {
   ReactNode,
@@ -37,7 +36,7 @@ export const AuthContext = createContext<AuthContextProps>({
     staffCode: "",
     role: 2,
   },
-  setUser: () => { },
+  setUser: () => {},
 });
 
 interface AuthProviderProps {
@@ -49,8 +48,8 @@ interface Token {
   "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name": string;
   StaffCode: string;
   "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": string;
-  "IsFirstTimeLogin" : boolean;
-  "DateOfBirth" : string;
+  IsFirstTimeLogin: string;
+  DateOfBirth: string;
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
