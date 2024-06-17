@@ -66,6 +66,11 @@ namespace AssetManagement.Application.Helper
             return new UserSpecification(user => !user.IsDeleted);
         }
 
+        public static ISpecification<User> GetUserByStaffCode(string staffCode)
+        {
+            return new UserSpecification(user => user.StaffCode == staffCode);
+        }
+
         public static Expression<Func<T, bool>> And<T>(this Expression<Func<T, bool>> expr1, Expression<Func<T, bool>> expr2)
         {
             var parameter = Expression.Parameter(typeof(T));

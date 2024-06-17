@@ -21,5 +21,6 @@ namespace AssetManagement.Application.Interfaces
 
         Task<Response<UserDto>> ResetPasswordAsync(Guid userId);
 
+        Task<Response<UserResponseDto>> GetUserByStaffCodeAsync(string staffCode);
     }
 }

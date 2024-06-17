@@ -83,7 +83,6 @@ namespace AssetManagement.API.Controllers
             return BadRequest(result);
         }
 
-
         [HttpPost]
         [Route("disable/{id}")]
         public async Task<IActionResult> DisableUser(Guid id)
@@ -107,6 +106,16 @@ namespace AssetManagement.API.Controllers
             return BadRequest(response);
         }
 
-
+        [HttpGet]
+        [Route("users/staffCode/{staffCode}")]
+        public async Task<IActionResult> GetUserByStaffCode(string staffCode)
+        {
+            var response = await _userService.GetUserByStaffCodeAsync(staffCode);
+            if (!response.Succeeded)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
+        }
     }
 }
