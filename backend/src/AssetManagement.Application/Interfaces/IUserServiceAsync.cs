@@ -16,5 +16,8 @@ namespace AssetManagement.Application.Interfaces
         Task<Response<UserResponseDto>> GetUserByIdAsync(Guid userId);
 
         Task<Response<UserDto>> EditUserAsync(EditUserRequestDto request);
+
+        Task<Response<UserDto>> DisableUserAsync(Guid userId);
+
     }
 }

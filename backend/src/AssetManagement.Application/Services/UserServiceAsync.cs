@@ -100,7 +100,7 @@ namespace AssetManagement.Application.Services
             }
             catch (Exception ex)
             {
-                return new PagedResponse<List<UserResponseDto>> { Succeeded = false, Errors = { ex.Message } };
+               return new PagedResponse<List<UserResponseDto>> { Succeeded = false, Errors = { ex.Message } };
             }
         }
 
@@ -136,5 +136,35 @@ namespace AssetManagement.Application.Services
                 return new Response<UserDto> { Succeeded = false, Errors = { ex.Message } };
             }
         }
+
+        public async Task<Response<UserDto>> DisableUserAsync(Guid userId)
+        {
+            try
+            {
+                var user = await _userRepositoriesAsync.GetByIdAsync(userId);
+                if (user == null)
+                {
+                    return new Response<UserDto> { Succeeded = false, Message = "User not found" };
+                }
+
+                user.IsDisable = !user.IsDisable;
+                await _userRepositoriesAsync.UpdateAsync(user);
+                if (user.IsDisable == true)
+                {
+                    return new Response<UserDto> { Succeeded = true, Message = "User disabled successfully" };
+                }
+                else
+                {
+                    return new Response<UserDto> { Succeeded = true, Message = "User enable successfully" };
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return new Response<UserDto> { Succeeded = false, Errors = { ex.Message } };
+            }
+        }
+
     }
 }
