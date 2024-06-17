@@ -4,6 +4,7 @@ using AssetManagement.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AssetManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240617053534_Seed-Category-Data")]
+    partial class SeedCategoryData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,17 +31,6 @@ namespace AssetManagement.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("AssetCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("AssetLocation")
-                        .HasColumnType("int");
-
-                    b.Property<string>("AssetName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
@@ -47,9 +39,6 @@ namespace AssetManagement.Infrastructure.Migrations
 
                     b.Property<DateTimeOffset>("CreatedOn")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTime>("InstalledDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -63,16 +52,10 @@ namespace AssetManagement.Infrastructure.Migrations
                     b.Property<DateTimeOffset?>("LastModifiedOn")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("Specification")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("State")
-                        .HasColumnType("bit");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("CategoryId")
+                        .IsUnique();
 
                     b.ToTable("Assets");
                 });
@@ -112,7 +95,7 @@ namespace AssetManagement.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("2423fc96-0941-40c1-a547-a6122662df3c"),
+                            Id = new Guid("b62f4360-08e6-4f3f-812d-ea03f447a948"),
                             CategoryName = "Laptop",
                             CreatedOn = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
@@ -120,7 +103,7 @@ namespace AssetManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("0c1ab665-14b5-4565-8d0c-2a363505f1ae"),
+                            Id = new Guid("1cfecdf4-a74d-42e7-b68d-eae822214397"),
                             CategoryName = "Monitor",
                             CreatedOn = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
@@ -128,7 +111,7 @@ namespace AssetManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f3fe76e0-c9d0-491c-a209-6f40a9a98b5b"),
+                            Id = new Guid("dea718a3-9a0f-473f-926c-9b89098e9a6d"),
                             CategoryName = "Mouse",
                             CreatedOn = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
@@ -218,9 +201,9 @@ namespace AssetManagement.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("78442b86-8abb-4e60-a49b-c4130f19b502"),
+                            Id = new Guid("fe44619b-a1b4-4890-8a2c-c64cc65d5f20"),
                             CreatedBy = "System",
-                            CreatedOn = new DateTimeOffset(new DateTime(2024, 6, 17, 13, 26, 31, 588, DateTimeKind.Unspecified).AddTicks(735), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedOn = new DateTimeOffset(new DateTime(2024, 6, 17, 12, 35, 33, 883, DateTimeKind.Unspecified).AddTicks(6403), new TimeSpan(0, 7, 0, 0, 0)),
                             DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "SuperUser",
                             Gender = 1,
@@ -230,7 +213,7 @@ namespace AssetManagement.Infrastructure.Migrations
                             JoinedDate = new DateTime(2024, 6, 17, 0, 0, 0, 0, DateTimeKind.Local),
                             LastName = "Admin",
                             Location = 1,
-                            PasswordHash = "AQAAAAIAAYagAAAAEKmjyP7bDgo+HT+5mvzZ/Dr6HbIjkA5T/aOcknt+AzHNvPfKgsIocaV6W8CpaOuCvw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKrFm7iJqNryNSSescjACvyIOxS3+jRC8LYQrCBH2uAqvJ2+2+31uCGy6t/XJAmhUQ==",
                             Role = 1,
                             StaffCode = "",
                             StaffCodeId = 0,
@@ -241,8 +224,8 @@ namespace AssetManagement.Infrastructure.Migrations
             modelBuilder.Entity("AssetManagement.Domain.Entites.Asset", b =>
                 {
                     b.HasOne("AssetManagement.Domain.Entites.Category", "Category")
-                        .WithMany("Assets")
-                        .HasForeignKey("CategoryId")
+                        .WithOne("Asset")
+                        .HasForeignKey("AssetManagement.Domain.Entites.Asset", "CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -251,7 +234,7 @@ namespace AssetManagement.Infrastructure.Migrations
 
             modelBuilder.Entity("AssetManagement.Domain.Entites.Category", b =>
                 {
-                    b.Navigation("Assets");
+                    b.Navigation("Asset");
                 });
 #pragma warning restore 612, 618
         }

@@ -34,4 +34,8 @@
     <ProjectReference Include="..\AssetManagement.Domain\AssetManagement.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\DTOs\Assets\Responses\" />
+  </ItemGroup>
+
 </Project>
