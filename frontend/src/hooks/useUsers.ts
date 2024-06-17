@@ -6,6 +6,7 @@ export const useUsers = (
   token: string,
   pageNumber: number,
   pageSize: number,
+  search?: string,
 ) => {
   const [users, setUsers] = useState<UserRes[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -14,7 +15,12 @@ export const useUsers = (
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const data = await getAllUserService({ token, pageNumber, pageSize });
+        const data = await getAllUserService({
+          token,
+          pageNumber,
+          pageSize,
+          search,
+        });
         console.log(data);
 
         setUsers(data.data.data);
@@ -26,7 +32,7 @@ export const useUsers = (
     };
 
     fetchUsers();
-  }, [token, pageNumber, pageSize]);
+  }, [token, pageNumber, pageSize, search]);
 
-  return { users, loading, error };
+  return { users, loading, error, setUsers };
 };

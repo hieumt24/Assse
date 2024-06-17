@@ -105,3 +105,7 @@ export const createUserSchema = z
       path: ["joinedDate"],
     },
   );
+
+export const searchUserSchema = z.object({
+  searchTerm: z.string(),
+});
