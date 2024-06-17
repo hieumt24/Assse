@@ -96,6 +96,17 @@ namespace AssetManagement.API.Controllers
             return BadRequest(response);
         }
 
+        [HttpPost("resetPassword")]
+        public async Task<IActionResult> ResetPassword(Guid userId)
+        {
+            var response = await _userService.ResetPasswordAsync(userId);
+            if (response.Succeeded)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
 
     }
 }

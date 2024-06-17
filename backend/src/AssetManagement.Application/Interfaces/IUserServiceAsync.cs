@@ -19,5 +19,7 @@ namespace AssetManagement.Application.Interfaces
 
         Task<Response<UserDto>> DisableUserAsync(Guid userId);
 
+        Task<Response<UserDto>> ResetPasswordAsync(Guid userId);
+
     }
 }

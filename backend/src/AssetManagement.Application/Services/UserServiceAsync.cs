@@ -166,5 +166,29 @@ namespace AssetManagement.Application.Services
             }
         }
 
+        public async Task<Response<UserDto>> ResetPasswordAsync(Guid userId)
+        {
+            try
+            {
+                var existingUser = await _userRepositoriesAsync.GetByIdAsync(userId);
+                if (existingUser == null)
+                {
+                    return new Response<UserDto>("User not found");
+                }
+
+                string newPassword = _userRepositoriesAsync.GeneratePassword(existingUser.Username, existingUser.DateOfBirth);
+                existingUser.PasswordHash = _passwordHasher.HashPassword(existingUser, newPassword);
+
+                await _userRepositoriesAsync.UpdateAsync(existingUser);
+
+                var updatedUserDto = _mapper.Map<UserDto>(existingUser);
+                return new Response<UserDto> { Succeeded = true, Message = "Reset password successfully" };
+            }
+            catch (Exception ex)
+            {
+                return new Response<UserDto> { Succeeded = false, Errors = { ex.Message } };
+            }
+        }
+
     }
 }
