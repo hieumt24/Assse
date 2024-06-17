@@ -15,7 +15,7 @@ namespace AssetManagement.Application.Helper
 
             if (!string.IsNullOrEmpty(search))
             {
-                criteria = user => user.FirstName.Contains(search) || user.LastName.Contains(search) || user.Username.Contains(search);
+                criteria = user => user.FirstName.Contains(search) || user.LastName.Contains(search) || user.Username.Contains(search) || user.StaffCode.Contains(search);
             }
 
             if (adminLocation.HasValue)
@@ -64,6 +64,11 @@ namespace AssetManagement.Application.Helper
         public static ISpecification<User> TotalUser()
         {
             return new UserSpecification(user => !user.IsDeleted);
+        }
+
+        public static ISpecification<User> GetUserByStaffCode(string staffCode)
+        {
+            return new UserSpecification(user => user.StaffCode == staffCode);
         }
 
         public static Expression<Func<T, bool>> And<T>(this Expression<Func<T, bool>> expr1, Expression<Func<T, bool>> expr2)

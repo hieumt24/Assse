@@ -4,6 +4,7 @@ using AssetManagement.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,10 +12,13 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AssetManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240617062632_Fix-Asset-Category-Relationship")]
+    partial class FixAssetCategoryRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
+#pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
@@ -217,23 +221,19 @@ namespace AssetManagement.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-
                             Id = new Guid("78442b86-8abb-4e60-a49b-c4130f19b502"),
                             CreatedBy = "System",
                             CreatedOn = new DateTimeOffset(new DateTime(2024, 6, 17, 13, 26, 31, 588, DateTimeKind.Unspecified).AddTicks(735), new TimeSpan(0, 7, 0, 0, 0)),
-
                             DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "SuperUser",
                             Gender = 1,
                             IsDeleted = false,
                             IsDisable = false,
                             IsFirstTimeLogin = false,
-
                             JoinedDate = new DateTime(2024, 6, 17, 0, 0, 0, 0, DateTimeKind.Local),
                             LastName = "Admin",
                             Location = 1,
                             PasswordHash = "AQAAAAIAAYagAAAAEKmjyP7bDgo+HT+5mvzZ/Dr6HbIjkA5T/aOcknt+AzHNvPfKgsIocaV6W8CpaOuCvw==",
-
                             Role = 1,
                             StaffCode = "",
                             StaffCodeId = 0,
@@ -256,7 +256,7 @@ namespace AssetManagement.Infrastructure.Migrations
                 {
                     b.Navigation("Assets");
                 });
-
+#pragma warning restore 612, 618
         }
     }
 }

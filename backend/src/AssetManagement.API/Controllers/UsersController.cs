@@ -82,5 +82,40 @@ namespace AssetManagement.API.Controllers
 
             return BadRequest(result);
         }
+
+        [HttpPost]
+        [Route("disable/{id}")]
+        public async Task<IActionResult> DisableUser(Guid id)
+        {
+            var response = await _userService.DisableUserAsync(id);
+            if (response.Succeeded)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
+        [HttpPost("resetPassword")]
+        public async Task<IActionResult> ResetPassword(Guid userId)
+        {
+            var response = await _userService.ResetPasswordAsync(userId);
+            if (response.Succeeded)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
+        [HttpGet]
+        [Route("users/staffCode/{staffCode}")]
+        public async Task<IActionResult> GetUserByStaffCode(string staffCode)
+        {
+            var response = await _userService.GetUserByStaffCodeAsync(staffCode);
+            if (!response.Succeeded)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
+        }
     }
 }
