@@ -100,7 +100,7 @@ namespace AssetManagement.Application.Services
             }
             catch (Exception ex)
             {
-               return new PagedResponse<List<UserResponseDto>> { Succeeded = false, Errors = { ex.Message } };
+                return new PagedResponse<List<UserResponseDto>> { Succeeded = false, Errors = { ex.Message } };
             }
         }
 
@@ -156,9 +156,7 @@ namespace AssetManagement.Application.Services
                 else
                 {
                     return new Response<UserDto> { Succeeded = true, Message = "User enable successfully" };
-
                 }
-
             }
             catch (Exception ex)
             {
@@ -190,5 +188,23 @@ namespace AssetManagement.Application.Services
             }
         }
 
+        public async Task<Response<UserResponseDto>> GetUserByStaffCodeAsync(string staffCode)
+        {
+            try
+            {
+                var userWithStaffCode = UserSpecificationHelper.GetUserByStaffCode(staffCode);
+                if (userWithStaffCode == null)
+                {
+                    return new Response<UserResponseDto>("User not found");
+                }
+                var user = await _userRepositoriesAsync.FirstOrDefaultAsync(userWithStaffCode);
+                var userDto = _mapper.Map<UserResponseDto>(user);
+                return new Response<UserResponseDto> { Succeeded = true, Data = userDto };
+            }
+            catch (Exception ex)
+            {
+                return new Response<UserResponseDto> { Succeeded = false, Errors = { ex.Message } };
+            }
+        }
     }
 }
