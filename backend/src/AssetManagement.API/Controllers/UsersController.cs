@@ -40,10 +40,10 @@ namespace AssetManagement.API.Controllers
 
         [HttpGet]
         [Route("users")]
-        public async Task<IActionResult> GetAllUsers([FromQuery] PaginationFilter filter, [FromQuery] string? search, [FromQuery] string? orderBy, [FromQuery] bool isDescending = false, [FromQuery] EnumLocation? adminLocation = EnumLocation.HaNoi)
+        public async Task<IActionResult> GetAllUsers([FromQuery] PaginationFilter filter, [FromQuery] string? search, [FromQuery] EnumLocation? adminLocation, [FromQuery] RoleType roleType, [FromQuery] string? orderBy, [FromQuery] bool isDescending = false)
         {
             string route = Request.Path.Value;
-            var response = await _userService.GetAllUsersAsync(filter, search, orderBy, isDescending, adminLocation, route);
+            var response = await _userService.GetAllUsersAsync(filter, search, adminLocation, roleType, orderBy, isDescending, route);
             if (!response.Succeeded)
             {
                 return BadRequest(response);
