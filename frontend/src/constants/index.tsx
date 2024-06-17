@@ -1,12 +1,28 @@
 export const ADMIN_NAV_FUNCTIONS = [
   {
     name: "Home",
-    path: "/admin",
+    path: "/home",
   },
   {
     name: "Manage User",
     path: "/user",
   },
+  {
+    name: "Manage Asset",
+    path: "/asset",
+  },
+  {
+    name: "Manage Assignment",
+    path: "/assignment",
+  }, 
+  {
+    name: "Request for Returning",
+    path: "/return"
+  },
+  {
+    name: "Report",
+    path: "/report"
+  }
 ];
 
 export const GENDERS = [
