@@ -217,19 +217,23 @@ namespace AssetManagement.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
+
                             Id = new Guid("78442b86-8abb-4e60-a49b-c4130f19b502"),
                             CreatedBy = "System",
                             CreatedOn = new DateTimeOffset(new DateTime(2024, 6, 17, 13, 26, 31, 588, DateTimeKind.Unspecified).AddTicks(735), new TimeSpan(0, 7, 0, 0, 0)),
+
                             DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "SuperUser",
                             Gender = 1,
                             IsDeleted = false,
                             IsDisable = false,
                             IsFirstTimeLogin = false,
+
                             JoinedDate = new DateTime(2024, 6, 17, 0, 0, 0, 0, DateTimeKind.Local),
                             LastName = "Admin",
                             Location = 1,
                             PasswordHash = "AQAAAAIAAYagAAAAEKmjyP7bDgo+HT+5mvzZ/Dr6HbIjkA5T/aOcknt+AzHNvPfKgsIocaV6W8CpaOuCvw==",
+
                             Role = 1,
                             StaffCode = "",
                             StaffCodeId = 0,

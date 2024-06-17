@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks";
-import { removeExtraWhitespace } from "@/lib/utils";
 import { firstTimeService } from "@/services";
 import { firstTimeLoginSchema } from "@/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -64,6 +63,13 @@ export const FirstTimeForm = () => {
     
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsAuthenticated(false);
+    navigate("/auth/login");
+    toast.success("You have been logged out");
+  };
+
   return (
     <FullPageModal show={showModal}>
       <Form {...form}>
@@ -92,10 +98,7 @@ export const FirstTimeForm = () => {
                       placeholder="Enter your new password"
                       {...field}
                       onBlur={(e) => {
-                        const cleanedValue = removeExtraWhitespace(
-                          e.target.value,
-                        ); // Clean the input value
-                        field.onChange(cleanedValue); // Update the form state
+                        field.onChange(e.target.value);
                       }}
                     />
                   </FormControl>
@@ -133,13 +136,20 @@ export const FirstTimeForm = () => {
                 </FormItem>
               )}
             />
-            <div className="mt-6 flex justify-end gap-8">
+            <div className="mt-6 flex justify-end gap-4">
               <Button
                 type="submit"
-                className="bg-red-500 hover:bg-white hover:text-red-500"
+                className="bg-red-500 hover:bg-white hover:text-red-500 w-[76px]"
                 disabled={!form.formState.isValid}
               >
                 Save
+              </Button>
+              <Button
+                type="submit"
+                className="bg-white text-black shadow-none hover:text-white border w-[76px]"
+                onClick={handleLogout}
+              >
+                Log out
               </Button>
             </div>
           </div>
