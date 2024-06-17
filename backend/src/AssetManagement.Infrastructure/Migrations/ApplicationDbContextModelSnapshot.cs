@@ -256,6 +256,7 @@ namespace AssetManagement.Infrastructure.Migrations
                 {
                     b.Navigation("Assets");
                 });
+
         }
     }
 }

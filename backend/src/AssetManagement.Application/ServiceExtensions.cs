@@ -19,6 +19,8 @@ namespace AssetManagement.Application
     {
         public static void ConfigureServices(IServiceCollection service, IConfiguration configuration)
         {
+
+
             service.AddScoped<IAssetServiceAsync, AssetServiceAsync>();
 
             service.AddAutoMapper(typeof(GeneralProfile));
