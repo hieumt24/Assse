@@ -24,8 +24,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       />
       {type === "password" && ( showPassword ? <LuEye className="absolute right-2 top-2" onClick={handleTogglePassword}/> : <LuEyeOff className="absolute right-2 top-2" onClick={handleTogglePassword}/>)}
       </div>
-      
-      
     )
   }
 )
