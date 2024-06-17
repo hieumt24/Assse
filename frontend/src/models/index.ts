@@ -8,6 +8,15 @@ export interface CreateUserReq {
   location: number;
 }
 
+export interface UpdateUserReq {
+  dateOfBirth: string;
+  joinedDate: string;
+  gender: number;
+  role: number;
+  location: number;
+  userId: string;
+}
+
 export interface LoginReq {
   username: string;
   password: string;

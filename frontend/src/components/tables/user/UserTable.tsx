@@ -7,6 +7,7 @@ import {
 
 import { FullPageModal } from "@/components/FullPageModal";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import {
   Table,
@@ -19,7 +20,6 @@ import {
 import { LOCATIONS } from "@/constants";
 import { PaginationState, UserRes } from "@/models";
 import { getUserByIdService } from "@/services";
-import { Dialog, DialogContent } from "@radix-ui/react-dialog";
 import { format } from "date-fns";
 import { Dispatch, SetStateAction, useState } from "react";
 
@@ -132,41 +132,41 @@ export function UserTable<TData, TValue>({
       </div>
       <FullPageModal show={openDetails}>
         <Dialog open={openDetails} onOpenChange={setOpenDetails}>
-          <DialogContent className="p-6 relative">
-              <div className="font-bold text-2xl">{userDetails?.staffCode}</div>
+          <DialogContent className="p-6">
+              <div className="font-bold text-2xl text-red-600">{userDetails?.staffCode}</div>
               <Separator/>
-              <table className="mt-2 text-xl">
+              <table className="text-xl">
                 <tbody>
                   <tr>
-                    <td className="w-[150px]">Username</td>
+                    <td className="w-[150px] font-medium">Username</td>
                     <td>{userDetails?.username}</td>
                   </tr>
                   <tr>
-                    <td>First Name</td>
+                    <td className="font-medium">First Name</td>
                     <td>{userDetails?.firstName}</td>
                   </tr>
                   <tr>
-                    <td>Last Name</td>
+                    <td className="font-medium">Last Name</td>
                     <td>{userDetails?.lastName}</td>
                   </tr>
                   <tr>
-                    <td>Date of Birth</td>
+                    <td className="font-medium">Date of Birth</td>
                     <td>{userDetails?.dateOfBirth ? format(userDetails?.dateOfBirth, "yyyy/MM/dd") : ""}</td>
                   </tr>
                   <tr>
-                    <td>Joined date</td>
+                    <td className="font-medium">Joined date</td>
                     <td>{userDetails?.joinedDate ? format(userDetails?.joinedDate, "yyyy/MM/dd") : ""}</td>
                   </tr>
                   <tr>
-                    <td>Gender</td>
+                    <td className="font-medium">Gender</td>
                     <td>{userDetails?.gender === 2 ? "Male" : "Female"}</td>
                   </tr>
                   <tr>
-                    <td>Role</td>
+                    <td className="font-medium">Role</td>
                     <td>{userDetails?.role === 1 ? "Admin" : "Staff"}</td>
                   </tr>
                   <tr>
-                    <td>Location</td>
+                    <td className="font-medium">Location</td>
                     <td>{userDetails?.location ? LOCATIONS[userDetails.location-1].label : ""}</td>
                   </tr>
                 </tbody>

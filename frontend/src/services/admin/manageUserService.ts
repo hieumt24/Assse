@@ -1,9 +1,7 @@
 import axiosInstance from "@/api/axiosInstance";
-import { CreateUserReq, GetUserReq } from "@/models";
+import { CreateUserReq, GetUserReq, UpdateUserReq } from "@/models";
 
 export const createUserService = (req: CreateUserReq) => {
-  console.log(import.meta.env.BASE_URL);
-
   return axiosInstance
     .post("/users", req)
     .then((res) => {
@@ -14,7 +12,7 @@ export const createUserService = (req: CreateUserReq) => {
       };
     })
     .catch((err) => {
-      return { success: false, message: "Failed to create user.", error: err };
+      return { success: false, message: "Failed to create user.", data: err };
     });
 };
 
@@ -58,7 +56,7 @@ export const getUserByIdService = (id: string) => {
 
 export const getUserByStaffCodeService = (staffCode: string | undefined) => {
   return axiosInstance
-    .get(`/users/${staffCode}`, {
+    .get(`/users/staffCode/${staffCode}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -72,5 +70,24 @@ export const getUserByStaffCodeService = (staffCode: string | undefined) => {
     })
     .catch((err) => {
       return { success: false, message: "Failed to fetch user.", data: err };
+    });
+};
+
+export const updateUserService = (req: UpdateUserReq) => {
+  return axiosInstance
+    .put(`/users`, req, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+    .then((res) => {
+      return {
+        success: true,
+        message: "User updated successfully!",
+        data: res.data,
+      };
+    })
+    .catch((err) => {
+      return { success: false, message: "Failed to update user.", data: err };
     });
 };

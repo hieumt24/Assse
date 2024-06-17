@@ -1,27 +1,28 @@
 import { Button } from "@/components/ui/button";
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { GENDERS, LOCATIONS, ROLES } from "@/constants";
 import { removeExtraWhitespace } from "@/lib/utils";
-import { createUserService, getUserByStaffCodeService } from "@/services";
+import { getUserByStaffCodeService, updateUserService } from "@/services";
 import { createUserSchema } from "@/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChangeEvent, useEffect } from "react";
+import { format } from "date-fns";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -31,7 +32,8 @@ import { z } from "zod";
 
 export const EditUserForm = () => {
     const {staffCode} = useParams();
-
+    const [userId, setUserId] = useState("");
+    
   const form = useForm<z.infer<typeof createUserSchema>>({
     mode: "all",
     resolver: zodResolver(createUserSchema),
@@ -51,24 +53,38 @@ export const EditUserForm = () => {
         try {
             const res = await getUserByStaffCodeService(staffCode);
             if (res.success) {
-                form.reset({...res.data.data});
+              const userDetails = res.data.data;
+              form.reset({
+                firstName: userDetails.firstName,
+                lastName: userDetails.lastName,
+                dateOfBirth: format(userDetails.dateOfBirth, "yyyy-MM-dd"),
+                joinedDate: format(userDetails.joinedDate, "yyyy-MM-dd"),
+                gender: userDetails.gender.toString(),
+                role: userDetails.role.toString(),
+                location: userDetails.location.toString(),
+              });
+              setUserId(userDetails.id);
             }
         } catch (error) {
             console.log(error);
+            toast.error("Error fetching user data");
         }
     }
-  })
-
+    fetchUser();
+    
+  }, [staffCode])
+  
   // Function handle onSubmit
   const onSubmit = async (values: z.infer<typeof createUserSchema>) => {
     const gender = parseInt(values.gender);
     const role = parseInt(values.role);
     const location = parseInt(values.location);
-    const res = await createUserService({
+    const res = await updateUserService({
       ...values,
       gender,
       role,
       location,
+      userId: userId
     });
     if (res.success) {
       toast.success(res.message);
