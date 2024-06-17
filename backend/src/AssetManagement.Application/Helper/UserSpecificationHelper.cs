@@ -15,7 +15,7 @@ namespace AssetManagement.Application.Helper
 
             if (!string.IsNullOrEmpty(search))
             {
-                criteria = user => user.FirstName.Contains(search) || user.LastName.Contains(search) || user.Username.Contains(search);
+                criteria = user => user.FirstName.Contains(search) || user.LastName.Contains(search) || user.Username.Contains(search) || user.StaffCode.Contains(search);
             }
 
             if (adminLocation.HasValue)
