@@ -23,7 +23,7 @@ export interface UserRes {
   id?: string;
   firstName?: string;
   lastName?: string;
-  dateOfBirth?: string;
+  dateOfBirth?: Date;
   joinedDate?: string;
   gender?: number;
   role?: number;

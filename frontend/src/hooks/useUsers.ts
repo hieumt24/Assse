@@ -15,8 +15,6 @@ export const useUsers = (
     const fetchUsers = async () => {
       try {
         const data = await getAllUserService({ token, pageNumber, pageSize });
-        console.log(data);
-
         setUsers(data.data.data);
       } catch (error) {
         setError(true);

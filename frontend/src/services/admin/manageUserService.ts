@@ -36,3 +36,41 @@ export const getAllUserService = (req: GetUserReq) => {
       return { success: false, message: "Failed to fetch users.", data: err };
     });
 };
+
+export const getUserByIdService = (id: string) => {
+  return axiosInstance
+    .get(`/users/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+    .then((res) => {
+      return {
+        success: true,
+        message: "User fetched successfully!",
+        data: res.data,
+      };
+    })
+    .catch((err) => {
+      return { success: false, message: "Failed to fetch user.", data: err };
+    });
+};
+
+export const getUserByStaffCodeService = (staffCode: string | undefined) => {
+  return axiosInstance
+    .get(`/users/${staffCode}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+    .then((res) => {
+      return {
+        success: true,
+        message: "User fetched successfully!",
+        data: res.data,
+      };
+    })
+    .catch((err) => {
+      return { success: false, message: "Failed to fetch user.", data: err };
+    });
+};

@@ -5,6 +5,7 @@ import { CreateUser, ManageUser } from "@/pages/admin/";
 import { } from "@radix-ui/react-collapsible";
 import { Route, Routes } from "react-router-dom";
 import { Sidebar } from "../../components/SideBar";
+import { EditUser } from "./manage/user/EditUser";
 
 export const Admin = () => {
 
@@ -17,6 +18,7 @@ export const Admin = () => {
         <Routes>
           <Route path="user" element={<ManageUser />} />
           <Route path="user/create-user" element={<CreateUser />} />
+          <Route path="user/edit/:staffCode" element={<EditUser />} />
         </Routes>
       </div>
     </div>
