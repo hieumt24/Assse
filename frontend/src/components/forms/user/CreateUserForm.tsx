@@ -21,11 +21,13 @@ import { removeExtraWhitespace } from "@/lib/utils";
 import { createUserService } from "@/services";
 import { createUserSchema } from "@/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ChangeEvent } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { z } from "zod";
+ 
 
 export const CreateUserForm = () => {
   // Define form
@@ -128,7 +130,25 @@ export const CreateUserForm = () => {
                 Date of birth <span className="text-red-600">*</span>
               </FormLabel>
               <FormControl>
-                <Input {...field} type="date" className="justify-center" />
+                <Input {...field} type="date" className="justify-center"
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  const value = e.target.value;
+                  const parts = value.split('-');
+                  if (parts.length > 0 && parts[0].length > 4) {
+                    // If the year part is longer than 4 digits, truncate it
+                    const truncatedValue = `${parts[0].substring(0, 4)}-${parts[1]}-${parts[2]}`;
+                    field.onChange({
+                      ...e,
+                      target: {
+                        ...e.target,
+                        value: truncatedValue,
+                      },
+                    });
+                  } else {
+                    // Update the field value as normal
+                    field.onChange(e);
+                  }
+                }}/>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -144,7 +164,25 @@ export const CreateUserForm = () => {
                 Joined Date <span className="text-red-600">*</span>
               </FormLabel>
               <FormControl>
-                <Input {...field} type="date" className="justify-center" />
+              <Input {...field} type="date" className="justify-center"
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  const value = e.target.value;
+                  const parts = value.split('-');
+                  if (parts.length > 0 && parts[0].length > 4) {
+                    // If the year part is longer than 4 digits, truncate it
+                    const truncatedValue = `${parts[0].substring(0, 4)}-${parts[1]}-${parts[2]}`;
+                    field.onChange({
+                      ...e,
+                      target: {
+                        ...e.target,
+                        value: truncatedValue,
+                      },
+                    });
+                  } else {
+                    // Update the field value as normal
+                    field.onChange(e);
+                  }
+                }}/>
               </FormControl>
               <FormMessage />
             </FormItem>
