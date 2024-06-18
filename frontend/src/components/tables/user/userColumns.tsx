@@ -60,7 +60,7 @@ export const userColumns: ColumnDef<UserRes>[] = [
             className="text-red-500 hover:text-red-700"
             onClick={(e) => {
               e.stopPropagation();
-              console.log("delete user")
+              console.log("delete user");
             }}
           >
             <MdDelete size={20} />
@@ -72,9 +72,9 @@ export const userColumns: ColumnDef<UserRes>[] = [
   {
     accessorKey: "id",
     header: "",
-    cell: ({row}) => {
+    cell: ({ row }) => {
       const user = row.original;
-      return <div className="hidden">{user.id}</div>
-    }
-  }
+      return <div className="hidden">{user.id}</div>;
+    },
+  },
 ];

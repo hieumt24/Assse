@@ -30,6 +30,7 @@ interface UserTableProps<TData, TValue> {
   onPaginationChange: Dispatch<
     SetStateAction<{ pageSize: number; pageIndex: number }>
   >;
+  pageCount?: number;
 }
 
 export function UserTable<TData, TValue>({
@@ -37,6 +38,7 @@ export function UserTable<TData, TValue>({
   data,
   pagination,
   onPaginationChange,
+  pageCount,
 }: Readonly<UserTableProps<TData, TValue>>) {
   const table = useReactTable({
     data,
@@ -45,6 +47,7 @@ export function UserTable<TData, TValue>({
     manualPagination: true,
     state: { pagination },
     onPaginationChange,
+    pageCount,
   });
 
   const [openDetails, setOpenDetails] = useState(false);
@@ -52,13 +55,12 @@ export function UserTable<TData, TValue>({
 
   const handleOpenDetails = async (id: string) => {
     setOpenDetails(true);
-    var result = await getUserByIdService(id);
+    const result = await getUserByIdService(id);
     setUserDetails(result.data.data);
   };
-
   return (
     <div>
-      <div className="rounded-md border relative">
+      <div className="relative rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -85,7 +87,7 @@ export function UserTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className="hover:cursor-pointer"
-                  onClick={async ()=>handleOpenDetails(row.getValue("id"))}
+                  onClick={async () => handleOpenDetails(row.getValue("id"))}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -96,7 +98,6 @@ export function UserTable<TData, TValue>({
                     </TableCell>
                   ))}
                 </TableRow>
-                
               ))
             ) : (
               <TableRow>
@@ -120,7 +121,7 @@ export function UserTable<TData, TValue>({
         >
           Previous
         </Button>
-        <span className="bg-red-500 px-2 text-white">{`${pagination.pageIndex + 1}`}</span>
+        <span>{`${pagination.pageIndex + 1} of ${pageCount}`}</span>
         <Button
           variant="outline"
           size="sm"
@@ -133,48 +134,61 @@ export function UserTable<TData, TValue>({
       <FullPageModal show={openDetails}>
         <Dialog open={openDetails} onOpenChange={setOpenDetails}>
           <DialogContent className="p-6">
-              <div className="font-bold text-2xl text-red-600">{userDetails?.staffCode}</div>
-              <Separator/>
-              <table className="text-xl">
-                <tbody>
-                  <tr>
-                    <td className="w-[150px] font-medium">Username</td>
-                    <td>{userDetails?.username}</td>
-                  </tr>
-                  <tr>
-                    <td className="font-medium">First Name</td>
-                    <td>{userDetails?.firstName}</td>
-                  </tr>
-                  <tr>
-                    <td className="font-medium">Last Name</td>
-                    <td>{userDetails?.lastName}</td>
-                  </tr>
-                  <tr>
-                    <td className="font-medium">Date of Birth</td>
-                    <td>{userDetails?.dateOfBirth ? format(userDetails?.dateOfBirth, "yyyy/MM/dd") : ""}</td>
-                  </tr>
-                  <tr>
-                    <td className="font-medium">Joined date</td>
-                    <td>{userDetails?.joinedDate ? format(userDetails?.joinedDate, "yyyy/MM/dd") : ""}</td>
-                  </tr>
-                  <tr>
-                    <td className="font-medium">Gender</td>
-                    <td>{userDetails?.gender === 2 ? "Male" : "Female"}</td>
-                  </tr>
-                  <tr>
-                    <td className="font-medium">Role</td>
-                    <td>{userDetails?.role === 1 ? "Admin" : "Staff"}</td>
-                  </tr>
-                  <tr>
-                    <td className="font-medium">Location</td>
-                    <td>{userDetails?.location ? LOCATIONS[userDetails.location-1].label : ""}</td>
-                  </tr>
-                </tbody>
-              </table>
+            <div className="text-2xl font-bold text-red-600">
+              {userDetails?.staffCode}
+            </div>
+            <Separator />
+            <table className="text-xl">
+              <tbody>
+                <tr>
+                  <td className="w-[150px] font-medium">Username</td>
+                  <td>{userDetails?.username}</td>
+                </tr>
+                <tr>
+                  <td className="font-medium">First Name</td>
+                  <td>{userDetails?.firstName}</td>
+                </tr>
+                <tr>
+                  <td className="font-medium">Last Name</td>
+                  <td>{userDetails?.lastName}</td>
+                </tr>
+                <tr>
+                  <td className="font-medium">Date of Birth</td>
+                  <td>
+                    {userDetails?.dateOfBirth
+                      ? format(userDetails?.dateOfBirth, "yyyy/MM/dd")
+                      : ""}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="font-medium">Joined date</td>
+                  <td>
+                    {userDetails?.joinedDate
+                      ? format(userDetails?.joinedDate, "yyyy/MM/dd")
+                      : ""}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="font-medium">Gender</td>
+                  <td>{userDetails?.gender === 2 ? "Male" : "Female"}</td>
+                </tr>
+                <tr>
+                  <td className="font-medium">Role</td>
+                  <td>{userDetails?.role === 1 ? "Admin" : "Staff"}</td>
+                </tr>
+                <tr>
+                  <td className="font-medium">Location</td>
+                  <td>
+                    {userDetails?.location
+                      ? LOCATIONS[userDetails.location - 1].label
+                      : ""}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </DialogContent>
         </Dialog>
       </FullPageModal>
-      
     </div>
   );
 }
