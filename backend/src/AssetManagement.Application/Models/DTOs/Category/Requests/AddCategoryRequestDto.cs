@@ -1,16 +1,13 @@
 ﻿using AssetManagement.Domain.Common.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace AssetManagement.Domain.Entites
+namespace AssetManagement.Application.Models.DTOs.Category.Requests
 {
-    public class Category : BaseEntity
+    public class AddCategoryRequestDto
     {
         [Required]
         public string CategoryName { get; set; } = string.Empty;
-
         [Required]
-        public string Prefix { get; set; } = string.Empty; 
-
-        public virtual ICollection<Asset>? Assets { get; set; }
+        public string Prefix { get; set; } = string.Empty;
     }
 }

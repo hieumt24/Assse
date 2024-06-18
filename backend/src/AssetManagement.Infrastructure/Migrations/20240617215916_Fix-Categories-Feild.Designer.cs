@@ -4,6 +4,7 @@ using AssetManagement.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AssetManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240617215916_Fix-Categories-Feild")]
+    partial class FixCategoriesFeild
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -105,7 +108,7 @@ namespace AssetManagement.Infrastructure.Migrations
                     b.Property<DateTimeOffset?>("LastModifiedOn")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("Prefix")
+                    b.Property<string>("PreFix")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -116,30 +119,30 @@ namespace AssetManagement.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("000b91d3-c77b-41ed-90d0-f4a3594b6588"),
+                            Id = new Guid("a76030e4-a341-47f2-a40d-c342d0a9ac8f"),
                             CategoryName = "Laptop",
                             CreatedOn = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
                             IsDisable = false,
-                            Prefix = "LA"
+                            PreFix = "LA"
                         },
                         new
                         {
-                            Id = new Guid("d5f17596-3b19-413b-9a73-ddbdeb5f3e30"),
+                            Id = new Guid("8897f88d-e88c-4fed-9aa0-14c615ae67c7"),
                             CategoryName = "Monitor",
                             CreatedOn = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
                             IsDisable = false,
-                            Prefix = "MO"
+                            PreFix = "MO"
                         },
                         new
                         {
-                            Id = new Guid("40d36eaf-ee50-4eed-9cf6-e650dd526969"),
+                            Id = new Guid("60b8e9b4-7fbb-4ae9-ae7f-842307661519"),
                             CategoryName = "Desk",
                             CreatedOn = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
                             IsDisable = false,
-                            Prefix = "DE"
+                            PreFix = "DE"
                         });
                 });
 
@@ -225,9 +228,9 @@ namespace AssetManagement.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c3bacf4e-f89f-4db5-aedf-6a305524c65f"),
+                            Id = new Guid("5c7fcf3a-d8d5-4783-8127-3edea3608f83"),
                             CreatedBy = "System",
-                            CreatedOn = new DateTimeOffset(new DateTime(2024, 6, 18, 5, 56, 28, 363, DateTimeKind.Unspecified).AddTicks(281), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedOn = new DateTimeOffset(new DateTime(2024, 6, 18, 4, 59, 15, 888, DateTimeKind.Unspecified).AddTicks(5301), new TimeSpan(0, 7, 0, 0, 0)),
                             DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "SuperUser",
                             Gender = 1,
@@ -237,7 +240,7 @@ namespace AssetManagement.Infrastructure.Migrations
                             JoinedDate = new DateTime(2024, 6, 18, 0, 0, 0, 0, DateTimeKind.Local),
                             LastName = "Admin",
                             Location = 1,
-                            PasswordHash = "AQAAAAIAAYagAAAAECNgoIld6TN4ppkpU1qLKgD0Ssrr2clk7+UzpBBp0IEKNJBtKYbSXkGATOaA3EMu5g==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENz0pK+FWN9FVBJ1IXoq8ZKWmCoRLgo6Ylb2fHgYCXW0nMAM/NkZjYK5lOPv+7dmxg==",
                             Role = 1,
                             StaffCode = "",
                             StaffCodeId = 0,

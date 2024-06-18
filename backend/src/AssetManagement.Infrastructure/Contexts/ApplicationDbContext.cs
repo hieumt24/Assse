@@ -54,10 +54,10 @@ namespace AssetManagement.Infrastructure.Contexts
 
             // seed category
             modelBuilder.Entity<Category>().HasData(
-                new Category { Id = Guid.NewGuid(), CategoryName = "Laptop" },
-                new Category { Id = Guid.NewGuid(), CategoryName = "Monitor" },
-                new Category { Id = Guid.NewGuid(), CategoryName = "Mouse" }
-            );
+                new Category { Id = Guid.NewGuid(), CategoryName = "Laptop", Prefix = "LA" },
+                new Category { Id = Guid.NewGuid(), CategoryName = "Monitor", Prefix = "MO" },
+                new Category { Id = Guid.NewGuid(), CategoryName = "Desk", Prefix = "DE" }
+            ) ;
         }
     }
 }
