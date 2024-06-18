@@ -98,7 +98,7 @@ export const Header = () => {
                 <DialogDescription className="text-center text-lg">
                   Do you want to logout?
                 </DialogDescription>
-                <div className="items-ceter flex justify-center gap-4">
+                <div className="flex items-center justify-center gap-4">
                   <Button variant={"destructive"} onClick={handleLogout}>
                     Log out
                   </Button>

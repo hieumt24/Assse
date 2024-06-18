@@ -86,12 +86,12 @@ namespace AssetManagement.Application.Services
             }
         }
 
-        public async Task<PagedResponse<List<UserResponseDto>>> GetAllUsersAsync(PaginationFilter filter, string? search, string? orderBy, bool isDescending, EnumLocation? adminLocation, string route)
+        public async Task<PagedResponse<List<UserResponseDto>>> GetAllUsersAsync(PaginationFilter filter, string? search, EnumLocation? adminLocation, RoleType? roleType, string? orderBy, bool? isDescending, string? route)
         {
             try
             {
                 var totalRecords = await _userRepositoriesAsync.CountAsync(UserSpecificationHelper.TotalUser());
-                var specification = UserSpecificationHelper.CreateSpecification(filter, search, orderBy, isDescending, adminLocation);
+                var specification = UserSpecificationHelper.CreateSpecification(filter, search, adminLocation, roleType, orderBy, isDescending);
                 var users = await _userRepositoriesAsync.ListAsync(specification);
                 var userDtos = _mapper.Map<List<UserResponseDto>>(users);
 
