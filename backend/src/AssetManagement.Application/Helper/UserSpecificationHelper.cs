@@ -9,7 +9,7 @@ namespace AssetManagement.Application.Helper
 {
     public static class UserSpecificationHelper
     {
-        public static ISpecification<User> CreateSpecification(PaginationFilter filter, string? search, EnumLocation? adminLocation, RoleType? roleType, string? orderBy, bool? isDescending)
+        public static ISpecification<User> CreateSpecification(string? search, EnumLocation? adminLocation, RoleType? roleType, string? orderBy, bool? isDescending)
         {
             Expression<Func<User, bool>> criteria = user => !user.IsDeleted && !user.IsDisable;
 
@@ -46,9 +46,14 @@ namespace AssetManagement.Application.Helper
                 spec.ApplyOrderByDescending(u => u.CreatedOn);
             }
 
-            spec.ApplyPaging((filter.PageNumber - 1) * filter.PageSize, filter.PageSize);
-
             return spec;
+        }
+
+        public static ISpecification<User> CreateSpecificationPagination(ISpecification<User> userQuery, PaginationFilter filter)
+        {
+            var useragination = new UserSpecification(userQuery.Criteria);
+            useragination.ApplyPaging(filter.PageSize * (filter.PageNumber - 1), filter.PageSize);
+            return useragination;
         }
 
         private static Expression<Func<User, object>> GetOrderByExpression(string orderBy)
@@ -63,11 +68,6 @@ namespace AssetManagement.Application.Helper
                 "gender" => u => u.Gender,
                 _ => u => u.FirstName,
             };
-        }
-
-        public static ISpecification<User> TotalUser()
-        {
-            return new UserSpecification(user => !user.IsDeleted);
         }
 
         public static ISpecification<User> GetUserByStaffCode(string staffCode)
