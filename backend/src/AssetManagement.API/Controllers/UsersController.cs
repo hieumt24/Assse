@@ -6,9 +6,7 @@ using AssetManagement.Application.Models.DTOs.Users.Requests;
 using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Enums;
 using FluentValidation;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 
 namespace AssetManagement.API.Controllers
 {
@@ -37,8 +35,8 @@ namespace AssetManagement.API.Controllers
             return Ok(response);
         }
 
-        [HttpGet]
-        [Route("users")]
+        [HttpPost]
+        [Route("filter-users")]
         public async Task<IActionResult> GetAllUsers([FromQuery] PaginationFilter filter, [FromQuery] string? search, [FromQuery] EnumLocation? adminLocation, [FromQuery] RoleType roleType, [FromQuery] string? orderBy, [FromQuery] bool isDescending = false)
         {
             string route = Request.Path.Value;
