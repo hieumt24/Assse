@@ -10,7 +10,7 @@ export const ManageUser = () => {
   const { pageSize, pageNumber, onPaginationChange, pagination } =
     usePagination();
   const [search, setSearch] = useState("");
-  const { users, loading, error } = useUsers(
+  const { users, loading, error, pageCount } = useUsers(
     token!,
     pageNumber,
     pageSize,
@@ -40,6 +40,7 @@ export const ManageUser = () => {
           data={users!}
           onPaginationChange={onPaginationChange}
           pagination={pagination}
+          pageCount={pageCount}
         />
       )}
       <Outlet />

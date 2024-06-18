@@ -24,6 +24,7 @@ interface UserTableProps<TData, TValue> {
   onPaginationChange: Dispatch<
     SetStateAction<{ pageSize: number; pageIndex: number }>
   >;
+  pageCount?: number;
 }
 
 export function UserTable<TData, TValue>({
@@ -31,6 +32,7 @@ export function UserTable<TData, TValue>({
   data,
   pagination,
   onPaginationChange,
+  pageCount,
 }: Readonly<UserTableProps<TData, TValue>>) {
   const table = useReactTable({
     data,
@@ -39,6 +41,7 @@ export function UserTable<TData, TValue>({
     manualPagination: true,
     state: { pagination },
     onPaginationChange,
+    pageCount,
   });
 
   return (
@@ -102,7 +105,7 @@ export function UserTable<TData, TValue>({
         >
           Previous
         </Button>
-        <span className="bg-red-500 px-2 text-white">{`${pagination.pageIndex + 1}`}</span>
+        <span>{`${pagination.pageIndex + 1} of ${pageCount}`}</span>
         <Button
           variant="outline"
           size="sm"

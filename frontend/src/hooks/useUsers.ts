@@ -11,6 +11,7 @@ export const useUsers = (
   const [users, setUsers] = useState<UserRes[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean | null>(false);
+  const [pageCount, setPageCount] = useState<number>(0);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -24,6 +25,7 @@ export const useUsers = (
         console.log(data);
 
         setUsers(data.data.data);
+        setPageCount(data.data.totalPages);
       } catch (error) {
         setError(true);
       } finally {
@@ -34,5 +36,5 @@ export const useUsers = (
     fetchUsers();
   }, [token, pageNumber, pageSize, search]);
 
-  return { users, loading, error, setUsers };
+  return { users, loading, error, setUsers, pageCount };
 };
