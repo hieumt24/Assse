@@ -10,8 +10,8 @@ namespace AssetManagement.Domain.Common.Specifications
         Expression<Func<T, object>> OrderBy { get; }
         Expression<Func<T, object>> OrderByDescending { get; }
         Expression<Func<T, object>> GroupBy { get; }
-        int Take { get; }
-        int Skip { get; }
+        int Take { get; set; }
+        int Skip { get; set; }
         bool IsPagingEnabled { get; }
     }
 }

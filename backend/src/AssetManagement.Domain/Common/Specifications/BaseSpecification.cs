@@ -21,8 +21,8 @@ namespace AssetManagement.Domain.Common.Specifications
         public Expression<Func<T, object>> OrderBy { get; private set; }
         public Expression<Func<T, object>> OrderByDescending { get; private set; }
         public Expression<Func<T, object>> GroupBy { get; private set; }
-        public int Take { get; private set; }
-        public int Skip { get; private set; }
+        public int Take { get; set; }
+        public int Skip { get; set; }
         public bool IsPagingEnabled { get; private set; } = false;
 
         public virtual void AddInclude(Expression<Func<T, object>> includeExpression)

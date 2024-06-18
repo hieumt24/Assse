@@ -90,12 +90,15 @@ namespace AssetManagement.Application.Services
         {
             try
             {
-                var totalRecords = await _userRepositoriesAsync.CountAsync(UserSpecificationHelper.TotalUser());
-                var specification = UserSpecificationHelper.CreateSpecification(filter, search, adminLocation, roleType, orderBy, isDescending);
-                var users = await _userRepositoriesAsync.ListAsync(specification);
+                var userQuery = UserSpecificationHelper.CreateSpecification(search, adminLocation, roleType, orderBy, isDescending);
+
+                var totalRecordsSpec = await _userRepositoriesAsync.CountAsync(userQuery);
+                var userPagination = UserSpecificationHelper.CreateSpecificationPagination(filter);
+                var countTest = await _userRepositoriesAsync.CountAsync(userPagination);
+                var users = await _userRepositoriesAsync.ListAsync(userPagination);
                 var userDtos = _mapper.Map<List<UserResponseDto>>(users);
 
-                var pagedResponse = PaginationHelper.CreatePagedReponse(userDtos, filter, totalRecords, _uriService, route);
+                var pagedResponse = PaginationHelper.CreatePagedReponse(userDtos, filter, totalRecordsSpec, _uriService, route);
                 return pagedResponse;
             }
             catch (Exception ex)

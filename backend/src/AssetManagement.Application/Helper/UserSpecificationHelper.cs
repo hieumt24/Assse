@@ -9,7 +9,7 @@ namespace AssetManagement.Application.Helper
 {
     public static class UserSpecificationHelper
     {
-        public static ISpecification<User> CreateSpecification(PaginationFilter filter, string? search, EnumLocation? adminLocation, RoleType? roleType, string? orderBy, bool? isDescending)
+        public static ISpecification<User> CreateSpecification(string? search, EnumLocation? adminLocation, RoleType? roleType, string? orderBy, bool? isDescending)
         {
             Expression<Func<User, bool>> criteria = user => !user.IsDeleted && !user.IsDisable;
 
@@ -46,8 +46,14 @@ namespace AssetManagement.Application.Helper
                 spec.ApplyOrderByDescending(u => u.CreatedOn);
             }
 
-            spec.ApplyPaging((filter.PageNumber - 1) * filter.PageSize, filter.PageSize);
+            return spec;
+        }
 
+        public static ISpecification<User> CreateSpecificationPagination(PaginationFilter filter)
+        {
+            Expression<Func<User, bool>> criteria = user => !user.IsDeleted && !user.IsDisable;
+            var spec = new UserSpecification(criteria);
+            spec.ApplyPaging(filter.PageSize, filter.PageNumber);
             return spec;
         }
 
