@@ -8,6 +8,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useLoading } from "@/context/LoadingContext";
 import { useAuth } from "@/hooks";
 import { removeExtraWhitespace } from "@/lib/utils";
 import { loginService } from "@/services";
@@ -31,16 +32,25 @@ export const LoginForm = () => {
   });
 
   const { setIsAuthenticated } = useAuth();
+  const { setIsLoading } = useLoading();
 
   // Function handle onSubmit
   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
-    const res = await loginService({ ...values });
-    if (res.success) {
-      setIsAuthenticated(true);
-      toast.success(res.message);
-      navigate("/admin");
-    } else {
-      toast.error(res.data.message);
+    try {
+      setIsLoading(true);
+      const res = await loginService({ ...values });
+      if (res.success) {
+        setIsAuthenticated(true);
+        toast.success(res.message);
+        navigate("/admin");
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error("Error logging in");
+    } finally {
+      setIsLoading(false);
     }
   };
 
