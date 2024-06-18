@@ -9,6 +9,7 @@ import { FullPageModal } from "@/components/FullPageModal";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import {
   Table,
@@ -159,54 +160,92 @@ export function UserTable<TData, TValue>({
                 {userDetails?.staffCode}
               </div>
               <Separator />
-              <table className="text-xl">
-                <tbody>
-                  <tr>
-                    <td className="w-[150px] font-medium">Username</td>
-                    <td>{userDetails?.username}</td>
-                  </tr>
-                  <tr>
-                    <td className="font-medium">First Name</td>
-                    <td>{userDetails?.firstName}</td>
-                  </tr>
-                  <tr>
-                    <td className="font-medium">Last Name</td>
-                    <td>{userDetails?.lastName}</td>
-                  </tr>
-                  <tr>
-                    <td className="font-medium">Date of Birth</td>
-                    <td>
-                      {userDetails?.dateOfBirth
+              <div className="flex flex-col gap-2">
+                <div>
+                  <label htmlFor="username" className="font-medium">
+                    Username
+                  </label>
+                  <Input id="username" value={userDetails?.username} readOnly />
+                </div>
+                <div>
+                  <label htmlFor="firstName" className="font-medium">
+                    First name
+                  </label>
+                  <Input
+                    id="firstName"
+                    value={userDetails?.firstName}
+                    readOnly
+                  />
+                </div>
+                <div>
+                  <label htmlFor="lastName" className="font-medium">
+                    Last name
+                  </label>
+                  <Input id="lastName" value={userDetails?.lastName} readOnly />
+                </div>
+                <div>
+                  <label htmlFor="dateOfBirth" className="font-medium">
+                    Date of birth
+                  </label>
+                  <Input
+                    id="dateOfBirth"
+                    value={
+                      userDetails?.dateOfBirth
                         ? format(userDetails?.dateOfBirth, "yyyy/MM/dd")
-                        : ""}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="font-medium">Joined date</td>
-                    <td>
-                      {userDetails?.joinedDate
+                        : ""
+                    }
+                    readOnly
+                  />
+                </div>
+                <div>
+                  <label htmlFor="joinedDate" className="font-medium">
+                    Joined date
+                  </label>
+                  <Input
+                    id="joinedDate"
+                    value={
+                      userDetails?.joinedDate
                         ? format(userDetails?.joinedDate, "yyyy/MM/dd")
-                        : ""}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="font-medium">Gender</td>
-                    <td>{userDetails?.gender === 2 ? "Male" : "Female"}</td>
-                  </tr>
-                  <tr>
-                    <td className="font-medium">Role</td>
-                    <td>{userDetails?.role === 1 ? "Admin" : "Staff"}</td>
-                  </tr>
-                  <tr>
-                    <td className="font-medium">Location</td>
-                    <td>
-                      {userDetails?.location
+                        : ""
+                    }
+                    readOnly
+                  />
+                </div>
+                <div>
+                  <label htmlFor="gender" className="font-medium">
+                    Gender
+                  </label>
+                  <Input
+                    id="gender"
+                    value={userDetails?.gender === 2 ? "Male" : "Female"}
+                    readOnly
+                  />
+                </div>
+                <div>
+                  <label htmlFor="role" className="font-medium">
+                    Role
+                  </label>
+                  <Input
+                    id="role"
+                    value={userDetails?.role === 1 ? "Admin" : "Staff"}
+                    readOnly
+                  />
+                </div>
+                <div>
+                  <label htmlFor="location" className="font-medium">
+                    Location
+                  </label>
+                  <Input
+                    id="location"
+                    value={
+                      userDetails?.location
                         ? LOCATIONS[userDetails.location - 1].label
-                        : ""}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                        : ""
+                    }
+                    readOnly
+                  />
+                </div>
+              </div>
             </DialogContent>
           )}
         </Dialog>
