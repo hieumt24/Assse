@@ -12,7 +12,7 @@ using System.Data;
 
 namespace AssetManagement.API.Controllers
 {
-    [Route("api/v1")]
+    [Route("api/v1/users")]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -26,7 +26,6 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpPost]
-        [Route("users")]
         [ValidateModel]
         public async Task<IActionResult> Create([FromBody] AddUserRequestDto request)
         {
@@ -39,7 +38,6 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpGet]
-        [Route("users")]
         public async Task<IActionResult> GetAllUsers([FromQuery] PaginationFilter filter, [FromQuery] string? search, [FromQuery] EnumLocation? adminLocation, [FromQuery] RoleType roleType, [FromQuery] string? orderBy, [FromQuery] bool isDescending = false)
         {
             string route = Request.Path.Value;
@@ -53,7 +51,7 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpGet]
-        [Route("users/{userId:guid}")]
+        [Route("{userId:guid}")]
         public async Task<IActionResult> GetUserById(Guid userId)
         {
             var response = await _userService.GetUserByIdAsync(userId);
@@ -64,7 +62,7 @@ namespace AssetManagement.API.Controllers
             return Ok(response);
         }
 
-        [HttpPut("UpdateUser")]
+        [HttpPut]
         public async Task<IActionResult> UpdateUser([FromBody] EditUserRequestDto request)
 
         {
@@ -107,7 +105,7 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpGet]
-        [Route("users/staffCode/{staffCode}")]
+        [Route("staffCode/{staffCode}")]
         public async Task<IActionResult> GetUserByStaffCode(string staffCode)
         {
             var response = await _userService.GetUserByStaffCodeAsync(staffCode);
