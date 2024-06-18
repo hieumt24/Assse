@@ -43,7 +43,7 @@ export const ChangePasswordForm = (props: {
     if (result.success) {
       setIsAuthenticated(false);
       localStorage.removeItem("token");
-      await toast.success(result.message);
+      toast.success(result.message);
       onOpenChange(false);
       navigate("/auth/login");
     } else {

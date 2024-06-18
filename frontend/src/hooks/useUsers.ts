@@ -8,23 +8,23 @@ export const useUsers = (
   pageSize: number,
 ) => {
   const [users, setUsers] = useState<UserRes[] | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [isLoading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean | null>(false);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const data = await getAllUserService({ token, pageNumber, pageSize });
-        setUsers(data.data.data);
-      } catch (error) {
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchUsers = async () => {
+    try {
+      const data = await getAllUserService({ token, pageNumber, pageSize });
+      setUsers(data.data.data);
+    } catch (error) {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchUsers();
   }, [token, pageNumber, pageSize]);
 
-  return { users, loading, error };
+  return { users, isLoading, error, fetchUsers };
 };
