@@ -108,6 +108,9 @@ export const createUserSchema = z
     },
   );
 
+export const searchUserSchema = z.object({
+  searchTerm: z.string(),
+});
 export const updateUserSchema = z
   .object({
     dateOfBirth: z

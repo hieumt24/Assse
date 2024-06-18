@@ -1,8 +1,10 @@
 using AssetManagement.Application.Interfaces;
 using AssetManagement.Application.Mappings;
+using AssetManagement.Application.Models.DTOs.Category.Requests;
 using AssetManagement.Application.Models.DTOs.Users.Requests;
 using AssetManagement.Application.Services;
 using AssetManagement.Application.Validations;
+using AssetManagement.Application.Validations.Category;
 using AssetManagement.Domain.Common.Settings;
 using AssetManagement.Domain.Enums;
 using FluentValidation;
@@ -22,6 +24,10 @@ namespace AssetManagement.Application
 
 
             service.AddScoped<IAssetServiceAsync, AssetServiceAsync>();
+            service.AddScoped<ICategoryServiceAsync, CategoryServiceAsync>();
+
+            service.AddScoped<IValidator<AddCategoryRequestDto>, AddCategoryRequestValidation>();
+            service.AddScoped<IValidator<UpdateCategoryRequestDto>, UpdateCategoryRequestValidation>();
 
             service.AddAutoMapper(typeof(GeneralProfile));
             service.AddScoped<IValidator<AddUserRequestDto>, AddUserRequestValidation>();

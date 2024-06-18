@@ -15,14 +15,15 @@ namespace AssetManagement.Infrastructure.Repositories
 
         public async Task<string> GenerateAssetCodeAsync(Guid CategoryId)
         {
-            // Get the category to access its name
+            // Get the category to access its prefix
             var category = await _dbContext.Categories.FindAsync(CategoryId);
             if (category == null)
             {
                 throw new Exception("Category not found");
             }
 
-            string prefix = new string(category.CategoryName.ToUpper().Take(2).ToArray());
+            // Use the prefix from the category
+            string prefix = category.Prefix.ToUpper();
 
             // Get the last asset code for this category
             var lastAssetCode = await _dbContext.Assets

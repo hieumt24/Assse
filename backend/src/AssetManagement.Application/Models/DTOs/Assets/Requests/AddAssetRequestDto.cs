@@ -13,7 +13,7 @@ namespace AssetManagement.Application.Models.DTOs.Assets.Requests
 
         [Required]
         [DataType(DataType.Date)]
-        public DateTime InstalledDate { get; set; }
+        public DateTime InstalledDate { get; set; } = DateTime.Now;
 
         [Required]
         // true = Available and false = Not Available

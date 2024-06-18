@@ -51,7 +51,6 @@ export const userColumns = ({
     cell: ({ row }) => {
       const user = row.original;
       const navigate = useNavigate();
-
       return (
         <div className="flex gap-1">
           <button

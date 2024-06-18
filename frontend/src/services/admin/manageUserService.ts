@@ -18,7 +18,9 @@ export const createUserService = (req: CreateUserReq) => {
 
 export const getAllUserService = (req: GetUserReq) => {
   return axiosInstance
-    .get(`/users?pageSize=${req.pageSize}&pageNumber=${req.pageNumber + 1}`)
+    .post(
+      `/users/filter-users?pageSize=${req.pageSize}&pageNumber=${req.pageNumber + 1}&search=${req.search ? req.search : ""}`,
+    )
     .then((res) => {
       return {
         success: true,

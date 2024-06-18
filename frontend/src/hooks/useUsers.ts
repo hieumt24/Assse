@@ -6,15 +6,25 @@ export const useUsers = (
   token: string,
   pageNumber: number,
   pageSize: number,
+  search?: string,
 ) => {
   const [users, setUsers] = useState<UserRes[] | null>(null);
-  const [isLoading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean | null>(false);
+  const [pageCount, setPageCount] = useState<number>(0);
 
   const fetchUsers = async () => {
     try {
-      const data = await getAllUserService({ token, pageNumber, pageSize });
+      const data = await getAllUserService({
+        token,
+        pageNumber,
+        pageSize,
+        search,
+      });
+      console.log(data);
+
       setUsers(data.data.data);
+      setPageCount(data.data.totalPages);
     } catch (error) {
       setError(true);
     } finally {
@@ -24,7 +34,7 @@ export const useUsers = (
 
   useEffect(() => {
     fetchUsers();
-  }, [token, pageNumber, pageSize]);
+  }, [token, pageNumber, pageSize, search]);
 
-  return { users, isLoading, error, fetchUsers };
+  return { users, loading, error, setUsers, pageCount, fetchUsers };
 };
