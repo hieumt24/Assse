@@ -35,7 +35,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\DTOs\Assets\Responses\" />
     <Folder Include="Models\DTOs\Category\Responses\" />
   </ItemGroup>
 

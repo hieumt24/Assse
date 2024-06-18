@@ -19,14 +19,14 @@ namespace AssetManagement.Domain.Entites
         public DateTime InstalledDate { get; set; }
 
         [Required]
-        // true = Available and false = Not Available
-        public bool State { get; set; } = true;
+        public AssetStateType State { get; set; }
 
         [Required]
         public EnumLocation AssetLocation { get; set; }
 
-        // relationship 
+        // relationship
         public Guid CategoryId { get; set; }
+
         public virtual Category? Category { get; set; }
     }
 }

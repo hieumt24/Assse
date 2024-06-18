@@ -6,7 +6,6 @@ using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Entites;
 using AutoMapper;
 
-
 namespace AssetManagement.Application.Services
 {
     public class AssetServiceAsync : IAssetServiceAsync
@@ -28,13 +27,15 @@ namespace AssetManagement.Application.Services
                 var newAsset = _mapper.Map<Asset>(request);
                 newAsset.AssetCode = await _assetRepository.GenerateAssetCodeAsync(newAsset.CategoryId);
 
+                newAsset.CreatedBy = request.AdminId;
                 newAsset.CreatedOn = DateTime.Now;
                 var asset = await _assetRepository.AddAsync(newAsset);
 
                 var assetDto = _mapper.Map<AssetDto>(asset);
 
                 return new Response<AssetDto>();
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return new Response<AssetDto> { Succeeded = false, Errors = { ex.Message } };
             }
