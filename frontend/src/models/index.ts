@@ -29,17 +29,17 @@ export interface FirstTimeLoginReq {
 }
 
 export interface UserRes {
-  id?: string;
-  firstName?: string;
-  lastName?: string;
-  dateOfBirth?: Date;
-  joinedDate?: string;
-  gender?: number;
-  role?: number;
-  staffCode?: string;
-  username?: string;
+  id: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: Date;
+  joinedDate: string;
+  gender: number;
+  role: number;
+  staffCode: string;
+  username: string;
   location?: number;
-  createdOn?: string;
+  createdOn: string;
 }
 
 export interface GetUserReq {

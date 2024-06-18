@@ -18,13 +18,8 @@ export const createUserService = (req: CreateUserReq) => {
 
 export const getAllUserService = (req: GetUserReq) => {
   return axiosInstance
-    .get(
-      `/users?pageSize=${req.pageSize}&pageNumber=${req.pageNumber + 1}&search=${req.search ? req.search : ""}`,
-      {
-        headers: {
-          Authorization: `Bearer ${req.token}`,
-        },
-      },
+    .post(
+      `/users/filter-users?pageSize=${req.pageSize}&pageNumber=${req.pageNumber + 1}&search=${req.search ? req.search : ""}`,
     )
     .then((res) => {
       return {
@@ -40,11 +35,7 @@ export const getAllUserService = (req: GetUserReq) => {
 
 export const getUserByIdService = (id: string) => {
   return axiosInstance
-    .get(`/users/${id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
+    .get(`/users/${id}`)
     .then((res) => {
       return {
         success: true,
@@ -59,11 +50,7 @@ export const getUserByIdService = (id: string) => {
 
 export const getUserByStaffCodeService = (staffCode: string | undefined) => {
   return axiosInstance
-    .get(`/users/staffCode/${staffCode}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
+    .get(`/users/staffCode/${staffCode}`)
     .then((res) => {
       return {
         success: true,
@@ -78,11 +65,7 @@ export const getUserByStaffCodeService = (staffCode: string | undefined) => {
 
 export const updateUserService = (req: UpdateUserReq) => {
   return axiosInstance
-    .put(`/users`, req, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
+    .put(`/users`, req)
     .then((res) => {
       return {
         success: true,
@@ -92,5 +75,20 @@ export const updateUserService = (req: UpdateUserReq) => {
     })
     .catch((err) => {
       return { success: false, message: "Failed to update user.", data: err };
+    });
+};
+
+export const disableUserService = (id: string) => {
+  return axiosInstance
+    .post(`/users/disable/${id}`)
+    .then((res) => {
+      return {
+        success: true,
+        message: "User disabled successfully!",
+        data: res.data,
+      };
+    })
+    .catch((err) => {
+      return { success: false, message: "Failed to disable user.", data: err };
     });
 };

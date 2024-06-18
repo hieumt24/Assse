@@ -4,7 +4,13 @@ import { format, parseISO } from "date-fns";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 
-export const userColumns: ColumnDef<UserRes>[] = [
+interface UserColumnsProps {
+  handleOpenDisable: (id: string) => void;
+}
+
+export const userColumns = ({
+  handleOpenDisable,
+}: UserColumnsProps): ColumnDef<UserRes>[] => [
   {
     accessorKey: "staffCode",
     header: "Staff Code",
@@ -60,7 +66,7 @@ export const userColumns: ColumnDef<UserRes>[] = [
             className="text-red-500 hover:text-red-700"
             onClick={(e) => {
               e.stopPropagation();
-              console.log("delete user");
+              handleOpenDisable(user.id);
             }}
           >
             <MdDelete size={20} />

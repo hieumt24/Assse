@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { GENDERS, LOCATIONS, ROLES } from "@/constants";
+import { useLoading } from "@/context/LoadingContext";
 import { removeExtraWhitespace } from "@/lib/utils";
 import { getUserByStaffCodeService, updateUserService } from "@/services";
 import { createUserSchema } from "@/validations";
@@ -28,12 +29,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { z } from "zod";
- 
 
 export const EditUserForm = () => {
-    const {staffCode} = useParams();
-    const [userId, setUserId] = useState("");
-    
+  const { staffCode } = useParams();
+  const [userId, setUserId] = useState("");
+  const { setIsLoading } = useLoading();
+
   const form = useForm<z.infer<typeof createUserSchema>>({
     mode: "all",
     resolver: zodResolver(createUserSchema),
@@ -50,46 +51,58 @@ export const EditUserForm = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-        try {
-            const res = await getUserByStaffCodeService(staffCode);
-            if (res.success) {
-              const userDetails = res.data.data;
-              form.reset({
-                firstName: userDetails.firstName,
-                lastName: userDetails.lastName,
-                dateOfBirth: format(userDetails.dateOfBirth, "yyyy-MM-dd"),
-                joinedDate: format(userDetails.joinedDate, "yyyy-MM-dd"),
-                gender: userDetails.gender.toString(),
-                role: userDetails.role.toString(),
-                location: userDetails.location.toString(),
-              });
-              setUserId(userDetails.id);
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error("Error fetching user data");
+      try {
+        setIsLoading(true);
+        const res = await getUserByStaffCodeService(staffCode);
+        if (res.success) {
+          const userDetails = res.data.data;
+          form.reset({
+            firstName: userDetails.firstName,
+            lastName: userDetails.lastName,
+            dateOfBirth: format(userDetails.dateOfBirth, "yyyy-MM-dd"),
+            joinedDate: format(userDetails.joinedDate, "yyyy-MM-dd"),
+            gender: userDetails.gender.toString(),
+            role: userDetails.role.toString(),
+            location: userDetails.location.toString(),
+          });
+          setUserId(userDetails.id);
+        } else {
+          toast.error(res.message);
         }
-    }
+      } catch (error) {
+        console.log(error);
+        toast.error("Error fetching user data");
+      } finally {
+        setIsLoading(false);
+      }
+    };
     fetchUser();
-    
-  }, [staffCode])
-  
+  }, [staffCode]);
+
   // Function handle onSubmit
   const onSubmit = async (values: z.infer<typeof createUserSchema>) => {
     const gender = parseInt(values.gender);
     const role = parseInt(values.role);
     const location = parseInt(values.location);
-    const res = await updateUserService({
-      ...values,
-      gender,
-      role,
-      location,
-      userId: userId
-    });
-    if (res.success) {
-      toast.success(res.message);
-    } else {
-      toast.error(res.message);
+    try {
+      setIsLoading(true);
+      const res = await updateUserService({
+        ...values,
+        gender,
+        role,
+        location,
+        userId: userId,
+      });
+      if (res.success) {
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error("Error updating user");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -160,25 +173,29 @@ export const EditUserForm = () => {
                 Date of birth <span className="text-red-600">*</span>
               </FormLabel>
               <FormControl>
-                <Input {...field} type="date" className="justify-center"
-                onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  const value = e.target.value;
-                  const parts = value.split('-');
-                  if (parts.length > 0 && parts[0].length > 4) {
-                    // If the year part is longer than 4 digits, truncate it
-                    const truncatedValue = `${parts[0].substring(0, 4)}-${parts[1]}-${parts[2]}`;
-                    field.onChange({
-                      ...e,
-                      target: {
-                        ...e.target,
-                        value: truncatedValue,
-                      },
-                    });
-                  } else {
-                    // Update the field value as normal
-                    field.onChange(e);
-                  }
-                }}/>
+                <Input
+                  {...field}
+                  type="date"
+                  className="justify-center"
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    const value = e.target.value;
+                    const parts = value.split("-");
+                    if (parts.length > 0 && parts[0].length > 4) {
+                      // If the year part is longer than 4 digits, truncate it
+                      const truncatedValue = `${parts[0].substring(0, 4)}-${parts[1]}-${parts[2]}`;
+                      field.onChange({
+                        ...e,
+                        target: {
+                          ...e.target,
+                          value: truncatedValue,
+                        },
+                      });
+                    } else {
+                      // Update the field value as normal
+                      field.onChange(e);
+                    }
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -194,25 +211,29 @@ export const EditUserForm = () => {
                 Joined Date <span className="text-red-600">*</span>
               </FormLabel>
               <FormControl>
-              <Input {...field} type="date" className="justify-center"
-                onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  const value = e.target.value;
-                  const parts = value.split('-');
-                  if (parts.length > 0 && parts[0].length > 4) {
-                    // If the year part is longer than 4 digits, truncate it
-                    const truncatedValue = `${parts[0].substring(0, 4)}-${parts[1]}-${parts[2]}`;
-                    field.onChange({
-                      ...e,
-                      target: {
-                        ...e.target,
-                        value: truncatedValue,
-                      },
-                    });
-                  } else {
-                    // Update the field value as normal
-                    field.onChange(e);
-                  }
-                }}/>
+                <Input
+                  {...field}
+                  type="date"
+                  className="justify-center"
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    const value = e.target.value;
+                    const parts = value.split("-");
+                    if (parts.length > 0 && parts[0].length > 4) {
+                      // If the year part is longer than 4 digits, truncate it
+                      const truncatedValue = `${parts[0].substring(0, 4)}-${parts[1]}-${parts[2]}`;
+                      field.onChange({
+                        ...e,
+                        target: {
+                          ...e.target,
+                          value: truncatedValue,
+                        },
+                      });
+                    } else {
+                      // Update the field value as normal
+                      field.onChange(e);
+                    }
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
