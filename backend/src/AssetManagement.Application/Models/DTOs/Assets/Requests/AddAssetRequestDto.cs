@@ -6,6 +6,9 @@ namespace AssetManagement.Application.Models.DTOs.Assets.Requests
     public class AddAssetRequestDto
     {
         [Required]
+        public string AdminId { get; set; }
+
+        [Required]
         public string AssetName { get; set; } = string.Empty;
 
         [Required]
@@ -16,8 +19,7 @@ namespace AssetManagement.Application.Models.DTOs.Assets.Requests
         public DateTime InstalledDate { get; set; } = DateTime.Now;
 
         [Required]
-        // true = Available and false = Not Available
-        public bool State { get; set; } = true;
+        public AssetStateType State { get; set; }
 
         [Required]
         public EnumLocation AssetLocation { get; set; }
