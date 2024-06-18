@@ -23,6 +23,7 @@ import useClickOutside from "@/hooks/useClickOutside";
 import { useCallback, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { ChangePasswordForm } from "./forms/user/ChangePasswordForm";
 import { Separator } from "./ui/separator";
 
 export const Header = () => {
@@ -30,9 +31,9 @@ export const Header = () => {
   const location = useLocation();
   const pathnames = location.pathname.split("/").filter(Boolean);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const [openPopup, setOpenPopup] = useState(false);
+  const [openLogout, setOpenLogout] = useState(false);
+  const [openChangePassword, setOpenChangePassword] = useState(false);
   const collapsibleRef = useRef<HTMLDivElement>(null);
-
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -42,9 +43,9 @@ export const Header = () => {
   };
 
   const handleClickOutside = useCallback(() => {
-    if (openPopup) return;
+    if (openChangePassword || openLogout) return;
     setIsUserMenuOpen(false);
-  }, [openPopup]);
+  }, [openLogout, openChangePassword]);
 
   useClickOutside(collapsibleRef, handleClickOutside);
 
@@ -79,14 +80,20 @@ export const Header = () => {
           </Button>
         </CollapsibleTrigger>
         <CollapsibleContent className="absolute right-0 mt-1 w-40 rounded-md bg-white font-semibold shadow-md">
-          <Link
-            to="/changepassword"
-            className="block rounded-t-md px-4 py-3 text-sm font-medium transition-all hover:bg-zinc-200"
+          <div
+            onClick={() => {
+              setOpenChangePassword(true);
+            }}
+            className="block rounded-t-md px-4 py-3 text-sm font-medium transition-all hover:cursor-pointer hover:bg-zinc-200"
           >
             Change password
-          </Link>
+          </div>
           <Separator />
-          <Dialog open={openPopup} onOpenChange={setOpenPopup}>
+          <ChangePasswordForm
+            open={openChangePassword}
+            onOpenChange={setOpenChangePassword}
+          />
+          <Dialog open={openLogout} onOpenChange={setOpenLogout}>
             <DialogTrigger className="w-full py-2 text-start text-sm transition-all hover:bg-zinc-200">
               <p className="ms-4 font-medium">Log out</p>
             </DialogTrigger>
@@ -102,7 +109,10 @@ export const Header = () => {
                   <Button variant={"destructive"} onClick={handleLogout}>
                     Log out
                   </Button>
-                  <Button variant="outline" onClick={() => setOpenPopup(false)}>
+                  <Button
+                    variant="outline"
+                    onClick={() => setOpenLogout(false)}
+                  >
                     Cancel
                   </Button>
                 </div>
@@ -114,4 +124,3 @@ export const Header = () => {
     </div>
   );
 };
-// This line is EOF

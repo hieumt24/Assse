@@ -108,7 +108,7 @@ export const createUserSchema = z
     },
   );
 
-  export const updateUserSchema = z
+export const updateUserSchema = z
   .object({
     dateOfBirth: z
       .string()
@@ -179,7 +179,7 @@ export const createUserSchema = z
     gender: z.enum(["1", "2", "3"]),
     role: z.enum(["2", "1"]),
     location: z.enum(["3", "1", "2"]),
-    id: z.string()
+    id: z.string(),
   })
   .refine(
     (data) => {
@@ -193,3 +193,22 @@ export const createUserSchema = z
       path: ["joinedDate"],
     },
   );
+
+export const changePasswordSchema = z.object({
+  currentPassword: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters long" })
+    .max(50, { message: "Password must be less than 50 characters" }),
+  newPassword: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters long" })
+    .max(50, { message: "Password must be less than 50 characters" })
+    .regex(/[A-Z]/, {
+      message: "Password must contain at least one uppercase letter",
+    })
+    .regex(/[0-9]/, { message: "Password must contain at least one number" })
+    .regex(/[^a-zA-Z0-9]/, {
+      message: "Password must contain at least one special character",
+    }),
+  username: z.string(),
+});

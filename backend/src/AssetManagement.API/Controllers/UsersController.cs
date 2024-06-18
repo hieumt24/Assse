@@ -38,7 +38,7 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllUsers([FromQuery] PaginationFilter filter, [FromQuery] string? search, [FromQuery] EnumLocation? adminLocation, [FromQuery] RoleType roleType, [FromQuery] string? orderBy, [FromQuery] bool isDescending = false)
+        public async Task<IActionResult> GetAllUsers([FromQuery] PaginationFilter filter, [FromQuery] string? search, [FromQuery] EnumLocation? adminLocation, [FromQuery] RoleType? roleType, [FromQuery] string? orderBy, [FromQuery] bool isDescending = false)
         {
             string route = Request.Path.Value;
             var response = await _userService.GetAllUsersAsync(filter, search, adminLocation, roleType, orderBy, isDescending, route);
