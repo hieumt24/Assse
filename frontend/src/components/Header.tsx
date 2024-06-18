@@ -22,6 +22,7 @@ import { useAuth } from "@/hooks";
 import useClickOutside from "@/hooks/useClickOutside";
 import { useCallback, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { Separator } from "./ui/separator";
 
 export const Header = () => {
@@ -37,6 +38,7 @@ export const Header = () => {
     localStorage.removeItem("token");
     setIsAuthenticated(false);
     navigate("/auth/login");
+    toast.success("You have been logged out");
   };
 
   const handleClickOutside = useCallback(() => {

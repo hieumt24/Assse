@@ -5,7 +5,10 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
+import { FullPageModal } from "@/components/FullPageModal";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Separator } from "@/components/ui/separator";
 import {
   Table,
   TableBody,
@@ -14,8 +17,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { PaginationState } from "@/models";
-import { Dispatch, SetStateAction } from "react";
+import { LOCATIONS } from "@/constants";
+import { PaginationState, UserRes } from "@/models";
+import { getUserByIdService } from "@/services";
+import { format } from "date-fns";
+import { Dispatch, SetStateAction, useState } from "react";
 
 interface UserTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -44,9 +50,17 @@ export function UserTable<TData, TValue>({
     pageCount,
   });
 
+  const [openDetails, setOpenDetails] = useState(false);
+  const [userDetails, setUserDetails] = useState<UserRes>();
+
+  const handleOpenDetails = async (id: string) => {
+    setOpenDetails(true);
+    const result = await getUserByIdService(id);
+    setUserDetails(result.data.data);
+  };
   return (
     <div>
-      <div className="rounded-md border">
+      <div className="relative rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -72,6 +86,8 @@ export function UserTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className="hover:cursor-pointer"
+                  onClick={async () => handleOpenDetails(row.getValue("id"))}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -115,6 +131,64 @@ export function UserTable<TData, TValue>({
           Next
         </Button>
       </div>
+      <FullPageModal show={openDetails}>
+        <Dialog open={openDetails} onOpenChange={setOpenDetails}>
+          <DialogContent className="p-6">
+            <div className="text-2xl font-bold text-red-600">
+              {userDetails?.staffCode}
+            </div>
+            <Separator />
+            <table className="text-xl">
+              <tbody>
+                <tr>
+                  <td className="w-[150px] font-medium">Username</td>
+                  <td>{userDetails?.username}</td>
+                </tr>
+                <tr>
+                  <td className="font-medium">First Name</td>
+                  <td>{userDetails?.firstName}</td>
+                </tr>
+                <tr>
+                  <td className="font-medium">Last Name</td>
+                  <td>{userDetails?.lastName}</td>
+                </tr>
+                <tr>
+                  <td className="font-medium">Date of Birth</td>
+                  <td>
+                    {userDetails?.dateOfBirth
+                      ? format(userDetails?.dateOfBirth, "yyyy/MM/dd")
+                      : ""}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="font-medium">Joined date</td>
+                  <td>
+                    {userDetails?.joinedDate
+                      ? format(userDetails?.joinedDate, "yyyy/MM/dd")
+                      : ""}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="font-medium">Gender</td>
+                  <td>{userDetails?.gender === 2 ? "Male" : "Female"}</td>
+                </tr>
+                <tr>
+                  <td className="font-medium">Role</td>
+                  <td>{userDetails?.role === 1 ? "Admin" : "Staff"}</td>
+                </tr>
+                <tr>
+                  <td className="font-medium">Location</td>
+                  <td>
+                    {userDetails?.location
+                      ? LOCATIONS[userDetails.location - 1].label
+                      : ""}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </DialogContent>
+        </Dialog>
+      </FullPageModal>
     </div>
   );
 }

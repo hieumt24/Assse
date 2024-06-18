@@ -19,6 +19,11 @@ namespace AssetManagement.Application
     {
         public static void ConfigureServices(IServiceCollection service, IConfiguration configuration)
         {
+
+
+            service.AddScoped<IAssetServiceAsync, AssetServiceAsync>();
+            service.AddScoped<ICategoryServiceAsync, CategoryServiceAsync>();
+
             service.AddAutoMapper(typeof(GeneralProfile));
             service.AddScoped<IValidator<AddUserRequestDto>, AddUserRequestValidation>();
             service.AddScoped<IValidator<EditUserRequestDto>, EditUserRequestValidation>();

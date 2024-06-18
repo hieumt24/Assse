@@ -17,6 +17,10 @@ namespace AssetManagement.Infrastructure.Contexts
 
         public DbSet<User> Users { get; set; }
 
+        public DbSet<Asset> Assets { get; set; }
+        public DbSet<Category> Categories { get; set; }
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,6 +34,13 @@ namespace AssetManagement.Infrastructure.Contexts
                 .HasIndex(u => u.Username)
                 .IsUnique();
 
+            // 1-n category-asset
+            modelBuilder.Entity<Category>()
+                .HasMany(c => c.Assets)
+                .WithOne(a => a.Category)
+                .HasForeignKey(a => a.CategoryId);
+
+
             //seed admin user
             var user = new User { FirstName = "SuperUser", LastName = "Admin", Role = RoleType.Admin, Location = EnumLocation.HaNoi, IsFirstTimeLogin = false, Username = "admin" };
             user.PasswordHash = _passwordHasher.HashPassword(user, "adminpassword");
@@ -40,6 +51,13 @@ namespace AssetManagement.Infrastructure.Contexts
 
             modelBuilder.Entity<User>().Property(u => u.StaffCodeId).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
 
+
+            // seed category
+            modelBuilder.Entity<Category>().HasData(
+                new Category { Id = Guid.NewGuid(), CategoryName = "Laptop", Prefix = "LA" },
+                new Category { Id = Guid.NewGuid(), CategoryName = "Monitor", Prefix = "MO" },
+                new Category { Id = Guid.NewGuid(), CategoryName = "Desk", Prefix = "DE" }
+            ) ;
         }
     }
 }

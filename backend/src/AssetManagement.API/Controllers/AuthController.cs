@@ -40,5 +40,6 @@ namespace AssetManagement.API.Controllers
             }
             return Ok(response);
         }
+
     }
 }

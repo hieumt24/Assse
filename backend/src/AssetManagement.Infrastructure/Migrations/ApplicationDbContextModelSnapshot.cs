@@ -22,6 +22,127 @@ namespace AssetManagement.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("AssetManagement.Domain.Entites.Asset", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AssetCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AssetLocation")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AssetName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTime>("InstalledDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDisable")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("LastModifiedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Specification")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("State")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Assets");
+                });
+
+            modelBuilder.Entity("AssetManagement.Domain.Entites.Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDisable")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("LastModifiedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Prefix")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("000b91d3-c77b-41ed-90d0-f4a3594b6588"),
+                            CategoryName = "Laptop",
+                            CreatedOn = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            IsDeleted = false,
+                            IsDisable = false,
+                            Prefix = "LA"
+                        },
+                        new
+                        {
+                            Id = new Guid("d5f17596-3b19-413b-9a73-ddbdeb5f3e30"),
+                            CategoryName = "Monitor",
+                            CreatedOn = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            IsDeleted = false,
+                            IsDisable = false,
+                            Prefix = "MO"
+                        },
+                        new
+                        {
+                            Id = new Guid("40d36eaf-ee50-4eed-9cf6-e650dd526969"),
+                            CategoryName = "Desk",
+                            CreatedOn = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            IsDeleted = false,
+                            IsDisable = false,
+                            Prefix = "DE"
+                        });
+                });
+
             modelBuilder.Entity("AssetManagement.Domain.Entites.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -46,6 +167,9 @@ namespace AssetManagement.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDisable")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsFirstTimeLogin")
@@ -101,23 +225,40 @@ namespace AssetManagement.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d434e69b-a3be-4bcb-8fd7-e557d91b6c30"),
+                            Id = new Guid("c3bacf4e-f89f-4db5-aedf-6a305524c65f"),
                             CreatedBy = "System",
-                            CreatedOn = new DateTimeOffset(new DateTime(2024, 6, 13, 10, 19, 55, 451, DateTimeKind.Unspecified).AddTicks(2382), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedOn = new DateTimeOffset(new DateTime(2024, 6, 18, 5, 56, 28, 363, DateTimeKind.Unspecified).AddTicks(281), new TimeSpan(0, 7, 0, 0, 0)),
                             DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "SuperUser",
                             Gender = 1,
                             IsDeleted = false,
+                            IsDisable = false,
                             IsFirstTimeLogin = false,
-                            JoinedDate = new DateTime(2024, 6, 13, 0, 0, 0, 0, DateTimeKind.Local),
+                            JoinedDate = new DateTime(2024, 6, 18, 0, 0, 0, 0, DateTimeKind.Local),
                             LastName = "Admin",
                             Location = 1,
-                            PasswordHash = "AQAAAAIAAYagAAAAEGTZbG5gkYBn/V1qevQpg7S8RPQNSTrOTrDeb9eJd5tfbSFCdfqeyKEgCrEouI/+Ew==",
+                            PasswordHash = "AQAAAAIAAYagAAAAECNgoIld6TN4ppkpU1qLKgD0Ssrr2clk7+UzpBBp0IEKNJBtKYbSXkGATOaA3EMu5g==",
                             Role = 1,
                             StaffCode = "",
                             StaffCodeId = 0,
                             Username = "admin"
                         });
+                });
+
+            modelBuilder.Entity("AssetManagement.Domain.Entites.Asset", b =>
+                {
+                    b.HasOne("AssetManagement.Domain.Entites.Category", "Category")
+                        .WithMany("Assets")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("AssetManagement.Domain.Entites.Category", b =>
+                {
+                    b.Navigation("Assets");
                 });
 #pragma warning restore 612, 618
         }

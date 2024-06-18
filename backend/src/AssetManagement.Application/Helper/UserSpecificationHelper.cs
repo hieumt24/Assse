@@ -9,13 +9,13 @@ namespace AssetManagement.Application.Helper
 {
     public static class UserSpecificationHelper
     {
-        public static ISpecification<User> CreateSpecification(PaginationFilter filter, string? search, string? orderBy, bool isDescending, EnumLocation? adminLocation)
+        public static ISpecification<User> CreateSpecification(PaginationFilter filter, string? search, EnumLocation? adminLocation, RoleType? roleType, string? orderBy, bool? isDescending)
         {
-            Expression<Func<User, bool>> criteria = user => true;
+            Expression<Func<User, bool>> criteria = user => !user.IsDeleted && !user.IsDisable;
 
             if (!string.IsNullOrEmpty(search))
             {
-                criteria = user => user.FirstName.Contains(search) || user.LastName.Contains(search) || user.Username.Contains(search);
+                criteria = user => user.FirstName.Contains(search) || user.LastName.Contains(search) || user.Username.Contains(search) || user.StaffCode.Contains(search);
             }
 
             if (adminLocation.HasValue)
@@ -23,12 +23,16 @@ namespace AssetManagement.Application.Helper
                 Expression<Func<User, bool>> locationCriteria = user => user.Location == adminLocation.Value;
                 criteria = criteria.And(locationCriteria);
             }
-
+            if (roleType.HasValue)
+            {
+                Expression<Func<User, bool>> roleCriteria = user => user.Role == roleType.Value;
+                criteria = criteria.And(roleCriteria);
+            }
             var spec = new UserSpecification(criteria);
 
             if (!string.IsNullOrEmpty(orderBy))
             {
-                if (isDescending)
+                if (isDescending.HasValue)
                 {
                     spec.ApplyOrderByDescending(GetOrderByExpression(orderBy));
                 }
@@ -64,6 +68,11 @@ namespace AssetManagement.Application.Helper
         public static ISpecification<User> TotalUser()
         {
             return new UserSpecification(user => !user.IsDeleted);
+        }
+
+        public static ISpecification<User> GetUserByStaffCode(string staffCode)
+        {
+            return new UserSpecification(user => user.StaffCode == staffCode && !user.IsDeleted);
         }
 
         public static Expression<Func<T, bool>> And<T>(this Expression<Func<T, bool>> expr1, Expression<Func<T, bool>> expr2)
