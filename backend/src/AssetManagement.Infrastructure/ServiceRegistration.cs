@@ -20,6 +20,7 @@ namespace AssetManagement.Infrastructure
             service.AddScoped(typeof(IBaseRepositoryAsync<>), typeof(BaseRepositoryAsync<>));
             service.AddScoped<IUserRepositoriesAsync, UserRepository>();
             service.AddScoped<IAssetRepositoriesAsync, AssetRepository>();
+            service.AddScoped<ICategoryRepositoriesAsync, CategoryRepository>();
 
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             service.AddDbContext<ApplicationDbContext>(options =>
