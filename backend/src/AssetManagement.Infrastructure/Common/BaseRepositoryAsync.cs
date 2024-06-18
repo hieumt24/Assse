@@ -3,6 +3,7 @@ using AssetManagement.Domain.Common.Models;
 using AssetManagement.Domain.Common.Specifications;
 using AssetManagement.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.InteropServices;
 
 namespace AssetManagement.Infrastructure.Common
 {

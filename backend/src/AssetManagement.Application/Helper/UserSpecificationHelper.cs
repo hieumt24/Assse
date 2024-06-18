@@ -49,12 +49,11 @@ namespace AssetManagement.Application.Helper
             return spec;
         }
 
-        public static ISpecification<User> CreateSpecificationPagination(PaginationFilter filter)
+        public static ISpecification<User> CreateSpecificationPagination(ISpecification<User> userQuery, PaginationFilter filter)
         {
-            Expression<Func<User, bool>> criteria = user => !user.IsDeleted && !user.IsDisable;
-            var spec = new UserSpecification(criteria);
-            spec.ApplyPaging(filter.PageSize, filter.PageNumber);
-            return spec;
+            var useragination = new UserSpecification(userQuery.Criteria);
+            useragination.ApplyPaging(filter.PageSize * (filter.PageNumber - 1), filter.PageSize);
+            return useragination;
         }
 
         private static Expression<Func<User, object>> GetOrderByExpression(string orderBy)
@@ -69,11 +68,6 @@ namespace AssetManagement.Application.Helper
                 "gender" => u => u.Gender,
                 _ => u => u.FirstName,
             };
-        }
-
-        public static ISpecification<User> TotalUser()
-        {
-            return new UserSpecification(user => !user.IsDeleted);
         }
 
         public static ISpecification<User> GetUserByStaffCode(string staffCode)

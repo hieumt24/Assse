@@ -91,10 +91,8 @@ namespace AssetManagement.Application.Services
             try
             {
                 var userQuery = UserSpecificationHelper.CreateSpecification(search, adminLocation, roleType, orderBy, isDescending);
-
                 var totalRecordsSpec = await _userRepositoriesAsync.CountAsync(userQuery);
-                var userPagination = UserSpecificationHelper.CreateSpecificationPagination(filter);
-                var countTest = await _userRepositoriesAsync.CountAsync(userPagination);
+                var userPagination = UserSpecificationHelper.CreateSpecificationPagination(userQuery, filter);
                 var users = await _userRepositoriesAsync.ListAsync(userPagination);
                 var userDtos = _mapper.Map<List<UserResponseDto>>(users);
 
