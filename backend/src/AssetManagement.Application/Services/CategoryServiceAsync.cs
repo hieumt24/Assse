@@ -16,30 +16,30 @@ namespace AssetManagement.Application.Services
     {
         private readonly IMapper _mapper;
         private readonly ICategoryRepositoriesAsync _categoryRepository;
-        //private readonly IValidator<AddCategoryRequestDto> _addCategoryValidator;
-        //private readonly IValidator<CategoryDto> _editCategoryValidator;
+        private readonly IValidator<AddCategoryRequestDto> _addCategoryValidator;
+        private readonly IValidator<UpdateCategoryRequestDto> _editCategoryValidator;
 
         public CategoryServiceAsync(
             ICategoryRepositoriesAsync categoryRepository,
-            IMapper mapper
-            //IValidator<AddCategoryRequestDto> addCategoryValidator,
-            //IValidator<CategoryDto> editCategoryValidator
+            IMapper mapper,
+            IValidator<AddCategoryRequestDto> addCategoryValidator,
+            IValidator<UpdateCategoryRequestDto> editCategoryValidator
         )
         {
             _categoryRepository = categoryRepository;
             _mapper = mapper;
-            //_addCategoryValidator = addCategoryValidator;
-            //_editCategoryValidator = editCategoryValidator;
+            _addCategoryValidator = addCategoryValidator;
+            _editCategoryValidator = editCategoryValidator;
         }
 
         public async Task<Response<CategoryDto>> AddCategoryAsync(AddCategoryRequestDto request)
         {
-            //var validationResult = await _addCategoryValidator.ValidateAsync(request);
-            //if (!validationResult.IsValid)
-            //{
-            //    var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-            //    return new Response<CategoryDto> { Succeeded = false, Errors = errors };
-            //}
+            var validationResult = await _addCategoryValidator.ValidateAsync(request);
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return new Response<CategoryDto> { Succeeded = false, Errors = errors };
+            }
 
             try
             {
@@ -50,10 +50,13 @@ namespace AssetManagement.Application.Services
 
                 if (await _categoryRepository.IsPrefixDuplicateAsync(request.Prefix))
                 {
-                    return new Response<CategoryDto> { Succeeded = false, Message = "Category prefix already exists." };
+                    return new Response<CategoryDto> { Succeeded = false, Message = "Prefix already exists." };
                 }
 
+               
                 var category = _mapper.Map<Category>(request);
+                category.CategoryName=  string.Join(" ", request.CategoryName.ToLower().Split(' ', StringSplitOptions.RemoveEmptyEntries));
+                category.Prefix = request.Prefix.Replace(" ","").ToUpper();
                 var addedCategory = await _categoryRepository.AddAsync(category);
 
                 var categoryDto = _mapper.Map<CategoryDto>(addedCategory);
@@ -86,12 +89,12 @@ namespace AssetManagement.Application.Services
 
         public async Task<Response<CategoryDto>> EditCategoryAsync(UpdateCategoryRequestDto request)
         {
-            //var validationResult = await _editCategoryValidator.ValidateAsync(request);
-            //if (!validationResult.IsValid)
-            //{
-            //    var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-            //    return new Response<CategoryDto> { Succeeded = false, Errors = errors };
-            //}
+            var validationResult = await _editCategoryValidator.ValidateAsync(request);
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return new Response<CategoryDto> { Succeeded = false, Errors = errors };
+            }
 
             try
             {
@@ -108,11 +111,11 @@ namespace AssetManagement.Application.Services
 
                 if (await _categoryRepository.IsPrefixDuplicateAsync(request.Prefix))
                 {
-                    return new Response<CategoryDto> { Succeeded = false, Message = "Category prefix already exists." };
+                    return new Response<CategoryDto> { Succeeded = false, Message = "Prefix already exists." };
                 }
 
-                existingCategory.CategoryName = request.CategoryName;
-                existingCategory.Prefix = request.Prefix;
+                existingCategory.CategoryName = request.CategoryName.Trim();
+                existingCategory.Prefix = request.Prefix.Replace(" ","").ToUpper();
                 await _categoryRepository.UpdateAsync(existingCategory);
 
                 var updatedCategoryDto = _mapper.Map<CategoryDto>(existingCategory);
