@@ -16,6 +16,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { ASSET_STATES } from "@/constants";
 import { CategoryRes } from "@/models";
 import { getAllCategoryService } from "@/services/admin/manageAssetService";
 import { createAssetSchema } from "@/validations/assetSchema";
@@ -64,6 +66,13 @@ export const CreateAssetForm: React.FC = () => {
   const form = useForm<z.infer<typeof createAssetSchema>>({
     mode: "all",
     resolver: zodResolver(createAssetSchema),
+    defaultValues: {
+      name: "",
+      category: "",
+      specification: "",
+      installedDate: "",
+      state: "1",
+    },
   });
 
   const onSubmit = async (values: z.infer<typeof createAssetSchema>) => {
@@ -116,26 +125,28 @@ export const CreateAssetForm: React.FC = () => {
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
                   <SelectContent>
-                    <div className="flex justify-between">
-                      <Input
-                        ref={inputRef}
-                        placeholder="Search category ..."
-                        className="border-none shadow-none focus:outline-none focus:ring-0"
-                        value={categorySearch}
-                        onChange={(e) => {
-                          setCategorySearch(e.target.value);
-                        }}
-                      />
-                      <Button>Create category</Button>
+                    <Input
+                      ref={inputRef}
+                      placeholder="Search category ..."
+                      className="border-none shadow-none focus-visible:ring-0"
+                      value={categorySearch}
+                      onChange={(e) => {
+                        setCategorySearch(e.target.value);
+                      }}
+                    />
+                    <div className="h-[100px] overflow-y-scroll">
+                      {filteredCategories?.map((category) => (
+                        <SelectItem
+                          key={category.id}
+                          value={category.categoryName}
+                        >
+                          {category.categoryName} ({category.prefix})
+                        </SelectItem>
+                      ))}
                     </div>
-                    {filteredCategories?.map((category) => (
-                      <SelectItem
-                        key={category.id}
-                        value={category.categoryName}
-                      >
-                        {category.categoryName}
-                      </SelectItem>
-                    ))}
+                    <Button variant={"ghost"} className="w-full">
+                      + Add new category
+                    </Button>
                   </SelectContent>
                 </Select>
               </FormControl>
@@ -156,7 +167,7 @@ export const CreateAssetForm: React.FC = () => {
                 Specification <span className="text-red-600">*</span>
               </FormLabel>
               <FormControl>
-                <Input placeholder="Enter specification" {...field} />
+                <Textarea placeholder="Enter specification" {...field} />
               </FormControl>
               <FormMessage>
                 {form.formState.errors.specification?.message}
@@ -199,20 +210,23 @@ export const CreateAssetForm: React.FC = () => {
                 <RadioGroup
                   onValueChange={field.onChange}
                   defaultValue={field.value}
-                  className="flex gap-8"
+                  className="flex gap-5"
                 >
-                  <FormItem className="flex items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="Available" />
-                    </FormControl>
-                    <FormLabel defaultValue={"true"} className="font-normal">
-                      Available
-                    </FormLabel>
-                    <FormControl>
-                      <RadioGroupItem value="Not available" />
-                    </FormControl>
-                    <FormLabel className="font-normal">Not available</FormLabel>
-                  </FormItem>
+                  {ASSET_STATES.map((state) => {
+                    return (
+                      <FormItem
+                        className="flex items-center gap-1 space-y-0"
+                        key={state.value}
+                      >
+                        <FormControl>
+                          <RadioGroupItem value={state.value.toString()} />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          {state.label}
+                        </FormLabel>
+                      </FormItem>
+                    );
+                  })}
                 </RadioGroup>
               </FormControl>
               <FormMessage>{form.formState.errors.state?.message}</FormMessage>

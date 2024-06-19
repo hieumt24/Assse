@@ -67,6 +67,7 @@ export const CreateUserForm = () => {
       toast.error("Error creating user");
     } finally {
       setIsLoading(false);
+      navigate("/admin/user");
     }
   };
 

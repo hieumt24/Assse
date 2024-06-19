@@ -14,15 +14,15 @@ export const ADMIN_NAV_FUNCTIONS = [
   {
     name: "Manage Assignment",
     path: "/assignment",
-  }, 
+  },
   {
     name: "Request for Returning",
-    path: "/return"
+    path: "/return",
   },
   {
     name: "Report",
-    path: "/report"
-  }
+    path: "/report",
+  },
 ];
 
 export const GENDERS = [
@@ -59,5 +59,16 @@ export const LOCATIONS = [
   {
     value: 3,
     label: "Ho Chi Minh City",
+  },
+];
+
+export const ASSET_STATES = [
+  {
+    value: 1,
+    label: "Available",
+  },
+  {
+    value: 2,
+    label: "Not available",
   },
 ];
