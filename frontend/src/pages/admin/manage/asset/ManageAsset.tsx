@@ -11,7 +11,7 @@ export const ManageAsset = () => {
           variant={"destructive"}
           onClick={() => navigate("/admin/asset/create-asset")}
         >
-          <span className="capitalize">Create new user</span>
+          <span className="capitalize">Create new asset</span>
         </Button>
       </div>
       <Outlet />

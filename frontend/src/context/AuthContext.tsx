@@ -13,7 +13,7 @@ interface User {
   dateOfBirth: string;
   isFirstTimeLogin: boolean;
   staffCode: string;
-  role: number;
+  role: string;
   location: string;
 }
 
@@ -35,7 +35,7 @@ export const AuthContext = createContext<AuthContextProps>({
     dateOfBirth: "",
     isFirstTimeLogin: false,
     staffCode: "",
-    role: 2,
+    role: "Staff",
     location: "",
   },
   setUser: () => {},
@@ -65,7 +65,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     dateOfBirth: "",
     isFirstTimeLogin: false,
     staffCode: "",
-    role: 2,
+    role: "Staff",
     location: "",
   });
 
@@ -87,13 +87,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         dateOfBirth: decodedToken.DateOfBirth,
         isFirstTimeLogin: decodedToken.IsFirstTimeLogin === "true",
         staffCode: decodedToken.StaffCode,
-        role: parseInt(
-          decodedToken[
-            "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-          ],
-        ),
+        role: decodedToken[
+          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+        ],
         location: decodedToken.Location,
       });
+      console.log(
+        decodedToken[
+          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+        ],
+      );
     } else {
       setUser({
         id: "",
@@ -101,7 +104,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         dateOfBirth: "",
         isFirstTimeLogin: false,
         staffCode: "",
-        role: 2,
+        role: "Staff",
         location: "",
       });
       setIsAuthenticated(false);

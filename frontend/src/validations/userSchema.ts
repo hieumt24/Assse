@@ -112,6 +112,7 @@ export const createUserSchema = z
 export const searchUserSchema = z.object({
   searchTerm: z.string(),
 });
+
 export const updateUserSchema = z
   .object({
     dateOfBirth: z
@@ -183,7 +184,6 @@ export const updateUserSchema = z
     gender: z.enum(["1", "2", "3"]),
     role: z.enum(["2", "1"]),
     location: z.string(),
-    id: z.string(),
   })
   .refine(
     (data) => {

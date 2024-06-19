@@ -16,11 +16,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { GENDERS, ROLES } from "@/constants";
+import { GENDERS, LOCATIONS, ROLES } from "@/constants";
 import { useLoading } from "@/context/LoadingContext";
-import { removeExtraWhitespace } from "@/lib/utils";
+import { useAuth } from "@/hooks";
+import { UserRes } from "@/models";
 import { getUserByStaffCodeService, updateUserService } from "@/services";
-import { createUserSchema } from "@/validations";
+import { updateUserSchema } from "@/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -32,20 +33,20 @@ import { z } from "zod";
 
 export const EditUserForm = () => {
   const { staffCode } = useParams();
-  const [userId, setUserId] = useState("");
   const { setIsLoading } = useLoading();
-
-  const form = useForm<z.infer<typeof createUserSchema>>({
+  const [userDetails, setUserDetails] = useState<UserRes>();
+  const { user } = useAuth();
+  const form = useForm<z.infer<typeof updateUserSchema>>({
     mode: "all",
-    resolver: zodResolver(createUserSchema),
+    resolver: zodResolver(updateUserSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
       dateOfBirth: "",
       joinedDate: "",
       gender: "2",
       role: "2",
-      location: "1",
+      location: LOCATIONS.find(
+        (location) => location.label === user.location,
+      )?.value.toString(),
     },
   });
 
@@ -53,24 +54,23 @@ export const EditUserForm = () => {
     const fetchUser = async () => {
       const res = await getUserByStaffCodeService(staffCode);
       if (res.success) {
-        const userDetails = res.data.data;
+        const details = res.data.data;
         form.reset({
-          firstName: userDetails.firstName,
-          lastName: userDetails.lastName,
-          dateOfBirth: format(userDetails.dateOfBirth, "yyyy-MM-dd"),
-          joinedDate: format(userDetails.joinedDate, "yyyy-MM-dd"),
-          gender: userDetails.gender.toString(),
-          role: userDetails.role.toString(),
+          dateOfBirth: format(details.dateOfBirth, "yyyy-MM-dd"),
+          joinedDate: format(details.joinedDate, "yyyy-MM-dd"),
+          gender: details.gender.toString(),
+          role: details.role.toString(),
+          location: details.location.toString(),
         });
-        setUserId(userDetails.id);
+        setUserDetails(details);
       } else {
         toast.error(res.message);
       }
     };
     fetchUser();
   }, [staffCode]);
-
-  const onSubmit = async (values: z.infer<typeof createUserSchema>) => {
+  console.log(form.formState);
+  const onSubmit = async (values: z.infer<typeof updateUserSchema>) => {
     const gender = parseInt(values.gender);
     const role = parseInt(values.role);
     try {
@@ -79,7 +79,7 @@ export const EditUserForm = () => {
         ...values,
         gender,
         role,
-        userId: userId,
+        userId: userDetails?.id ? userDetails?.id : "",
       });
       if (res.success) {
         toast.success(res.message);
@@ -103,47 +103,51 @@ export const EditUserForm = () => {
         className="w-1/3 space-y-5 rounded-2xl bg-white p-6 shadow-md"
       >
         <h1 className="text-2xl font-bold text-red-600">Edit User</h1>
+
         <FormField
-          control={form.control}
-          name="firstName"
-          render={({ field }) => (
+          name="staffCode"
+          render={() => (
             <FormItem>
-              <FormLabel className="text-md">
-                First Name <span className="text-red-600">*</span>
-              </FormLabel>
+              <FormLabel className="text-md">Staff code</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Enter first name"
-                  {...field}
-                  onBlur={(e) => {
-                    const cleanedValue = removeExtraWhitespace(e.target.value); // Clean the input value
-                    field.onChange(cleanedValue); // Update the form state
-                  }}
-                  disabled
-                />
+                <Input value={userDetails?.staffCode} disabled />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          name="username"
+          render={() => (
+            <FormItem>
+              <FormLabel className="text-md">Username</FormLabel>
+              <FormControl>
+                <Input value={userDetails?.username} disabled />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
         <FormField
-          control={form.control}
-          name="lastName"
-          render={({ field }) => (
+          name="firstName"
+          render={() => (
             <FormItem>
-              <FormLabel className="text-md">
-                Last Name <span className="text-red-600">*</span>
-              </FormLabel>
+              <FormLabel className="text-md">First Name</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Enter last name"
-                  {...field}
-                  onBlur={(e) => {
-                    const cleanedValue = removeExtraWhitespace(e.target.value); // Clean the input value
-                    field.onChange(cleanedValue); // Update the form state
-                  }}
-                  disabled
-                />
+                <Input value={userDetails?.firstName} disabled />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="lastName"
+          render={() => (
+            <FormItem>
+              <FormLabel className="text-md">Last Name</FormLabel>
+              <FormControl>
+                <Input value={userDetails?.lastName} disabled />
               </FormControl>
               <FormMessage />
             </FormItem>
