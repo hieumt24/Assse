@@ -1,9 +1,11 @@
-using AssetManagement.Application.Interfaces;
+using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Mappings;
+using AssetManagement.Application.Models.DTOs.Assets.Requests;
 using AssetManagement.Application.Models.DTOs.Category.Requests;
 using AssetManagement.Application.Models.DTOs.Users.Requests;
 using AssetManagement.Application.Services;
 using AssetManagement.Application.Validations;
+using AssetManagement.Application.Validations.Asset;
 using AssetManagement.Application.Validations.Category;
 using AssetManagement.Domain.Common.Settings;
 using AssetManagement.Domain.Enums;
@@ -21,12 +23,11 @@ namespace AssetManagement.Application
     {
         public static void ConfigureServices(IServiceCollection service, IConfiguration configuration)
         {
-
-
             service.AddScoped<IAssetServiceAsync, AssetServiceAsync>();
             service.AddScoped<ICategoryServiceAsync, CategoryServiceAsync>();
 
             service.AddScoped<IValidator<AddCategoryRequestDto>, AddCategoryRequestValidation>();
+            service.AddScoped<IValidator<AddAssetRequestDto>, AddAssetRequestValidation>();
             service.AddScoped<IValidator<UpdateCategoryRequestDto>, UpdateCategoryRequestValidation>();
 
             service.AddAutoMapper(typeof(GeneralProfile));

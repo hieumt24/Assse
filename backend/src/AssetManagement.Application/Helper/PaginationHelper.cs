@@ -1,5 +1,5 @@
 ﻿using AssetManagement.Application.Filter;
-using AssetManagement.Application.Interfaces;
+using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Wrappers;
 
 namespace AssetManagement.Application.Helper

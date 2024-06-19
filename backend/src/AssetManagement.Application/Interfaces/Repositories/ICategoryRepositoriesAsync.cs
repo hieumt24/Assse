@@ -7,15 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AssetManagement.Application.Interfaces
+namespace AssetManagement.Application.Interfaces.Repositories
 {
     public interface ICategoryRepositoriesAsync : IBaseRepositoryAsync<Category>
     {
-      Task<bool> IsCategoryNameDuplicateAsync(string categoryName);
+        Task<bool> IsCategoryNameDuplicateAsync(string categoryName);
 
-      Task<bool> IsPrefixDuplicateAsync(string prefix);
+        Task<bool> IsPrefixDuplicateAsync(string prefix);
 
-      Task<List<Category>> ListAllActiveAsync();
+        Task<List<Category>> ListAllActiveAsync();
 
     }
 }

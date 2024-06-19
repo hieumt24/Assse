@@ -1,6 +1,7 @@
 using AssetManagement.Application.Filter;
 using AssetManagement.Application.Helper;
-using AssetManagement.Application.Interfaces;
+using AssetManagement.Application.Interfaces.Repositories;
+using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Models.DTOs.Users;
 using AssetManagement.Application.Models.DTOs.Users.Requests;
 using AssetManagement.Application.Models.DTOs.Users.Responses;
@@ -86,7 +87,7 @@ namespace AssetManagement.Application.Services
             }
         }
 
-        public async Task<PagedResponse<List<UserResponseDto>>> GetAllUsersAsync(PaginationFilter filter, string? search, EnumLocation? adminLocation, RoleType? roleType, string? orderBy, bool? isDescending, string? route)
+        public async Task<PagedResponse<List<UserResponseDto>>> GetAllUsersAsync(PaginationFilter filter, string? search, EnumLocation adminLocation, RoleType? roleType, string? orderBy, bool? isDescending, string? route)
         {
             try
             {

@@ -1,11 +1,6 @@
-﻿using AssetManagement.Application.Interfaces;
-using AssetManagement.Application.Models.DTOs.Category;
+﻿using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Models.DTOs.Category.Requests;
-using AssetManagement.Application.Wrappers;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace AssetManagement.API.Controllers
 {

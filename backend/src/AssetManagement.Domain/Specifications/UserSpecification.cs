@@ -2,7 +2,7 @@
 using AssetManagement.Domain.Entites;
 using System.Linq.Expressions;
 
-namespace AssetManagement.Application.Services
+namespace AssetManagement.Domain.Specifications
 {
     public class UserSpecification : BaseSpecification<User>
     {

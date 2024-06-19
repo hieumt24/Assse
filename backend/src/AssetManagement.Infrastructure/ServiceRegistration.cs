@@ -1,5 +1,5 @@
 ﻿using AssetManagement.Application.Common;
-using AssetManagement.Application.Interfaces;
+using AssetManagement.Application.Interfaces.Repositories;
 using AssetManagement.Application.Services;
 using AssetManagement.Domain.Common.Settings;
 using AssetManagement.Domain.Entites;

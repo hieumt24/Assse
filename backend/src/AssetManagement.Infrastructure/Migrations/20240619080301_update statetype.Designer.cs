@@ -4,6 +4,7 @@ using AssetManagement.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AssetManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240619080301_update statetype")]
+    partial class updatestatetype
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,7 +119,7 @@ namespace AssetManagement.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("efa04981-bd0a-4108-a40d-467549a8b503"),
+                            Id = new Guid("e4631528-7cb3-4d23-b1d6-53a2078c476e"),
                             CategoryName = "Laptop",
                             CreatedOn = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
@@ -125,7 +128,7 @@ namespace AssetManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("95d144bb-02d1-4074-9c2d-98353387fe2e"),
+                            Id = new Guid("a9321bb3-7fc4-44f0-802e-8e2d4bb4fa82"),
                             CategoryName = "Monitor",
                             CreatedOn = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
@@ -134,7 +137,7 @@ namespace AssetManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("53f7300c-c7fe-4674-bdad-bbbc72b23543"),
+                            Id = new Guid("7e76a3cd-4ee9-4411-89ba-e99455d8d9c1"),
                             CategoryName = "Desk",
                             CreatedOn = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
@@ -225,62 +228,23 @@ namespace AssetManagement.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("fb23c8c6-ebaa-4c1e-8326-81105d43cdde"),
+                            Id = new Guid("e2b6ff2a-be52-4ee9-be3e-ecb2f877b0a9"),
                             CreatedBy = "System",
-                            CreatedOn = new DateTimeOffset(new DateTime(2024, 6, 19, 11, 15, 55, 944, DateTimeKind.Unspecified).AddTicks(9879), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedOn = new DateTimeOffset(new DateTime(2024, 6, 19, 15, 3, 0, 267, DateTimeKind.Unspecified).AddTicks(9954), new TimeSpan(0, 7, 0, 0, 0)),
                             DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "Admin",
-                            Gender = 1,
+                            FirstName = "SuperUser",
+                            Gender = 0,
                             IsDeleted = false,
                             IsDisable = false,
                             IsFirstTimeLogin = false,
-                            JoinedDate = new DateTime(2024, 6, 19, 0, 0, 0, 0, DateTimeKind.Local),
-                            LastName = "Ha Noi",
+                            JoinedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastName = "Admin",
                             Location = 1,
-                            PasswordHash = "AQAAAAIAAYagAAAAEGf6lK3vgdUExVWP+lzYKSBNtrt+e9tuJR5Rr3nfXJ6qozZNWtyztKq5eWOeVyigiw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELPKxMYBhkhRIrvxK4IMhdeu4UqvQgXOm495vGL3Ozx4Ht3NPMHYp8OHpsqc/Jd/6g==",
                             Role = 1,
                             StaffCode = "",
                             StaffCodeId = 0,
-                            Username = "adminHN"
-                        },
-                        new
-                        {
-                            Id = new Guid("ecf74a4f-28db-4b75-a755-e24a76c8cd57"),
-                            CreatedBy = "System",
-                            CreatedOn = new DateTimeOffset(new DateTime(2024, 6, 19, 11, 15, 56, 23, DateTimeKind.Unspecified).AddTicks(7949), new TimeSpan(0, 7, 0, 0, 0)),
-                            DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "Admin",
-                            Gender = 1,
-                            IsDeleted = false,
-                            IsDisable = false,
-                            IsFirstTimeLogin = false,
-                            JoinedDate = new DateTime(2024, 6, 19, 0, 0, 0, 0, DateTimeKind.Local),
-                            LastName = "Ho Chi Minh",
-                            Location = 3,
-                            PasswordHash = "AQAAAAIAAYagAAAAEECmLK+ExfYPUF+81Byv6oPxqambgTBC+6fUN9Miv1gUn07njt0OqljH7l1ub3ntsg==",
-                            Role = 1,
-                            StaffCode = "",
-                            StaffCodeId = 0,
-                            Username = "adminHCM"
-                        },
-                        new
-                        {
-                            Id = new Guid("bba7193a-ee6d-4f77-ac0a-2f7cffba6b10"),
-                            CreatedOn = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "Admin",
-                            Gender = 1,
-                            IsDeleted = false,
-                            IsDisable = false,
-                            IsFirstTimeLogin = false,
-                            JoinedDate = new DateTime(2024, 6, 19, 0, 0, 0, 0, DateTimeKind.Local),
-                            LastName = "Da Nang",
-                            Location = 2,
-                            PasswordHash = "",
-                            Role = 1,
-                            StaffCode = "",
-                            StaffCodeId = 0,
-                            Username = "adminDN"
+                            Username = "admin"
                         });
                 });
 

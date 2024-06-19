@@ -1,17 +1,16 @@
-﻿using AssetManagement.Application.Interfaces;
+﻿using AssetManagement.Application.Interfaces.Repositories;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Infrastructure.Common;
 using AssetManagement.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AssetManagement.Infrastructure.Repositories
 {
     public class AssetRepository : BaseRepositoryAsync<Asset>, IAssetRepositoriesAsync
     {
-        public AssetRepository(ApplicationDbContext dbContext) : base(dbContext) { }
+        public AssetRepository(ApplicationDbContext dbContext) : base(dbContext)
+        {
+        }
 
         public async Task<string> GenerateAssetCodeAsync(Guid CategoryId)
         {

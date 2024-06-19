@@ -1,4 +1,5 @@
-﻿using AssetManagement.Application.Interfaces;
+﻿using AssetManagement.Application.Interfaces.Repositories;
+using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Models.DTOs.Category;
 using AssetManagement.Application.Models.DTOs.Category.Requests;
 using AssetManagement.Application.Wrappers;
@@ -59,8 +60,7 @@ namespace AssetManagement.Application.Services
                 category.Prefix = request.Prefix.Replace(" ","").ToUpper();
                 var addedCategory = await _categoryRepository.AddAsync(category);
 
-                var categoryDto = _mapper.Map<CategoryDto>(addedCategory);
-                return new Response<CategoryDto> { Succeeded = true, Data = categoryDto };
+                return new Response<CategoryDto> { Succeeded = true, Message = "Create Category Successfully." };
             }
             catch (Exception ex)
             {
@@ -118,8 +118,7 @@ namespace AssetManagement.Application.Services
                 existingCategory.Prefix = request.Prefix.Replace(" ","").ToUpper();
                 await _categoryRepository.UpdateAsync(existingCategory);
 
-                var updatedCategoryDto = _mapper.Map<CategoryDto>(existingCategory);
-                return new Response<CategoryDto> { Succeeded = true, Data = updatedCategoryDto };
+                return new Response<CategoryDto> { Succeeded = true, Message = "Edit Category Successfully." };
             }
             catch (Exception ex)
             {
@@ -137,8 +136,7 @@ namespace AssetManagement.Application.Services
                     return new Response<CategoryDto> { Succeeded = false, Message = "Category not found." };
                 }
 
-                var categoryDto = _mapper.Map<CategoryDto>(category);
-                return new Response<CategoryDto> { Succeeded = true, Data = categoryDto };
+                return new Response<CategoryDto> { Succeeded = true, Message = "Delete Category Successfully." };
             }
             catch (Exception ex)
             {

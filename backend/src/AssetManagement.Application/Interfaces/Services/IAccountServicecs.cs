@@ -2,7 +2,7 @@
 using AssetManagement.Application.Models.DTOs.Users.Responses;
 using AssetManagement.Application.Wrappers;
 
-namespace AssetManagement.Application.Interfaces
+namespace AssetManagement.Application.Interfaces.Services
 {
     public interface IAccountServicecs
     {

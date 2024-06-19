@@ -1,10 +1,10 @@
-﻿using AssetManagement.Application.Interfaces;
+﻿using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Models.DTOs.Users.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AssetManagement.API.Controllers
 {
-    [Route("api/v1")]
+    [Route("api/v1/auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -17,7 +17,7 @@ namespace AssetManagement.API.Controllers
 
         //POST api/v1/auth/login
         [HttpPost]
-        [Route("auth/login")]
+        [Route("login")]
         public async Task<IActionResult> Login([FromBody] AuthenticationRequest request)
         {
             var response = await _accountService.LoginAsync(request);
@@ -30,7 +30,7 @@ namespace AssetManagement.API.Controllers
 
         //POST api/v1/auth/change-password
         [HttpPost]
-        [Route("auth/change-password")]
+        [Route("change-password")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
         {
             var response = await _accountService.ChangePasswordAsync(request);
@@ -40,6 +40,5 @@ namespace AssetManagement.API.Controllers
             }
             return Ok(response);
         }
-
     }
 }
