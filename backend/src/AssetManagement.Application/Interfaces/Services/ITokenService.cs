@@ -2,7 +2,7 @@
 using AssetManagement.Domain.Enums;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace AssetManagement.Application.Interfaces
+namespace AssetManagement.Application.Interfaces.Services
 {
     public interface ITokenService
     {

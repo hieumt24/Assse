@@ -1,4 +1,5 @@
-﻿using AssetManagement.Application.Interfaces;
+﻿using AssetManagement.Application.Interfaces.Repositories;
+using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Models.DTOs.Category;
 using AssetManagement.Application.Models.DTOs.Category.Requests;
 using AssetManagement.Application.Wrappers;

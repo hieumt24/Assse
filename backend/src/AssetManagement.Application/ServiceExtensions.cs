@@ -1,4 +1,4 @@
-using AssetManagement.Application.Interfaces;
+using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Mappings;
 using AssetManagement.Application.Models.DTOs.Assets.Requests;
 using AssetManagement.Application.Models.DTOs.Category.Requests;
@@ -23,8 +23,6 @@ namespace AssetManagement.Application
     {
         public static void ConfigureServices(IServiceCollection service, IConfiguration configuration)
         {
-
-
             service.AddScoped<IAssetServiceAsync, AssetServiceAsync>();
             service.AddScoped<ICategoryServiceAsync, CategoryServiceAsync>();
 

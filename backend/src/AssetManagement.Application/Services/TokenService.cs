@@ -1,4 +1,4 @@
-﻿using AssetManagement.Application.Interfaces;
+﻿using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Domain.Common.Settings;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
