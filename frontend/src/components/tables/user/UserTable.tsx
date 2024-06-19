@@ -7,7 +7,6 @@ import {
 
 import { FullPageModal } from "@/components/FullPageModal";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -26,6 +25,7 @@ import { getUserByIdService } from "@/services";
 import { format } from "date-fns";
 import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "react-toastify";
+import Pagination from "../Pagination";
 
 interface UserTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -61,7 +61,7 @@ export function UserTable<TData, TValue>({
     setOpenDetails(true);
     try {
       setIsLoading(true);
-      var result = await getUserByIdService(id);
+      const result = await getUserByIdService(id);
       if (result.success) {
         setUserDetails(result.data.data);
       } else {
@@ -81,7 +81,7 @@ export function UserTable<TData, TValue>({
     <div>
       <div className="relative rounded-md border">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-zinc-200 text-lg font-bold">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -131,25 +131,16 @@ export function UserTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <span>{`${pagination.pageIndex + 1} of ${pageCount}`}</span>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
-      </div>
+      <Pagination
+        pageIndex={pagination.pageIndex + 1}
+        pageCount={pageCount || 1}
+        onPageChange={(page) =>
+          onPaginationChange({
+            pageIndex: page - 1,
+            pageSize: pagination.pageSize,
+          })
+        }
+      />
       <FullPageModal show={openDetails}>
         <Dialog open={openDetails} onOpenChange={setOpenDetails}>
           {isLoading ? (
