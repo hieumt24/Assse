@@ -27,14 +27,12 @@ import { toast } from "react-toastify";
 
 export const ManageUser = () => {
   const { token } = useAuth();
-  const { pageSize, pageNumber, onPaginationChange, pagination } =
-    usePagination();
+  const { onPaginationChange, pagination } = usePagination();
   const [search, setSearch] = useState("");
-  const [roleType, setRoleType] = useState("");
+  const [roleType, setRoleType] = useState(0);
   const { users, loading, error, pageCount, fetchUsers } = useUsers(
     token!,
-    pageNumber,
-    pageSize,
+    pagination,
     search,
     roleType,
   );
@@ -70,7 +68,7 @@ export const ManageUser = () => {
       <div className="flex items-center justify-between">
         <Select
           onValueChange={(event) => {
-            setRoleType(event);
+            setRoleType(parseInt(event));
             console.log(event);
           }}
         >

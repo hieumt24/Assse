@@ -9,8 +9,8 @@ export const usePagination = () => {
   const { pageIndex, pageSize } = pagination;
 
   return {
-    pageSize: pageSize,
-    pageNumber: pageIndex,
+    pageSize,
+    pageIndex,
     onPaginationChange: setPagination,
     pagination,
   };
