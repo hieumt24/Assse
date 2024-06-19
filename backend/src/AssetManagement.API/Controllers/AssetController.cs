@@ -1,9 +1,7 @@
 ﻿using AssetManagement.API.CustomActionFilters;
-using AssetManagement.Application.Filter;
 using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Models.DTOs.Assets.Requests;
 using AssetManagement.Application.Models.Filters;
-using AssetManagement.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
