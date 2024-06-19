@@ -56,12 +56,13 @@ export function UserTable<TData, TValue>({
 
   const [openDetails, setOpenDetails] = useState(false);
   const [userDetails, setUserDetails] = useState<UserRes>();
+  const { isLoading, setIsLoading } = useLoading();
 
   const handleOpenDetails = async (id: string) => {
     setOpenDetails(true);
     try {
       setIsLoading(true);
-      var result = await getUserByIdService(id);
+      const result = await getUserByIdService(id);
       if (result.success) {
         setUserDetails(result.data.data);
       } else {
@@ -74,8 +75,6 @@ export function UserTable<TData, TValue>({
       setIsLoading(false);
     }
   };
-
-  const { isLoading, setIsLoading } = useLoading();
 
   return (
     <div>
