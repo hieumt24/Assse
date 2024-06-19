@@ -41,5 +41,10 @@ namespace AssetManagement.Infrastructure.Repositories
 
             return $"{prefix}{newNumber:D6}";
         }
+
+        public IQueryable<Asset> Query()
+        {
+            return _dbContext.Assets;
+        }
     }
 }

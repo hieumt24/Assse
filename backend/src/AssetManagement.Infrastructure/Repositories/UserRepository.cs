@@ -73,6 +73,11 @@ namespace AssetManagement.Infrastructure.Repositories
             return await _dbContext.Users.AnyAsync(u => u.Username == username);
         }
 
+        public IQueryable<User> Query()
+        {
+            return _dbContext.Users;
+        }
+
         public async Task<User> UpdateUserAysnc(User user)
         {
             var existingUser = await _dbContext.Users.FindAsync(user.Id);

@@ -16,7 +16,7 @@ namespace AssetManagement.Application.Interfaces.Repositories
         Task<RoleType> GetRoleAsync(Guid userId);
 
         Task<bool> IsUsernameExist(string username);
-
+        IQueryable<User> Query();
         Task<User> UpdateUserAysnc(User user);
 
 

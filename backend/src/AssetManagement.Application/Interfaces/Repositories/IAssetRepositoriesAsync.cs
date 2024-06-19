@@ -11,5 +11,6 @@ namespace AssetManagement.Application.Interfaces.Repositories
     public interface IAssetRepositoriesAsync : IBaseRepositoryAsync<Asset>
     {
         Task<string> GenerateAssetCodeAsync(Guid CategoryId);
+        IQueryable<Asset> Query();
     }
 }

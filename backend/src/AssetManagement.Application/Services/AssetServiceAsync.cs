@@ -1,18 +1,17 @@
-﻿using AssetManagement.Application.Filter;
+using AssetManagement.Application.Common;
+using AssetManagement.Application.Filter;
 using AssetManagement.Application.Helper;
 using AssetManagement.Application.Interfaces.Repositories;
 using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Models.DTOs.Assets;
 using AssetManagement.Application.Models.DTOs.Assets.Requests;
 using AssetManagement.Application.Models.DTOs.Assets.Responses;
-using AssetManagement.Application.Models.DTOs.Category;
-using AssetManagement.Application.Models.DTOs.Users;
-using AssetManagement.Application.Validations.Asset;
 using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
 using AutoMapper;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 
 namespace AssetManagement.Application.Services
 {
@@ -103,9 +102,14 @@ namespace AssetManagement.Application.Services
             try
             {
                 var assetQuery = AssetSpecificationHelper.CreateAssetQuery(search, categoryId, assetStateType, enumLocation, orderBy, isDescending);
-                var totalRecords = await _assetRepository.CountAsync(assetQuery);
-                var assetPagaination = AssetSpecificationHelper.CreateAssetPagination(assetQuery, pagination);
-                var assets = await _assetRepository.ListAsync(assetPagaination);
+
+                var query = SpecificationEvaluator<Asset>.GetQuery(_assetRepository.Query(), assetQuery);
+                var totalRecords = await query.CountAsync();
+
+                var assetPaginationSpec = AssetSpecificationHelper.CreateAssetPagination(assetQuery, pagination);
+                var paginatedQuery = SpecificationEvaluator<Asset>.GetQuery(query, assetPaginationSpec);
+
+                var assets = await paginatedQuery.ToListAsync();
 
                 //Map to asset reponse
                 var responseAssetDtos = _mapper.Map<List<AssetResponseDto>>(assets);

@@ -35,7 +35,6 @@ namespace AssetManagement.API.Controllers
 
         [HttpPost]
         [Route("filter-assets")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllAsset([FromBody] AssetFilter assetFilter)
         {
             string route = Request.Path.Value;
