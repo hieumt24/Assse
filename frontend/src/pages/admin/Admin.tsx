@@ -7,10 +7,10 @@ import { EditUser } from "./manage/user/EditUser";
 
 export const Admin = () => {
   return (
-    <div className="h-full items-start">
+    <div className="flex h-full flex-col items-start">
       <FirstTimeForm />
       <Header />
-      <div className="flex flex-grow">
+      <div className="flex w-full flex-grow">
         <Sidebar />
         <Routes>
           <Route path="user" element={<ManageUser />} />
