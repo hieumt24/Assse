@@ -94,7 +94,7 @@ export const createUserSchema = z
       ),
     gender: z.enum(["1", "2", "3"]),
     role: z.enum(["2", "1"]),
-    location: z.enum(["3", "1", "2"]),
+    location: z.string(),
   })
   .refine(
     (data) => {
@@ -182,7 +182,7 @@ export const updateUserSchema = z
       ),
     gender: z.enum(["1", "2", "3"]),
     role: z.enum(["2", "1"]),
-    location: z.enum(["3", "1", "2"]),
+    location: z.string(),
     id: z.string(),
   })
   .refine(

@@ -5,7 +5,7 @@ import { useLoading } from "@/context/LoadingContext";
 export const EditUser = () => {
   const { isLoading } = useLoading();
   return (
-    <div className="mt-16 flex flex-grow justify-center">
+    <div className="mt-16 flex h-fit flex-grow justify-center">
       {isLoading ? <LoadingSpinner /> : <EditUserForm />}
     </div>
   );

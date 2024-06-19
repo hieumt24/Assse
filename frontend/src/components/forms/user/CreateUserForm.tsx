@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/select";
 import { GENDERS, LOCATIONS, ROLES } from "@/constants";
 import { useLoading } from "@/context/LoadingContext";
+import { useAuth } from "@/hooks";
 import { removeExtraWhitespace } from "@/lib/utils";
 import { createUserService } from "@/services";
 import { createUserSchema } from "@/validations";
@@ -31,6 +32,7 @@ import { z } from "zod";
 
 export const CreateUserForm = () => {
   const { setIsLoading } = useLoading();
+  const { user } = useAuth();
   const form = useForm<z.infer<typeof createUserSchema>>({
     mode: "all",
     resolver: zodResolver(createUserSchema),
@@ -41,7 +43,9 @@ export const CreateUserForm = () => {
       joinedDate: "",
       gender: "2",
       role: "2",
-      location: "1",
+      location: LOCATIONS.find(
+        (location) => location.label === user.location,
+      )?.value.toString(),
     },
   });
 
@@ -262,29 +266,8 @@ export const CreateUserForm = () => {
           name="location"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-md">Location</FormLabel>
               <FormControl>
-                <RadioGroup
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  className="flex gap-5"
-                >
-                  {LOCATIONS.map((location) => {
-                    return (
-                      <FormItem
-                        className="flex items-center gap-1 space-y-0"
-                        key={location.value}
-                      >
-                        <FormControl>
-                          <RadioGroupItem value={location.value.toString()} />
-                        </FormControl>
-                        <FormLabel className="font-normal">
-                          {location.label}
-                        </FormLabel>
-                      </FormItem>
-                    );
-                  })}
-                </RadioGroup>
+                <Input {...field} type="hidden" />
               </FormControl>
               <FormMessage />
             </FormItem>

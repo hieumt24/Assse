@@ -1,4 +1,6 @@
+import { FullPageModal } from "@/components/FullPageModal";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -33,6 +35,7 @@ export const CreateAssetForm: React.FC = () => {
   const [filteredCategories, setFilteredCategories] = useState(
     Array<CategoryRes>,
   );
+  const [openCreateCategory, setOpenCreateCategory] = useState(false);
   const [categorySearch, setCategorySearch] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -144,7 +147,13 @@ export const CreateAssetForm: React.FC = () => {
                         </SelectItem>
                       ))}
                     </div>
-                    <Button variant={"ghost"} className="w-full">
+                    <Button
+                      variant={"ghost"}
+                      className="w-full"
+                      onClick={() => {
+                        setOpenCreateCategory(true);
+                      }}
+                    >
                       + Add new category
                     </Button>
                   </SelectContent>
@@ -249,6 +258,14 @@ export const CreateAssetForm: React.FC = () => {
             Cancel
           </Button>
         </div>
+        <FullPageModal show={openCreateCategory}>
+          <Dialog
+            open={openCreateCategory}
+            onOpenChange={setOpenCreateCategory}
+          >
+            <DialogContent>Add new category</DialogContent>
+          </Dialog>
+        </FullPageModal>
       </form>
     </Form>
   );
