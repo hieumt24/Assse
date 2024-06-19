@@ -33,9 +33,16 @@ namespace AssetManagement.Application.Services
             }
 
             var user = await _userRepositoriesAsync.FindByUsernameAsync(request.Username);
+
             if (user == null || !_passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.CurrentPassword).Equals(PasswordVerificationResult.Success))
             {
                 return new Response<string> { Succeeded = false, Message = "Invalid username or password" };
+            }
+
+            // Check if the new password is the same as the current password
+            if (_passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.NewPassword).Equals(PasswordVerificationResult.Success))
+            {
+                return new Response<string> { Succeeded = false, Message = "New password cannot be the same as the current password" };
             }
 
             user.PasswordHash = _passwordHasher.HashPassword(user, request.NewPassword);
