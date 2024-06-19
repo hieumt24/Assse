@@ -7,6 +7,7 @@ export const useUsers = (
   pageNumber: number,
   pageSize: number,
   search?: string,
+  roleType?: string,
 ) => {
   const [users, setUsers] = useState<UserRes[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -20,6 +21,7 @@ export const useUsers = (
         pageNumber,
         pageSize,
         search,
+        roleType,
       });
 
       setUsers(data.data.data);
@@ -33,7 +35,7 @@ export const useUsers = (
 
   useEffect(() => {
     fetchUsers();
-  }, [token, pageNumber, pageSize, search]);
+  }, [token, pageNumber, pageSize, search, roleType]);
 
   return { users, loading, error, setUsers, pageCount, fetchUsers };
 };

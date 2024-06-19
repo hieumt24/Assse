@@ -5,7 +5,7 @@ import { useLoading } from "@/context/LoadingContext";
 export const CreateUser = () => {
   const { isLoading } = useLoading();
   return (
-    <div className="mt-16 flex flex-grow justify-center">
+    <div className="my-16 flex flex-grow justify-center">
       {isLoading ? <LoadingSpinner /> : <CreateUserForm />}
     </div>
   );

@@ -7,7 +7,6 @@ import {
 
 import { FullPageModal } from "@/components/FullPageModal";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
   Table,
@@ -24,6 +23,7 @@ import { getUserByIdService } from "@/services";
 import { format } from "date-fns";
 import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "react-toastify";
+import Pagination from "../Pagination";
 
 interface UserTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -54,7 +54,6 @@ export function UserTable<TData, TValue>({
 
   const [openDetails, setOpenDetails] = useState(false);
   const [userDetails, setUserDetails] = useState<UserRes>();
-  const { isLoading, setIsLoading } = useLoading();
 
   const handleOpenDetails = async (id: string) => {
     setOpenDetails(true);
@@ -74,11 +73,20 @@ export function UserTable<TData, TValue>({
     }
   };
 
+  const { isLoading, setIsLoading } = useLoading();
+  // Set the page directly in the table state
+  const setPage = (pageIndex: number) => {
+    onPaginationChange((prev) => ({
+      ...prev,
+      pageIndex: pageIndex,
+    }));
+  };
+
   return (
     <div>
       <div className="relative rounded-md border">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-zinc-200 text-lg font-bold">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -128,25 +136,15 @@ export function UserTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <span>{`${pagination.pageIndex + 1} of ${pageCount}`}</span>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
-      </div>
+      <Pagination
+        pageIndex={pagination.pageIndex + 1}
+        pageCount={pageCount || 1}
+        setPage={setPage}
+        previousPage={table.previousPage} // Added
+        getCanPreviousPage={table.getCanPreviousPage} // Added
+        nextPage={table.nextPage} // Added
+        getCanNextPage={table.getCanNextPage}
+      />
       <FullPageModal show={openDetails}>
         <Dialog open={openDetails} onOpenChange={setOpenDetails}>
           {isLoading ? (

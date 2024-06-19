@@ -37,7 +37,7 @@ export const SearchUserForm = (props: SearchUserFormProps) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex w-1/5 text-lg"
+        className="flex w-1/5 flex-grow text-lg"
       >
         {/* Search term */}
         <FormField
@@ -47,7 +47,7 @@ export const SearchUserForm = (props: SearchUserFormProps) => {
             <FormItem>
               <FormControl>
                 <Input
-                  placeholder="Enter search term"
+                  placeholder="Search"
                   {...field}
                   onBlur={(e) => {
                     const cleanedValue = removeExtraWhitespace(e.target.value); // Clean the input value
@@ -61,11 +61,7 @@ export const SearchUserForm = (props: SearchUserFormProps) => {
           )}
         />
 
-        <Button
-          type="submit"
-          disabled={!form.formState.isValid}
-          variant={"outline"}
-        >
+        <Button type="submit" variant={"outline"}>
           <MdSearch />
         </Button>
       </form>

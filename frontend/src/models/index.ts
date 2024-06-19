@@ -52,6 +52,7 @@ export interface GetUserReq {
   pageSize: number;
   pageNumber: number;
   search?: string;
+  roleType?: string;
 }
 
 export type PaginationState = {
