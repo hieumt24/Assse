@@ -1,6 +1,6 @@
 ﻿using AssetManagement.Application.Filter;
 
-namespace AssetManagement.Application.Interfaces
+namespace AssetManagement.Application.Interfaces.Services
 {
     public interface IUriService
     {

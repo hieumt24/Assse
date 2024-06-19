@@ -1,8 +1,8 @@
 using AssetManagement.Application.Filter;
-using AssetManagement.Application.Services;
 using AssetManagement.Domain.Common.Specifications;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
+using AssetManagement.Domain.Specifications;
 using System.Linq.Expressions;
 
 namespace AssetManagement.Application.Helper
@@ -11,18 +11,13 @@ namespace AssetManagement.Application.Helper
     {
         public static ISpecification<User> CreateSpecification(string? search, EnumLocation? adminLocation, RoleType? roleType, string? orderBy, bool? isDescending)
         {
-            Expression<Func<User, bool>> criteria = user => !user.IsDeleted && !user.IsDisable;
+            Expression<Func<User, bool>> criteria = user => !user.IsDeleted && !user.IsDisable && user.Location == adminLocation;
 
             if (!string.IsNullOrEmpty(search))
             {
                 criteria = user => user.FirstName.Contains(search) || user.LastName.Contains(search) || user.Username.Contains(search) || user.StaffCode.Contains(search);
             }
 
-            if (adminLocation.HasValue)
-            {
-                Expression<Func<User, bool>> locationCriteria = user => user.Location == adminLocation.Value;
-                criteria = criteria.And(locationCriteria);
-            }
             if (roleType.HasValue)
             {
                 Expression<Func<User, bool>> roleCriteria = user => user.Role == roleType.Value;

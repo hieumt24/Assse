@@ -5,13 +5,13 @@ using AssetManagement.Application.Models.DTOs.Users.Responses;
 using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Enums;
 
-namespace AssetManagement.Application.Interfaces
+namespace AssetManagement.Application.Interfaces.Services
 {
     public interface IUserServiceAsync
     {
         Task<Response<UserDto>> AddUserAsync(AddUserRequestDto request);
 
-        Task<PagedResponse<List<UserResponseDto>>> GetAllUsersAsync(PaginationFilter filter, string? search, EnumLocation? adminLocation, RoleType? roleType, string? orderBy, bool? isDescending, string? route);
+        Task<PagedResponse<List<UserResponseDto>>> GetAllUsersAsync(PaginationFilter filter, string? search, EnumLocation adminLocation, RoleType? roleType, string? orderBy, bool? isDescending, string? route);
 
         Task<Response<UserResponseDto>> GetUserByIdAsync(Guid userId);
 

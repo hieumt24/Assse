@@ -1,4 +1,4 @@
-using AssetManagement.Application.Interfaces;
+using AssetManagement.Application.Interfaces.Repositories;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
 using AssetManagement.Infrastructure.Common;

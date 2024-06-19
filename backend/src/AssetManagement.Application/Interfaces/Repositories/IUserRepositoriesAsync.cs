@@ -3,7 +3,7 @@ using AssetManagement.Application.Models.DTOs.Users;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
 
-namespace AssetManagement.Application.Interfaces
+namespace AssetManagement.Application.Interfaces.Repositories
 {
     public interface IUserRepositoriesAsync : IBaseRepositoryAsync<User>
     {
@@ -18,7 +18,7 @@ namespace AssetManagement.Application.Interfaces
         Task<bool> IsUsernameExist(string username);
 
         Task<User> UpdateUserAysnc(User user);
-        
+
 
     }
 }

@@ -1,11 +1,13 @@
 using AssetManagement.API.CustomActionFilters;
 using AssetManagement.Application.Filter;
-using AssetManagement.Application.Interfaces;
+using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Models.DTOs.Users;
 using AssetManagement.Application.Models.DTOs.Users.Requests;
+using AssetManagement.Application.Models.Filters;
 using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Enums;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AssetManagement.API.Controllers
@@ -25,6 +27,7 @@ namespace AssetManagement.API.Controllers
 
         [HttpPost]
         [ValidateModel]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromBody] AddUserRequestDto request)
         {
             var response = await _userService.AddUserAsync(request);
@@ -37,10 +40,11 @@ namespace AssetManagement.API.Controllers
 
         [HttpPost]
         [Route("filter-users")]
-        public async Task<IActionResult> GetAllUsers([FromQuery] PaginationFilter filter, [FromQuery] string? search, [FromQuery] EnumLocation? adminLocation, [FromQuery] RoleType? roleType, [FromQuery] string? orderBy, [FromQuery] bool isDescending = false)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAllUsers([FromBody] UserFilter userFilter)
         {
             string route = Request.Path.Value;
-            var response = await _userService.GetAllUsersAsync(filter, search, adminLocation, roleType, orderBy, isDescending, route);
+            var response = await _userService.GetAllUsersAsync(userFilter.pagination, userFilter.search, userFilter.adminLocation, userFilter.roleType, userFilter.orderBy, userFilter.isDescending, route);
             if (!response.Succeeded)
             {
                 return BadRequest(response);
@@ -51,6 +55,7 @@ namespace AssetManagement.API.Controllers
 
         [HttpGet]
         [Route("{userId:guid}")]
+        [Authorize(Roles = "Admin,Staff")]
         public async Task<IActionResult> GetUserById(Guid userId)
         {
             var response = await _userService.GetUserByIdAsync(userId);
@@ -62,6 +67,8 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpPut]
+        [ValidateModel]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateUser([FromBody] EditUserRequestDto request)
 
         {
@@ -82,6 +89,7 @@ namespace AssetManagement.API.Controllers
 
         [HttpPost]
         [Route("disable/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DisableUser(Guid id)
         {
             var response = await _userService.DisableUserAsync(id);
@@ -93,6 +101,7 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpPost("resetPassword")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ResetPassword(Guid userId)
         {
             var response = await _userService.ResetPasswordAsync(userId);
@@ -105,6 +114,7 @@ namespace AssetManagement.API.Controllers
 
         [HttpGet]
         [Route("staffCode/{staffCode}")]
+        [Authorize(Roles = "Admin,Staff")]
         public async Task<IActionResult> GetUserByStaffCode(string staffCode)
         {
             var response = await _userService.GetUserByStaffCodeAsync(staffCode);
