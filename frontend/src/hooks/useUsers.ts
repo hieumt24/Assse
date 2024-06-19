@@ -37,7 +37,7 @@ export const useUsers = (
 
   useEffect(() => {
     fetchUsers();
-  }, [token, pagination.pageIndex, pagination.pageSize, search, roleType]);
+  }, [token, pagination, search, roleType]);
 
   return { users, loading, error, setUsers, pageCount, fetchUsers };
 };

@@ -34,7 +34,6 @@ export const LoginForm = () => {
   const { setIsAuthenticated } = useAuth();
   const { setIsLoading } = useLoading();
 
-  // Function handle onSubmit
   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     try {
       setIsLoading(true);
