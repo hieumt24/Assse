@@ -47,5 +47,27 @@ namespace AssetManagement.API.Controllers
 
             return Ok(response);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsset(Guid id)
+        {
+            var result = await _assetService.DeleteAssetAsync(id);
+            if (result.Succeeded)
+            {
+                return Ok(result);
+            }
+            return NotFound(result);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAssetById(Guid id)
+        {
+            var result = await _assetService.GetAssetByIdAsync(id);
+            if (result.Succeeded)
+            {
+                return Ok(result);
+            }
+            return NotFound(result);
+        }
     }
 }

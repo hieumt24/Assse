@@ -3,6 +3,14 @@ import { FullPageModal } from "@/components/FullPageModal";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -22,11 +30,13 @@ export const ManageUser = () => {
   const { pageSize, pageNumber, onPaginationChange, pagination } =
     usePagination();
   const [search, setSearch] = useState("");
+  const [roleType, setRoleType] = useState("");
   const { users, loading, error, pageCount, fetchUsers } = useUsers(
     token!,
     pageNumber,
     pageSize,
     search,
+    roleType,
   );
   const navigate = useNavigate();
   const { setIsLoading } = useLoading();
@@ -38,7 +48,7 @@ export const ManageUser = () => {
   const handleDisable = async () => {
     try {
       setIsLoading(true);
-      var res = await disableUserService(userIdToDisable);
+      const res = await disableUserService(userIdToDisable);
       if (res.success) {
         toast.success(res.message);
       } else {
@@ -55,16 +65,34 @@ export const ManageUser = () => {
   };
   const [openDisable, setOpenDisable] = useState(false);
   return (
-    <div className="m-24 flex h-full w-2/3 flex-grow flex-col gap-8">
+    <div className="m-24 flex w-2/3 flex-grow flex-col gap-8">
       <p className="text-2xl font-bold text-red-600">User List</p>
       <div className="flex items-center justify-between">
-        <SearchUserForm setSearch={setSearch} />
-        <Button
-          variant={"destructive"}
-          onClick={() => navigate("/admin/user/create-user")}
+        <Select
+          onValueChange={(event) => {
+            setRoleType(event);
+            console.log(event);
+          }}
         >
-          <span className="capitalize">Create new user</span>
-        </Button>
+          <SelectTrigger className="w-32">
+            <SelectValue placeholder="Type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="0">All</SelectItem>
+            <SelectItem value="1">Admin</SelectItem>
+            <SelectItem value="2">Staff</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <div className="flex justify-between gap-6">
+          <SearchUserForm setSearch={setSearch} />
+          <Button
+            variant={"destructive"}
+            onClick={() => navigate("/admin/user/create-user")}
+          >
+            <span className="capitalize">Create new user</span>
+          </Button>
+        </div>
       </div>
       {loading ? (
         <LoadingSpinner />

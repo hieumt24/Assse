@@ -17,9 +17,11 @@ export const createUserService = (req: CreateUserReq) => {
 };
 
 export const getAllUserService = (req: GetUserReq) => {
+  // If roleType value equal 0, then show all
+  req.roleType = req.roleType === "0" ? "" : req.roleType;
   return axiosInstance
     .post(
-      `/users/filter-users?pageSize=${req.pageSize}&pageNumber=${req.pageNumber + 1}&search=${req.search ? req.search : ""}`,
+      `/users/filter-users?pageSize=${req.pageSize}&pageNumber=${req.pageNumber + 1}&search=${req.search ? req.search : ""}&roleType=${req.roleType ? req.roleType : ""}`,
     )
     .then((res) => {
       return {

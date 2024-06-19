@@ -51,35 +51,26 @@ export const EditUserForm = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
-        setIsLoading(true);
-        const res = await getUserByStaffCodeService(staffCode);
-        if (res.success) {
-          const userDetails = res.data.data;
-          form.reset({
-            firstName: userDetails.firstName,
-            lastName: userDetails.lastName,
-            dateOfBirth: format(userDetails.dateOfBirth, "yyyy-MM-dd"),
-            joinedDate: format(userDetails.joinedDate, "yyyy-MM-dd"),
-            gender: userDetails.gender.toString(),
-            role: userDetails.role.toString(),
-            location: userDetails.location.toString(),
-          });
-          setUserId(userDetails.id);
-        } else {
-          toast.error(res.message);
-        }
-      } catch (error) {
-        console.log(error);
-        toast.error("Error fetching user data");
-      } finally {
-        setIsLoading(false);
+      const res = await getUserByStaffCodeService(staffCode);
+      if (res.success) {
+        const userDetails = res.data.data;
+        form.reset({
+          firstName: userDetails.firstName,
+          lastName: userDetails.lastName,
+          dateOfBirth: format(userDetails.dateOfBirth, "yyyy-MM-dd"),
+          joinedDate: format(userDetails.joinedDate, "yyyy-MM-dd"),
+          gender: userDetails.gender.toString(),
+          role: userDetails.role.toString(),
+          location: userDetails.location.toString(),
+        });
+        setUserId(userDetails.id);
+      } else {
+        toast.error(res.message);
       }
     };
     fetchUser();
   }, [staffCode]);
 
-  // Function handle onSubmit
   const onSubmit = async (values: z.infer<typeof createUserSchema>) => {
     const gender = parseInt(values.gender);
     const role = parseInt(values.role);

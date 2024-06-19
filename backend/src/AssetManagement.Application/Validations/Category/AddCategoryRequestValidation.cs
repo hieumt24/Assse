@@ -17,8 +17,6 @@ namespace AssetManagement.Application.Validations.Category
                 .NotEmpty().WithMessage("Prefix cannot be blank")
                 .Length(2, 5).WithMessage("Prefix length should be 2 - 5 characters")
                 .Matches(@"[a-zA-Z]").WithMessage("The prefix contains only letters");
-
-
         }
     }
 }
