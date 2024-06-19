@@ -44,10 +44,15 @@ export interface UserRes {
 
 export interface GetUserReq {
   token: string;
-  pageSize: number;
-  pageNumber: number;
+  pagination: {
+    pageSize: number;
+    pageIndex: number;
+  };
   search?: string;
-  roleType?: string;
+  roleType?: number;
+  orderBy?: string;
+  adminLocation?: number;
+  isDescending?: boolean;
 }
 
 export type PaginationState = {
