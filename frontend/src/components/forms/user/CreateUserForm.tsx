@@ -45,7 +45,6 @@ export const CreateUserForm = () => {
     },
   });
 
-  // Function handle onSubmit
   const onSubmit = async (values: z.infer<typeof createUserSchema>) => {
     const gender = parseInt(values.gender);
     const role = parseInt(values.role);
@@ -80,7 +79,6 @@ export const CreateUserForm = () => {
         className="w-1/3 space-y-5 rounded-2xl bg-white p-6 shadow-md"
       >
         <h1 className="text-2xl font-bold text-red-600">Create New User</h1>
-        {/* First name */}
         <FormField
           control={form.control}
           name="firstName"
@@ -104,7 +102,6 @@ export const CreateUserForm = () => {
             </FormItem>
           )}
         />
-        {/* Last name */}
         <FormField
           control={form.control}
           name="lastName"
@@ -118,8 +115,8 @@ export const CreateUserForm = () => {
                   placeholder="Enter last name"
                   {...field}
                   onBlur={(e) => {
-                    const cleanedValue = removeExtraWhitespace(e.target.value); // Clean the input value
-                    field.onChange(cleanedValue); // Update the form state
+                    const cleanedValue = removeExtraWhitespace(e.target.value);
+                    field.onChange(cleanedValue);
                   }}
                 />
               </FormControl>
@@ -127,7 +124,6 @@ export const CreateUserForm = () => {
             </FormItem>
           )}
         />
-        {/* Date of birth */}
         <FormField
           control={form.control}
           name="dateOfBirth"
@@ -155,7 +151,6 @@ export const CreateUserForm = () => {
                         },
                       });
                     } else {
-                      // Update the field value as normal
                       field.onChange(e);
                     }
                   }}
@@ -165,7 +160,6 @@ export const CreateUserForm = () => {
             </FormItem>
           )}
         />
-        {/* Joined date */}
         <FormField
           control={form.control}
           name="joinedDate"
@@ -193,7 +187,6 @@ export const CreateUserForm = () => {
                         },
                       });
                     } else {
-                      // Update the field value as normal
                       field.onChange(e);
                     }
                   }}
@@ -203,7 +196,6 @@ export const CreateUserForm = () => {
             </FormItem>
           )}
         />
-        {/* Gender */}
         <FormField
           control={form.control}
           name="gender"
@@ -237,7 +229,6 @@ export const CreateUserForm = () => {
             </FormItem>
           )}
         />
-        {/* Role */}
         <FormField
           control={form.control}
           name="role"
@@ -265,7 +256,6 @@ export const CreateUserForm = () => {
             </FormItem>
           )}
         />
-        {/* Location */}
         <FormField
           control={form.control}
           name="location"

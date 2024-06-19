@@ -21,7 +21,6 @@ export const useUsers = (
         pageSize,
         search,
       });
-      console.log(data);
 
       setUsers(data.data.data);
       setPageCount(data.data.totalPages);

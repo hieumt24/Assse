@@ -35,6 +35,7 @@ export const ManageUser = () => {
     setUserIdToDisable(id);
     setOpenDisable(true);
   };
+
   const handleDisable = async () => {
     try {
       setIsLoading(true);

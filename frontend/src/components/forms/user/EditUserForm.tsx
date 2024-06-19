@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { GENDERS, LOCATIONS, ROLES } from "@/constants";
+import { GENDERS, ROLES } from "@/constants";
 import { useLoading } from "@/context/LoadingContext";
 import { removeExtraWhitespace } from "@/lib/utils";
 import { getUserByStaffCodeService, updateUserService } from "@/services";
@@ -61,7 +61,6 @@ export const EditUserForm = () => {
           joinedDate: format(userDetails.joinedDate, "yyyy-MM-dd"),
           gender: userDetails.gender.toString(),
           role: userDetails.role.toString(),
-          location: userDetails.location.toString(),
         });
         setUserId(userDetails.id);
       } else {
@@ -74,14 +73,12 @@ export const EditUserForm = () => {
   const onSubmit = async (values: z.infer<typeof createUserSchema>) => {
     const gender = parseInt(values.gender);
     const role = parseInt(values.role);
-    const location = parseInt(values.location);
     try {
       setIsLoading(true);
       const res = await updateUserService({
         ...values,
         gender,
         role,
-        location,
         userId: userId,
       });
       if (res.success) {
@@ -103,10 +100,9 @@ export const EditUserForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="h-[740px] w-1/3 space-y-5 rounded-2xl bg-white p-6 shadow-md"
+        className="w-1/3 space-y-5 rounded-2xl bg-white p-6 shadow-md"
       >
         <h1 className="text-2xl font-bold text-red-600">Edit User</h1>
-        {/* First name */}
         <FormField
           control={form.control}
           name="firstName"
@@ -130,7 +126,6 @@ export const EditUserForm = () => {
             </FormItem>
           )}
         />
-        {/* Last name */}
         <FormField
           control={form.control}
           name="lastName"
@@ -154,7 +149,6 @@ export const EditUserForm = () => {
             </FormItem>
           )}
         />
-        {/* Date of birth */}
         <FormField
           control={form.control}
           name="dateOfBirth"
@@ -182,7 +176,6 @@ export const EditUserForm = () => {
                         },
                       });
                     } else {
-                      // Update the field value as normal
                       field.onChange(e);
                     }
                   }}
@@ -192,7 +185,6 @@ export const EditUserForm = () => {
             </FormItem>
           )}
         />
-        {/* Joined date */}
         <FormField
           control={form.control}
           name="joinedDate"
@@ -220,7 +212,6 @@ export const EditUserForm = () => {
                         },
                       });
                     } else {
-                      // Update the field value as normal
                       field.onChange(e);
                     }
                   }}
@@ -230,7 +221,6 @@ export const EditUserForm = () => {
             </FormItem>
           )}
         />
-        {/* Gender */}
         <FormField
           control={form.control}
           name="gender"
@@ -264,7 +254,6 @@ export const EditUserForm = () => {
             </FormItem>
           )}
         />
-        {/* Role */}
         <FormField
           control={form.control}
           name="role"
@@ -287,40 +276,6 @@ export const EditUserForm = () => {
                     ))}
                   </SelectContent>
                 </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        {/* Location */}
-        <FormField
-          control={form.control}
-          name="location"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-md">Location</FormLabel>
-              <FormControl>
-                <RadioGroup
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  className="flex gap-5"
-                >
-                  {LOCATIONS.map((location) => {
-                    return (
-                      <FormItem
-                        className="flex items-center gap-1 space-y-0"
-                        key={location.value}
-                      >
-                        <FormControl>
-                          <RadioGroupItem value={location.value.toString()} />
-                        </FormControl>
-                        <FormLabel className="font-normal">
-                          {location.label}
-                        </FormLabel>
-                      </FormItem>
-                    );
-                  })}
-                </RadioGroup>
               </FormControl>
               <FormMessage />
             </FormItem>

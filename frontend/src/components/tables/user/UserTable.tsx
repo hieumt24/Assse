@@ -9,8 +9,6 @@ import { FullPageModal } from "@/components/FullPageModal";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
 import {
   Table,
   TableBody,
@@ -154,95 +152,62 @@ export function UserTable<TData, TValue>({
           {isLoading ? (
             <LoadingSpinner />
           ) : (
-            <DialogContent className="p-6">
-              <div className="text-2xl font-bold text-red-600">
-                {userDetails?.staffCode}
-              </div>
-              <Separator />
-              <div className="flex flex-col gap-2">
-                <div>
-                  <label htmlFor="username" className="font-medium">
-                    Username
-                  </label>
-                  <Input id="username" value={userDetails?.username} readOnly />
-                </div>
-                <div>
-                  <label htmlFor="firstName" className="font-medium">
-                    First name
-                  </label>
-                  <Input
-                    id="firstName"
-                    value={userDetails?.firstName}
-                    readOnly
-                  />
-                </div>
-                <div>
-                  <label htmlFor="lastName" className="font-medium">
-                    Last name
-                  </label>
-                  <Input id="lastName" value={userDetails?.lastName} readOnly />
-                </div>
-                <div>
-                  <label htmlFor="dateOfBirth" className="font-medium">
-                    Date of birth
-                  </label>
-                  <Input
-                    id="dateOfBirth"
-                    value={
-                      userDetails?.dateOfBirth
-                        ? format(userDetails?.dateOfBirth, "yyyy/MM/dd")
-                        : ""
-                    }
-                    readOnly
-                  />
-                </div>
-                <div>
-                  <label htmlFor="joinedDate" className="font-medium">
-                    Joined date
-                  </label>
-                  <Input
-                    id="joinedDate"
-                    value={
-                      userDetails?.joinedDate
-                        ? format(userDetails?.joinedDate, "yyyy/MM/dd")
-                        : ""
-                    }
-                    readOnly
-                  />
-                </div>
-                <div>
-                  <label htmlFor="gender" className="font-medium">
-                    Gender
-                  </label>
-                  <Input
-                    id="gender"
-                    value={userDetails?.gender === 2 ? "Male" : "Female"}
-                    readOnly
-                  />
-                </div>
-                <div>
-                  <label htmlFor="role" className="font-medium">
-                    Role
-                  </label>
-                  <Input
-                    id="role"
-                    value={userDetails?.role === 1 ? "Admin" : "Staff"}
-                    readOnly
-                  />
-                </div>
-                <div>
-                  <label htmlFor="location" className="font-medium">
-                    Location
-                  </label>
-                  <Input
-                    id="location"
-                    value={
-                      userDetails?.location
-                        ? LOCATIONS[userDetails.location - 1].label
-                        : ""
-                    }
-                    readOnly
-                  />
+            <DialogContent className="max-w-[40%] p-[1px]">
+              <div className="rounded-lg border-2 border-black p-0 text-lg shadow-lg">
+                <h1 className="rounded-t-lg border-b-2 border-black bg-zinc-300 p-6 px-10 text-xl font-bold text-red-600">
+                  Detailed User Information
+                </h1>
+                <div className="w-full px-10 py-4">
+                  <table className="w-full">
+                    <tr>
+                      <td className="w-[40%]">Staff code</td>
+                      <td>{userDetails?.staffCode}</td>
+                    </tr>
+                    <tr>
+                      <td>Username</td>
+                      <td>{userDetails?.username}</td>
+                    </tr>
+                    <tr>
+                      <td>First name</td>
+                      <td>{userDetails?.firstName}</td>
+                    </tr>
+                    <tr>
+                      <td>Last name</td>
+                      <td>{userDetails?.lastName}</td>
+                    </tr>
+                    <tr>
+                      <td>Date of birth</td>
+                      <td>
+                        {userDetails?.dateOfBirth
+                          ? format(userDetails?.dateOfBirth, "MM/dd/yyyy")
+                          : ""}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Joined date</td>
+                      <td>
+                        {userDetails?.joinedDate
+                          ? format(userDetails?.joinedDate, "MM/dd/yyyy")
+                          : ""}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Gender</td>
+                      <td>{userDetails?.gender === 2 ? "Male" : "Female"}</td>
+                    </tr>
+                    <tr>
+                      <td>Role</td>
+                      <td>{userDetails?.role === 1 ? "Admin" : "Staff"}</td>
+                    </tr>
+                    <tr>
+                      <td>Location</td>
+                      <td>
+                        {userDetails?.location
+                          ? LOCATIONS[userDetails.location - 1].label
+                          : ""}
+                      </td>
+                    </tr>
+                  </table>
                 </div>
               </div>
             </DialogContent>
