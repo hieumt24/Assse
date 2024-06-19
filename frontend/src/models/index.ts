@@ -49,10 +49,16 @@ export interface CategoryRes {
 }
 
 export interface GetUserReq {
-  pageSize: number;
-  pageNumber: number;
+  token: string;
+  pagination: {
+    pageSize: number;
+    pageIndex: number;
+  };
   search?: string;
-  roleType?: string;
+  roleType?: number;
+  orderBy?: string;
+  adminLocation?: number;
+  isDescending?: boolean;
 }
 
 export type PaginationState = {

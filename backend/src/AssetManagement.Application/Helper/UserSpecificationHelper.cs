@@ -27,7 +27,7 @@ namespace AssetManagement.Application.Helper
 
             if (!string.IsNullOrEmpty(orderBy))
             {
-                if (isDescending.HasValue)
+                if (isDescending.HasValue && isDescending.Value)
                 {
                     spec.ApplyOrderByDescending(GetOrderByExpression(orderBy));
                 }
@@ -38,7 +38,7 @@ namespace AssetManagement.Application.Helper
             }
             else
             {
-                spec.ApplyOrderByDescending(u => u.CreatedOn);
+                spec.ApplyOrderBy(u => u.FirstName);
             }
 
             return spec;
@@ -53,16 +53,32 @@ namespace AssetManagement.Application.Helper
 
         private static Expression<Func<User, object>> GetOrderByExpression(string orderBy)
         {
-            return orderBy.ToLower() switch
+            switch (orderBy.ToLower())
             {
-                "firstname" => u => u.FirstName,
-                "lastname" => u => u.LastName,
-                "username" => u => u.Username,
-                "dateofbirth" => u => u.DateOfBirth,
-                "joineddate" => u => u.JoinedDate,
-                "gender" => u => u.Gender,
-                _ => u => u.FirstName,
-            };
+                case "firstname":
+                    return u => u.FirstName;
+
+                case "lastname":
+                    return u => u.LastName;
+
+                case "username":
+                    return u => u.Username;
+
+                case "dateofbirth":
+                    return u => u.DateOfBirth;
+
+                case "joineddate":
+                    return u => u.JoinedDate;
+
+                case "gender":
+                    return u => u.Gender;
+
+                case "staffcode":
+                    return u => u.StaffCode;
+
+                default:
+                    return u => u.FirstName;
+            }
         }
 
         public static ISpecification<User> GetUserByStaffCode(string staffCode)

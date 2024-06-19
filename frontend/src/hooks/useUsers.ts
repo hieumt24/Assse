@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 
 export const useUsers = (
   token: string,
-  pageNumber: number,
-  pageSize: number,
+  pagination: {
+    pageIndex: number;
+    pageSize: number;
+  },
   search?: string,
-  roleType?: string,
+  roleType?: number,
 ) => {
   const [users, setUsers] = useState<UserRes[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -18,10 +20,10 @@ export const useUsers = (
     try {
       const data = await getAllUserService({
         token,
-        pageNumber,
-        pageSize,
+        pagination,
         search,
         roleType,
+        adminLocation: 1,
       });
 
       setUsers(data.data.data);
@@ -35,7 +37,7 @@ export const useUsers = (
 
   useEffect(() => {
     fetchUsers();
-  }, [token, pageNumber, pageSize, search, roleType]);
+  }, [token, pagination.pageIndex, pagination.pageSize, search, roleType]);
 
   return { users, loading, error, setUsers, pageCount, fetchUsers };
 };

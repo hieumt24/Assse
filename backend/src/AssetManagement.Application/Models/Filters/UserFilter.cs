@@ -10,6 +10,6 @@ namespace AssetManagement.Application.Models.Filters
         public EnumLocation adminLocation { get; set; }
         public RoleType? roleType { get; set; }
         public string? orderBy { get; set; }
-        public bool? isDescending { get; set; }
+        public bool isDescending { get; set; } = false;
     }
 }

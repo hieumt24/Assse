@@ -11,7 +11,7 @@ namespace AssetManagement.Application.Helper
     {
         public static ISpecification<Asset> CreateAssetQuery(string? search, Guid? categoryId, AssetStateType? assetStateType, EnumLocation enumLocation, string? orderBy, bool? isDescending)
         {
-            Expression<Func<Asset, bool>> criteria = asset => !asset.IsDeleted && !asset.IsDisable  && asset.AssetLocation == enumLocation;
+            Expression<Func<Asset, bool>> criteria = asset => !asset.IsDeleted && !asset.IsDisable && asset.AssetLocation == enumLocation;
             if (!string.IsNullOrEmpty(search))
             {
                 criteria = asset => asset.AssetCode.ToLower().Contains(search.ToLower()) || asset.AssetName.ToLower().Contains(search.ToLower());
@@ -26,12 +26,11 @@ namespace AssetManagement.Application.Helper
                 Expression<Func<Asset, bool>> categoryCriteria = asset => asset.CategoryId == categoryId.Value;
                 criteria = criteria.And(categoryCriteria);
             }
-          
 
             var spec = new AssetSpecification(criteria);
             if (!string.IsNullOrEmpty(orderBy))
             {
-                if (isDescending.HasValue)
+                if (isDescending.HasValue && isDescending.Value)
                 {
                     spec.ApplyOrderByDescending(GetOrderByExpression(orderBy));
                 }
@@ -60,7 +59,7 @@ namespace AssetManagement.Application.Helper
                 "state" => u => u.State,
                 "assetlocation" => u => u.AssetLocation,
                 "categoryname" => u => u.Category.CategoryName,
-                _ => u => u.CreatedOn
+                _ => u => u.AssetName
             };
         }
     }
