@@ -1,4 +1,4 @@
-﻿using AssetManagement.Application.Common;
+using AssetManagement.Application.Common;
 using AssetManagement.Application.Filter;
 using AssetManagement.Application.Helper;
 using AssetManagement.Application.Interfaces.Repositories;
@@ -6,9 +6,6 @@ using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Models.DTOs.Assets;
 using AssetManagement.Application.Models.DTOs.Assets.Requests;
 using AssetManagement.Application.Models.DTOs.Assets.Responses;
-using AssetManagement.Application.Models.DTOs.Category;
-using AssetManagement.Application.Models.DTOs.Users;
-using AssetManagement.Application.Validations.Asset;
 using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
