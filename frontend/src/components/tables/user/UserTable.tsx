@@ -76,6 +76,13 @@ export function UserTable<TData, TValue>({
   };
 
   const { isLoading, setIsLoading } = useLoading();
+  // Set the page directly in the table state
+  const setPage = (pageIndex: number) => {
+    onPaginationChange((prev) => ({
+      ...prev,
+      pageIndex: pageIndex,
+    }));
+  };
 
   return (
     <div>
@@ -134,12 +141,11 @@ export function UserTable<TData, TValue>({
       <Pagination
         pageIndex={pagination.pageIndex + 1}
         pageCount={pageCount || 1}
-        onPageChange={(page) =>
-          onPaginationChange({
-            pageIndex: page - 1,
-            pageSize: pagination.pageSize,
-          })
-        }
+        setPage={setPage}
+        previousPage={table.previousPage} // Added
+        getCanPreviousPage={table.getCanPreviousPage} // Added
+        nextPage={table.nextPage} // Added
+        getCanNextPage={table.getCanNextPage}
       />
       <FullPageModal show={openDetails}>
         <Dialog open={openDetails} onOpenChange={setOpenDetails}>

@@ -5,13 +5,20 @@ import { Button } from "../ui/button";
 interface PaginationProps {
   pageIndex: number;
   pageCount: number;
-  onPageChange: (page: number) => void;
+  previousPage: () => void; // Added prop
+  getCanPreviousPage: () => boolean; // Added prop
+  nextPage: () => void; // Added prop
+  getCanNextPage: () => boolean; // Added prop
+  setPage: (pageIndex: number) => void;
 }
-
 const Pagination: React.FC<PaginationProps> = ({
   pageIndex,
   pageCount,
-  onPageChange,
+  previousPage,
+  getCanPreviousPage,
+  nextPage,
+  getCanNextPage,
+  setPage,
 }) => {
   const getPaginationNumbers = () => {
     const pageNumbers: (number | string)[] = [];
@@ -52,8 +59,8 @@ const Pagination: React.FC<PaginationProps> = ({
       <Button
         variant="destructive"
         size="sm"
-        onClick={() => onPageChange(pageIndex + 1)}
-        disabled={pageIndex === pageCount}
+        onClick={previousPage}
+        disabled={!getCanPreviousPage()}
         className="px-1"
       >
         <MdKeyboardArrowLeft size={24} />
@@ -64,7 +71,7 @@ const Pagination: React.FC<PaginationProps> = ({
           className={`rounded-md border px-3 py-1 transition-all ${
             page === pageIndex ? "bg-red-500 text-white" : "border-gray-300"
           } ${typeof page === "number" ? "hover:bg-red-400" : "cursor-default"}`}
-          onClick={() => typeof page === "number" && onPageChange(page)}
+          onClick={() => typeof page === "number" && setPage(page - 1)}
           disabled={typeof page !== "number"}
         >
           {page}
@@ -73,8 +80,8 @@ const Pagination: React.FC<PaginationProps> = ({
       <Button
         variant="destructive"
         size="sm"
-        onClick={() => onPageChange(pageIndex + 1)}
-        disabled={pageIndex === pageCount}
+        onClick={nextPage}
+        disabled={!getCanNextPage()}
         className="px-1"
       >
         <MdKeyboardArrowRight size={24} />
