@@ -6,6 +6,11 @@ html, body, #root {
   height: 100%;
 }
 
+input::-ms-reveal,
+      input::-ms-clear {
+        display: none;
+      }
+
 @layer base {
   :root {
     --background: 0 0% 100%;
