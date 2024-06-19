@@ -13,28 +13,28 @@ export const useUsers = (
   const [error, setError] = useState<boolean | null>(false);
   const [pageCount, setPageCount] = useState<number>(0);
 
+  const fetchUsers = async () => {
+    try {
+      const data = await getAllUserService({
+        token,
+        pageNumber,
+        pageSize,
+        search,
+      });
+      console.log(data);
+
+      setUsers(data.data.data);
+      setPageCount(data.data.totalPages);
+    } catch (error) {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const data = await getAllUserService({
-          token,
-          pageNumber,
-          pageSize,
-          search,
-        });
-        console.log(data);
-
-        setUsers(data.data.data);
-        setPageCount(data.data.totalPages);
-      } catch (error) {
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchUsers();
   }, [token, pageNumber, pageSize, search]);
 
-  return { users, loading, error, setUsers, pageCount };
+  return { users, loading, error, setUsers, pageCount, fetchUsers };
 };

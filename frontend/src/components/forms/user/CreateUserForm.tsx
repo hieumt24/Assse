@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { GENDERS, LOCATIONS, ROLES } from "@/constants";
+import { useLoading } from "@/context/LoadingContext";
 import { removeExtraWhitespace } from "@/lib/utils";
 import { createUserService } from "@/services";
 import { createUserSchema } from "@/validations";
@@ -27,11 +28,9 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { z } from "zod";
- 
 
 export const CreateUserForm = () => {
-  // Define form
-
+  const { setIsLoading } = useLoading();
   const form = useForm<z.infer<typeof createUserSchema>>({
     mode: "all",
     resolver: zodResolver(createUserSchema),
@@ -51,16 +50,24 @@ export const CreateUserForm = () => {
     const gender = parseInt(values.gender);
     const role = parseInt(values.role);
     const location = parseInt(values.location);
-    const res = await createUserService({
-      ...values,
-      gender,
-      role,
-      location,
-    });
-    if (res.success) {
-      toast.success(res.message);
-    } else {
-      toast.error(res.message);
+    try {
+      setIsLoading(true);
+      const res = await createUserService({
+        ...values,
+        gender,
+        role,
+        location,
+      });
+      if (res.success) {
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error creating user");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -70,7 +77,7 @@ export const CreateUserForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="h-[740px] w-1/3 space-y-5 rounded-2xl bg-white p-6 shadow-md"
+        className="w-1/3 space-y-5 rounded-2xl bg-white p-6 shadow-md"
       >
         <h1 className="text-2xl font-bold text-red-600">Create New User</h1>
         {/* First name */}
@@ -130,25 +137,29 @@ export const CreateUserForm = () => {
                 Date of birth <span className="text-red-600">*</span>
               </FormLabel>
               <FormControl>
-                <Input {...field} type="date" className="justify-center"
-                onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  const value = e.target.value;
-                  const parts = value.split('-');
-                  if (parts.length > 0 && parts[0].length > 4) {
-                    // If the year part is longer than 4 digits, truncate it
-                    const truncatedValue = `${parts[0].substring(0, 4)}-${parts[1]}-${parts[2]}`;
-                    field.onChange({
-                      ...e,
-                      target: {
-                        ...e.target,
-                        value: truncatedValue,
-                      },
-                    });
-                  } else {
-                    // Update the field value as normal
-                    field.onChange(e);
-                  }
-                }}/>
+                <Input
+                  {...field}
+                  type="date"
+                  className="justify-center"
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    const value = e.target.value;
+                    const parts = value.split("-");
+                    if (parts.length > 0 && parts[0].length > 4) {
+                      // If the year part is longer than 4 digits, truncate it
+                      const truncatedValue = `${parts[0].substring(0, 4)}-${parts[1]}-${parts[2]}`;
+                      field.onChange({
+                        ...e,
+                        target: {
+                          ...e.target,
+                          value: truncatedValue,
+                        },
+                      });
+                    } else {
+                      // Update the field value as normal
+                      field.onChange(e);
+                    }
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -164,25 +175,29 @@ export const CreateUserForm = () => {
                 Joined Date <span className="text-red-600">*</span>
               </FormLabel>
               <FormControl>
-              <Input {...field} type="date" className="justify-center"
-                onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  const value = e.target.value;
-                  const parts = value.split('-');
-                  if (parts.length > 0 && parts[0].length > 4) {
-                    // If the year part is longer than 4 digits, truncate it
-                    const truncatedValue = `${parts[0].substring(0, 4)}-${parts[1]}-${parts[2]}`;
-                    field.onChange({
-                      ...e,
-                      target: {
-                        ...e.target,
-                        value: truncatedValue,
-                      },
-                    });
-                  } else {
-                    // Update the field value as normal
-                    field.onChange(e);
-                  }
-                }}/>
+                <Input
+                  {...field}
+                  type="date"
+                  className="justify-center"
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    const value = e.target.value;
+                    const parts = value.split("-");
+                    if (parts.length > 0 && parts[0].length > 4) {
+                      // If the year part is longer than 4 digits, truncate it
+                      const truncatedValue = `${parts[0].substring(0, 4)}-${parts[1]}-${parts[2]}`;
+                      field.onChange({
+                        ...e,
+                        target: {
+                          ...e.target,
+                          value: truncatedValue,
+                        },
+                      });
+                    } else {
+                      // Update the field value as normal
+                      field.onChange(e);
+                    }
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

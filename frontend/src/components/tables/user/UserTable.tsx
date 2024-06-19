@@ -6,8 +6,10 @@ import {
 } from "@tanstack/react-table";
 
 import { FullPageModal } from "@/components/FullPageModal";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import {
   Table,
@@ -18,10 +20,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { LOCATIONS } from "@/constants";
+import { useLoading } from "@/context/LoadingContext";
 import { PaginationState, UserRes } from "@/models";
 import { getUserByIdService } from "@/services";
 import { format } from "date-fns";
 import { Dispatch, SetStateAction, useState } from "react";
+import { toast } from "react-toastify";
 
 interface UserTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -55,9 +59,24 @@ export function UserTable<TData, TValue>({
 
   const handleOpenDetails = async (id: string) => {
     setOpenDetails(true);
-    const result = await getUserByIdService(id);
-    setUserDetails(result.data.data);
+    try {
+      setIsLoading(true);
+      var result = await getUserByIdService(id);
+      if (result.success) {
+        setUserDetails(result.data.data);
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error fetching user details");
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  const { isLoading, setIsLoading } = useLoading();
+
   return (
     <div>
       <div className="relative rounded-md border">
@@ -133,60 +152,102 @@ export function UserTable<TData, TValue>({
       </div>
       <FullPageModal show={openDetails}>
         <Dialog open={openDetails} onOpenChange={setOpenDetails}>
-          <DialogContent className="p-6">
-            <div className="text-2xl font-bold text-red-600">
-              {userDetails?.staffCode}
-            </div>
-            <Separator />
-            <table className="text-xl">
-              <tbody>
-                <tr>
-                  <td className="w-[150px] font-medium">Username</td>
-                  <td>{userDetails?.username}</td>
-                </tr>
-                <tr>
-                  <td className="font-medium">First Name</td>
-                  <td>{userDetails?.firstName}</td>
-                </tr>
-                <tr>
-                  <td className="font-medium">Last Name</td>
-                  <td>{userDetails?.lastName}</td>
-                </tr>
-                <tr>
-                  <td className="font-medium">Date of Birth</td>
-                  <td>
-                    {userDetails?.dateOfBirth
-                      ? format(userDetails?.dateOfBirth, "yyyy/MM/dd")
-                      : ""}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="font-medium">Joined date</td>
-                  <td>
-                    {userDetails?.joinedDate
-                      ? format(userDetails?.joinedDate, "yyyy/MM/dd")
-                      : ""}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="font-medium">Gender</td>
-                  <td>{userDetails?.gender === 2 ? "Male" : "Female"}</td>
-                </tr>
-                <tr>
-                  <td className="font-medium">Role</td>
-                  <td>{userDetails?.role === 1 ? "Admin" : "Staff"}</td>
-                </tr>
-                <tr>
-                  <td className="font-medium">Location</td>
-                  <td>
-                    {userDetails?.location
-                      ? LOCATIONS[userDetails.location - 1].label
-                      : ""}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </DialogContent>
+          {isLoading ? (
+            <LoadingSpinner />
+          ) : (
+            <DialogContent className="p-6">
+              <div className="text-2xl font-bold text-red-600">
+                {userDetails?.staffCode}
+              </div>
+              <Separator />
+              <div className="flex flex-col gap-2">
+                <div>
+                  <label htmlFor="username" className="font-medium">
+                    Username
+                  </label>
+                  <Input id="username" value={userDetails?.username} readOnly />
+                </div>
+                <div>
+                  <label htmlFor="firstName" className="font-medium">
+                    First name
+                  </label>
+                  <Input
+                    id="firstName"
+                    value={userDetails?.firstName}
+                    readOnly
+                  />
+                </div>
+                <div>
+                  <label htmlFor="lastName" className="font-medium">
+                    Last name
+                  </label>
+                  <Input id="lastName" value={userDetails?.lastName} readOnly />
+                </div>
+                <div>
+                  <label htmlFor="dateOfBirth" className="font-medium">
+                    Date of birth
+                  </label>
+                  <Input
+                    id="dateOfBirth"
+                    value={
+                      userDetails?.dateOfBirth
+                        ? format(userDetails?.dateOfBirth, "yyyy/MM/dd")
+                        : ""
+                    }
+                    readOnly
+                  />
+                </div>
+                <div>
+                  <label htmlFor="joinedDate" className="font-medium">
+                    Joined date
+                  </label>
+                  <Input
+                    id="joinedDate"
+                    value={
+                      userDetails?.joinedDate
+                        ? format(userDetails?.joinedDate, "yyyy/MM/dd")
+                        : ""
+                    }
+                    readOnly
+                  />
+                </div>
+                <div>
+                  <label htmlFor="gender" className="font-medium">
+                    Gender
+                  </label>
+                  <Input
+                    id="gender"
+                    value={userDetails?.gender === 2 ? "Male" : "Female"}
+                    readOnly
+                  />
+                </div>
+                <div>
+                  <label htmlFor="role" className="font-medium">
+                    Role
+                  </label>
+                  <Input
+                    id="role"
+                    value={userDetails?.role === 1 ? "Admin" : "Staff"}
+                    readOnly
+                  />
+                </div>
+                <div>
+                  <label htmlFor="location" className="font-medium">
+                    Location
+                  </label>
+                  <Input
+                    id="location"
+                    value={
+                      userDetails?.location
+                        ? LOCATIONS[userDetails.location - 1].label
+                        : ""
+                    }
+                    readOnly
+                  />
+                </div>
+              </div>
+            </DialogContent>
+          )}
         </Dialog>
       </FullPageModal>
     </div>
