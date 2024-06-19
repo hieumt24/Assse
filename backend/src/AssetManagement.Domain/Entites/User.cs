@@ -21,13 +21,13 @@ namespace AssetManagement.Domain.Entites
         public DateTime DateOfBirth { get; set; }
 
         [Required]
-        public DateTime JoinedDate { get; set; } = DateTime.Now.Date;
+        public DateTime JoinedDate { get; set; } 
 
         [Required]
-        public GenderEnum Gender { get; set; } = GenderEnum.Unknown;
+        public GenderEnum Gender { get; set; } 
 
         [Required]
-        public RoleType Role { get; set; } = RoleType.Staff;
+        public RoleType Role { get; set; } 
 
         [Required]
         [RegularExpression(@"^SD\d{4}$", ErrorMessage = "StaffCode must be in the format SDxxxx where xxxx are digits.")]

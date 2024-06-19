@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AssetManagement.API.Controllers
 {
-    [Route("api/v1")]
+    [Route("api/v1/assets")]
     [ApiController]
     public class AssetController : ControllerBase
     {
@@ -19,7 +19,6 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpPost]
-        [Route("assets")]
         [ValidateModel]
         public async Task<IActionResult> Create([FromBody] AddAssetRequestDto request)
         {
@@ -29,6 +28,28 @@ namespace AssetManagement.API.Controllers
                 return BadRequest(response);
             }
             return Ok(response);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsset(Guid id)
+        {
+            var result = await _assetService.DeleteAssetAsync(id);
+            if (result.Succeeded)
+            {
+                return Ok(result);
+            }
+            return NotFound(result);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAssetById(Guid id)
+        {
+            var result = await _assetService.GetAssetByIdAsync(id);
+            if (result.Succeeded)
+            {
+                return Ok(result);
+            }
+            return NotFound(result);
         }
     }
 }
