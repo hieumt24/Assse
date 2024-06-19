@@ -40,7 +40,6 @@ namespace AssetManagement.API.Controllers
 
         [HttpPost]
         [Route("filter-users")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllUsers([FromBody] UserFilter userFilter)
         {
             string route = Request.Path.Value;

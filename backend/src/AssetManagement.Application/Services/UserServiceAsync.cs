@@ -1,3 +1,4 @@
+using AssetManagement.Application.Common;
 using AssetManagement.Application.Filter;
 using AssetManagement.Application.Helper;
 using AssetManagement.Application.Interfaces.Repositories;
@@ -11,6 +12,7 @@ using AssetManagement.Domain.Enums;
 using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace AssetManagement.Application.Services
 {
@@ -91,10 +93,19 @@ namespace AssetManagement.Application.Services
         {
             try
             {
+                //search and filter users
                 var userQuery = UserSpecificationHelper.CreateSpecification(search, adminLocation, roleType, orderBy, isDescending);
-                var totalRecordsSpec = await _userRepositoriesAsync.CountAsync(userQuery);
-                var userPagination = UserSpecificationHelper.CreateSpecificationPagination(userQuery, filter);
-                var users = await _userRepositoriesAsync.ListAsync(userPagination);
+
+                //query with conditions
+                var query = SpecificationEvaluator<User>.GetQuery(_userRepositoriesAsync.Query(), userQuery);
+
+                var totalRecordsSpec = await query.CountAsync();
+
+                var userPaginationSpec = UserSpecificationHelper.CreateSpecificationPagination(userQuery, filter);
+                var paginatedQuery = SpecificationEvaluator<User>.GetQuery(query, userPaginationSpec);
+
+                var users = await paginatedQuery.ToListAsync();
+
                 var userDtos = _mapper.Map<List<UserResponseDto>>(users);
 
                 var pagedResponse = PaginationHelper.CreatePagedReponse(userDtos, filter, totalRecordsSpec, _uriService, route);
