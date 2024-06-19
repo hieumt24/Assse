@@ -25,8 +25,8 @@ namespace AssetManagement.Application.Services
 
         public AssetServiceAsync(IAssetRepositoriesAsync assetRepository,
              IMapper mapper,
-              IUriService uriService)
-             IMapper mapper, IValidator<AddAssetRequestDto> addAssetValidator)
+              IUriService uriService,
+             IValidator<AddAssetRequestDto> addAssetValidator)
         {
             _mapper = mapper;
             _assetRepository = assetRepository;
@@ -34,89 +34,89 @@ namespace AssetManagement.Application.Services
             _addAssetValidator = addAssetValidator;
         }
 
-    public async Task<Response<AssetDto>> AddAssetAsync(AddAssetRequestDto request)
-    {
-        var validationResult = await _addAssetValidator.ValidateAsync(request);
-        if (!validationResult.IsValid)
+        public async Task<Response<AssetDto>> AddAssetAsync(AddAssetRequestDto request)
         {
-            var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-            return new Response<AssetDto> { Succeeded = false, Errors = errors };
-        }
-        try
-        {
-            var newAsset = _mapper.Map<Asset>(request);
-            newAsset.AssetCode = await _assetRepository.GenerateAssetCodeAsync(newAsset.CategoryId);
-
-            newAsset.CreatedBy = request.AdminId;
-            newAsset.CreatedOn = DateTime.Now;
-            var asset = await _assetRepository.AddAsync(newAsset);
-
-            var assetDto = _mapper.Map<AssetDto>(asset);
-
-            return new Response<AssetDto> { Succeeded = true, Message = "Create New Asset Successfully." };
-        }
-        catch (Exception ex)
-        {
-            return new Response<AssetDto> { Succeeded = false, Errors = { ex.Message } };
-        }
-    }
-
-    public async Task<Response<AssetDto>> DeleteAssetAsync(Guid assetId)
-    {
-        try
-        {
-            var assset = await _assetRepository.DeleteAsync(assetId);
-            if (assset == null)
+            var validationResult = await _addAssetValidator.ValidateAsync(request);
+            if (!validationResult.IsValid)
             {
-                return new Response<AssetDto> { Succeeded = false, Message = "Asset not found." };
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return new Response<AssetDto> { Succeeded = false, Errors = errors };
             }
-
-            return new Response<AssetDto> { Succeeded = true, Message = "Delete asset successfully!" };
-        }
-        catch (Exception ex)
-        {
-            return new Response<AssetDto> { Succeeded = false, Errors = { ex.Message } };
-        }
-    }
-
-    public async Task<Response<AssetDto>> GetAssetByIdAsync(Guid assetId)
-    {
-        try
-        {
-            var asset = await _assetRepository.GetByIdAsync(assetId);
-            if (asset == null)
+            try
             {
-                return new Response<AssetDto> { Succeeded = false, Message = "Category not found." };
+                var newAsset = _mapper.Map<Asset>(request);
+                newAsset.AssetCode = await _assetRepository.GenerateAssetCodeAsync(newAsset.CategoryId);
+
+                newAsset.CreatedBy = request.AdminId;
+                newAsset.CreatedOn = DateTime.Now;
+                var asset = await _assetRepository.AddAsync(newAsset);
+
+                var assetDto = _mapper.Map<AssetDto>(asset);
+
+                return new Response<AssetDto> { Succeeded = true, Message = "Create New Asset Successfully." };
             }
-
-            var categoryDto = _mapper.Map<AssetDto>(asset);
-            return new Response<AssetDto> { Succeeded = true, Data = categoryDto };
+            catch (Exception ex)
+            {
+                return new Response<AssetDto> { Succeeded = false, Errors = { ex.Message } };
+            }
         }
-        catch (Exception ex)
+
+        public async Task<Response<AssetDto>> DeleteAssetAsync(Guid assetId)
         {
-            return new Response<AssetDto> { Succeeded = false, Errors = { ex.Message } };
+            try
+            {
+                var assset = await _assetRepository.DeleteAsync(assetId);
+                if (assset == null)
+                {
+                    return new Response<AssetDto> { Succeeded = false, Message = "Asset not found." };
+                }
+
+                return new Response<AssetDto> { Succeeded = true, Message = "Delete asset successfully!" };
+            }
+            catch (Exception ex)
+            {
+                return new Response<AssetDto> { Succeeded = false, Errors = { ex.Message } };
+            }
+        }
+
+        public async Task<Response<AssetDto>> GetAssetByIdAsync(Guid assetId)
+        {
+            try
+            {
+                var asset = await _assetRepository.GetByIdAsync(assetId);
+                if (asset == null)
+                {
+                    return new Response<AssetDto> { Succeeded = false, Message = "Category not found." };
+                }
+
+                var categoryDto = _mapper.Map<AssetDto>(asset);
+                return new Response<AssetDto> { Succeeded = true, Data = categoryDto };
+            }
+            catch (Exception ex)
+            {
+                return new Response<AssetDto> { Succeeded = false, Errors = { ex.Message } };
+            }
+        }
+
+        public async Task<PagedResponse<List<AssetResponseDto>>> GetAllAseets(PaginationFilter pagination, string? search, Guid? categoryId, AssetStateType? assetStateType, EnumLocation enumLocation, string? orderBy, bool? isDescending, string? route)
+        {
+            try
+            {
+                var assetQuery = AssetSpecificationHelper.CreateAssetQuery(search, categoryId, assetStateType, enumLocation, orderBy, isDescending);
+                var totalRecords = await _assetRepository.CountAsync(assetQuery);
+                var assetPagaination = AssetSpecificationHelper.CreateAssetPagination(assetQuery, pagination);
+                var assets = await _assetRepository.ListAsync(assetPagaination);
+
+                //Map to asset reponse
+                var responseAssetDtos = _mapper.Map<List<AssetResponseDto>>(assets);
+
+                var pagedResponse = PaginationHelper.CreatePagedReponse(responseAssetDtos, pagination, totalRecords, _uriService, route);
+                return pagedResponse;
+            }
+            catch (Exception ex)
+            {
+                return new PagedResponse<List<AssetResponseDto>> { Succeeded = false, Errors = { ex.Message } };
+            }
         }
     }
-
-    public async Task<PagedResponse<List<AssetResponseDto>>> GetAllAseets(PaginationFilter pagination, string? search, Guid? categoryId, AssetStateType? assetStateType, EnumLocation enumLocation, string? orderBy, bool? isDescending, string? route)
-    {
-        try
-        {
-            var assetQuery = AssetSpecificationHelper.CreateAssetQuery(search, categoryId, assetStateType, enumLocation, orderBy, isDescending);
-            var totalRecords = await _assetRepository.CountAsync(assetQuery);
-            var assetPagaination = AssetSpecificationHelper.CreateAssetPagination(assetQuery, pagination);
-            var assets = await _assetRepository.ListAsync(assetPagaination);
-
-            //Map to asset reponse
-            var responseAssetDtos = _mapper.Map<List<AssetResponseDto>>(assets);
-
-            var pagedResponse = PaginationHelper.CreatePagedReponse(responseAssetDtos, pagination, totalRecords, _uriService, route);
-            return pagedResponse;
-        }
-        catch (Exception ex)
-        {
-            return new PagedResponse<List<AssetResponseDto>> { Succeeded = false, Errors = { ex.Message } };
-        }
-    }
-}
 }
