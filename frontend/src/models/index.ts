@@ -13,7 +13,6 @@ export interface UpdateUserReq {
   joinedDate: string;
   gender: number;
   role: number;
-  location: number;
   userId: string;
 }
 
@@ -33,12 +32,19 @@ export interface UserRes {
   firstName: string;
   lastName: string;
   dateOfBirth: Date;
-  joinedDate: string;
+  joinedDate: Date;
   gender: number;
   role: number;
   staffCode: string;
   username: string;
   location?: number;
+  createdOn: string;
+}
+
+export interface CategoryRes {
+  categoryName: string;
+  prefix: string;
+  id: string;
   createdOn: string;
 }
 

@@ -9,7 +9,6 @@ const passwordSchema = z
 export const loginSchema = z.object({
   username: z
     .string()
-    .regex(/^[A-Za-z0-9]+$/, {message: "Username must not contains any special character"})
     .min(2, { message: "Username must be at least 2 characters" })
     .max(50, { message: "Username must be less than 50 characters" }),
   password: passwordSchema,
@@ -28,5 +27,5 @@ export const firstTimeLoginSchema = z.object({
       message: "Password must contain at least one special character",
     }),
   currentPassword: z.string(),
-  username: z.string()
+  username: z.string(),
 });

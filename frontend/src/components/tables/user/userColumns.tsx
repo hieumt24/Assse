@@ -1,6 +1,6 @@
 import { UserRes } from "@/models";
 import { ColumnDef } from "@tanstack/react-table";
-import { format, parseISO } from "date-fns";
+import { format } from "date-fns";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 
@@ -31,9 +31,7 @@ export const userColumns = ({
     accessorKey: "joinedDate",
     header: "Joined Date",
     cell: ({ row }) => {
-      const dateString = row.original.joinedDate;
-      const date = parseISO(dateString!);
-      const formattedDate = format(date, "dd/MM/yyyy");
+      const formattedDate = format(row.original.joinedDate, "MM/dd/yyyy");
       return <p>{formattedDate}</p>;
     },
   },

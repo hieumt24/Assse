@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/select";
 import { GENDERS, LOCATIONS, ROLES } from "@/constants";
 import { useLoading } from "@/context/LoadingContext";
+import { useAuth } from "@/hooks";
 import { removeExtraWhitespace } from "@/lib/utils";
 import { createUserService } from "@/services";
 import { createUserSchema } from "@/validations";
@@ -31,6 +32,7 @@ import { z } from "zod";
 
 export const CreateUserForm = () => {
   const { setIsLoading } = useLoading();
+  const { user } = useAuth();
   const form = useForm<z.infer<typeof createUserSchema>>({
     mode: "all",
     resolver: zodResolver(createUserSchema),
@@ -41,11 +43,12 @@ export const CreateUserForm = () => {
       joinedDate: "",
       gender: "2",
       role: "2",
-      location: "1",
+      location: LOCATIONS.find(
+        (location) => location.label === user.location,
+      )?.value.toString(),
     },
   });
 
-  // Function handle onSubmit
   const onSubmit = async (values: z.infer<typeof createUserSchema>) => {
     const gender = parseInt(values.gender);
     const role = parseInt(values.role);
@@ -68,6 +71,7 @@ export const CreateUserForm = () => {
       toast.error("Error creating user");
     } finally {
       setIsLoading(false);
+      navigate("/admin/user");
     }
   };
 
@@ -80,7 +84,6 @@ export const CreateUserForm = () => {
         className="w-1/3 space-y-5 rounded-2xl bg-white p-6 shadow-md"
       >
         <h1 className="text-2xl font-bold text-red-600">Create New User</h1>
-        {/* First name */}
         <FormField
           control={form.control}
           name="firstName"
@@ -104,7 +107,6 @@ export const CreateUserForm = () => {
             </FormItem>
           )}
         />
-        {/* Last name */}
         <FormField
           control={form.control}
           name="lastName"
@@ -118,8 +120,8 @@ export const CreateUserForm = () => {
                   placeholder="Enter last name"
                   {...field}
                   onBlur={(e) => {
-                    const cleanedValue = removeExtraWhitespace(e.target.value); // Clean the input value
-                    field.onChange(cleanedValue); // Update the form state
+                    const cleanedValue = removeExtraWhitespace(e.target.value);
+                    field.onChange(cleanedValue);
                   }}
                 />
               </FormControl>
@@ -127,7 +129,6 @@ export const CreateUserForm = () => {
             </FormItem>
           )}
         />
-        {/* Date of birth */}
         <FormField
           control={form.control}
           name="dateOfBirth"
@@ -155,7 +156,6 @@ export const CreateUserForm = () => {
                         },
                       });
                     } else {
-                      // Update the field value as normal
                       field.onChange(e);
                     }
                   }}
@@ -165,7 +165,6 @@ export const CreateUserForm = () => {
             </FormItem>
           )}
         />
-        {/* Joined date */}
         <FormField
           control={form.control}
           name="joinedDate"
@@ -193,7 +192,6 @@ export const CreateUserForm = () => {
                         },
                       });
                     } else {
-                      // Update the field value as normal
                       field.onChange(e);
                     }
                   }}
@@ -203,7 +201,6 @@ export const CreateUserForm = () => {
             </FormItem>
           )}
         />
-        {/* Gender */}
         <FormField
           control={form.control}
           name="gender"
@@ -237,7 +234,6 @@ export const CreateUserForm = () => {
             </FormItem>
           )}
         />
-        {/* Role */}
         <FormField
           control={form.control}
           name="role"
@@ -265,35 +261,13 @@ export const CreateUserForm = () => {
             </FormItem>
           )}
         />
-        {/* Location */}
         <FormField
           control={form.control}
           name="location"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-md">Location</FormLabel>
               <FormControl>
-                <RadioGroup
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  className="flex gap-5"
-                >
-                  {LOCATIONS.map((location) => {
-                    return (
-                      <FormItem
-                        className="flex items-center gap-1 space-y-0"
-                        key={location.value}
-                      >
-                        <FormControl>
-                          <RadioGroupItem value={location.value.toString()} />
-                        </FormControl>
-                        <FormLabel className="font-normal">
-                          {location.label}
-                        </FormLabel>
-                      </FormItem>
-                    );
-                  })}
-                </RadioGroup>
+                <Input {...field} type="hidden" />
               </FormControl>
               <FormMessage />
             </FormItem>

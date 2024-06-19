@@ -18,9 +18,10 @@ import {
 } from "@/components/ui/select";
 import { GENDERS, LOCATIONS, ROLES } from "@/constants";
 import { useLoading } from "@/context/LoadingContext";
-import { removeExtraWhitespace } from "@/lib/utils";
+import { useAuth } from "@/hooks";
+import { UserRes } from "@/models";
 import { getUserByStaffCodeService, updateUserService } from "@/services";
-import { createUserSchema } from "@/validations";
+import { updateUserSchema } from "@/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -32,20 +33,20 @@ import { z } from "zod";
 
 export const EditUserForm = () => {
   const { staffCode } = useParams();
-  const [userId, setUserId] = useState("");
   const { setIsLoading } = useLoading();
-
-  const form = useForm<z.infer<typeof createUserSchema>>({
+  const [userDetails, setUserDetails] = useState<UserRes>();
+  const { user } = useAuth();
+  const form = useForm<z.infer<typeof updateUserSchema>>({
     mode: "all",
-    resolver: zodResolver(createUserSchema),
+    resolver: zodResolver(updateUserSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
       dateOfBirth: "",
       joinedDate: "",
       gender: "2",
       role: "2",
-      location: "1",
+      location: LOCATIONS.find(
+        (location) => location.label === user.location,
+      )?.value.toString(),
     },
   });
 
@@ -53,36 +54,32 @@ export const EditUserForm = () => {
     const fetchUser = async () => {
       const res = await getUserByStaffCodeService(staffCode);
       if (res.success) {
-        const userDetails = res.data.data;
+        const details = res.data.data;
         form.reset({
-          firstName: userDetails.firstName,
-          lastName: userDetails.lastName,
-          dateOfBirth: format(userDetails.dateOfBirth, "yyyy-MM-dd"),
-          joinedDate: format(userDetails.joinedDate, "yyyy-MM-dd"),
-          gender: userDetails.gender.toString(),
-          role: userDetails.role.toString(),
-          location: userDetails.location.toString(),
+          dateOfBirth: format(details.dateOfBirth, "yyyy-MM-dd"),
+          joinedDate: format(details.joinedDate, "yyyy-MM-dd"),
+          gender: details.gender.toString(),
+          role: details.role.toString(),
+          location: details.location.toString(),
         });
-        setUserId(userDetails.id);
+        setUserDetails(details);
       } else {
         toast.error(res.message);
       }
     };
     fetchUser();
   }, [staffCode]);
-
-  const onSubmit = async (values: z.infer<typeof createUserSchema>) => {
+  console.log(form.formState);
+  const onSubmit = async (values: z.infer<typeof updateUserSchema>) => {
     const gender = parseInt(values.gender);
     const role = parseInt(values.role);
-    const location = parseInt(values.location);
     try {
       setIsLoading(true);
       const res = await updateUserService({
         ...values,
         gender,
         role,
-        location,
-        userId: userId,
+        userId: userDetails?.id ? userDetails?.id : "",
       });
       if (res.success) {
         toast.success(res.message);
@@ -103,58 +100,59 @@ export const EditUserForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="h-[740px] w-1/3 space-y-5 rounded-2xl bg-white p-6 shadow-md"
+        className="w-1/3 space-y-5 rounded-2xl bg-white p-6 shadow-md"
       >
         <h1 className="text-2xl font-bold text-red-600">Edit User</h1>
-        {/* First name */}
+
         <FormField
-          control={form.control}
+          name="staffCode"
+          render={() => (
+            <FormItem>
+              <FormLabel className="text-md">Staff code</FormLabel>
+              <FormControl>
+                <Input value={userDetails?.staffCode} disabled />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          name="username"
+          render={() => (
+            <FormItem>
+              <FormLabel className="text-md">Username</FormLabel>
+              <FormControl>
+                <Input value={userDetails?.username} disabled />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
           name="firstName"
-          render={({ field }) => (
+          render={() => (
             <FormItem>
-              <FormLabel className="text-md">
-                First Name <span className="text-red-600">*</span>
-              </FormLabel>
+              <FormLabel className="text-md">First Name</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Enter first name"
-                  {...field}
-                  onBlur={(e) => {
-                    const cleanedValue = removeExtraWhitespace(e.target.value); // Clean the input value
-                    field.onChange(cleanedValue); // Update the form state
-                  }}
-                  disabled
-                />
+                <Input value={userDetails?.firstName} disabled />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        {/* Last name */}
         <FormField
-          control={form.control}
           name="lastName"
-          render={({ field }) => (
+          render={() => (
             <FormItem>
-              <FormLabel className="text-md">
-                Last Name <span className="text-red-600">*</span>
-              </FormLabel>
+              <FormLabel className="text-md">Last Name</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Enter last name"
-                  {...field}
-                  onBlur={(e) => {
-                    const cleanedValue = removeExtraWhitespace(e.target.value); // Clean the input value
-                    field.onChange(cleanedValue); // Update the form state
-                  }}
-                  disabled
-                />
+                <Input value={userDetails?.lastName} disabled />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        {/* Date of birth */}
         <FormField
           control={form.control}
           name="dateOfBirth"
@@ -182,7 +180,6 @@ export const EditUserForm = () => {
                         },
                       });
                     } else {
-                      // Update the field value as normal
                       field.onChange(e);
                     }
                   }}
@@ -192,7 +189,6 @@ export const EditUserForm = () => {
             </FormItem>
           )}
         />
-        {/* Joined date */}
         <FormField
           control={form.control}
           name="joinedDate"
@@ -220,7 +216,6 @@ export const EditUserForm = () => {
                         },
                       });
                     } else {
-                      // Update the field value as normal
                       field.onChange(e);
                     }
                   }}
@@ -230,7 +225,6 @@ export const EditUserForm = () => {
             </FormItem>
           )}
         />
-        {/* Gender */}
         <FormField
           control={form.control}
           name="gender"
@@ -264,7 +258,6 @@ export const EditUserForm = () => {
             </FormItem>
           )}
         />
-        {/* Role */}
         <FormField
           control={form.control}
           name="role"
@@ -287,40 +280,6 @@ export const EditUserForm = () => {
                     ))}
                   </SelectContent>
                 </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        {/* Location */}
-        <FormField
-          control={form.control}
-          name="location"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-md">Location</FormLabel>
-              <FormControl>
-                <RadioGroup
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  className="flex gap-5"
-                >
-                  {LOCATIONS.map((location) => {
-                    return (
-                      <FormItem
-                        className="flex items-center gap-1 space-y-0"
-                        key={location.value}
-                      >
-                        <FormControl>
-                          <RadioGroupItem value={location.value.toString()} />
-                        </FormControl>
-                        <FormLabel className="font-normal">
-                          {location.label}
-                        </FormLabel>
-                      </FormItem>
-                    );
-                  })}
-                </RadioGroup>
               </FormControl>
               <FormMessage />
             </FormItem>

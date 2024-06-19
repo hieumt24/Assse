@@ -13,7 +13,8 @@ interface User {
   dateOfBirth: string;
   isFirstTimeLogin: boolean;
   staffCode: string;
-  role: number;
+  role: string;
+  location: string;
 }
 
 export interface AuthContextProps {
@@ -34,7 +35,8 @@ export const AuthContext = createContext<AuthContextProps>({
     dateOfBirth: "",
     isFirstTimeLogin: false,
     staffCode: "",
-    role: 2,
+    role: "Staff",
+    location: "",
   },
   setUser: () => {},
 });
@@ -50,6 +52,7 @@ interface Token {
   "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": string;
   IsFirstTimeLogin: string;
   DateOfBirth: string;
+  Location: string;
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
@@ -62,7 +65,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     dateOfBirth: "",
     isFirstTimeLogin: false,
     staffCode: "",
-    role: 2,
+    role: "Staff",
+    location: "",
   });
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!token);
@@ -83,12 +87,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         dateOfBirth: decodedToken.DateOfBirth,
         isFirstTimeLogin: decodedToken.IsFirstTimeLogin === "true",
         staffCode: decodedToken.StaffCode,
-        role: parseInt(
-          decodedToken[
-            "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-          ],
-        ),
+        role: decodedToken[
+          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+        ],
+        location: decodedToken.Location,
       });
+      console.log(
+        decodedToken[
+          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+        ],
+      );
     } else {
       setUser({
         id: "",
@@ -96,7 +104,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         dateOfBirth: "",
         isFirstTimeLogin: false,
         staffCode: "",
-        role: 2,
+        role: "Staff",
+        location: "",
       });
       setIsAuthenticated(false);
     }

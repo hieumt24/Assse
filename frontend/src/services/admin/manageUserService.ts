@@ -17,7 +17,6 @@ export const createUserService = (req: CreateUserReq) => {
 };
 
 export const getAllUserService = (req: GetUserReq) => {
-  console.log(req);
   if (req.roleType === 0) {
     delete req.roleType;
   }

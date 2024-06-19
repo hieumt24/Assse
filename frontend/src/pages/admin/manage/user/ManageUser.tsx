@@ -43,6 +43,7 @@ export const ManageUser = () => {
     setUserIdToDisable(id);
     setOpenDisable(true);
   };
+
   const handleDisable = async () => {
     try {
       setIsLoading(true);
@@ -63,7 +64,7 @@ export const ManageUser = () => {
   };
   const [openDisable, setOpenDisable] = useState(false);
   return (
-    <div className="m-24 flex w-2/3 flex-grow flex-col gap-8">
+    <div className="m-24 flex flex-grow flex-col gap-8">
       <p className="text-2xl font-bold text-red-600">User List</p>
       <div className="flex items-center justify-between">
         <Select

@@ -25,7 +25,6 @@ export const useUsers = (
         roleType,
         adminLocation: 1,
       });
-      console.log(data);
 
       setUsers(data.data.data);
       setPageCount(data.data.totalPages);
@@ -38,7 +37,7 @@ export const useUsers = (
 
   useEffect(() => {
     fetchUsers();
-  }, [token, pagination.pageIndex, pagination.pageSize, search, roleType]);
+  }, [token, pagination, search, roleType]);
 
   return { users, loading, error, setUsers, pageCount, fetchUsers };
 };

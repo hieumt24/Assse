@@ -1,8 +1,9 @@
 import { differenceInYears, isAfter, isValid } from "date-fns";
 import { z } from "zod";
+
 const dateFormat = /^\d{4}-?\d{2}-?\d{2}$/;
-const firstNameFormat = /^[A-Za-z]+$/;
 const nameFormat = /^[a-zA-Z\s]*$/;
+const firstNameFormat = /^[A-Za-z]+$/;
 
 export const createUserSchema = z
   .object({
@@ -93,7 +94,7 @@ export const createUserSchema = z
       ),
     gender: z.enum(["1", "2", "3"]),
     role: z.enum(["2", "1"]),
-    location: z.enum(["3", "1", "2"]),
+    location: z.string(),
   })
   .refine(
     (data) => {
@@ -111,6 +112,7 @@ export const createUserSchema = z
 export const searchUserSchema = z.object({
   searchTerm: z.string(),
 });
+
 export const updateUserSchema = z
   .object({
     dateOfBirth: z
@@ -181,8 +183,7 @@ export const updateUserSchema = z
       ),
     gender: z.enum(["1", "2", "3"]),
     role: z.enum(["2", "1"]),
-    location: z.enum(["3", "1", "2"]),
-    id: z.string(),
+    location: z.string(),
   })
   .refine(
     (data) => {
