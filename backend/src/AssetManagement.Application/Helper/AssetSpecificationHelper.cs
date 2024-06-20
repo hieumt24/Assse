@@ -45,7 +45,7 @@ namespace AssetManagement.Application.Helper
         public static ISpecification<Asset> CreateAssetPagination(ISpecification<Asset> assetQuery, PaginationFilter filter)
         {
             var assetPagination = new AssetSpecification(assetQuery.Criteria);
-            assetPagination.ApplyPaging(filter.PageSize * (filter.PageNumber - 1), filter.PageSize);
+            assetPagination.ApplyPaging(filter.PageSize * (filter.PageIndex - 1), filter.PageSize);
             return assetPagination;
         }
 

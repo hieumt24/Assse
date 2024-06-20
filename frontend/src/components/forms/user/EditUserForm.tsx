@@ -69,7 +69,7 @@ export const EditUserForm = () => {
     };
     fetchUser();
   }, [staffCode]);
-  console.log(form.formState);
+
   const onSubmit = async (values: z.infer<typeof updateUserSchema>) => {
     const gender = parseInt(values.gender);
     const role = parseInt(values.role);
@@ -91,6 +91,7 @@ export const EditUserForm = () => {
       toast.error("Error updating user");
     } finally {
       setIsLoading(false);
+      navigate("/admin/user");
     }
   };
 
@@ -234,7 +235,7 @@ export const EditUserForm = () => {
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  {...field}
                   className="flex gap-8"
                 >
                   {GENDERS.map((gender) => {
@@ -265,7 +266,7 @@ export const EditUserForm = () => {
             <FormItem>
               <FormLabel className="text-md">Types</FormLabel>
               <FormControl>
-                <Select value={field.value} onValueChange={field.onChange}>
+                <Select {...field} onValueChange={field.onChange}>
                   <SelectTrigger>
                     <SelectValue placeholder="Role" />
                   </SelectTrigger>

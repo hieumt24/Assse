@@ -1,6 +1,4 @@
-import { FullPageModal } from "@/components/FullPageModal";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -19,16 +17,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { ASSET_STATES } from "@/constants";
+import { LOCATIONS } from "@/constants";
+import { useLoading } from "@/context/LoadingContext";
+import { useAuth } from "@/hooks";
+import { removeExtraWhitespace } from "@/lib/utils";
 import { CategoryRes } from "@/models";
-import { getAllCategoryService } from "@/services/admin/manageAssetService";
+import {
+  createAssetService,
+  getAllCategoryService,
+} from "@/services/admin/manageAssetService";
 import { createAssetSchema } from "@/validations/assetSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { z } from "zod";
+import { CreateCategoryForm } from "./CreateCategoryForm";
 
 export const CreateAssetForm: React.FC = () => {
   const [categories, setCategories] = useState(Array<CategoryRes>);
@@ -38,6 +44,9 @@ export const CreateAssetForm: React.FC = () => {
   const [openCreateCategory, setOpenCreateCategory] = useState(false);
   const [categorySearch, setCategorySearch] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const { user } = useAuth();
+  const { setIsLoading } = useLoading();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setFilteredCategories(
@@ -53,16 +62,17 @@ export const CreateAssetForm: React.FC = () => {
     inputRef?.current?.focus();
   }, [filteredCategories]);
 
+  const fetchCategories = async () => {
+    const res = await getAllCategoryService();
+    if (res.success) {
+      setCategories(res.data.data);
+      setFilteredCategories(res.data.data);
+    } else {
+      console.log(res.message);
+    }
+  };
+
   useEffect(() => {
-    const fetchCategories = async () => {
-      const res = await getAllCategoryService();
-      if (res.success) {
-        setCategories(res.data.data);
-        setFilteredCategories(res.data.data);
-      } else {
-        console.log(res.message);
-      }
-    };
     fetchCategories();
   }, []);
 
@@ -79,8 +89,32 @@ export const CreateAssetForm: React.FC = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof createAssetSchema>) => {
-    console.log(values);
-    toast.success("Asset created successfully!");
+    const location = LOCATIONS.find(
+      (location) => location.label === user.location,
+    )?.value;
+    try {
+      setIsLoading(true);
+      const res = await createAssetService({
+        adminId: user.id,
+        assetName: values.name,
+        assetLocation: location ? location : 1,
+        categoryId: values.category,
+        state: parseInt(values.state),
+        specification: values.specification,
+        installedDate: values.installedDate,
+      });
+      if (res.success) {
+        toast.success("Asset created successfully!");
+      } else {
+        toast.error(res.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error creating asset");
+    } finally {
+      setIsLoading(false);
+      navigate("/admin/asset");
+    }
   };
 
   return (
@@ -104,7 +138,7 @@ export const CreateAssetForm: React.FC = () => {
                   placeholder="Enter asset name"
                   {...field}
                   onBlur={(e) => {
-                    const cleanedValue = e.target.value.trim();
+                    const cleanedValue = removeExtraWhitespace(e.target.value);
                     field.onChange(cleanedValue);
                   }}
                   autoFocus
@@ -123,7 +157,7 @@ export const CreateAssetForm: React.FC = () => {
                 Category <span className="text-red-600">*</span>
               </FormLabel>
               <FormControl>
-                <Select value={field.value} onValueChange={field.onChange}>
+                <Select {...field} onValueChange={field.onChange}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
@@ -137,12 +171,9 @@ export const CreateAssetForm: React.FC = () => {
                         setCategorySearch(e.target.value);
                       }}
                     />
-                    <div className="h-[100px] overflow-y-scroll">
+                    <div className="max-h-[100px] overflow-y-scroll">
                       {filteredCategories?.map((category) => (
-                        <SelectItem
-                          key={category.id}
-                          value={category.categoryName}
-                        >
+                        <SelectItem key={category.id} value={category.id}>
                           {category.categoryName} ({category.prefix})
                         </SelectItem>
                       ))}
@@ -221,21 +252,18 @@ export const CreateAssetForm: React.FC = () => {
                   defaultValue={field.value}
                   className="flex gap-5"
                 >
-                  {ASSET_STATES.map((state) => {
-                    return (
-                      <FormItem
-                        className="flex items-center gap-1 space-y-0"
-                        key={state.value}
-                      >
-                        <FormControl>
-                          <RadioGroupItem value={state.value.toString()} />
-                        </FormControl>
-                        <FormLabel className="font-normal">
-                          {state.label}
-                        </FormLabel>
-                      </FormItem>
-                    );
-                  })}
+                  <FormItem className="flex items-center gap-1 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value={"1"} />
+                    </FormControl>
+                    <FormLabel className="font-normal">Available</FormLabel>
+                  </FormItem>
+                  <FormItem className="flex items-center gap-1 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value={"2"} />
+                    </FormControl>
+                    <FormLabel className="font-normal">Not available</FormLabel>
+                  </FormItem>
                 </RadioGroup>
               </FormControl>
               <FormMessage>{form.formState.errors.state?.message}</FormMessage>
@@ -258,14 +286,11 @@ export const CreateAssetForm: React.FC = () => {
             Cancel
           </Button>
         </div>
-        <FullPageModal show={openCreateCategory}>
-          <Dialog
-            open={openCreateCategory}
-            onOpenChange={setOpenCreateCategory}
-          >
-            <DialogContent>Add new category</DialogContent>
-          </Dialog>
-        </FullPageModal>
+        <CreateCategoryForm
+          onCreate={fetchCategories}
+          open={openCreateCategory}
+          setOpen={setOpenCreateCategory}
+        />
       </form>
     </Form>
   );
