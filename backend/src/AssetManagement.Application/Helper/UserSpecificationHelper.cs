@@ -47,7 +47,7 @@ namespace AssetManagement.Application.Helper
         public static ISpecification<User> CreateSpecificationPagination(ISpecification<User> userQuery, PaginationFilter filter)
         {
             var useragination = new UserSpecification(userQuery.Criteria);
-            useragination.ApplyPaging(filter.PageSize * (filter.PageNumber - 1), filter.PageSize);
+            useragination.ApplyPaging(filter.PageSize * (filter.PageIndex - 1), filter.PageSize);
             return useragination;
         }
 

@@ -90,6 +90,10 @@ namespace AssetManagement.Infrastructure.Contexts
                 new Category { Id = Guid.NewGuid(), CategoryName = "Monitor", Prefix = "MO" },
                 new Category { Id = Guid.NewGuid(), CategoryName = "Desk", Prefix = "DE" }
             );
+
+            modelBuilder.Entity<Category>().HasIndex(c => c.CategoryName).IsUnique();
+            modelBuilder.Entity<Category>().HasIndex(c => c.Prefix).IsUnique();
+
         }
     }
 }
