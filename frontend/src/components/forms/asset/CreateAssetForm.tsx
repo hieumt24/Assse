@@ -44,6 +44,7 @@ export const CreateAssetForm: React.FC = () => {
   const [openCreateCategory, setOpenCreateCategory] = useState(false);
   const [categorySearch, setCategorySearch] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const selectRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
   const { setIsLoading } = useLoading();
   const navigate = useNavigate();
@@ -74,6 +75,22 @@ export const CreateAssetForm: React.FC = () => {
 
   useEffect(() => {
     fetchCategories();
+  }, []);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      selectRef.current &&
+      !selectRef.current.contains(event.target as Node)
+    ) {
+      setCategorySearch("");
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   const form = useForm<z.infer<typeof createAssetSchema>>({
@@ -152,7 +169,7 @@ export const CreateAssetForm: React.FC = () => {
           control={form.control}
           name="category"
           render={({ field }) => (
-            <FormItem>
+            <FormItem ref={selectRef}>
               <FormLabel className="text-md">
                 Category <span className="text-red-600">*</span>
               </FormLabel>
