@@ -11,7 +11,9 @@ namespace AssetManagement.Application.Helper
     {
         public static ISpecification<Asset> CreateAssetQuery(string? search, Guid? categoryId, AssetStateType? assetStateType, EnumLocation enumLocation, string? orderBy, bool? isDescending)
         {
-            Expression<Func<Asset, bool>> criteria = asset => !asset.IsDeleted && asset.AssetLocation == enumLocation;
+            Expression<Func<Asset, bool>> criteria = asset => asset.AssetLocation == enumLocation;
+            //include category
+
             if (!string.IsNullOrEmpty(search))
             {
                 criteria = asset => asset.AssetCode.ToLower().Contains(search.ToLower()) || asset.AssetName.ToLower().Contains(search.ToLower());
@@ -28,6 +30,7 @@ namespace AssetManagement.Application.Helper
             }
 
             var spec = new AssetSpecification(criteria);
+            spec.AddInclude(x => x.Category);
             if (!string.IsNullOrEmpty(orderBy))
             {
                 if (isDescending.HasValue && isDescending.Value)
