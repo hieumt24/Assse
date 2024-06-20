@@ -105,6 +105,7 @@ export const CreateAssetForm: React.FC = () => {
       });
       if (res.success) {
         toast.success("Asset created successfully!");
+        navigate("/admin/asset");
       } else {
         toast.error(res.message);
       }
@@ -113,7 +114,6 @@ export const CreateAssetForm: React.FC = () => {
       toast.error("Error creating asset");
     } finally {
       setIsLoading(false);
-      navigate("/admin/asset");
     }
   };
 
@@ -249,7 +249,7 @@ export const CreateAssetForm: React.FC = () => {
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  {...field}
                   className="flex gap-5"
                 >
                   <FormItem className="flex items-center gap-1 space-y-0">
