@@ -1,5 +1,5 @@
 import { FullPageModal } from "@/components/FullPageModal";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 
 interface DialogProps {
   open: boolean;
@@ -11,7 +11,9 @@ export const CreateCategoryForm = (props: DialogProps) => {
   return (
     <FullPageModal show={open}>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>Add new category</DialogContent>
+        <DialogContent>
+          <DialogHeader>Add new category</DialogHeader>
+        </DialogContent>
       </Dialog>
     </FullPageModal>
   );
