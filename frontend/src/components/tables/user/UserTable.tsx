@@ -150,7 +150,7 @@ export function UserTable<TData, TValue>({
           {isLoading ? (
             <LoadingSpinner />
           ) : (
-            <DialogContent className="max-w-[40%] p-[1px]">
+            <DialogContent className="max-w-[40%] p-0">
               <div className="rounded-lg border-2 border-black p-0 text-lg shadow-lg">
                 <h1 className="rounded-t-lg border-b-2 border-black bg-zinc-300 p-6 px-10 text-xl font-bold text-red-600">
                   Detailed User Information

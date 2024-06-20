@@ -117,7 +117,7 @@ export const ManageUser = () => {
           />
           <FullPageModal show={openDisable}>
             <Dialog open={openDisable} onOpenChange={setOpenDisable}>
-              <DialogContent onClick={(e) => e.stopPropagation()}>
+              <DialogContent>
                 <DialogHeader>
                   <DialogTitle className="text-center text-2xl font-bold text-red-600">
                     Are you sure?
