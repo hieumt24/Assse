@@ -39,10 +39,7 @@ namespace AssetManagement.Infrastructure.Contexts
                 .HasForeignKey(a => a.CategoryId);
 
             //seed admin user
-            //var user = new User { FirstName = "Admin", LastName = "Ha Noi", Role = RoleType.Admin, Location = EnumLocation.HaNoi, IsFirstTimeLogin = false, Username = "admin" };
-            //user.PasswordHash = _passwordHasher.HashPassword(user, "adminpassword");
-            //user.CreatedOn = DateTime.Now;
-            //user.CreatedBy = "System";
+
             var adminHN = new User
             {
                 FirstName = "Admin",
@@ -90,6 +87,9 @@ namespace AssetManagement.Infrastructure.Contexts
                 new Category { Id = Guid.NewGuid(), CategoryName = "Monitor", Prefix = "MO" },
                 new Category { Id = Guid.NewGuid(), CategoryName = "Desk", Prefix = "DE" }
             );
+
+            modelBuilder.Entity<Category>().HasIndex(c => c.CategoryName).IsUnique();
+            modelBuilder.Entity<Category>().HasIndex(c => c.Prefix).IsUnique();
         }
     }
 }

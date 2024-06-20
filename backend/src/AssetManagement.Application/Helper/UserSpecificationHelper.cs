@@ -11,7 +11,7 @@ namespace AssetManagement.Application.Helper
     {
         public static ISpecification<User> CreateSpecification(string? search, EnumLocation? adminLocation, RoleType? roleType, string? orderBy, bool? isDescending)
         {
-            Expression<Func<User, bool>> criteria = user => !user.IsDeleted && !user.IsDisable && user.Location == adminLocation;
+            Expression<Func<User, bool>> criteria = user => !user.IsDeleted && user.Location == adminLocation;
 
             if (!string.IsNullOrEmpty(search))
             {
