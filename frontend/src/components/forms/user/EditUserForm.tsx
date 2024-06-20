@@ -70,7 +70,7 @@ export const EditUserForm = () => {
     };
     fetchUser();
   }, [staffCode]);
-  console.log(form.formState);
+
   const onSubmit = async (values: z.infer<typeof updateUserSchema>) => {
     const gender = parseInt(values.gender);
     const role = parseInt(values.role);
@@ -92,6 +92,7 @@ export const EditUserForm = () => {
       toast.error("Error updating user");
     } finally {
       setIsLoading(false);
+      navigate("/admin/user");
     }
   };
 
@@ -291,9 +292,6 @@ export const EditUserForm = () => {
             type="submit"
             className="w-[76px] bg-red-500 hover:bg-white hover:text-red-500"
             disabled={!form.formState.isValid}
-            onClick={() => {
-              navigate("/admin/user");
-            }}
           >
             Save
           </Button>
