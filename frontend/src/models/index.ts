@@ -65,3 +65,18 @@ export type PaginationState = {
   pageIndex: number;
   pageSize: number;
 };
+
+export interface CreateCategoryReq {
+  categoryName: string;
+  prefix: string;
+}
+
+export interface CreateAssetReq {
+  adminId: string;
+  assetName: string;
+  specification: string;
+  installedDate: string;
+  state: number;
+  assetLocation: number;
+  categoryId: string;
+}
