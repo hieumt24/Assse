@@ -55,6 +55,7 @@ export const EditUserForm = () => {
       const res = await getUserByStaffCodeService(staffCode);
       if (res.success) {
         const details = res.data.data;
+        console.log(details);
         form.reset({
           dateOfBirth: format(details.dateOfBirth, "yyyy-MM-dd"),
           joinedDate: format(details.joinedDate, "yyyy-MM-dd"),
@@ -234,7 +235,7 @@ export const EditUserForm = () => {
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  {...field}
                   className="flex gap-8"
                 >
                   {GENDERS.map((gender) => {
@@ -265,7 +266,7 @@ export const EditUserForm = () => {
             <FormItem>
               <FormLabel className="text-md">Types</FormLabel>
               <FormControl>
-                <Select value={field.value} onValueChange={field.onChange}>
+                <Select {...field} onValueChange={field.onChange}>
                   <SelectTrigger>
                     <SelectValue placeholder="Role" />
                   </SelectTrigger>
@@ -290,6 +291,9 @@ export const EditUserForm = () => {
             type="submit"
             className="w-[76px] bg-red-500 hover:bg-white hover:text-red-500"
             disabled={!form.formState.isValid}
+            onClick={() => {
+              navigate("/admin/user");
+            }}
           >
             Save
           </Button>
