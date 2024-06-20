@@ -28,23 +28,23 @@ const Pagination: React.FC<PaginationProps> = ({
         pageNumbers.push(i);
       }
     } else {
-      if (pageIndex > 3) {
+      if (pageIndex > 1) {
         pageNumbers.push(1);
-        if (pageIndex > 4) {
+        if (pageIndex > 2) {
           pageNumbers.push("...");
         }
       }
 
       for (
-        let i = Math.max(1, pageIndex - 2);
-        i <= Math.min(pageIndex + 2, pageCount);
+        let i = Math.max(1, pageIndex - 1);
+        i <= Math.min(pageIndex + 1, pageCount);
         i++
       ) {
         pageNumbers.push(i);
       }
 
-      if (pageIndex < pageCount - 3) {
-        if (pageIndex < pageCount - 4) {
+      if (pageIndex < pageCount - 1) {
+        if (pageIndex < pageCount - 2) {
           pageNumbers.push("...");
         }
         pageNumbers.push(pageCount);
@@ -60,7 +60,7 @@ const Pagination: React.FC<PaginationProps> = ({
         variant="destructive"
         size="sm"
         onClick={previousPage}
-        disabled={!getCanPreviousPage()}
+        disabled={!getCanPreviousPage() || pageIndex === 1}
         className="px-1"
       >
         <MdKeyboardArrowLeft size={24} />
@@ -71,7 +71,9 @@ const Pagination: React.FC<PaginationProps> = ({
           className={`rounded-md border px-3 py-1 transition-all ${
             page === pageIndex ? "bg-red-500 text-white" : "border-gray-300"
           } ${typeof page === "number" ? "hover:bg-red-400" : "cursor-default"}`}
-          onClick={() => typeof page === "number" && setPage(page - 1)}
+          onClick={() => {
+            typeof page === "number" && setPage(page);
+          }}
           disabled={typeof page !== "number"}
         >
           {page}
@@ -81,7 +83,7 @@ const Pagination: React.FC<PaginationProps> = ({
         variant="destructive"
         size="sm"
         onClick={nextPage}
-        disabled={!getCanNextPage()}
+        disabled={!getCanNextPage() && pageIndex === pageCount}
         className="px-1"
       >
         <MdKeyboardArrowRight size={24} />
