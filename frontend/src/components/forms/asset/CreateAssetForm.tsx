@@ -1,6 +1,4 @@
-import { FullPageModal } from "@/components/FullPageModal";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -29,6 +27,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { z } from "zod";
+import { CreateCategoryForm } from "./CreateCategoryForm";
 
 export const CreateAssetForm: React.FC = () => {
   const [categories, setCategories] = useState(Array<CategoryRes>);
@@ -258,14 +257,10 @@ export const CreateAssetForm: React.FC = () => {
             Cancel
           </Button>
         </div>
-        <FullPageModal show={openCreateCategory}>
-          <Dialog
-            open={openCreateCategory}
-            onOpenChange={setOpenCreateCategory}
-          >
-            <DialogContent>Add new category</DialogContent>
-          </Dialog>
-        </FullPageModal>
+        <CreateCategoryForm
+          open={openCreateCategory}
+          setOpen={setOpenCreateCategory}
+        />
       </form>
     </Form>
   );
