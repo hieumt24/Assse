@@ -1,4 +1,4 @@
-﻿namespace AssetManagement.Domain.Enums
+namespace AssetManagement.Domain.Enums
 {
     public enum AssetStateType
     {

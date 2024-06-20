@@ -1,4 +1,4 @@
-﻿using AssetManagement.Domain.Entites;
+using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
