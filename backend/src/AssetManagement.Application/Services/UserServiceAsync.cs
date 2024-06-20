@@ -160,9 +160,9 @@ namespace AssetManagement.Application.Services
                     return new Response<UserDto> { Succeeded = false, Message = "User not found" };
                 }
 
-                user.IsDisable = !user.IsDisable;
+                user.IsDeleted = !user.IsDeleted;
                 await _userRepositoriesAsync.UpdateAsync(user);
-                if (user.IsDisable == true)
+                if (user.IsDeleted == true)
                 {
                     return new Response<UserDto> { Succeeded = true, Message = "User disabled successfully" };
                 }

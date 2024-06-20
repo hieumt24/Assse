@@ -11,7 +11,7 @@ namespace AssetManagement.Application.Helper
     {
         public static ISpecification<User> CreateSpecification(string? search, EnumLocation? adminLocation, RoleType? roleType, string? orderBy, bool? isDescending)
         {
-            Expression<Func<User, bool>> criteria = user => !user.IsDeleted && !user.IsDisable && user.Location == adminLocation;
+            Expression<Func<User, bool>> criteria = user => !user.IsDeleted && user.Location == adminLocation;
 
             if (!string.IsNullOrEmpty(search))
             {
@@ -47,7 +47,7 @@ namespace AssetManagement.Application.Helper
         public static ISpecification<User> CreateSpecificationPagination(ISpecification<User> userQuery, PaginationFilter filter)
         {
             var useragination = new UserSpecification(userQuery.Criteria);
-            useragination.ApplyPaging(filter.PageSize * (filter.PageNumber - 1), filter.PageSize);
+            useragination.ApplyPaging(filter.PageSize * (filter.PageIndex - 1), filter.PageSize);
             return useragination;
         }
 
