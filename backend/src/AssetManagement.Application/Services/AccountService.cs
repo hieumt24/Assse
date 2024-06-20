@@ -36,7 +36,7 @@ namespace AssetManagement.Application.Services
 
             if (user == null || !_passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.CurrentPassword).Equals(PasswordVerificationResult.Success))
             {
-                return new Response<string> { Succeeded = false, Message = "Invalid username or password" };
+                return new Response<string> { Succeeded = false, Message = "Current password is incorrect" };
             }
 
             // Check if the new password is the same as the current password
