@@ -55,7 +55,6 @@ export const EditUserForm = () => {
       const res = await getUserByStaffCodeService(staffCode);
       if (res.success) {
         const details = res.data.data;
-        console.log(details);
         form.reset({
           dateOfBirth: format(details.dateOfBirth, "yyyy-MM-dd"),
           joinedDate: format(details.joinedDate, "yyyy-MM-dd"),
