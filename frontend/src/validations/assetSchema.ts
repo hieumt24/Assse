@@ -1,8 +1,8 @@
-import { isAfter, isValid } from "date-fns";
+import { isAfter, isBefore, isValid } from "date-fns";
 import { z } from "zod";
 
 const dateFormat = /^\d{4}-?\d{2}-?\d{2}$/;
-const nameFormat = /^[a-zA-Z\s]*$/;
+const nameFormat = /^[a-zA-Z0-9\s]*$/;
 
 export const createAssetSchema = z.object({
   name: z
@@ -11,7 +11,7 @@ export const createAssetSchema = z.object({
     .min(2, { message: "Name must be at least 2 letters long." })
     .max(50, { message: "Name must be no longer than 50 letters." })
     .regex(nameFormat, {
-      message: "Name must not contain accent marks or numbers.",
+      message: "Name must not contain accent marks.",
     }),
   category: z.string(),
   specification: z
@@ -32,23 +32,16 @@ export const createAssetSchema = z.object({
     .refine(
       (dateString) => {
         const parsedDate = new Date(dateString);
-        return !isAfter(parsedDate, new Date());
+        return !isBefore(parsedDate, new Date("2000/01/01"));
       },
-      { message: "Joined Date cannot be in the future." },
+      { message: "Installed Date must be from the year 2000 or later." },
     )
     .refine(
       (dateString) => {
         const parsedDate = new Date(dateString);
-
-        const dayOfWeek = parsedDate.toString().substring(0, 3);
-        if (dayOfWeek === "Sat" || dayOfWeek === "Sun") {
-          return false;
-        }
-        return true;
+        return !isAfter(parsedDate, new Date());
       },
-      {
-        message: "Joined date can't be on Saturday, Sunday.",
-      },
+      { message: "Joined Date cannot be in the future." },
     ),
   state: z.enum(["1", "2"]),
 });

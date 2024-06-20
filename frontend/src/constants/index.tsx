@@ -71,4 +71,16 @@ export const ASSET_STATES = [
     value: 2,
     label: "Not available",
   },
+  {
+    value: 3,
+    label: "Assigned",
+  },
+  {
+    value: 4,
+    label: "Waiting for Recycling",
+  },
+  {
+    value: 5,
+    label: "Recycled",
+  },
 ];
