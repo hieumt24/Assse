@@ -12,6 +12,7 @@ using AssetManagement.Domain.Enums;
 using AutoMapper;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using System.Xml;
 
 namespace AssetManagement.Application.Services
 {
@@ -21,16 +22,19 @@ namespace AssetManagement.Application.Services
         private readonly IAssetRepositoriesAsync _assetRepository;
         private readonly IUriService _uriService;
         private readonly IValidator<AddAssetRequestDto> _addAssetValidator;
+        private readonly IValidator<EditAssetRequestDto> _editAssetValidator;
 
         public AssetServiceAsync(IAssetRepositoriesAsync assetRepository,
              IMapper mapper,
               IUriService uriService,
-             IValidator<AddAssetRequestDto> addAssetValidator)
+             IValidator<AddAssetRequestDto> addAssetValidator,
+             IValidator<EditAssetRequestDto> editAssetValidator)
         {
             _mapper = mapper;
             _assetRepository = assetRepository;
             _uriService = uriService;
             _addAssetValidator = addAssetValidator;
+            _editAssetValidator = editAssetValidator;
         }
 
         public async Task<Response<AssetDto>> AddAssetAsync(AddAssetRequestDto request)
@@ -120,6 +124,46 @@ namespace AssetManagement.Application.Services
             catch (Exception ex)
             {
                 return new PagedResponse<List<AssetResponseDto>> { Succeeded = false, Errors = { ex.Message } };
+            }
+        }
+
+        public async Task<Response<AssetDto>> EditAssetAsync(Guid assetId, EditAssetRequestDto request)
+        {
+            try
+            {
+                //Map Dto to Domain
+                var assetDomain = _mapper.Map<Asset>(request);
+
+                //Check asset is exist
+                var exsitingAsset = await _assetRepository.GetByIdAsync(assetId);
+                if (exsitingAsset == null)
+                {
+                    return new Response<AssetDto> { Succeeded = false, Message = "Asset not found" };
+                }
+
+                //Check validation
+                var validationResult = await _editAssetValidator.ValidateAsync(request);
+                if (!validationResult.IsValid)
+                {
+                    var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                    return new Response<AssetDto> { Succeeded = false, Errors = errors };
+                }
+                exsitingAsset.AssetName = assetDomain.AssetName;
+                exsitingAsset.Specification = assetDomain.Specification;
+                exsitingAsset.InstalledDate = assetDomain.InstalledDate;
+                exsitingAsset.State = assetDomain.State;
+                exsitingAsset.LastModifiedOn = DateTime.Now;
+
+                //Update to database
+                await _assetRepository.UpdateAsync(exsitingAsset);
+
+                //Map to Dto
+                var assetEditDto = _mapper.Map<AssetDto>(exsitingAsset);
+                return new Response<AssetDto> { Succeeded = true, Data = assetEditDto };
+            }
+            catch (Exception ex)
+            {
+                return new Response<AssetDto> { Succeeded = false, Errors = { ex.Message } };
             }
         }
     }

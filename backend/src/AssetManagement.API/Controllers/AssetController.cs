@@ -19,6 +19,20 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpPost]
+        [Route("filter-assets")]
+        public async Task<IActionResult> GetAllAsset([FromBody] AssetFilter assetFilter)
+        {
+            string route = Request.Path.Value;
+            var response = await _assetService.GetAllAseets(assetFilter.pagination, assetFilter.search, assetFilter.categoryId, assetFilter.assetStateType, assetFilter.enumLocation, assetFilter.orderBy, assetFilter.isDescending, route);
+            if (!response.Succeeded)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+
+        [HttpPost]
         [ValidateModel]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromBody] AddAssetRequestDto request)
@@ -31,17 +45,15 @@ namespace AssetManagement.API.Controllers
             return Ok(response);
         }
 
-        [HttpPost]
-        [Route("filter-assets")]
-        public async Task<IActionResult> GetAllAsset([FromBody] AssetFilter assetFilter)
+        [HttpPut]
+        [ValidateModel]
+        public async Task<IActionResult> Edit([FromQuery] Guid id, [FromBody] EditAssetRequestDto request)
         {
-            string route = Request.Path.Value;
-            var response = await _assetService.GetAllAseets(assetFilter.pagination, assetFilter.search, assetFilter.categoryId, assetFilter.assetStateType, assetFilter.enumLocation, assetFilter.orderBy, assetFilter.isDescending, route);
+            var response = await _assetService.EditAssetAsync(id, request);
             if (!response.Succeeded)
             {
                 return BadRequest(response);
             }
-
             return Ok(response);
         }
 

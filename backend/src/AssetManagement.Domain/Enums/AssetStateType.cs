@@ -1,4 +1,4 @@
-﻿namespace AssetManagement.Domain.Enums
+namespace AssetManagement.Domain.Enums
 {
     public enum AssetStateType
     {
@@ -6,7 +6,6 @@
         NotAvailable = 2,
         Assigned = 3,
         WaitingForRecycling = 4,
-        WaitingForAcceptance = 5,
-        Recycled = 6,
+        Recycled = 5
     }
 }

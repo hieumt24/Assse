@@ -11,7 +11,7 @@ namespace AssetManagement.Application.Helper
     {
         public static ISpecification<Asset> CreateAssetQuery(string? search, Guid? categoryId, AssetStateType? assetStateType, EnumLocation enumLocation, string? orderBy, bool? isDescending)
         {
-            Expression<Func<Asset, bool>> criteria = asset => !asset.IsDeleted && !asset.IsDisable && asset.AssetLocation == enumLocation;
+            Expression<Func<Asset, bool>> criteria = asset => !asset.IsDeleted && asset.AssetLocation == enumLocation;
             if (!string.IsNullOrEmpty(search))
             {
                 criteria = asset => asset.AssetCode.ToLower().Contains(search.ToLower()) || asset.AssetName.ToLower().Contains(search.ToLower());
