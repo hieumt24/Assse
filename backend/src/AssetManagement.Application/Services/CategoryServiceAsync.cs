@@ -56,7 +56,7 @@ namespace AssetManagement.Application.Services
 
                
                 var category = _mapper.Map<Category>(request);
-                category.CategoryName=  string.Join(" ", request.CategoryName.ToLower().Split(' ', StringSplitOptions.RemoveEmptyEntries));
+                category.CategoryName=  string.Join(" ", request.CategoryName.Split(' ', StringSplitOptions.RemoveEmptyEntries));
                 category.Prefix = request.Prefix.Replace(" ","").ToUpper();
                 var addedCategory = await _categoryRepository.AddAsync(category);
 
