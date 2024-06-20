@@ -18,6 +18,7 @@ export const Admin = () => {
           <Route path="asset" element={<ManageAsset />} />
           <Route path="user/create-user" element={<CreateUser />} />
           <Route path="asset/create-asset" element={<CreateAsset />} />
+
           <Route path="user/edit/:staffCode" element={<EditUser />} />
         </Routes>
       </div>

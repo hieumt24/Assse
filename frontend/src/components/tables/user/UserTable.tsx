@@ -150,31 +150,33 @@ export function UserTable<TData, TValue>({
           {isLoading ? (
             <LoadingSpinner />
           ) : (
-            <DialogContent className="max-w-[40%] p-0">
-              <div className="rounded-lg border-2 border-black p-0 text-lg shadow-lg">
-                <h1 className="rounded-t-lg border-b-2 border-black bg-zinc-300 p-6 px-10 text-xl font-bold text-red-600">
+            <DialogContent className="max-w-[40%] border-none p-0">
+              <div className="border-1 w-[100%] rounded-lg border-black p-0 text-lg shadow-lg">
+                <h1 className="border-b-1 rounded-t-lg border-black bg-zinc-300 p-6 px-16 text-xl font-bold text-red-600">
                   Detailed User Information
                 </h1>
-                <div className="w-full px-10 py-4">
+                <div className="w-full px-16 py-6">
                   <table className="w-full">
                     <tr>
-                      <td className="w-[40%]">Staff code</td>
-                      <td>{userDetails?.staffCode}</td>
+                      <td className="w-[40%] font-semibold">Staff code</td>
+                      <td className="text-wrap">{userDetails?.staffCode}</td>
                     </tr>
                     <tr>
-                      <td>Username</td>
-                      <td>{userDetails?.username}</td>
+                      <td className="font-semibold">Username</td>
+                      <td className="text-wrap">{userDetails?.username}</td>
                     </tr>
                     <tr>
-                      <td>First name</td>
-                      <td>{userDetails?.firstName}</td>
+                      <td className="font-semibold">First name</td>
+                      <td className="truncate text-wrap">
+                        {userDetails?.firstName}
+                      </td>
                     </tr>
                     <tr>
-                      <td>Last name</td>
-                      <td>{userDetails?.lastName}</td>
+                      <td className="font-semibold">Last name</td>
+                      <td className="text-wrap">{userDetails?.lastName}</td>
                     </tr>
                     <tr>
-                      <td>Date of birth</td>
+                      <td className="font-semibold">Date of birth</td>
                       <td>
                         {userDetails?.dateOfBirth
                           ? format(userDetails?.dateOfBirth, "MM/dd/yyyy")
@@ -182,7 +184,7 @@ export function UserTable<TData, TValue>({
                       </td>
                     </tr>
                     <tr>
-                      <td>Joined date</td>
+                      <td className="font-semibold">Joined date</td>
                       <td>
                         {userDetails?.joinedDate
                           ? format(userDetails?.joinedDate, "MM/dd/yyyy")
@@ -190,15 +192,15 @@ export function UserTable<TData, TValue>({
                       </td>
                     </tr>
                     <tr>
-                      <td>Gender</td>
+                      <td className="font-semibold">Gender</td>
                       <td>{userDetails?.gender === 2 ? "Male" : "Female"}</td>
                     </tr>
                     <tr>
-                      <td>Role</td>
+                      <td className="font-semibold">Role</td>
                       <td>{userDetails?.role === 1 ? "Admin" : "Staff"}</td>
                     </tr>
                     <tr>
-                      <td>Location</td>
+                      <td className="font-semibold">Location</td>
                       <td>
                         {userDetails?.location
                           ? LOCATIONS[userDetails.location - 1].label
