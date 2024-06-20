@@ -20,6 +20,7 @@ namespace AssetManagement.API.Controllers
 
         [HttpPost]
         [Route("filter-assets")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllAsset([FromBody] AssetFilter assetFilter)
         {
             string route = Request.Path.Value;
@@ -47,6 +48,7 @@ namespace AssetManagement.API.Controllers
 
         [HttpPut]
         [ValidateModel]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit([FromQuery] Guid id, [FromBody] EditAssetRequestDto request)
         {
             var response = await _assetService.EditAssetAsync(id, request);
@@ -58,6 +60,7 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteAsset(Guid id)
         {
             var result = await _assetService.DeleteAssetAsync(id);
