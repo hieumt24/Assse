@@ -92,16 +92,17 @@ namespace AssetManagement.Infrastructure.Contexts
                 .HasData(adminHN, adminHCM, adminDN);
 
             modelBuilder.Entity<User>().Property(u => u.StaffCodeId).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
-
-            // seed category
-            modelBuilder.Entity<Category>().HasData(
-                new Category { Id = Guid.NewGuid(), CategoryName = "Laptop", Prefix = "LA" },
-                new Category { Id = Guid.NewGuid(), CategoryName = "Monitor", Prefix = "MO" },
-                new Category { Id = Guid.NewGuid(), CategoryName = "Desk", Prefix = "DE" }
-            );
-
+            
             modelBuilder.Entity<Category>().HasIndex(c => c.CategoryName).IsUnique();
             modelBuilder.Entity<Category>().HasIndex(c => c.Prefix).IsUnique();
+            // seed category
+            modelBuilder.Entity<Category>().HasData(
+                new Category { CategoryName = "Laptop", Prefix = "LA" },
+                new Category { CategoryName = "Monitor", Prefix = "MO" },
+                new Category { CategoryName = "Desk", Prefix = "DE" }
+            );
+
+            
         }
 
         private static LambdaExpression CreateIsDeletedFilter(Type entityType)

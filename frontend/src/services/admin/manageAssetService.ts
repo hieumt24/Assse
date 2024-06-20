@@ -80,9 +80,9 @@ export const updateAssetService = (req: UpdateAssetReq) => {
     });
 };
 
-export const getAssetService = (assetId: string) => {
+export const getAssetByAssetCodeService = (staffCode: string) => {
   return axiosInstace
-    .get(`/assets/${assetId}`)
+    .get(`/assets/staffCode/${staffCode}`)
     .then((res) => {
       return {
         success: true,

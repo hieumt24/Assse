@@ -88,3 +88,14 @@ export interface UpdateAssetReq {
   installedDate: string;
   state: number;
 }
+
+export interface AssetRes {
+  id?: string;
+  assetCode?: string;
+  assestName?: string;
+  specification?: string;
+  installedDate?: Date;
+  state?: number;
+  assetLocation?: number;
+  categoryName?: string;
+}

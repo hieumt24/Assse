@@ -9,24 +9,18 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useLoading } from "@/context/LoadingContext";
 import { useAuth } from "@/hooks";
 import { removeExtraWhitespace } from "@/lib/utils";
+import { AssetRes } from "@/models";
 import {
-  getAssetService,
+  getAssetByAssetCodeService,
   updateAssetService,
 } from "@/services/admin/manageAssetService";
 import { updateAssetSchema } from "@/validations/assetSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -36,11 +30,10 @@ import { CreateCategoryForm } from "./CreateCategoryForm";
 
 export const EditAssetForm: React.FC = () => {
   const { staffCode } = useParams();
-  const inputRef = useRef<HTMLInputElement>(null);
   const { user } = useAuth();
   const { setIsLoading } = useLoading();
   const navigate = useNavigate();
-  const [asset, setAsset] = useState();
+  const [asset, setAsset] = useState<AssetRes>();
 
   const form = useForm<z.infer<typeof updateAssetSchema>>({
     mode: "all",
@@ -57,13 +50,16 @@ export const EditAssetForm: React.FC = () => {
     const fetchAsset = async () => {
       try {
         setIsLoading(true);
-        const res = await getAssetService(staffCode);
+        const res = await getAssetByAssetCodeService(
+          staffCode ? staffCode : "",
+        );
+        const details = res.data;
         if (res.success) {
           setAsset(res.data);
-          form.setValue("name", res.data.name);
-          form.setValue("specification", res.data.specification);
-          form.setValue("installedDate", res.data.installedDate);
-          form.setValue("state", res.data.state.toString());
+          form.setValue("name", details.name);
+          form.setValue("specification", details.specification);
+          form.setValue("installedDate", details.installedDate);
+          form.setValue("state", details.state.toString());
         } else {
           toast.error(res.message);
         }
@@ -75,16 +71,16 @@ export const EditAssetForm: React.FC = () => {
       }
     };
 
-    if (id) {
+    if (staffCode) {
       fetchAsset();
     }
-  }, [id]);
+  }, [staffCode]);
 
   const onSubmit = async (values: z.infer<typeof updateAssetSchema>) => {
     try {
       setIsLoading(true);
       const res = await updateAssetService({
-        assetId: asset.id,
+        assetId: asset?.id ? asset?.id : "",
         assetName: values.name,
         state: parseInt(values.state),
         specification: values.specification,
@@ -143,38 +139,7 @@ export const EditAssetForm: React.FC = () => {
                 Category <span className="text-red-600">*</span>
               </FormLabel>
               <FormControl>
-                <Select {...field} onValueChange={field.onChange}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <Input
-                      ref={inputRef}
-                      placeholder="Search category ..."
-                      className="border-none shadow-none focus-visible:ring-0"
-                      value={categorySearch}
-                      onChange={(e) => {
-                        setCategorySearch(e.target.value);
-                      }}
-                    />
-                    <div className="max-h-[100px] overflow-y-scroll">
-                      {filteredCategories?.map((category) => (
-                        <SelectItem key={category.id} value={category.id}>
-                          {category.categoryName} ({category.prefix})
-                        </SelectItem>
-                      ))}
-                    </div>
-                    <Button
-                      variant={"ghost"}
-                      className="w-full"
-                      onClick={() => {
-                        setOpenCreateCategory(true);
-                      }}
-                    >
-                      + Add new category
-                    </Button>
-                  </SelectContent>
-                </Select>
+                <Input />
               </FormControl>
               <FormMessage>
                 {form.formState.errors.category?.message}
