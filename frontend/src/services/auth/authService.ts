@@ -34,7 +34,7 @@ export const firstTimeService = (req: FirstTimeLoginReq) => {
     .catch((err) => {
       return {
         success: false,
-        message: "Current password is incorrect.",
+        message: err.response.data.message,
         data: err,
       };
     });
