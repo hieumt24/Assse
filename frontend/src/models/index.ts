@@ -80,3 +80,11 @@ export interface CreateAssetReq {
   assetLocation: number;
   categoryId: string;
 }
+
+export interface UpdateAssetReq {
+  assetId: string;
+  assetName: string;
+  specification: string;
+  installedDate: string;
+  state: number;
+}

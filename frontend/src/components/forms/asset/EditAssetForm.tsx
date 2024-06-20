@@ -17,88 +17,75 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { LOCATIONS } from "@/constants";
 import { useLoading } from "@/context/LoadingContext";
 import { useAuth } from "@/hooks";
 import { removeExtraWhitespace } from "@/lib/utils";
-import { CategoryRes } from "@/models";
 import {
-  createAssetService,
-  getAllCategoryService,
+  getAssetService,
+  updateAssetService,
 } from "@/services/admin/manageAssetService";
-import { createAssetSchema } from "@/validations/assetSchema";
+import { updateAssetSchema } from "@/validations/assetSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { z } from "zod";
 import { CreateCategoryForm } from "./CreateCategoryForm";
 
 export const EditAssetForm: React.FC = () => {
-  const [categories, setCategories] = useState(Array<CategoryRes>);
-  const [filteredCategories, setFilteredCategories] = useState(
-    Array<CategoryRes>,
-  );
-  const [openCreateCategory, setOpenCreateCategory] = useState(false);
-  const [categorySearch, setCategorySearch] = useState("");
+  const { staffCode } = useParams();
   const inputRef = useRef<HTMLInputElement>(null);
   const { user } = useAuth();
   const { setIsLoading } = useLoading();
   const navigate = useNavigate();
+  const [asset, setAsset] = useState();
 
-  useEffect(() => {
-    setFilteredCategories(
-      categories.filter((category) =>
-        category.categoryName
-          .toLowerCase()
-          .includes(categorySearch.toLowerCase()),
-      ),
-    );
-  }, [categorySearch]);
-
-  useEffect(() => {
-    inputRef?.current?.focus();
-  }, [filteredCategories]);
-
-  const fetchCategories = async () => {
-    const res = await getAllCategoryService();
-    if (res.success) {
-      setCategories(res.data.data);
-      setFilteredCategories(res.data.data);
-    } else {
-      console.log(res.message);
-    }
-  };
-
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  const form = useForm<z.infer<typeof createAssetSchema>>({
+  const form = useForm<z.infer<typeof updateAssetSchema>>({
     mode: "all",
-    resolver: zodResolver(createAssetSchema),
+    resolver: zodResolver(updateAssetSchema),
     defaultValues: {
       name: "",
-      category: "",
       specification: "",
       installedDate: "",
       state: "1",
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof createAssetSchema>) => {
-    const location = LOCATIONS.find(
-      (location) => location.label === user.location,
-    )?.value;
+  useEffect(() => {
+    const fetchAsset = async () => {
+      try {
+        setIsLoading(true);
+        const res = await getAssetService(staffCode);
+        if (res.success) {
+          setAsset(res.data);
+          form.setValue("name", res.data.name);
+          form.setValue("specification", res.data.specification);
+          form.setValue("installedDate", res.data.installedDate);
+          form.setValue("state", res.data.state.toString());
+        } else {
+          toast.error(res.message);
+        }
+      } catch (error) {
+        console.log(error);
+        toast.error("Error fetching asset");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchAsset();
+    }
+  }, [id]);
+
+  const onSubmit = async (values: z.infer<typeof updateAssetSchema>) => {
     try {
       setIsLoading(true);
-      const res = await createAssetService({
-        adminId: user.id,
+      const res = await updateAssetService({
+        assetId: asset.id,
         assetName: values.name,
-        assetLocation: location ? location : 1,
-        categoryId: values.category,
         state: parseInt(values.state),
         specification: values.specification,
         installedDate: values.installedDate,
@@ -149,7 +136,6 @@ export const EditAssetForm: React.FC = () => {
           )}
         />
         <FormField
-          control={form.control}
           name="category"
           render={({ field }) => (
             <FormItem>
