@@ -137,7 +137,7 @@ export function UserTable<TData, TValue>({
         </Table>
       </div>
       <Pagination
-        pageIndex={pagination.pageIndex + 1}
+        pageIndex={pagination.pageIndex}
         pageCount={pageCount || 1}
         setPage={setPage}
         previousPage={table.previousPage} // Added
