@@ -29,12 +29,16 @@ export const ManageUser = () => {
   const { token } = useAuth();
   const { onPaginationChange, pagination } = usePagination();
   const [search, setSearch] = useState("");
+  const [orderBy, setOrderBy] = useState("");
+  const [isDescending, setIsDescending] = useState(false);
   const [roleType, setRoleType] = useState(0);
   const { users, loading, error, pageCount, fetchUsers } = useUsers(
     token!,
     pagination,
     search,
     roleType,
+    orderBy,
+    isDescending,
   );
   const navigate = useNavigate();
   const { setIsLoading } = useLoading();
@@ -100,7 +104,12 @@ export const ManageUser = () => {
       ) : (
         <>
           <UserTable
-            columns={userColumns({ handleOpenDisable })}
+            columns={userColumns({
+              handleOpenDisable,
+              setOrderBy,
+              setIsDescending,
+              isDescending,
+            })}
             data={users!}
             onPaginationChange={onPaginationChange}
             pagination={pagination}

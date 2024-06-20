@@ -3,7 +3,7 @@ using FluentValidation;
 using AssetManagement.Domain.Enums;
 using System;
 
-namespace AssetManagement.Application.Validations
+namespace AssetManagement.Application.Validations.User
 {
     public class AddUserRequestValidation : AbstractValidator<AddUserRequestDto>
     {

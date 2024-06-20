@@ -173,11 +173,7 @@ export const CreateAssetForm: React.FC = () => {
                     />
                     <div className="max-h-[100px] overflow-y-scroll">
                       {filteredCategories?.map((category) => (
-                        <SelectItem
-                          key={category.id}
-                          value={category.id}
-                          className="justify-between"
-                        >
+                        <SelectItem key={category.id} value={category.id}>
                           {category.categoryName} ({category.prefix})
                         </SelectItem>
                       ))}

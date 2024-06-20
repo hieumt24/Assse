@@ -22,6 +22,7 @@ namespace AssetManagement.Application.Mappings
 
             //Asset Mapping
             CreateMap<AddAssetRequestDto, Asset>().ReverseMap();
+            CreateMap<EditAssetRequestDto, Asset>().ReverseMap();
             CreateMap<Asset, AssetDto>().ReverseMap();
             CreateMap<Asset, AssetResponseDto>()
                 .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.CategoryName))

@@ -10,6 +10,8 @@ export const useUsers = (
   },
   search?: string,
   roleType?: number,
+  orderBy?: string,
+  isDescending?: boolean,
 ) => {
   const [users, setUsers] = useState<UserRes[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -24,6 +26,8 @@ export const useUsers = (
         search,
         roleType,
         adminLocation: 1,
+        orderBy,
+        isDescending,
       });
 
       setUsers(data.data.data);
@@ -37,7 +41,7 @@ export const useUsers = (
 
   useEffect(() => {
     fetchUsers();
-  }, [token, pagination, search, roleType]);
+  }, [token, pagination, search, roleType, orderBy, isDescending]);
 
   return { users, loading, error, setUsers, pageCount, fetchUsers };
 };

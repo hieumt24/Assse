@@ -20,6 +20,8 @@ export const getAllUserService = (req: GetUserReq) => {
   if (req.roleType === 0) {
     delete req.roleType;
   }
+  req.pagination.pageIndex++;
+
   return axiosInstance
     .post("/users/filter-users", req)
     .then((res) => {
