@@ -8,11 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AssetManagement.Application.Validations
+namespace AssetManagement.Application.Validations.User
 {
     public class EditUserRequestValidation : AbstractValidator<EditUserRequestDto>
     {
-        public EditUserRequestValidation() 
+        public EditUserRequestValidation()
         {
 
             RuleFor(x => x.DateOfBirth)

@@ -8,6 +8,5 @@
         public string? LastModifiedBy { get; set; }
         public DateTimeOffset? LastModifiedOn { get; set; }
         public bool IsDeleted { get; set; }
-        public bool IsDisable { get; set;} = false;
     }
 }
