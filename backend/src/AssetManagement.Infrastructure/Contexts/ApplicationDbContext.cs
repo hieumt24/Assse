@@ -1,8 +1,10 @@
+using AssetManagement.Domain.Common.Models;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using System.Linq.Expressions;
 
 namespace AssetManagement.Infrastructure.Contexts
 {
@@ -23,6 +25,16 @@ namespace AssetManagement.Infrastructure.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            //And global query filter
+
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
+                {
+                    modelBuilder.Entity(entityType.ClrType).HasQueryFilter(CreateIsDeletedFilter(entityType.ClrType));
+                }
+            }
 
             modelBuilder.Entity<User>()
                 .Property(p => p.StaffCode)
@@ -90,6 +102,14 @@ namespace AssetManagement.Infrastructure.Contexts
 
             modelBuilder.Entity<Category>().HasIndex(c => c.CategoryName).IsUnique();
             modelBuilder.Entity<Category>().HasIndex(c => c.Prefix).IsUnique();
+        }
+
+        private static LambdaExpression CreateIsDeletedFilter(Type entityType)
+        {
+            var param = Expression.Parameter(entityType, "e");
+            var prop = Expression.Property(param, "IsDeleted");
+            var condition = Expression.Equal(prop, Expression.Constant(false));
+            return Expression.Lambda(condition, param);
         }
     }
 }
