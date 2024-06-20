@@ -87,11 +87,65 @@ export const userColumns = ({
   },
   {
     accessorKey: "username",
-    header: "Username",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant={"ghost"}
+          onClick={() => {
+            setOrderBy(column.id);
+            setIsDescending((prev) => !prev);
+          }}
+          className="p-0 hover:bg-muted/50"
+        >
+          <div className="flex items-center justify-center">
+            <span
+              className={`${!isDescending ? "font-black text-red-600" : ""}`}
+            >
+              {column.id.toUpperCase()}
+            </span>
+            {isDescending ? (
+              <IoMdArrowDropup size={24} />
+            ) : (
+              <IoMdArrowDropdown
+                size={24}
+                className={`${!isDescending ? "font-black text-red-600" : ""}`}
+              />
+            )}
+          </div>
+        </Button>
+      );
+    },
   },
   {
     accessorKey: "joinedDate",
-    header: "Joined Date",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant={"ghost"}
+          onClick={() => {
+            setOrderBy(column.id);
+            setIsDescending((prev) => !prev);
+          }}
+          className="p-0 hover:bg-muted/50"
+        >
+          <div className="flex items-center justify-center">
+            <span
+              className={`${!isDescending ? "font-black text-red-600" : ""}`}
+            >
+              {column.id.toUpperCase()}
+            </span>
+            {isDescending ? (
+              <IoMdArrowDropup size={24} />
+            ) : (
+              <IoMdArrowDropdown
+                size={24}
+                className={`${!isDescending ? "font-black text-red-600" : ""}`}
+              />
+            )}
+          </div>
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       const formattedDate = format(row.original.joinedDate, "MM/dd/yyyy");
       return <p>{formattedDate}</p>;
@@ -99,7 +153,34 @@ export const userColumns = ({
   },
   {
     accessorKey: "role",
-    header: "Type",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant={"ghost"}
+          onClick={() => {
+            setOrderBy(column.id);
+            setIsDescending((prev) => !prev);
+          }}
+          className="p-0 hover:bg-muted/50"
+        >
+          <div className="flex items-center justify-center">
+            <span
+              className={`${!isDescending ? "font-black text-red-600" : ""}`}
+            >
+              TYPE
+            </span>
+            {isDescending ? (
+              <IoMdArrowDropup size={24} />
+            ) : (
+              <IoMdArrowDropdown
+                size={24}
+                className={`${!isDescending ? "font-black text-red-600" : ""}`}
+              />
+            )}
+          </div>
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       const role = row.original.role;
       return <p>{role === 1 ? "Admin" : "Staff"}</p>;
