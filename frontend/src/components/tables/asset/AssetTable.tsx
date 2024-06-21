@@ -19,6 +19,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { format } from "date-fns";
 import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "react-toastify";
 import Pagination from "../Pagination";
@@ -165,6 +166,12 @@ export function AssetTable<TData, TValue>({
                     <tr>
                       <td className="font-semibold">Category</td>
                       <td>{assetDetails?.categoryName}</td>
+                    </tr>
+                    <tr>
+                      <td className="font-semibold">Installed date</td>
+                      <td>
+                        {format(assetDetails?.installedDate!, "MM/dd/yyyy")}
+                      </td>
                     </tr>
                     <tr>
                       <td className="font-semibold">State</td>
