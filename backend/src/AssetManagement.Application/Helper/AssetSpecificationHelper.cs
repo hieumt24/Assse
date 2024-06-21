@@ -1,4 +1,4 @@
-﻿using AssetManagement.Application.Extensions;
+using AssetManagement.Application.Extensions;
 using AssetManagement.Application.Filter;
 using AssetManagement.Domain.Common.Specifications;
 using AssetManagement.Domain.Entites;
