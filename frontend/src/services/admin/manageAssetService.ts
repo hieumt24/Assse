@@ -60,9 +60,9 @@ export const createAssetService = (req: CreateAssetReq) => {
     });
 };
 
-export const updateAssetService = (req: UpdateAssetReq) => {
+export const updateAssetService = (id: string, req: UpdateAssetReq) => {
   return axiosInstace
-    .put(`/assets/${req.assetId}`, req)
+    .put(`/assets?id=${id}`, req)
     .then((res) => {
       return {
         success: true,

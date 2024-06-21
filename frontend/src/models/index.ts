@@ -82,7 +82,6 @@ export interface CreateAssetReq {
 }
 
 export interface UpdateAssetReq {
-  assetId: string;
   assetName: string;
   specification: string;
   installedDate: string;

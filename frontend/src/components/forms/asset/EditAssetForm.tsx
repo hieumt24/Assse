@@ -51,7 +51,7 @@ export const EditAssetForm: React.FC = () => {
     console.log(assetCode);
     const fetchAsset = async () => {
       try {
-        // setIsLoading(true);
+        //setIsLoading(true);
         const res = await getAssetByAssetCodeService(
           assetCode ? assetCode : "",
         );
@@ -86,8 +86,7 @@ export const EditAssetForm: React.FC = () => {
   const onSubmit = async (values: z.infer<typeof updateAssetSchema>) => {
     try {
       setIsLoading(true);
-      const res = await updateAssetService({
-        assetId: asset?.id ? asset?.id : "",
+      const res = await updateAssetService(asset?.id ? asset?.id : "", {
         assetName: values.name,
         state: parseInt(values.state),
         specification: values.specification,
@@ -229,7 +228,7 @@ export const EditAssetForm: React.FC = () => {
                   </FormItem>
                   <FormItem className="flex items-center gap-1 space-y-0">
                     <FormControl>
-                      <RadioGroupItem value={"3"} />
+                      <RadioGroupItem value={"4"} />
                     </FormControl>
                     <FormLabel className="font-normal">
                       Waiting for Recycling
@@ -237,7 +236,7 @@ export const EditAssetForm: React.FC = () => {
                   </FormItem>
                   <FormItem className="flex items-center gap-1 space-y-0">
                     <FormControl>
-                      <RadioGroupItem value={"4"} />
+                      <RadioGroupItem value={"5"} />
                     </FormControl>
                     <FormLabel className="font-normal">Recycle</FormLabel>
                   </FormItem>
