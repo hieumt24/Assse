@@ -1,9 +1,9 @@
-import { Button } from "@/components/ui/button";
+import { renderHeader } from "@/lib/utils";
 import { UserRes } from "@/models";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
-import { MdDelete, MdEdit } from "react-icons/md";
+import { FiEdit2 } from "react-icons/fi";
+import { IoCloseCircleOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 
 interface UserColumnsProps {
@@ -11,6 +11,7 @@ interface UserColumnsProps {
   setOrderBy: React.Dispatch<React.SetStateAction<string>>;
   setIsDescending: React.Dispatch<React.SetStateAction<boolean>>;
   isDescending: boolean;
+  orderBy: string;
 }
 
 export const userColumns = ({
@@ -18,68 +19,17 @@ export const userColumns = ({
   setOrderBy,
   setIsDescending,
   isDescending,
+  orderBy,
 }: UserColumnsProps): ColumnDef<UserRes>[] => [
   {
     accessorKey: "staffCode",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant={"ghost"}
-          onClick={() => {
-            setOrderBy(column.id);
-            setIsDescending((prev) => !prev);
-          }}
-          className="p-0 hover:bg-muted/50"
-        >
-          <div className="flex items-center justify-center">
-            <span
-              className={`${!isDescending ? "font-black text-red-600" : ""}`}
-            >
-              {column.id.toUpperCase()}
-            </span>
-            {isDescending ? (
-              <IoMdArrowDropup size={24} />
-            ) : (
-              <IoMdArrowDropdown
-                size={24}
-                className={`${!isDescending ? "font-black text-red-600" : ""}`}
-              />
-            )}
-          </div>
-        </Button>
-      );
-    },
+    header: ({ column }) =>
+      renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),
   },
   {
     accessorKey: "fullName",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant={"ghost"}
-          onClick={() => {
-            setOrderBy(column.id);
-            setIsDescending((prev) => !prev);
-          }}
-          className="p-0 hover:bg-muted/50"
-        >
-          <div className="flex items-center justify-center">
-            <span
-              className={`${!isDescending ? "font-black text-red-600" : ""}`}
-            >
-              {column.id.toUpperCase()}
-            </span>
-            {isDescending ? (
-              <IoMdArrowDropup size={24} />
-            ) : (
-              <IoMdArrowDropdown
-                size={24}
-                className={`${!isDescending ? "font-black text-red-600" : ""}`}
-              />
-            )}
-          </div>
-        </Button>
-      );
-    },
+    header: ({ column }) =>
+      renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),
     cell: ({ row }) => {
       const user = row.original;
       return <p>{`${user.firstName} ${user.lastName}`}</p>;
@@ -87,100 +37,22 @@ export const userColumns = ({
   },
   {
     accessorKey: "username",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant={"ghost"}
-          onClick={() => {
-            setOrderBy(column.id);
-            setIsDescending((prev) => !prev);
-          }}
-          className="p-0 hover:bg-muted/50"
-        >
-          <div className="flex items-center justify-center">
-            <span
-              className={`${!isDescending ? "font-black text-red-600" : ""}`}
-            >
-              {column.id.toUpperCase()}
-            </span>
-            {isDescending ? (
-              <IoMdArrowDropup size={24} />
-            ) : (
-              <IoMdArrowDropdown
-                size={24}
-                className={`${!isDescending ? "font-black text-red-600" : ""}`}
-              />
-            )}
-          </div>
-        </Button>
-      );
-    },
+    header: ({ column }) =>
+      renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),
   },
   {
     accessorKey: "joinedDate",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant={"ghost"}
-          onClick={() => {
-            setOrderBy(column.id);
-            setIsDescending((prev) => !prev);
-          }}
-          className="p-0 hover:bg-muted/50"
-        >
-          <div className="flex items-center justify-center">
-            <span
-              className={`${!isDescending ? "font-black text-red-600" : ""}`}
-            >
-              {column.id.toUpperCase()}
-            </span>
-            {isDescending ? (
-              <IoMdArrowDropup size={24} />
-            ) : (
-              <IoMdArrowDropdown
-                size={24}
-                className={`${!isDescending ? "font-black text-red-600" : ""}`}
-              />
-            )}
-          </div>
-        </Button>
-      );
-    },
+    header: ({ column }) =>
+      renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),
     cell: ({ row }) => {
-      const formattedDate = format(row.original.joinedDate, "MM/dd/yyyy");
+      const formattedDate = format(row.original.joinedDate, "dd/MM/yyyy");
       return <p>{formattedDate}</p>;
     },
   },
   {
     accessorKey: "role",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant={"ghost"}
-          onClick={() => {
-            setOrderBy(column.id);
-            setIsDescending((prev) => !prev);
-          }}
-          className="p-0 hover:bg-muted/50"
-        >
-          <div className="flex items-center justify-center">
-            <span
-              className={`${!isDescending ? "font-black text-red-600" : ""}`}
-            >
-              TYPE
-            </span>
-            {isDescending ? (
-              <IoMdArrowDropup size={24} />
-            ) : (
-              <IoMdArrowDropdown
-                size={24}
-                className={`${!isDescending ? "font-black text-red-600" : ""}`}
-              />
-            )}
-          </div>
-        </Button>
-      );
-    },
+    header: ({ column }) =>
+      renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),
     cell: ({ row }) => {
       const role = row.original.role;
       return <p>{role === 1 ? "Admin" : "Staff"}</p>;
@@ -194,7 +66,7 @@ export const userColumns = ({
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const navigate = useNavigate();
       return (
-        <div className="flex gap-1">
+        <div className="flex gap-4">
           <button
             className="text-blue-500 hover:text-blue-700"
             onClick={(e) => {
@@ -202,7 +74,7 @@ export const userColumns = ({
               navigate(`edit/${user.staffCode}`);
             }}
           >
-            <MdEdit size={20} />
+            <FiEdit2 size={18} />
           </button>
           <button
             className="text-red-500 hover:text-red-700"
@@ -211,7 +83,7 @@ export const userColumns = ({
               handleOpenDisable(user.id);
             }}
           >
-            <MdDelete size={20} />
+            <IoCloseCircleOutline size={20} />
           </button>
         </div>
       );

@@ -36,7 +36,7 @@ export const ManageAsset = () => {
   const { onPaginationChange, pagination } = usePagination();
   const [search, setSearch] = useState("");
   const [orderBy, setOrderBy] = useState("");
-  const [isDescending, setIsDescending] = useState(false);
+  const [isDescending, setIsDescending] = useState(true);
   const [assetStateType, setAssetStateType] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const { assets, loading, error, pageCount, fetchAssets } = useAssets(
@@ -192,6 +192,7 @@ export const ManageAsset = () => {
               setOrderBy,
               setIsDescending,
               isDescending,
+              orderBy,
             })}
             data={assets!}
             pagination={pagination}
