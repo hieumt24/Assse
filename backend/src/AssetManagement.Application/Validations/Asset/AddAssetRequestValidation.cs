@@ -12,11 +12,11 @@ namespace AssetManagement.Application.Validations.Asset
             RuleFor(x => x.AssetName)
                 .NotEmpty().WithMessage("Asset name cannot be blank")
                 .Length(2, 50).WithMessage("The asset name length should be 2 - 50 characters")
-                .Matches(@"[a-zA-Z]").WithMessage("The asset name must contain letters");
+                 .Matches(@"^(?=.*[a-zA-Z])[a-zA-Z0-9!@#$%^&*(),.?':{ }|<> ~`+=\-_ /\\[\] ]*$").WithMessage("The asset name must contain letters");
 
             RuleFor(x => x.Specification)
                 .NotEmpty().WithMessage("Specification cannot be blank")
-                .Length(2, 100).WithMessage("The specification length should be 2 - 50 characters")
+                .Length(2, 100).WithMessage("The specification length should be 2 - 100 characters")
                 .Matches(@"[a-zA-Z]").WithMessage("The specification must contain letters");
 
             RuleFor(x => x.AssetLocation)

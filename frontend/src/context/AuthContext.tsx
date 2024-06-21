@@ -6,6 +6,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface User {
   id: string;
@@ -53,7 +54,14 @@ interface Token {
   IsFirstTimeLogin: string;
   DateOfBirth: string;
   Location: string;
+  exp: number;
 }
+
+const isTokenExpired = (token: string): boolean => {
+  const decodedToken = jwtDecode<Token>(token);
+  const currentTime = Math.floor(Date.now() / 1000);
+  return decodedToken.exp < currentTime;
+};
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [token, setToken] = useState<string | null>(
@@ -70,28 +78,35 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   });
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!token);
-
   const fetchUserFromToken = () => {
     const storedToken = localStorage.getItem("token");
+    const navigate = useNavigate();
 
     if (storedToken) {
-      setIsAuthenticated(true);
-      setToken(storedToken);
-      const decodedToken = jwtDecode<Token>(storedToken);
-      setUser({
-        id: decodedToken.UserId,
-        username:
-          decodedToken[
-            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+      if (isTokenExpired(storedToken)) {
+        localStorage.removeItem("token");
+        setToken(null);
+        setIsAuthenticated(false);
+        navigate("/auth/login");
+      } else {
+        setIsAuthenticated(true);
+        setToken(storedToken);
+        const decodedToken = jwtDecode<Token>(storedToken);
+        setUser({
+          id: decodedToken.UserId,
+          username:
+            decodedToken[
+              "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+            ],
+          dateOfBirth: decodedToken.DateOfBirth,
+          isFirstTimeLogin: decodedToken.IsFirstTimeLogin === "true",
+          staffCode: decodedToken.StaffCode,
+          role: decodedToken[
+            "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
           ],
-        dateOfBirth: decodedToken.DateOfBirth,
-        isFirstTimeLogin: decodedToken.IsFirstTimeLogin === "true",
-        staffCode: decodedToken.StaffCode,
-        role: decodedToken[
-          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-        ],
-        location: decodedToken.Location,
-      });
+          location: decodedToken.Location,
+        });
+      }
     } else {
       setUser({
         id: "",

@@ -2,15 +2,15 @@ import { isAfter, isBefore, isValid } from "date-fns";
 import { z } from "zod";
 
 const dateFormat = /^\d{4}-?\d{2}-?\d{2}$/;
-const nameFormat = /^[a-zA-Z0-9\s]*$/;
+const nameFormat = /^[a-zA-Z0-9\s!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/;
 const containsLetters = /[a-zA-Z]/;
 
 export const createAssetSchema = z.object({
   name: z
     .string()
     .trim()
-    .min(2, { message: "Name must be at least 2 letters long." })
-    .max(50, { message: "Name must be no longer than 50 letters." })
+    .min(2, { message: "Name must be at least 2 characters long." })
+    .max(50, { message: "Name must be no longer than 50 characters." })
     .regex(containsLetters, {
       message: "The asset name must contain letters.",
     })
@@ -24,8 +24,10 @@ export const createAssetSchema = z.object({
     .regex(containsLetters, {
       message: "The specification name must contain letters.",
     })
-    .min(2, { message: "Specification must be at least 2 letters long." })
-    .max(100, { message: "Specification must be no longer than 100 letters." }),
+    .min(2, { message: "Specification must be at least 2 characters long." })
+    .max(100, {
+      message: "Specification must be no longer than 100 characters.",
+    }),
   installedDate: z
     .string()
     .regex(dateFormat, { message: "Please select a valid Installed Date." })
