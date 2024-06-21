@@ -88,11 +88,15 @@ namespace AssetManagement.Infrastructure.Contexts
                 Username = "adminDN"
             };
 
+            adminDN.PasswordHash = _passwordHasher.HashPassword(adminDN, "adminpassword");
+            adminDN.CreatedOn = DateTime.Now;
+            adminDN.CreatedBy = "System";
+
             modelBuilder.Entity<User>()
                 .HasData(adminHN, adminHCM, adminDN);
 
             modelBuilder.Entity<User>().Property(u => u.StaffCodeId).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
-            
+
             modelBuilder.Entity<Category>().HasIndex(c => c.CategoryName).IsUnique();
             modelBuilder.Entity<Category>().HasIndex(c => c.Prefix).IsUnique();
             // seed category
@@ -101,8 +105,6 @@ namespace AssetManagement.Infrastructure.Contexts
                 new Category { CategoryName = "Monitor", Prefix = "MO" },
                 new Category { CategoryName = "Desk", Prefix = "DE" }
             );
-
-            
         }
 
         private static LambdaExpression CreateIsDeletedFilter(Type entityType)

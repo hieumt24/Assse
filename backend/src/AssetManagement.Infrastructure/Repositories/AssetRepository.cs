@@ -1,5 +1,6 @@
 ﻿using AssetManagement.Application.Interfaces.Repositories;
 using AssetManagement.Domain.Entites;
+using AssetManagement.Domain.Enums;
 using AssetManagement.Infrastructure.Common;
 using AssetManagement.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
@@ -42,9 +43,9 @@ namespace AssetManagement.Infrastructure.Repositories
             return $"{prefix}{newNumber:D6}";
         }
 
-        public IQueryable<Asset> Query()
+        public IQueryable<Asset> Query(EnumLocation adminLocation)
         {
-            return _dbContext.Assets;
+            return _dbContext.Assets.Where(x => x.AssetLocation == adminLocation);
         }
     }
 }
