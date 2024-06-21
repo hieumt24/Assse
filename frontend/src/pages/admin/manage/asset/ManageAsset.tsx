@@ -3,6 +3,7 @@ import { FullPageModal } from "@/components/FullPageModal";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { assetColumns } from "@/components/tables/asset/assetColumns";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Collapsible,
   CollapsibleContent,
@@ -23,14 +24,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
 import { ASSET_STATES, LOCATIONS } from "@/constants";
 import { useLoading } from "@/context/LoadingContext";
 import { useAuth, usePagination } from "@/hooks";
 import { useAssets } from "@/hooks/useAssets";
+import useClickOutside from "@/hooks/useClickOutside";
 import { CategoryRes } from "@/models";
 import { deleteAssetByIdService, getAllCategoryService } from "@/services";
-import { useEffect, useRef, useState } from "react";
+import { CaretSortIcon } from "@radix-ui/react-icons";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AssetTable } from "../../../../components/tables/asset/AssetTable";
@@ -42,7 +44,7 @@ export const ManageAsset = () => {
   const [search, setSearch] = useState("");
   const [orderBy, setOrderBy] = useState("");
   const [isDescending, setIsDescending] = useState(false);
-  const [assetStateType, setAssetStateType] = useState(0);
+  const [assetStateType, setAssetStateType] = useState<number[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const { assets, loading, error, pageCount, fetchAssets } = useAssets(
     token!,
@@ -133,6 +135,22 @@ export const ManageAsset = () => {
     }
   };
   const [openDisable, setOpenDisable] = useState(false);
+  const stateListRef = useRef<HTMLDivElement>(null);
+
+  useClickOutside(
+    stateListRef,
+    useCallback(() => setIsStateListOpen(false), []),
+  );
+
+  const handleCheckboxChange = (stateValue: number) => {
+    setAssetStateType((prev) => {
+      if (prev.includes(stateValue)) {
+        return prev.filter((value) => value !== stateValue);
+      } else {
+        return [...prev, stateValue];
+      }
+    });
+  };
 
   return (
     <div className="m-24 flex h-full flex-grow flex-col gap-8">
@@ -142,46 +160,39 @@ export const ManageAsset = () => {
           <Collapsible
             open={isStateListOpen}
             onOpenChange={setIsStateListOpen}
-            className="relative"
+            className="relative w-[100px]"
+            ref={stateListRef}
           >
             <CollapsibleTrigger asChild>
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-xl text-white hover:bg-white hover:text-red-600"
+                className="flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm font-normal shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1"
               >
-                <span className="mr-2">{user.username}</span>
-                <span className="text-xs">&#9660;</span>
+                State
+                <CaretSortIcon className="h-4 w-4 opacity-50" />
               </Button>
             </CollapsibleTrigger>
-            <CollapsibleContent className="absolute right-0 mt-1 w-40 rounded-md bg-white font-semibold shadow-md">
-              <div
-                onClick={() => {}}
-                className="block rounded-t-md px-4 py-3 text-sm font-medium transition-all hover:cursor-pointer hover:bg-zinc-200"
-              >
-                Change password
-              </div>
-              <Separator />
+            <CollapsibleContent className="absolute z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover bg-white p-1 font-semibold text-popover-foreground shadow-md transition-all data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2">
+              {ASSET_STATES.map((state) => (
+                <div className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm font-normal text-zinc-900 transition-all hover:bg-zinc-100">
+                  <Checkbox
+                    value={state.value.toString()}
+                    key={state.value}
+                    id={`state-checkbox-${state.value}`}
+                    onCheckedChange={() => {
+                      handleCheckboxChange(state.value);
+                    }}
+                  >
+                    {state.label}
+                  </Checkbox>
+                  <label htmlFor={`state-checkbox-${state.value}`}>
+                    {state.label}
+                  </label>
+                </div>
+              ))}
             </CollapsibleContent>
           </Collapsible>
-
-          <Select
-            onValueChange={(value) => {
-              setAssetStateType(parseInt(value));
-            }}
-          >
-            <SelectTrigger className="w-32">
-              <SelectValue placeholder="State" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="0">All</SelectItem>
-              {ASSET_STATES.map((state) => (
-                <SelectItem value={state.value.toString()}>
-                  {state.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
           <div ref={selectRef} className="w-[150px]">
             <Select
               onValueChange={(value) => {

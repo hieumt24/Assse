@@ -42,6 +42,9 @@ export const ManageUser = () => {
     orderBy,
     isDescending,
   );
+  console.log(user);
+  console.log(LOCATIONS.find((location) => location.label === user.location));
+
   const navigate = useNavigate();
   const { setIsLoading } = useLoading();
   const [userIdToDisable, setUserIdToDisable] = useState<string>("");
