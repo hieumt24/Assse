@@ -97,7 +97,7 @@ namespace AssetManagement.Application.Services
                 var userQuery = UserSpecificationHelper.CreateSpecification(search, adminLocation, roleType, orderBy, isDescending);
 
                 //query with conditions
-                var query = SpecificationEvaluator<User>.GetQuery(_userRepositoriesAsync.Query(), userQuery);
+                var query = SpecificationEvaluator<User>.GetQuery(_userRepositoriesAsync.Query(adminLocation), userQuery);
 
                 var totalRecordsSpec = await query.CountAsync();
 
