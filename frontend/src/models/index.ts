@@ -41,6 +41,17 @@ export interface UserRes {
   createdOn: string;
 }
 
+export interface AssetRes {
+  id?: string;
+  assetCode?: string;
+  assetName?: string;
+  specification?: string;
+  installedDate?: Date;
+  state?: number;
+  assetLocation?: number;
+  categoryName?: string;
+}
+
 export interface CategoryRes {
   categoryName: string;
   prefix: string;
@@ -58,6 +69,20 @@ export interface GetUserReq {
   roleType?: number;
   orderBy?: string;
   adminLocation?: number;
+  isDescending?: boolean;
+}
+
+export interface GetAssetReq {
+  token: string;
+  pagination: {
+    pageSize: number;
+    pageIndex: number;
+  };
+  search?: string;
+  categoryId?: number;
+  assetStateType?: number;
+  adminLocation?: number;
+  orderBy?: string;
   isDescending?: boolean;
 }
 

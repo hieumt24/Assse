@@ -10,7 +10,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useLoading } from "@/context/LoadingContext";
-import { PaginationState } from "@/models";
+import { AssetRes, PaginationState } from "@/models";
+import { getAssetByIdService } from "@/services";
 import {
   ColumnDef,
   flexRender,
@@ -18,15 +19,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { Dispatch, SetStateAction, useState } from "react";
+import { toast } from "react-toastify";
 import Pagination from "../Pagination";
-
-interface Asset {
-  assetCode: string;
-  assetName: string;
-  category: string;
-  state: string;
-  id: string;
-}
 
 interface AssetTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -56,13 +50,27 @@ export function AssetTable<TData, TValue>({
   });
 
   const [openDetails, setOpenDetails] = useState(false);
-  const [assetDetails] = useState<Asset | null>(null);
+  const [assetDetails, setAssetDetails] = useState<AssetRes>();
 
   const handleOpenDetails = async (id: string) => {
-    console.log(id);
+    setOpenDetails(true);
+    try {
+      setIsLoading(true);
+      const result = await getAssetByIdService(id);
+      if (result.success) {
+        setAssetDetails(result.data.data);
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error fetching asset details");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const { isLoading } = useLoading();
+  const { isLoading, setIsLoading } = useLoading();
 
   const setPage = (pageIndex: number) => {
     onPaginationChange((prev) => ({
@@ -156,7 +164,7 @@ export function AssetTable<TData, TValue>({
                     </tr>
                     <tr>
                       <td>Category</td>
-                      <td>{assetDetails?.category}</td>
+                      <td>{assetDetails?.categoryName}</td>
                     </tr>
                     <tr>
                       <td>State</td>

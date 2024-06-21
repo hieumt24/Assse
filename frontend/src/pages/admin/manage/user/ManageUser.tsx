@@ -1,4 +1,4 @@
-import { SearchUserForm, UserTable, userColumns } from "@/components";
+import { SearchForm, UserTable, userColumns } from "@/components";
 import { FullPageModal } from "@/components/FullPageModal";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { LOCATIONS } from "@/constants";
 import { useLoading } from "@/context/LoadingContext";
 import { useAuth, useUsers } from "@/hooks";
 import { usePagination } from "@/hooks/usePagination";
@@ -26,7 +27,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export const ManageUser = () => {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const { onPaginationChange, pagination } = usePagination();
   const [search, setSearch] = useState("");
   const [orderBy, setOrderBy] = useState("");
@@ -35,6 +36,7 @@ export const ManageUser = () => {
   const { users, loading, error, pageCount, fetchUsers } = useUsers(
     token!,
     pagination,
+    LOCATIONS.find((location) => location.label === user.location)!.value,
     search,
     roleType,
     orderBy,
@@ -88,7 +90,7 @@ export const ManageUser = () => {
         </Select>
 
         <div className="flex justify-between gap-6">
-          <SearchUserForm setSearch={setSearch} />
+          <SearchForm setSearch={setSearch} />
           <Button
             variant={"destructive"}
             onClick={() => navigate("/admin/user/create-user")}

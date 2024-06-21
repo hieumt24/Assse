@@ -1,12 +1,12 @@
 import axios, { AxiosInstance } from "axios";
 
-const axiosInstace: AxiosInstance = axios.create({
+const axiosInstance: AxiosInstance = axios.create({
   // this is for vite
   // for node is process.env
   baseURL: import.meta.env.VITE_REACT_APP_API_URL,
 });
 
-axiosInstace.interceptors.request.use(
+axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -19,4 +19,4 @@ axiosInstace.interceptors.request.use(
   },
 );
 
-export default axiosInstace;
+export default axiosInstance;
