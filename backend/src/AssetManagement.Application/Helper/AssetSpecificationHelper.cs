@@ -65,5 +65,12 @@ namespace AssetManagement.Application.Helper
                 _ => u => u.AssetName
             };
         }
+
+        public static ISpecification<Asset> GetAssetByAssetCode(string assetCode)
+        {
+            var spec = new AssetSpecification(asset => asset.AssetCode == assetCode && !asset.IsDeleted);
+            spec.AddInclude(x => x.Category);
+            return spec;
+        }
     }
 }

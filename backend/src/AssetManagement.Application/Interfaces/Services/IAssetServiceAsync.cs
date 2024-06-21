@@ -18,5 +18,7 @@ namespace AssetManagement.Application.Interfaces.Services
         Task<Response<AssetDto>> EditAssetAsync(Guid assetId, EditAssetRequestDto request);
 
         Task<Response<AssetDto>> DeleteAssetAsync(Guid assetId);
+
+        Task<Response<AssetDto>> GetAssetByAssetCode(string assetCode);
     }
 }

@@ -39,7 +39,11 @@ namespace AssetManagement.Application.Services
             if (!validationResult.IsValid)
             {
                 var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                return new Response<CategoryDto> { Succeeded = false, Errors = errors };
+                return new Response<CategoryDto>
+                {
+                    Succeeded = false,
+                    Message = string.Join("; ", errors)
+                };
             }
 
             try
@@ -93,7 +97,11 @@ namespace AssetManagement.Application.Services
             if (!validationResult.IsValid)
             {
                 var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                return new Response<CategoryDto> { Succeeded = false, Errors = errors };
+                return new Response<CategoryDto>
+                {
+                    Succeeded = false,
+                    Message = string.Join("; ", errors)
+                };
             }
 
             try

@@ -12,5 +12,6 @@ namespace AssetManagement.Application.Models.DTOs.Assets
         public AssetStateType State { get; set; }
         public EnumLocation AssetLocation { get; set; }
         public Guid CategoryId { get; set; }
+        public string? CategoryName { get; set; }
     }
 }

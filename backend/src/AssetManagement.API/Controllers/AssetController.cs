@@ -81,5 +81,18 @@ namespace AssetManagement.API.Controllers
             }
             return NotFound(result);
         }
+
+        [HttpGet]
+        [Route("assetCode/{assetCode}")]
+        [Authorize(Roles = "Admin,Staff")]
+        public async Task<IActionResult> GetUserByAssetCode(string assetCode)
+        {
+            var response = await _assetService.GetAssetByAssetCode(assetCode);
+            if (!response.Succeeded)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
+        }
     }
 }
