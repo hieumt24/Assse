@@ -50,15 +50,15 @@ export const ROLES = [
 export const LOCATIONS = [
   {
     value: 1,
-    label: "HaNoi",
+    label: "Ha Noi",
   },
   {
     value: 2,
-    label: "DaNang",
+    label: "Da Nang",
   },
   {
     value: 3,
-    label: "HoChiMinh",
+    label: "Ho Chi Minh",
   },
 ];
 

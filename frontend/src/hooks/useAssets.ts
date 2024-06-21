@@ -1,8 +1,8 @@
-import { UserRes } from "@/models";
-import { getAllUserService } from "@/services";
+import { AssetRes } from "@/models";
+import { getAllAssestService } from "@/services/";
 import { useEffect, useState } from "react";
 
-export const useUsers = (
+export const useAssets = (
   token: string,
   pagination: {
     pageIndex: number;
@@ -10,29 +10,29 @@ export const useUsers = (
   },
   adminLocation: number,
   search?: string,
-  roleType?: number,
   orderBy?: string,
   isDescending?: boolean,
+  assetStateType?: number,
+  categoryId?: string,
 ) => {
-  const [users, setUsers] = useState<UserRes[] | null>(null);
+  const [assets, setAssets] = useState<AssetRes[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean | null>(false);
   const [pageCount, setPageCount] = useState<number>(0);
-
-  const fetchUsers = async () => {
-    setLoading(true);
+  const fetchAssets = async () => {
     try {
-      const data = await getAllUserService({
+      const data = await getAllAssestService({
         token,
         pagination,
         search,
-        roleType,
-        adminLocation,
         orderBy,
         isDescending,
+        adminLocation,
+        assetStateType,
+        categoryId,
       });
 
-      setUsers(data.data.data);
+      setAssets(data.data.data);
       setPageCount(data.data.totalPages);
     } catch (error) {
       setError(true);
@@ -42,16 +42,16 @@ export const useUsers = (
   };
 
   useEffect(() => {
-    fetchUsers();
+    fetchAssets();
   }, [
     token,
     pagination,
     search,
-    roleType,
     orderBy,
     isDescending,
-    adminLocation,
+    assetStateType,
+    categoryId,
   ]);
 
-  return { users, loading, error, setUsers, pageCount, fetchUsers };
+  return { assets, loading, error, setAssets, pageCount, fetchAssets };
 };

@@ -9,8 +9,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ASSET_STATES, LOCATIONS } from "@/constants";
 import { useLoading } from "@/context/LoadingContext";
-import { PaginationState } from "@/models";
+import { AssetRes, PaginationState } from "@/models";
+import { getAssetByAssetCodeService } from "@/services";
 import {
   ColumnDef,
   flexRender,
@@ -18,15 +20,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { Dispatch, SetStateAction, useState } from "react";
+import { toast } from "react-toastify";
 import Pagination from "../Pagination";
-
-interface Asset {
-  assetCode: string;
-  assetName: string;
-  category: string;
-  state: string;
-  id: string;
-}
 
 interface AssetTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -56,13 +51,28 @@ export function AssetTable<TData, TValue>({
   });
 
   const [openDetails, setOpenDetails] = useState(false);
-  const [assetDetails] = useState<Asset | null>(null);
+  const [assetDetails, setAssetDetails] = useState<AssetRes>();
 
-  const handleOpenDetails = async (id: string) => {
-    console.log(id);
+  const handleOpenDetails = async (assetCode: string) => {
+    setOpenDetails(true);
+    try {
+      setIsLoading(true);
+      const result = await getAssetByAssetCodeService(assetCode);
+      console.log(result.data);
+      if (result.success) {
+        setAssetDetails(result.data);
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error fetching asset details");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const { isLoading } = useLoading();
+  const { isLoading, setIsLoading } = useLoading();
 
   const setPage = (pageIndex: number) => {
     onPaginationChange((prev) => ({
@@ -100,7 +110,9 @@ export function AssetTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className="hover:cursor-pointer"
-                  onClick={async () => handleOpenDetails(row.getValue("id"))}
+                  onClick={async () =>
+                    handleOpenDetails(row.getValue("assetCode"))
+                  }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -139,28 +151,45 @@ export function AssetTable<TData, TValue>({
           {isLoading ? (
             <LoadingSpinner />
           ) : (
-            <DialogContent className="max-w-[40%] p-[1px]">
-              <div className="rounded-lg border-2 border-black p-0 text-lg shadow-lg">
-                <h1 className="rounded-t-lg border-b-2 border-black bg-zinc-300 p-6 px-10 text-xl font-bold text-red-600">
+            <DialogContent className="max-w-[40%] border-none p-0">
+              <div className="rounded-lg p-0 text-lg shadow-lg">
+                <h1 className="rounded-t-lg bg-zinc-300 p-6 px-16 text-xl font-bold text-red-600">
                   Detailed Asset Information
                 </h1>
-                <div className="w-full px-10 py-4">
+                <div className="w-full px-16 py-6">
                   <table className="w-full">
                     <tr>
-                      <td className="w-[40%]">Asset Code</td>
+                      <td className="w-[40%] font-semibold">Asset Code</td>
                       <td>{assetDetails?.assetCode}</td>
                     </tr>
                     <tr>
-                      <td>Asset Name</td>
+                      <td className="font-semibold">Asset Name</td>
                       <td>{assetDetails?.assetName}</td>
                     </tr>
                     <tr>
-                      <td>Category</td>
-                      <td>{assetDetails?.category}</td>
+                      <td className="font-semibold">Category</td>
+                      <td>{assetDetails?.categoryName}</td>
                     </tr>
                     <tr>
-                      <td>State</td>
-                      <td>{assetDetails?.state}</td>
+                      <td className="font-semibold">State</td>
+                      <td>
+                        {
+                          ASSET_STATES.find(
+                            (state) => state.value === assetDetails?.state,
+                          )?.label
+                        }
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="font-semibold">Location</td>
+                      <td>
+                        {
+                          LOCATIONS.find(
+                            (location) =>
+                              location.value === assetDetails?.assetLocation,
+                          )?.label
+                        }
+                      </td>
                     </tr>
                   </table>
                 </div>

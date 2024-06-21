@@ -1,3 +1,4 @@
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -33,7 +34,7 @@ import { z } from "zod";
 
 export const EditUserForm = () => {
   const { staffCode } = useParams();
-  const { setIsLoading } = useLoading();
+  const { isLoading, setIsLoading } = useLoading();
   const [userDetails, setUserDetails] = useState<UserRes>();
   const { user } = useAuth();
   const form = useForm<z.infer<typeof updateUserSchema>>({
@@ -52,6 +53,7 @@ export const EditUserForm = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
+      setIsLoading(true);
       const res = await getUserByStaffCodeService(staffCode);
       if (res.success) {
         const details = res.data.data;
@@ -66,6 +68,7 @@ export const EditUserForm = () => {
       } else {
         toast.error(res.message);
       }
+      setIsLoading(false);
     };
     fetchUser();
   }, [staffCode]);
@@ -96,6 +99,8 @@ export const EditUserForm = () => {
   };
 
   const navigate = useNavigate();
+
+  if (isLoading) return <LoadingSpinner />;
 
   return (
     <Form {...form}>

@@ -28,7 +28,7 @@ import {
 } from "@/services/admin/manageAssetService";
 import { createAssetSchema } from "@/validations/assetSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -247,6 +247,23 @@ export const CreateAssetForm: React.FC = () => {
                   style={{ justifyContent: "center" }}
                   type="date"
                   {...field}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    const value = e.target.value;
+                    const parts = value.split("-");
+                    if (parts.length > 0 && parts[0].length > 4) {
+                      // If the year part is longer than 4 digits, truncate it
+                      const truncatedValue = `${parts[0].substring(0, 4)}-${parts[1]}-${parts[2]}`;
+                      field.onChange({
+                        ...e,
+                        target: {
+                          ...e.target,
+                          value: truncatedValue,
+                        },
+                      });
+                    } else {
+                      field.onChange(e);
+                    }
+                  }}
                 />
               </FormControl>
               <FormMessage>

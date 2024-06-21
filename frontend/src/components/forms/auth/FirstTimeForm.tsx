@@ -22,13 +22,13 @@ import { z } from "zod";
 
 export const FirstTimeForm = () => {
   const { user, setIsAuthenticated } = useAuth();
-  
+
   const isFirstTime = user.isFirstTimeLogin;
   const [showModal, setShowModal] = useState<boolean>(isFirstTime);
-  const dateParts = user.dateOfBirth.split('-');
-  const newDateStr = dateParts.join('');
+  const dateParts = user.dateOfBirth.split("-");
+  const newDateStr = dateParts.join("");
   const oldPassword = user.username + "@" + newDateStr;
-  
+
   // Define form
   const form = useForm<z.infer<typeof firstTimeLoginSchema>>({
     mode: "all",
@@ -50,7 +50,7 @@ export const FirstTimeForm = () => {
 
   const navigate = useNavigate();
   const onSubmit = async (values: z.infer<typeof firstTimeLoginSchema>) => {
-    const result = await firstTimeService({...values});
+    const result = await firstTimeService({ ...values });
     if (result.success) {
       setIsAuthenticated(false);
       localStorage.removeItem("token");
@@ -60,7 +60,6 @@ export const FirstTimeForm = () => {
     } else {
       toast.error(result.message);
     }
-    
   };
 
   const handleLogout = () => {
@@ -112,10 +111,7 @@ export const FirstTimeForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
-                      type="hidden"
-                      {...field}
-                    />
+                    <Input type="hidden" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -127,10 +123,7 @@ export const FirstTimeForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
-                      type="hidden"
-                      {...field}
-                    />
+                    <Input type="hidden" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -139,14 +132,14 @@ export const FirstTimeForm = () => {
             <div className="mt-6 flex justify-end gap-4">
               <Button
                 type="submit"
-                className="bg-red-500 hover:bg-white hover:text-red-500 w-[76px]"
+                className="w-[76px] bg-red-500 hover:bg-white hover:text-red-500"
                 disabled={!form.formState.isValid}
               >
                 Save
               </Button>
               <Button
                 type="submit"
-                className="bg-white text-black shadow-none hover:text-white border w-[76px]"
+                className="w-[76px] border bg-white text-black shadow-none hover:text-white"
                 onClick={handleLogout}
               >
                 Log out

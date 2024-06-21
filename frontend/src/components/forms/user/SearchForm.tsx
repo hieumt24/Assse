@@ -8,29 +8,29 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { removeExtraWhitespace } from "@/lib/utils";
-import { searchUserSchema } from "@/validations";
+import { searchSchema } from "@/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { MdSearch } from "react-icons/md";
 
 import { z } from "zod";
 
-interface SearchUserFormProps {
+interface SearchFormProps {
   setSearch: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export const SearchUserForm = (props: SearchUserFormProps) => {
+export const SearchForm = (props: SearchFormProps) => {
   // Define form
-  const form = useForm<z.infer<typeof searchUserSchema>>({
+  const form = useForm<z.infer<typeof searchSchema>>({
     mode: "all",
-    resolver: zodResolver(searchUserSchema),
+    resolver: zodResolver(searchSchema),
     defaultValues: {
       searchTerm: "",
     },
   });
 
   // Function handle onSubmit
-  const onSubmit = async (values: z.infer<typeof searchUserSchema>) => {
+  const onSubmit = async (values: z.infer<typeof searchSchema>) => {
     props.setSearch(values.searchTerm);
   };
   return (
