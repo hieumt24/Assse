@@ -4,6 +4,11 @@ import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { assetColumns } from "@/components/tables/asset/assetColumns";
 import { Button } from "@/components/ui/button";
 import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -18,11 +23,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
 import { ASSET_STATES, LOCATIONS } from "@/constants";
 import { useLoading } from "@/context/LoadingContext";
 import { useAuth, usePagination } from "@/hooks";
 import { useAssets } from "@/hooks/useAssets";
-import useClickOutside from "@/hooks/useClickOutside";
 import { CategoryRes } from "@/models";
 import { deleteAssetByIdService, getAllCategoryService } from "@/services";
 import { useEffect, useRef, useState } from "react";
@@ -49,6 +54,7 @@ export const ManageAsset = () => {
     assetStateType,
     selectedCategory,
   );
+  const [isStateListOpen, setIsStateListOpen] = useState(false);
   const [categories, setCategories] = useState(Array<CategoryRes>);
   const [filteredCategories, setFilteredCategories] = useState(
     Array<CategoryRes>,
@@ -85,9 +91,21 @@ export const ManageAsset = () => {
     fetchCategories();
   }, []);
 
-  useClickOutside(selectRef, () => {
-    setCategorySearch("");
-  });
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      selectRef.current &&
+      !selectRef.current.contains(event.target as Node)
+    ) {
+      setCategorySearch("");
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const { setIsLoading } = useLoading();
   const [assetIdToDelete, setAssetIdToDelete] = useState<string>("");
@@ -121,13 +139,39 @@ export const ManageAsset = () => {
       <p className="text-2xl font-bold text-red-600">Asset List</p>
       <div className="flex items-center justify-between">
         <div className="flex gap-2">
+          <Collapsible
+            open={isStateListOpen}
+            onOpenChange={setIsStateListOpen}
+            className="relative"
+          >
+            <CollapsibleTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-xl text-white hover:bg-white hover:text-red-600"
+              >
+                <span className="mr-2">{user.username}</span>
+                <span className="text-xs">&#9660;</span>
+              </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="absolute right-0 mt-1 w-40 rounded-md bg-white font-semibold shadow-md">
+              <div
+                onClick={() => {}}
+                className="block rounded-t-md px-4 py-3 text-sm font-medium transition-all hover:cursor-pointer hover:bg-zinc-200"
+              >
+                Change password
+              </div>
+              <Separator />
+            </CollapsibleContent>
+          </Collapsible>
+
           <Select
             onValueChange={(value) => {
               setAssetStateType(parseInt(value));
             }}
           >
             <SelectTrigger className="w-32">
-              <SelectValue placeholder="Status" />
+              <SelectValue placeholder="State" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="0">All</SelectItem>
@@ -138,36 +182,38 @@ export const ManageAsset = () => {
               ))}
             </SelectContent>
           </Select>
-          <Select
-            onValueChange={(value) => {
-              setSelectedCategory(value);
-            }}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select category" />
-            </SelectTrigger>
-            <SelectContent>
-              <Input
-                ref={inputRef}
-                placeholder="Search category ..."
-                className="border-none shadow-none focus-visible:ring-0"
-                value={categorySearch}
-                onChange={(e) => {
-                  setCategorySearch(e.target.value);
-                }}
-              />
-              <div className="max-h-[100px] overflow-y-scroll">
-                <SelectItem key={0} value="all">
-                  All
-                </SelectItem>
-                {filteredCategories?.map((category) => (
-                  <SelectItem key={category.id} value={category.id}>
-                    {category.categoryName} ({category.prefix})
+          <div ref={selectRef} className="w-[150px]">
+            <Select
+              onValueChange={(value) => {
+                setSelectedCategory(value);
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Category" />
+              </SelectTrigger>
+              <SelectContent>
+                <Input
+                  ref={inputRef}
+                  placeholder="Search category ..."
+                  className="border-none shadow-none focus-visible:ring-0"
+                  value={categorySearch}
+                  onChange={(e) => {
+                    setCategorySearch(e.target.value);
+                  }}
+                />
+                <div className="max-h-[100px] overflow-y-scroll">
+                  <SelectItem key={0} value="all">
+                    All
                   </SelectItem>
-                ))}
-              </div>
-            </SelectContent>
-          </Select>
+                  {filteredCategories?.map((category) => (
+                    <SelectItem key={category.id} value={category.id}>
+                      {category.categoryName} ({category.prefix})
+                    </SelectItem>
+                  ))}
+                </div>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         <div className="flex justify-between gap-6">
