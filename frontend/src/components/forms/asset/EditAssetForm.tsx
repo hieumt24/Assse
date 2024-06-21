@@ -11,7 +11,6 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { useLoading } from "@/context/LoadingContext";
-import { useAuth } from "@/hooks";
 import { removeExtraWhitespace } from "@/lib/utils";
 import { AssetRes } from "@/models";
 import {
@@ -31,7 +30,6 @@ import { z } from "zod";
 export const EditAssetForm: React.FC = () => {
   const { assetCode } = useParams();
 
-  const { user } = useAuth();
   const { setIsLoading } = useLoading();
   const navigate = useNavigate();
   const [asset, setAsset] = useState<AssetRes>();
