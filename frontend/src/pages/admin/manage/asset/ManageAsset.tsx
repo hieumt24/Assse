@@ -10,12 +10,22 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { LOCATIONS } from "@/constants";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ASSET_STATES, LOCATIONS } from "@/constants";
 import { useLoading } from "@/context/LoadingContext";
 import { useAuth, usePagination } from "@/hooks";
 import { useAssets } from "@/hooks/useAssets";
-import { deleteAssetByIdService } from "@/services";
-import { useState } from "react";
+import useClickOutside from "@/hooks/useClickOutside";
+import { CategoryRes } from "@/models";
+import { deleteAssetByIdService, getAllCategoryService } from "@/services";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AssetTable } from "../../../../components/tables/asset/AssetTable";
@@ -27,6 +37,8 @@ export const ManageAsset = () => {
   const [search, setSearch] = useState("");
   const [orderBy, setOrderBy] = useState("");
   const [isDescending, setIsDescending] = useState(false);
+  const [assetStateType, setAssetStateType] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const { assets, loading, error, pageCount, fetchAssets } = useAssets(
     token!,
     pagination,
@@ -34,7 +46,48 @@ export const ManageAsset = () => {
     search,
     orderBy,
     isDescending,
+    assetStateType,
+    selectedCategory,
   );
+  const [categories, setCategories] = useState(Array<CategoryRes>);
+  const [filteredCategories, setFilteredCategories] = useState(
+    Array<CategoryRes>,
+  );
+  const [categorySearch, setCategorySearch] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+  const selectRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setFilteredCategories(
+      categories.filter((category) =>
+        category.categoryName
+          .toLowerCase()
+          .includes(categorySearch.toLowerCase()),
+      ),
+    );
+  }, [categorySearch]);
+
+  useEffect(() => {
+    inputRef?.current?.focus();
+  }, [filteredCategories]);
+
+  const fetchCategories = async () => {
+    const res = await getAllCategoryService();
+    if (res.success) {
+      setCategories(res.data.data);
+      setFilteredCategories(res.data.data);
+    } else {
+      console.log(res.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  useClickOutside(selectRef, () => {
+    setCategorySearch("");
+  });
 
   const { setIsLoading } = useLoading();
   const [assetIdToDelete, setAssetIdToDelete] = useState<string>("");
@@ -67,13 +120,65 @@ export const ManageAsset = () => {
     <div className="m-24 flex h-full flex-grow flex-col gap-8">
       <p className="text-2xl font-bold text-red-600">Asset List</p>
       <div className="flex items-center justify-between">
-        <SearchForm setSearch={setSearch} />
-        <Button
-          variant={"destructive"}
-          onClick={() => navigate("/admin/asset/create-asset")}
-        >
-          <span className="capitalize">Create new asset</span>
-        </Button>
+        <div className="flex gap-2">
+          <Select
+            onValueChange={(value) => {
+              setAssetStateType(parseInt(value));
+            }}
+          >
+            <SelectTrigger className="w-32">
+              <SelectValue placeholder="Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="0">All</SelectItem>
+              {ASSET_STATES.map((state) => (
+                <SelectItem value={state.value.toString()}>
+                  {state.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select
+            onValueChange={(value) => {
+              setSelectedCategory(value);
+            }}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select category" />
+            </SelectTrigger>
+            <SelectContent>
+              <Input
+                ref={inputRef}
+                placeholder="Search category ..."
+                className="border-none shadow-none focus-visible:ring-0"
+                value={categorySearch}
+                onChange={(e) => {
+                  setCategorySearch(e.target.value);
+                }}
+              />
+              <div className="max-h-[100px] overflow-y-scroll">
+                <SelectItem key={0} value="all">
+                  All
+                </SelectItem>
+                {filteredCategories?.map((category) => (
+                  <SelectItem key={category.id} value={category.id}>
+                    {category.categoryName} ({category.prefix})
+                  </SelectItem>
+                ))}
+              </div>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="flex justify-between gap-6">
+          <SearchForm setSearch={setSearch} />
+          <Button
+            variant={"destructive"}
+            onClick={() => navigate("/admin/asset/create-asset")}
+          >
+            <span className="capitalize">Create new asset</span>
+          </Button>
+        </div>
       </div>
       {loading ? (
         <LoadingSpinner />

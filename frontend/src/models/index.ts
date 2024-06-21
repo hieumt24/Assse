@@ -79,7 +79,7 @@ export interface GetAssetReq {
     pageIndex: number;
   };
   search?: string;
-  categoryId?: number;
+  categoryId?: string;
   assetStateType?: number;
   adminLocation?: number;
   orderBy?: string;

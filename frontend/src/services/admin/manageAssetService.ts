@@ -7,6 +7,12 @@ import {
 } from "@/models";
 
 export const getAllAssestService = (req: GetAssetReq) => {
+  if (req.categoryId === "all") {
+    delete req.categoryId;
+  }
+  if (req.assetStateType === 0) {
+    delete req.assetStateType;
+  }
   return axiosInstance
     .post("/assets/filter-assets", req)
     .then((res) => {
