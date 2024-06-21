@@ -68,7 +68,9 @@ namespace AssetManagement.Application.Helper
 
         public static ISpecification<Asset> GetAssetByAssetCode(string assetCode)
         {
-            return new AssetSpecification(asset => asset.AssetCode == assetCode && !asset.IsDeleted);
+            var spec = new AssetSpecification(asset => asset.AssetCode == assetCode && !asset.IsDeleted);
+            spec.AddInclude(x => x.Category);
+            return spec;
         }
     }
 }
