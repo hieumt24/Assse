@@ -73,9 +73,9 @@ namespace AssetManagement.Infrastructure.Repositories
             return await _dbContext.Users.AnyAsync(u => u.Username == username);
         }
 
-        public IQueryable<User> Query()
+        public IQueryable<User> Query(EnumLocation adminLocation)
         {
-            return _dbContext.Users;
+            return _dbContext.Users.Where(x => x.Location == adminLocation);
         }
 
         public async Task<User> UpdateUserAysnc(User user)
