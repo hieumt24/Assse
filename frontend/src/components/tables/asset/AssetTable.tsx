@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ASSET_STATES } from "@/constants";
+import { ASSET_STATES, LOCATIONS } from "@/constants";
 import { useLoading } from "@/context/LoadingContext";
 import { AssetRes, PaginationState } from "@/models";
 import { getAssetByAssetCodeService } from "@/services";
@@ -159,23 +159,34 @@ export function AssetTable<TData, TValue>({
                 <div className="w-full px-16 py-6">
                   <table className="w-full">
                     <tr>
-                      <td className="w-[40%]">Asset Code</td>
+                      <td className="w-[40%] font-semibold">Asset Code</td>
                       <td>{assetDetails?.assetCode}</td>
                     </tr>
                     <tr>
-                      <td>Asset Name</td>
+                      <td className="font-semibold">Asset Name</td>
                       <td>{assetDetails?.assetName}</td>
                     </tr>
                     <tr>
-                      <td>Category</td>
+                      <td className="font-semibold">Category</td>
                       <td>{assetDetails?.categoryName}</td>
                     </tr>
                     <tr>
-                      <td>State</td>
+                      <td className="font-semibold">State</td>
                       <td>
                         {
                           ASSET_STATES.find(
                             (state) => state.value === assetDetails?.state,
+                          )?.label
+                        }
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="font-semibold">Location</td>
+                      <td>
+                        {
+                          LOCATIONS.find(
+                            (location) =>
+                              location.value === assetDetails?.assetLocation,
                           )?.label
                         }
                       </td>

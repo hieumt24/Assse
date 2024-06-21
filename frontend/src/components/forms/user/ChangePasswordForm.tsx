@@ -58,9 +58,9 @@ export const ChangePasswordForm = (props: {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="w-full space-y-5 rounded-lg border-2 border-black bg-zinc-100 text-lg shadow-lg"
+              className="w-full space-y-5 rounded-lg border-none bg-zinc-100 text-lg shadow-lg"
             >
-              <h1 className="rounded-t-lg border-b-2 border-black bg-zinc-300 p-6 text-xl font-bold text-red-600">
+              <h1 className="rounded-t-lg bg-zinc-300 p-6 text-xl font-bold text-red-600">
                 Change password
               </h1>
               <div className="p-6">
