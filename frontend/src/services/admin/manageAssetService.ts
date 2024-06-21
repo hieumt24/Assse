@@ -1,5 +1,5 @@
 import axiosInstace from "@/api/axiosInstance";
-import { CreateAssetReq, CreateCategoryReq } from "@/models";
+import { CreateAssetReq, CreateCategoryReq, UpdateAssetReq } from "@/models";
 
 export const getAllCategoryService = () => {
   return axiosInstace
@@ -48,6 +48,46 @@ export const createAssetService = (req: CreateAssetReq) => {
         success: true,
         message: "Asset created successfully!",
         data: res.data,
+      };
+    })
+    .catch((err) => {
+      console.log(err.response?.data);
+      return {
+        success: false,
+        message: err.response?.data.message,
+        data: err.response,
+      };
+    });
+};
+
+export const updateAssetService = (id: string, req: UpdateAssetReq) => {
+  return axiosInstace
+    .put(`/assets?id=${id}`, req)
+    .then((res) => {
+      return {
+        success: true,
+        message: "Asset updated successfully!",
+        data: res.data,
+      };
+    })
+    .catch((err) => {
+      console.log(err.response?.data);
+      return {
+        success: false,
+        message: err.response?.data.message,
+        data: err.response,
+      };
+    });
+};
+
+export const getAssetByAssetCodeService = (staffCode: string) => {
+  return axiosInstace
+    .get(`/assets/assetCode/${staffCode}`)
+    .then((res) => {
+      return {
+        success: true,
+        message: "Asset fetched successfully!",
+        data: res.data.data,
       };
     })
     .catch((err) => {

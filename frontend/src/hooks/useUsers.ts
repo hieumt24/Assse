@@ -19,6 +19,7 @@ export const useUsers = (
   const [pageCount, setPageCount] = useState<number>(0);
 
   const fetchUsers = async () => {
+    setLoading(true);
     try {
       const data = await getAllUserService({
         token,
