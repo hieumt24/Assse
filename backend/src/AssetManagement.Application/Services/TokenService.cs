@@ -45,5 +45,6 @@ namespace AssetManagement.Application.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
     }
 }
