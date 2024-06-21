@@ -24,7 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ASSET_STATES, LOCATIONS } from "@/constants";
+import { ASSET_STATES } from "@/constants";
 import { useLoading } from "@/context/LoadingContext";
 import { useAuth, usePagination } from "@/hooks";
 import { useAssets } from "@/hooks/useAssets";
@@ -49,7 +49,7 @@ export const ManageAsset = () => {
   const { assets, loading, error, pageCount, fetchAssets } = useAssets(
     token!,
     pagination,
-    LOCATIONS.find((location) => location.label === user.location)?.value || 1,
+    user.location,
     search,
     orderBy,
     isDescending,

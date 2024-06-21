@@ -17,7 +17,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { LOCATIONS } from "@/constants";
 import { useLoading } from "@/context/LoadingContext";
 import { useAuth, useUsers } from "@/hooks";
 import { usePagination } from "@/hooks/usePagination";
@@ -36,14 +35,12 @@ export const ManageUser = () => {
   const { users, loading, error, pageCount, fetchUsers } = useUsers(
     token!,
     pagination,
-    LOCATIONS.find((location) => location.label === user.location)?.value || 1,
+    user.location,
     search,
     roleType,
     orderBy,
     isDescending,
   );
-  console.log(user);
-  console.log(LOCATIONS.find((location) => location.label === user.location));
 
   const navigate = useNavigate();
   const { setIsLoading } = useLoading();
