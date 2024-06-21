@@ -53,7 +53,7 @@ export const assetColumns = ({
         case 3:
           return <p className="text-red-600">Assigned</p>;
         case 4:
-          return <p className="text-red-600">WaitingForRecycling</p>;
+          return <p className="text-red-600">Waiting For Recycling</p>;
         case 5:
           return <p className="text-red-600">Recycled</p>;
         default:

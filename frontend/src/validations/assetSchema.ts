@@ -76,13 +76,13 @@ export const updateAssetSchema = z.object({
     .max(100, { message: "Specification must be no longer than 100 letters." }),
   installedDate: z
     .string()
-    .regex(dateFormat, { message: "Please select a valid Joined Date." })
+    .regex(dateFormat, { message: "Please select a valid Installed Date." })
     .refine(
       (dateString) => {
         const parsedDate = new Date(dateString);
         return isValid(parsedDate);
       },
-      { message: "Invalid Joined Date. Please enter a valid date." },
+      { message: "Invalid Installed Date. Please enter a valid date." },
     )
     .refine(
       (dateString) => {
@@ -96,7 +96,7 @@ export const updateAssetSchema = z.object({
         const parsedDate = new Date(dateString);
         return !isAfter(parsedDate, new Date());
       },
-      { message: "Joined Date cannot be in the future." },
+      { message: "Installed Date cannot be in the future." },
     ),
   state: z.enum(["1", "2", "3", "4", "5"]),
 });
