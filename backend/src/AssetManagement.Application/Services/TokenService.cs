@@ -26,7 +26,7 @@ namespace AssetManagement.Application.Services
                 new Claim("UserId", user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim("StaffCode", user.StaffCode),
-                new Claim("Location", user.Location.ToString()),
+                new Claim("Location", Convert.ToInt32(user.Location).ToString()),
                 new Claim(ClaimTypes.Role, role.ToString()),
                 new Claim("IsFirstTimeLogin", user.IsFirstTimeLogin.ToString().ToLowerInvariant()),
                 new Claim("DateOfBirth", user.DateOfBirth.ToString("dd-MM-yyyy"))
