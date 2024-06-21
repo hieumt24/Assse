@@ -36,7 +36,7 @@ export const ManageUser = () => {
   const { users, loading, error, pageCount, fetchUsers } = useUsers(
     token!,
     pagination,
-    LOCATIONS.find((location) => location.label === user.location)!.value,
+    LOCATIONS.find((location) => location.label === user.location)?.value || 1,
     search,
     roleType,
     orderBy,

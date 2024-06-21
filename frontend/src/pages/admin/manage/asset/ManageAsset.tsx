@@ -30,7 +30,7 @@ export const ManageAsset = () => {
   const { assets, loading, error, pageCount, fetchAssets } = useAssets(
     token!,
     pagination,
-    LOCATIONS.find((location) => location.label === user.location)!.value,
+    LOCATIONS.find((location) => location.label === user.location)?.value || 1,
     search,
     orderBy,
     isDescending,
