@@ -28,7 +28,7 @@ import {
 } from "@/services/admin/manageAssetService";
 import { createAssetSchema } from "@/validations/assetSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -44,6 +44,7 @@ export const CreateAssetForm: React.FC = () => {
   const [openCreateCategory, setOpenCreateCategory] = useState(false);
   const [categorySearch, setCategorySearch] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const selectRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
   const { setIsLoading } = useLoading();
   const navigate = useNavigate();
@@ -74,6 +75,22 @@ export const CreateAssetForm: React.FC = () => {
 
   useEffect(() => {
     fetchCategories();
+  }, []);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      selectRef.current &&
+      !selectRef.current.contains(event.target as Node)
+    ) {
+      setCategorySearch("");
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   const form = useForm<z.infer<typeof createAssetSchema>>({
@@ -152,7 +169,7 @@ export const CreateAssetForm: React.FC = () => {
           control={form.control}
           name="category"
           render={({ field }) => (
-            <FormItem>
+            <FormItem ref={selectRef}>
               <FormLabel className="text-md">
                 Category <span className="text-red-600">*</span>
               </FormLabel>
@@ -230,6 +247,23 @@ export const CreateAssetForm: React.FC = () => {
                   style={{ justifyContent: "center" }}
                   type="date"
                   {...field}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                    const value = e.target.value;
+                    const parts = value.split("-");
+                    if (parts.length > 0 && parts[0].length > 4) {
+                      // If the year part is longer than 4 digits, truncate it
+                      const truncatedValue = `${parts[0].substring(0, 4)}-${parts[1]}-${parts[2]}`;
+                      field.onChange({
+                        ...e,
+                        target: {
+                          ...e.target,
+                          value: truncatedValue,
+                        },
+                      });
+                    } else {
+                      field.onChange(e);
+                    }
+                  }}
                 />
               </FormControl>
               <FormMessage>

@@ -1,8 +1,10 @@
+using AssetManagement.Domain.Common.Models;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using System.Linq.Expressions;
 
 namespace AssetManagement.Infrastructure.Contexts
 {
@@ -23,6 +25,16 @@ namespace AssetManagement.Infrastructure.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            //And global query filter
+
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
+                {
+                    modelBuilder.Entity(entityType.ClrType).HasQueryFilter(CreateIsDeletedFilter(entityType.ClrType));
+                }
+            }
 
             modelBuilder.Entity<User>()
                 .Property(p => p.StaffCode)
@@ -80,16 +92,25 @@ namespace AssetManagement.Infrastructure.Contexts
                 .HasData(adminHN, adminHCM, adminDN);
 
             modelBuilder.Entity<User>().Property(u => u.StaffCodeId).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
-
-            // seed category
-            modelBuilder.Entity<Category>().HasData(
-                new Category { Id = Guid.NewGuid(), CategoryName = "Laptop", Prefix = "LA" },
-                new Category { Id = Guid.NewGuid(), CategoryName = "Monitor", Prefix = "MO" },
-                new Category { Id = Guid.NewGuid(), CategoryName = "Desk", Prefix = "DE" }
-            );
-
+            
             modelBuilder.Entity<Category>().HasIndex(c => c.CategoryName).IsUnique();
             modelBuilder.Entity<Category>().HasIndex(c => c.Prefix).IsUnique();
+            // seed category
+            modelBuilder.Entity<Category>().HasData(
+                new Category { CategoryName = "Laptop", Prefix = "LA" },
+                new Category { CategoryName = "Monitor", Prefix = "MO" },
+                new Category { CategoryName = "Desk", Prefix = "DE" }
+            );
+
+            
+        }
+
+        private static LambdaExpression CreateIsDeletedFilter(Type entityType)
+        {
+            var param = Expression.Parameter(entityType, "e");
+            var prop = Expression.Property(param, "IsDeleted");
+            var condition = Expression.Equal(prop, Expression.Constant(false));
+            return Expression.Lambda(condition, param);
         }
     }
 }
