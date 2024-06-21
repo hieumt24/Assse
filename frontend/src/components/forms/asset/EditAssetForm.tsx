@@ -66,7 +66,6 @@ export const EditAssetForm: React.FC = () => {
     } catch (error) {
       console.log(error);
       toast.error("Error fetching asset");
-    } finally {
     }
   };
 

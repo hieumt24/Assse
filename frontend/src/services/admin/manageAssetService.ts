@@ -10,7 +10,7 @@ export const getAllAssestService = (req: GetAssetReq) => {
   if (req.categoryId === "all") {
     delete req.categoryId;
   }
-  if (req.assetStateType === 0) {
+  if (req.assetStateType?.length == 0) {
     delete req.assetStateType;
   }
   return axiosInstance

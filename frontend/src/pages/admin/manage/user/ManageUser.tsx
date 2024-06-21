@@ -17,7 +17,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { LOCATIONS } from "@/constants";
 import { useLoading } from "@/context/LoadingContext";
 import { useAuth, useUsers } from "@/hooks";
 import { usePagination } from "@/hooks/usePagination";
@@ -31,17 +30,18 @@ export const ManageUser = () => {
   const { onPaginationChange, pagination } = usePagination();
   const [search, setSearch] = useState("");
   const [orderBy, setOrderBy] = useState("");
-  const [isDescending, setIsDescending] = useState(false);
+  const [isDescending, setIsDescending] = useState(true);
   const [roleType, setRoleType] = useState(0);
   const { users, loading, error, pageCount, fetchUsers } = useUsers(
     token!,
     pagination,
-    LOCATIONS.find((location) => location.label === user.location)?.value || 1,
+    user.location,
     search,
     roleType,
     orderBy,
     isDescending,
   );
+
   const navigate = useNavigate();
   const { setIsLoading } = useLoading();
   const [userIdToDisable, setUserIdToDisable] = useState<string>("");
@@ -110,6 +110,7 @@ export const ManageUser = () => {
               setOrderBy,
               setIsDescending,
               isDescending,
+              orderBy,
             })}
             data={users!}
             onPaginationChange={onPaginationChange}

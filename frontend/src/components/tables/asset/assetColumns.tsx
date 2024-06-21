@@ -1,8 +1,8 @@
-import { Button } from "@/components/ui/button";
+import { renderHeader } from "@/lib/utils";
 import { AssetRes } from "@/models";
 import { ColumnDef } from "@tanstack/react-table";
-import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
-import { MdDelete, MdEdit } from "react-icons/md";
+import { FiEdit2 } from "react-icons/fi";
+import { IoCloseCircleOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 
 interface AssetColumnsProps {
@@ -10,6 +10,7 @@ interface AssetColumnsProps {
   setOrderBy: React.Dispatch<React.SetStateAction<string>>;
   setIsDescending: React.Dispatch<React.SetStateAction<boolean>>;
   isDescending: boolean;
+  orderBy: string;
 }
 
 export const assetColumns = ({
@@ -17,68 +18,17 @@ export const assetColumns = ({
   setOrderBy,
   setIsDescending,
   isDescending,
+  orderBy,
 }: AssetColumnsProps): ColumnDef<AssetRes>[] => [
   {
     accessorKey: "assetCode",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant={"ghost"}
-          onClick={() => {
-            setOrderBy(column.id);
-            setIsDescending((prev) => !prev);
-          }}
-          className="p-0 hover:bg-muted/50"
-        >
-          <div className="flex items-center justify-center">
-            <span
-              className={`${!isDescending ? "font-black text-red-600" : ""}`}
-            >
-              {column.id.toUpperCase()}
-            </span>
-            {isDescending ? (
-              <IoMdArrowDropup size={24} />
-            ) : (
-              <IoMdArrowDropdown
-                size={24}
-                className={`${!isDescending ? "font-black text-red-600" : ""}`}
-              />
-            )}
-          </div>
-        </Button>
-      );
-    },
+    header: ({ column }) =>
+      renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),
   },
   {
     accessorKey: "assetName",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant={"ghost"}
-          onClick={() => {
-            setOrderBy(column.id);
-            setIsDescending((prev) => !prev);
-          }}
-          className="p-0 hover:bg-muted/50"
-        >
-          <div className="flex items-center justify-center">
-            <span
-              className={`${!isDescending ? "font-black text-red-600" : ""}`}
-            >
-              {column.id.toUpperCase()}
-            </span>
-            {isDescending ? (
-              <IoMdArrowDropup size={24} />
-            ) : (
-              <IoMdArrowDropdown
-                size={24}
-                className={`${!isDescending ? "font-black text-red-600" : ""}`}
-              />
-            )}
-          </div>
-        </Button>
-      );
-    },
+    header: ({ column }) =>
+      renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),
     cell: ({ row }) => {
       const asset = row.original;
       return <p>{`${asset.assetName}`}</p>;
@@ -86,65 +36,13 @@ export const assetColumns = ({
   },
   {
     accessorKey: "categoryName",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant={"ghost"}
-          onClick={() => {
-            setOrderBy(column.id);
-            setIsDescending((prev) => !prev);
-          }}
-          className="p-0 hover:bg-muted/50"
-        >
-          <div className="flex items-center justify-center">
-            <span
-              className={`${!isDescending ? "font-black text-red-600" : ""}`}
-            >
-              CATEGORY
-            </span>
-            {isDescending ? (
-              <IoMdArrowDropup size={24} />
-            ) : (
-              <IoMdArrowDropdown
-                size={24}
-                className={`${!isDescending ? "font-black text-red-600" : ""}`}
-              />
-            )}
-          </div>
-        </Button>
-      );
-    },
+    header: ({ column }) =>
+      renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),
   },
   {
     accessorKey: "state",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant={"ghost"}
-          onClick={() => {
-            setOrderBy(column.id);
-            setIsDescending((prev) => !prev);
-          }}
-          className="p-0 hover:bg-muted/50"
-        >
-          <div className="flex items-center justify-center">
-            <span
-              className={`${!isDescending ? "font-black text-red-600" : ""}`}
-            >
-              STATE
-            </span>
-            {isDescending ? (
-              <IoMdArrowDropup size={24} />
-            ) : (
-              <IoMdArrowDropdown
-                size={24}
-                className={`${!isDescending ? "font-black text-red-600" : ""}`}
-              />
-            )}
-          </div>
-        </Button>
-      );
-    },
+    header: ({ column }) =>
+      renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),
     cell: ({ row }) => {
       const state = row.original.state;
       switch (state) {
@@ -155,7 +53,7 @@ export const assetColumns = ({
         case 3:
           return <p className="text-red-600">Assigned</p>;
         case 4:
-          return <p className="text-red-600">WaitingForRecycling</p>;
+          return <p className="text-red-600">Waiting For Recycling</p>;
         case 5:
           return <p className="text-red-600">Recycled</p>;
         default:
@@ -171,7 +69,7 @@ export const assetColumns = ({
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const navigate = useNavigate();
       return (
-        <div className="flex gap-1">
+        <div className="flex gap-4">
           <button
             className="text-blue-500 hover:text-blue-700"
             onClick={(e) => {
@@ -179,7 +77,7 @@ export const assetColumns = ({
               navigate(`edit/${asset.assetCode}`);
             }}
           >
-            <MdEdit size={20} />
+            <FiEdit2 size={18} />
           </button>
           <button
             className="text-red-500 hover:text-red-700"
@@ -188,7 +86,7 @@ export const assetColumns = ({
               handleOpenDisable(asset.id!);
             }}
           >
-            <MdDelete size={20} />
+            <IoCloseCircleOutline size={20} />
           </button>
         </div>
       );

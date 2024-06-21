@@ -12,7 +12,7 @@ export const useAssets = (
   search?: string,
   orderBy?: string,
   isDescending?: boolean,
-  assetStateType?: number,
+  assetStateType?: Array<number>,
   categoryId?: string,
 ) => {
   const [assets, setAssets] = useState<AssetRes[] | null>(null);

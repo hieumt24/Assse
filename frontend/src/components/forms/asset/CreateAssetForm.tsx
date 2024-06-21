@@ -17,7 +17,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { LOCATIONS } from "@/constants";
 import { useLoading } from "@/context/LoadingContext";
 import { useAuth } from "@/hooks";
 import { removeExtraWhitespace } from "@/lib/utils";
@@ -106,9 +105,7 @@ export const CreateAssetForm: React.FC = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof createAssetSchema>) => {
-    const location = LOCATIONS.find(
-      (location) => location.label === user.location,
-    )?.value;
+    const location = user.location;
     try {
       setIsLoading(true);
       const res = await createAssetService({
