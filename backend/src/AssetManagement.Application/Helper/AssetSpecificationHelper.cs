@@ -1,4 +1,5 @@
-﻿using AssetManagement.Application.Filter;
+﻿using AssetManagement.Application.Extensions;
+using AssetManagement.Application.Filter;
 using AssetManagement.Domain.Common.Specifications;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
@@ -9,7 +10,7 @@ namespace AssetManagement.Application.Helper
 {
     public class AssetSpecificationHelper
     {
-        public static ISpecification<Asset> CreateAssetQuery(string? search, Guid? categoryId, ICollection<AssetStateType?> assetStateType, EnumLocation enumLocation, string? orderBy, bool? isDescending)
+        public static ISpecification<Asset> CreateAssetQuery(string? search, Guid? categoryId, ICollection<AssetStateType?>? assetStateType, EnumLocation enumLocation, string? orderBy, bool? isDescending)
         {
             Expression<Func<Asset, bool>> criteria = asset => asset.AssetLocation == enumLocation;
             //include category
@@ -22,6 +23,16 @@ namespace AssetManagement.Application.Helper
             if (assetStateType != null && assetStateType.Count > 0)
             {
                 Expression<Func<Asset, bool>> stateCriteria = asset => assetStateType.Contains(asset.State);
+                criteria = criteria.And(stateCriteria);
+            }
+            else
+            {
+                Expression<Func<Asset, bool>> stateCriteria = asset => asset.State == AssetStateType.Available
+                                                                    || asset.State == AssetStateType.NotAvailable
+                                                                    || asset.State == AssetStateType.Assigned
+                                                                    || asset.State == AssetStateType.WaitingForRecycling
+                                                                    || asset.State == AssetStateType.Recycled;
+
                 criteria = criteria.And(stateCriteria);
             }
             if (categoryId.HasValue)
