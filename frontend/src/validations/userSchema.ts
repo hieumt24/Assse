@@ -109,7 +109,7 @@ export const createUserSchema = z
     },
   );
 
-export const searchUserSchema = z.object({
+export const searchSchema = z.object({
   searchTerm: z.string(),
 });
 

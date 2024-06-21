@@ -1,8 +1,53 @@
-import axiosInstace from "@/api/axiosInstance";
-import { CreateAssetReq, CreateCategoryReq } from "@/models";
+import axiosInstance from "@/api/axiosInstance";
+import { CreateAssetReq, CreateCategoryReq, GetAssetReq } from "@/models";
+
+export const getAllAssestService = (req: GetAssetReq) => {
+  return axiosInstance
+    .post("/assets/filter-assets", req)
+    .then((res) => {
+      return {
+        success: true,
+        message: "Assets fetched successfully!",
+        data: res.data,
+      };
+    })
+    .catch((err) => {
+      return { success: false, message: "Failed to fetch assets.", data: err };
+    });
+};
+
+export const getAssetByIdService = (id: string) => {
+  return axiosInstance
+    .get(`/assets/${id}`)
+    .then((res) => {
+      return {
+        success: true,
+        message: "Asset fetched successfully!",
+        data: res.data,
+      };
+    })
+    .catch((err) => {
+      return { success: false, message: "Failed to fetch asset.", data: err };
+    });
+};
+
+export const deleteAssetByIdService = (id: string) => {
+  return axiosInstance
+    .delete(`/assets/${id}`)
+    .then((res) => {
+      return {
+        success: true,
+        message: "Asset deleted successfully!",
+        data: res.data,
+      };
+    })
+    .catch((err) => {
+      return { success: false, message: "Failed to delete asset.", data: err };
+    });
+};
 
 export const getAllCategoryService = () => {
-  return axiosInstace
+  return axiosInstance
     .get("/categories")
     .then((res) => {
       return {
@@ -21,7 +66,7 @@ export const getAllCategoryService = () => {
 };
 
 export const createCategoryService = (req: CreateCategoryReq) => {
-  return axiosInstace
+  return axiosInstance
     .post("/categories", req)
     .then((res) => {
       return {
@@ -41,7 +86,7 @@ export const createCategoryService = (req: CreateCategoryReq) => {
 };
 
 export const createAssetService = (req: CreateAssetReq) => {
-  return axiosInstace
+  return axiosInstance
     .post("/assets", req)
     .then((res) => {
       return {
