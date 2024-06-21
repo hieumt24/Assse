@@ -7,5 +7,7 @@ namespace AssetManagement.Application.Interfaces.Services
     public interface ITokenService
     {
         string GenerateJwtToken(User user, RoleType role);
+
+        int? ValidateToken(string token);
     }
 }

@@ -11,7 +11,7 @@ namespace AssetManagement.Application.Interfaces.Services
     {
         Task<Response<AssetDto>> AddAssetAsync(AddAssetRequestDto request);
 
-        Task<PagedResponse<List<AssetResponseDto>>> GetAllAseets(PaginationFilter pagination, string? search, Guid? categoryId, AssetStateType? assetStateType, EnumLocation enumLocation, string? orderBy, bool? isDescending, string? route);
+        Task<PagedResponse<List<AssetResponseDto>>> GetAllAseets(PaginationFilter pagination, string? search, Guid? categoryId, ICollection<AssetStateType?>? assetStateType, EnumLocation enumLocation, string? orderBy, bool? isDescending, string? route);
 
         Task<Response<AssetDto>> GetAssetByIdAsync(Guid assetId);
 
