@@ -9,9 +9,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ASSET_STATES } from "@/constants";
 import { useLoading } from "@/context/LoadingContext";
 import { AssetRes, PaginationState } from "@/models";
-import { getAssetByIdService } from "@/services";
+import { getAssetByAssetCodeService } from "@/services";
 import {
   ColumnDef,
   flexRender,
@@ -52,13 +53,14 @@ export function AssetTable<TData, TValue>({
   const [openDetails, setOpenDetails] = useState(false);
   const [assetDetails, setAssetDetails] = useState<AssetRes>();
 
-  const handleOpenDetails = async (id: string) => {
+  const handleOpenDetails = async (assetCode: string) => {
     setOpenDetails(true);
     try {
       setIsLoading(true);
-      const result = await getAssetByIdService(id);
+      const result = await getAssetByAssetCodeService(assetCode);
+      console.log(result.data);
       if (result.success) {
-        setAssetDetails(result.data.data);
+        setAssetDetails(result.data);
       } else {
         toast.error(result.message);
       }
@@ -108,7 +110,9 @@ export function AssetTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className="hover:cursor-pointer"
-                  onClick={async () => handleOpenDetails(row.getValue("id"))}
+                  onClick={async () =>
+                    handleOpenDetails(row.getValue("assetCode"))
+                  }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -147,12 +151,12 @@ export function AssetTable<TData, TValue>({
           {isLoading ? (
             <LoadingSpinner />
           ) : (
-            <DialogContent className="max-w-[40%] p-[1px]">
-              <div className="rounded-lg border-2 border-black p-0 text-lg shadow-lg">
-                <h1 className="rounded-t-lg border-b-2 border-black bg-zinc-300 p-6 px-10 text-xl font-bold text-red-600">
+            <DialogContent className="max-w-[40%] border-none p-0">
+              <div className="rounded-lg p-0 text-lg shadow-lg">
+                <h1 className="rounded-t-lg bg-zinc-300 p-6 px-16 text-xl font-bold text-red-600">
                   Detailed Asset Information
                 </h1>
-                <div className="w-full px-10 py-4">
+                <div className="w-full px-16 py-6">
                   <table className="w-full">
                     <tr>
                       <td className="w-[40%]">Asset Code</td>
@@ -168,7 +172,13 @@ export function AssetTable<TData, TValue>({
                     </tr>
                     <tr>
                       <td>State</td>
-                      <td>{assetDetails?.state}</td>
+                      <td>
+                        {
+                          ASSET_STATES.find(
+                            (state) => state.value === assetDetails?.state,
+                          )?.label
+                        }
+                      </td>
                     </tr>
                   </table>
                 </div>

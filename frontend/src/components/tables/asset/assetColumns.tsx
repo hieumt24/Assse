@@ -176,7 +176,7 @@ export const assetColumns = ({
             className="text-blue-500 hover:text-blue-700"
             onClick={(e) => {
               e.stopPropagation();
-              navigate(`edit/${asset.id}`);
+              navigate(`edit/${asset.assetCode}`);
             }}
           >
             <MdEdit size={20} />
