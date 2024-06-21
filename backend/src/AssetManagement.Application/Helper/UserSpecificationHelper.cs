@@ -1,3 +1,4 @@
+using AssetManagement.Application.Extensions;
 using AssetManagement.Application.Filter;
 using AssetManagement.Domain.Common.Specifications;
 using AssetManagement.Domain.Entites;
@@ -83,19 +84,19 @@ namespace AssetManagement.Application.Helper
 
         public static ISpecification<User> GetUserByStaffCode(string staffCode)
         {
-            return new UserSpecification(user => user.StaffCode == staffCode && !user.IsDeleted);
+            return new UserSpecification(user => user.StaffCode == staffCode);
         }
 
-        public static Expression<Func<T, bool>> And<T>(this Expression<Func<T, bool>> expr1, Expression<Func<T, bool>> expr2)
-        {
-            var parameter = Expression.Parameter(typeof(T));
+        //public static Expression<Func<T, bool>> And<T>(this Expression<Func<T, bool>> expr1, Expression<Func<T, bool>> expr2)
+        //{
+        //    var parameter = Expression.Parameter(typeof(T));
 
-            var body = Expression.AndAlso(
-                Expression.Invoke(expr1, parameter),
-                Expression.Invoke(expr2, parameter)
-            );
+        //    var body = Expression.AndAlso(
+        //        Expression.Invoke(expr1, parameter),
+        //        Expression.Invoke(expr2, parameter)
+        //    );
 
-            return Expression.Lambda<Func<T, bool>>(body, parameter);
-        }
+        //    return Expression.Lambda<Func<T, bool>>(body, parameter);
+        //}
     }
 }

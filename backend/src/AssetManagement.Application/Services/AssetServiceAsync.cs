@@ -6,14 +6,12 @@ using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Models.DTOs.Assets;
 using AssetManagement.Application.Models.DTOs.Assets.Requests;
 using AssetManagement.Application.Models.DTOs.Assets.Responses;
-using AssetManagement.Application.Models.DTOs.Users.Responses;
 using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
 using AutoMapper;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using System.Xml;
 
 namespace AssetManagement.Application.Services
 {
@@ -102,7 +100,7 @@ namespace AssetManagement.Application.Services
             }
         }
 
-        public async Task<PagedResponse<List<AssetResponseDto>>> GetAllAseets(PaginationFilter pagination, string? search, Guid? categoryId, ICollection<AssetStateType?> assetStateType, EnumLocation enumLocation, string? orderBy, bool? isDescending, string? route)
+        public async Task<PagedResponse<List<AssetResponseDto>>> GetAllAseets(PaginationFilter pagination, string? search, Guid? categoryId, ICollection<AssetStateType?>? assetStateType, EnumLocation enumLocation, string? orderBy, bool? isDescending, string? route)
         {
             try
             {
