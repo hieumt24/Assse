@@ -249,6 +249,7 @@ export const ManageAsset = () => {
               setOrderBy,
               setIsDescending,
               isDescending,
+              orderBy,
             })}
             data={assets!}
             pagination={pagination}

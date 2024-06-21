@@ -30,7 +30,7 @@ export const ManageUser = () => {
   const { onPaginationChange, pagination } = usePagination();
   const [search, setSearch] = useState("");
   const [orderBy, setOrderBy] = useState("");
-  const [isDescending, setIsDescending] = useState(false);
+  const [isDescending, setIsDescending] = useState(true);
   const [roleType, setRoleType] = useState(0);
   const { users, loading, error, pageCount, fetchUsers } = useUsers(
     token!,
@@ -110,6 +110,7 @@ export const ManageUser = () => {
               setOrderBy,
               setIsDescending,
               isDescending,
+              orderBy,
             })}
             data={users!}
             onPaginationChange={onPaginationChange}

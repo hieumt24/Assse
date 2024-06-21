@@ -5,19 +5,11 @@ import { Button } from "../ui/button";
 interface PaginationProps {
   pageIndex: number;
   pageCount: number;
-  previousPage: () => void; // Added prop
-  getCanPreviousPage: () => boolean; // Added prop
-  nextPage: () => void; // Added prop
-  getCanNextPage: () => boolean; // Added prop
   setPage: (pageIndex: number) => void;
 }
 const Pagination: React.FC<PaginationProps> = ({
   pageIndex,
   pageCount,
-  previousPage,
-  getCanPreviousPage,
-  nextPage,
-  getCanNextPage,
   setPage,
 }) => {
   const getPaginationNumbers = () => {
@@ -28,27 +20,25 @@ const Pagination: React.FC<PaginationProps> = ({
         pageNumbers.push(i);
       }
     } else {
-      if (pageIndex > 1) {
-        pageNumbers.push(1);
-        if (pageIndex > 2) {
-          pageNumbers.push("...");
-        }
+      pageNumbers.push(1); // Always include the first page
+
+      if (pageIndex > 2) {
+        pageNumbers.push("...");
       }
 
       for (
-        let i = Math.max(1, pageIndex - 1);
-        i <= Math.min(pageIndex + 1, pageCount);
+        let i = Math.max(2, pageIndex - 1);
+        i <= Math.min(pageIndex + 1, pageCount - 1);
         i++
       ) {
         pageNumbers.push(i);
       }
 
-      if (pageIndex < pageCount - 1) {
-        if (pageIndex < pageCount - 2) {
-          pageNumbers.push("...");
-        }
-        pageNumbers.push(pageCount);
+      if (pageIndex < pageCount - 2) {
+        pageNumbers.push("...");
       }
+
+      pageNumbers.push(pageCount); // Always include the last page
     }
 
     return pageNumbers;
@@ -59,8 +49,8 @@ const Pagination: React.FC<PaginationProps> = ({
       <Button
         variant="destructive"
         size="sm"
-        onClick={previousPage}
-        disabled={!getCanPreviousPage() || pageIndex === 1}
+        onClick={() => setPage(--pageIndex)}
+        disabled={pageIndex === 1}
         className="px-1"
       >
         <MdKeyboardArrowLeft size={24} />
@@ -82,8 +72,8 @@ const Pagination: React.FC<PaginationProps> = ({
       <Button
         variant="destructive"
         size="sm"
-        onClick={nextPage}
-        disabled={!getCanNextPage() && pageIndex === pageCount}
+        onClick={() => setPage(++pageIndex)}
+        disabled={pageIndex === pageCount}
         className="px-1"
       >
         <MdKeyboardArrowRight size={24} />
