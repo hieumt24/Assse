@@ -5,8 +5,6 @@ export const loginService = (req: LoginReq) => {
   return axiosInstance
     .post("/auth/login", req)
     .then((res) => {
-      console.log(res.data);
-
       localStorage.setItem("token", res.data.data.token);
       return {
         success: true,

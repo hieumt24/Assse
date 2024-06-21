@@ -74,9 +74,8 @@ export const ManageUser = () => {
       <p className="text-2xl font-bold text-red-600">User List</p>
       <div className="flex items-center justify-between">
         <Select
-          onValueChange={(event) => {
-            setRoleType(parseInt(event));
-            console.log(event);
+          onValueChange={(value) => {
+            setRoleType(parseInt(value));
           }}
         >
           <SelectTrigger className="w-32">

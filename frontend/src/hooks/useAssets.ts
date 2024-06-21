@@ -12,12 +12,13 @@ export const useAssets = (
   search?: string,
   orderBy?: string,
   isDescending?: boolean,
+  assetStateType?: number,
+  categoryId?: string,
 ) => {
   const [assets, setAssets] = useState<AssetRes[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean | null>(false);
   const [pageCount, setPageCount] = useState<number>(0);
-
   const fetchAssets = async () => {
     try {
       const data = await getAllAssestService({
@@ -27,6 +28,8 @@ export const useAssets = (
         orderBy,
         isDescending,
         adminLocation,
+        assetStateType,
+        categoryId,
       });
 
       setAssets(data.data.data);
@@ -40,7 +43,15 @@ export const useAssets = (
 
   useEffect(() => {
     fetchAssets();
-  }, [token, pagination, search, orderBy, isDescending]);
+  }, [
+    token,
+    pagination,
+    search,
+    orderBy,
+    isDescending,
+    assetStateType,
+    categoryId,
+  ]);
 
   return { assets, loading, error, setAssets, pageCount, fetchAssets };
 };
