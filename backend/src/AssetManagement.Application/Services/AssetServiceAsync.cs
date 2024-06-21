@@ -102,7 +102,7 @@ namespace AssetManagement.Application.Services
             }
         }
 
-        public async Task<PagedResponse<List<AssetResponseDto>>> GetAllAseets(PaginationFilter pagination, string? search, Guid? categoryId, AssetStateType? assetStateType, EnumLocation enumLocation, string? orderBy, bool? isDescending, string? route)
+        public async Task<PagedResponse<List<AssetResponseDto>>> GetAllAseets(PaginationFilter pagination, string? search, Guid? categoryId, ICollection<AssetStateType?> assetStateType, EnumLocation enumLocation, string? orderBy, bool? isDescending, string? route)
         {
             try
             {

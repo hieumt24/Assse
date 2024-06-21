@@ -9,7 +9,7 @@ namespace AssetManagement.Application.Helper
 {
     public class AssetSpecificationHelper
     {
-        public static ISpecification<Asset> CreateAssetQuery(string? search, Guid? categoryId, AssetStateType? assetStateType, EnumLocation enumLocation, string? orderBy, bool? isDescending)
+        public static ISpecification<Asset> CreateAssetQuery(string? search, Guid? categoryId, ICollection<AssetStateType?> assetStateType, EnumLocation enumLocation, string? orderBy, bool? isDescending)
         {
             Expression<Func<Asset, bool>> criteria = asset => asset.AssetLocation == enumLocation;
             //include category
@@ -18,10 +18,11 @@ namespace AssetManagement.Application.Helper
             {
                 criteria = asset => asset.AssetCode.ToLower().Contains(search.ToLower()) || asset.AssetName.ToLower().Contains(search.ToLower());
             }
-            if (assetStateType.HasValue)
+
+            if (assetStateType != null && assetStateType.Count > 0)
             {
-                Expression<Func<Asset, bool>> assetStateCriteria = asset => asset.State == assetStateType.Value;
-                criteria = criteria.And(assetStateCriteria);
+                Expression<Func<Asset, bool>> stateCriteria = asset => assetStateType.Contains(asset.State);
+                criteria = criteria.And(stateCriteria);
             }
             if (categoryId.HasValue)
             {

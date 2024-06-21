@@ -8,7 +8,7 @@ namespace AssetManagement.Application.Models.Filters
         public PaginationFilter pagination { get; set; }
         public string? search { get; set; }
         public Guid? categoryId { get; set; }
-        public AssetStateType? assetStateType { get; set; }
+        public ICollection<AssetStateType?> assetStateType { get; set; }
         public EnumLocation adminLocation { get; set; }
         public string? orderBy { get; set; }
         public bool? isDescending { get; set; }
