@@ -1,3 +1,4 @@
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -30,7 +31,7 @@ import { z } from "zod";
 export const EditAssetForm: React.FC = () => {
   const { assetCode } = useParams();
 
-  const { setIsLoading } = useLoading();
+  const { isLoading, setIsLoading } = useLoading();
   const navigate = useNavigate();
   const [asset, setAsset] = useState<AssetRes>();
 
@@ -45,37 +46,31 @@ export const EditAssetForm: React.FC = () => {
     },
   });
 
-  useEffect(() => {
-    console.log(assetCode);
-    const fetchAsset = async () => {
-      try {
-        //setIsLoading(true);
-        const res = await getAssetByAssetCodeService(
-          assetCode ? assetCode : "",
-        );
-        const details = res.data;
-        console.log(details);
-        if (res.success) {
-          setAsset(res.data);
-
-          form.setValue("name", details.assetName);
-          form.setValue("specification", details.specification);
-          form.setValue(
-            "installedDate",
-            format(details.installedDate, "yyyy-MM-dd"),
-          );
-          form.setValue("state", details.state.toString());
-        } else {
-          toast.error(res.message);
-        }
-      } catch (error) {
-        console.log(error);
-        toast.error("Error fetching asset");
-      } finally {
-        //setIsLoading(false);
+  const fetchAsset = async () => {
+    try {
+      setIsLoading(true);
+      const res = await getAssetByAssetCodeService(assetCode ? assetCode : "");
+      const details = res.data;
+      if (res.success) {
+        setAsset(res.data);
+        form.reset({
+          name: details.assetName,
+          specification: details.specification,
+          installedDate: format(details.installedDate, "yyyy-MM-dd"),
+          state: details.state.toString(),
+        });
+      } else {
+        toast.error(res.message);
       }
-    };
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      toast.error("Error fetching asset");
+    } finally {
+    }
+  };
 
+  useEffect(() => {
     if (assetCode) {
       fetchAsset();
     }
@@ -103,6 +98,8 @@ export const EditAssetForm: React.FC = () => {
       setIsLoading(false);
     }
   };
+
+  if (isLoading) return <LoadingSpinner />;
 
   return (
     <Form {...form}>
