@@ -3,6 +3,7 @@ import { Header } from "@/components/Header";
 import { CreateAsset, CreateUser, ManageUser } from "@/pages/admin/";
 import { Route, Routes } from "react-router-dom";
 import { Sidebar } from "../../components/SideBar";
+import { EditAsset } from "./manage/asset/EditAsset";
 import { ManageAsset } from "./manage/asset/ManageAsset";
 import { EditUser } from "./manage/user/EditUser";
 
@@ -18,7 +19,7 @@ export const Admin = () => {
           <Route path="asset" element={<ManageAsset />} />
           <Route path="user/create-user" element={<CreateUser />} />
           <Route path="asset/create-asset" element={<CreateAsset />} />
-
+          <Route path="asset/edit/:assetCode" element={<EditAsset />} />
           <Route path="user/edit/:staffCode" element={<EditUser />} />
         </Routes>
       </div>

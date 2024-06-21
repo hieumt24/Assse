@@ -20,16 +20,17 @@ import {
 } from "@/services/admin/manageAssetService";
 import { updateAssetSchema } from "@/validations/assetSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { z } from "zod";
-import { CreateCategoryForm } from "./CreateCategoryForm";
 
 export const EditAssetForm: React.FC = () => {
-  const { staffCode } = useParams();
+  const { assetCode } = useParams();
+
   const { user } = useAuth();
   const { setIsLoading } = useLoading();
   const navigate = useNavigate();
@@ -47,18 +48,24 @@ export const EditAssetForm: React.FC = () => {
   });
 
   useEffect(() => {
+    console.log(assetCode);
     const fetchAsset = async () => {
       try {
-        setIsLoading(true);
+        // setIsLoading(true);
         const res = await getAssetByAssetCodeService(
-          staffCode ? staffCode : "",
+          assetCode ? assetCode : "",
         );
         const details = res.data;
+        console.log(details);
         if (res.success) {
           setAsset(res.data);
-          form.setValue("name", details.name);
+
+          form.setValue("name", details.assetName);
           form.setValue("specification", details.specification);
-          form.setValue("installedDate", details.installedDate);
+          form.setValue(
+            "installedDate",
+            format(details.installedDate, "yyyy-MM-dd"),
+          );
           form.setValue("state", details.state.toString());
         } else {
           toast.error(res.message);
@@ -67,14 +74,14 @@ export const EditAssetForm: React.FC = () => {
         console.log(error);
         toast.error("Error fetching asset");
       } finally {
-        setIsLoading(false);
+        //setIsLoading(false);
       }
     };
 
-    if (staffCode) {
+    if (assetCode) {
       fetchAsset();
     }
-  }, [staffCode]);
+  }, [assetCode]);
 
   const onSubmit = async (values: z.infer<typeof updateAssetSchema>) => {
     try {
@@ -106,8 +113,18 @@ export const EditAssetForm: React.FC = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="w-1/3 space-y-5 rounded-2xl bg-white p-6 shadow-md"
       >
-        <h1 className="text-2xl font-bold text-red-600">Create New Asset</h1>
-
+        <h1 className="text-2xl font-bold text-red-600">Edit Asset</h1>
+        <FormField
+          name="assetCode"
+          render={() => (
+            <FormItem>
+              <FormLabel className="text-md">Asset code</FormLabel>
+              <FormControl>
+                <Input disabled value={asset?.assetCode} />
+              </FormControl>
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="name"
@@ -133,17 +150,12 @@ export const EditAssetForm: React.FC = () => {
         />
         <FormField
           name="category"
-          render={({ field }) => (
+          render={() => (
             <FormItem>
-              <FormLabel className="text-md">
-                Category <span className="text-red-600">*</span>
-              </FormLabel>
+              <FormLabel className="text-md">Category</FormLabel>
               <FormControl>
-                <Input />
+                <Input disabled value={asset?.categoryName} />
               </FormControl>
-              <FormMessage>
-                {form.formState.errors.category?.message}
-              </FormMessage>
             </FormItem>
           )}
         />
@@ -201,7 +213,7 @@ export const EditAssetForm: React.FC = () => {
                 <RadioGroup
                   onValueChange={field.onChange}
                   {...field}
-                  className="flex gap-5"
+                  className=""
                 >
                   <FormItem className="flex items-center gap-1 space-y-0">
                     <FormControl>
@@ -214,6 +226,20 @@ export const EditAssetForm: React.FC = () => {
                       <RadioGroupItem value={"2"} />
                     </FormControl>
                     <FormLabel className="font-normal">Not available</FormLabel>
+                  </FormItem>
+                  <FormItem className="flex items-center gap-1 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value={"3"} />
+                    </FormControl>
+                    <FormLabel className="font-normal">
+                      Waiting for Recycling
+                    </FormLabel>
+                  </FormItem>
+                  <FormItem className="flex items-center gap-1 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value={"4"} />
+                    </FormControl>
+                    <FormLabel className="font-normal">Recycle</FormLabel>
                   </FormItem>
                 </RadioGroup>
               </FormControl>
@@ -237,11 +263,6 @@ export const EditAssetForm: React.FC = () => {
             Cancel
           </Button>
         </div>
-        <CreateCategoryForm
-          onCreate={fetchCategories}
-          open={openCreateCategory}
-          setOpen={setOpenCreateCategory}
-        />
       </form>
     </Form>
   );

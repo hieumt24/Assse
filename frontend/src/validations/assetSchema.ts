@@ -50,6 +50,7 @@ export const updateAssetSchema = z.object({
   name: z
     .string()
     .trim()
+    .min(1, "Asset name cannot be blank")
     .min(2, { message: "Name must be at least 2 letters long." })
     .max(50, { message: "Name must be no longer than 50 letters." })
     .regex(nameFormat, {

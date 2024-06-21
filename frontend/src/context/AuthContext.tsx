@@ -92,11 +92,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         ],
         location: decodedToken.Location,
       });
-      console.log(
-        decodedToken[
-          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-        ],
-      );
     } else {
       setUser({
         id: "",

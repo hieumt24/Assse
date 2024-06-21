@@ -82,12 +82,12 @@ export const updateAssetService = (req: UpdateAssetReq) => {
 
 export const getAssetByAssetCodeService = (staffCode: string) => {
   return axiosInstace
-    .get(`/assets/staffCode/${staffCode}`)
+    .get(`/assets/assetCode/${staffCode}`)
     .then((res) => {
       return {
         success: true,
         message: "Asset fetched successfully!",
-        data: res.data,
+        data: res.data.data,
       };
     })
     .catch((err) => {
