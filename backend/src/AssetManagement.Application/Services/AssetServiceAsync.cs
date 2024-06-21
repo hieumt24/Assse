@@ -100,13 +100,13 @@ namespace AssetManagement.Application.Services
             }
         }
 
-        public async Task<PagedResponse<List<AssetResponseDto>>> GetAllAseets(PaginationFilter pagination, string? search, Guid? categoryId, ICollection<AssetStateType?>? assetStateType, EnumLocation enumLocation, string? orderBy, bool? isDescending, string? route)
+        public async Task<PagedResponse<List<AssetResponseDto>>> GetAllAseets(PaginationFilter pagination, string? search, Guid? categoryId, ICollection<AssetStateType?>? assetStateType, EnumLocation adminLocation, string? orderBy, bool? isDescending, string? route)
         {
             try
             {
-                var assetQuery = AssetSpecificationHelper.CreateAssetQuery(search, categoryId, assetStateType, enumLocation, orderBy, isDescending);
+                var assetQuery = AssetSpecificationHelper.CreateAssetQuery(search, categoryId, assetStateType, adminLocation, orderBy, isDescending);
 
-                var query = SpecificationEvaluator<Asset>.GetQuery(_assetRepository.Query(), assetQuery);
+                var query = SpecificationEvaluator<Asset>.GetQuery(_assetRepository.Query(adminLocation), assetQuery);
                 var totalRecords = await query.CountAsync();
 
                 var assetPaginationSpec = AssetSpecificationHelper.CreateAssetPagination(assetQuery, pagination);
