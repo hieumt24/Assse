@@ -44,7 +44,7 @@ export const ManageAsset = () => {
   const [search, setSearch] = useState("");
   const [orderBy, setOrderBy] = useState("");
   const [isDescending, setIsDescending] = useState(false);
-  const [assetStateType, setAssetStateType] = useState<number[]>([]);
+  const [assetStateType, setAssetStateType] = useState<number[]>([1, 2, 3]);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const { assets, loading, error, pageCount, fetchAssets } = useAssets(
     token!,
@@ -183,6 +183,7 @@ export const ManageAsset = () => {
                     onCheckedChange={() => {
                       handleCheckboxChange(state.value);
                     }}
+                    checked={assetStateType.includes(state.value)}
                   >
                     {state.label}
                   </Checkbox>
