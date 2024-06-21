@@ -85,7 +85,7 @@ export function AssetTable<TData, TValue>({
     <div>
       <div className="relative rounded-md border">
         <Table>
-          <TableHeader className="bg-zinc-200 text-lg font-bold">
+          <TableHeader className="bg-zinc-200 font-bold">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -138,13 +138,9 @@ export function AssetTable<TData, TValue>({
         </Table>
       </div>
       <Pagination
-        pageIndex={pagination.pageIndex + 1}
+        pageIndex={pagination.pageIndex}
         pageCount={pageCount || 1}
         setPage={setPage}
-        previousPage={table.previousPage}
-        getCanPreviousPage={table.getCanPreviousPage}
-        nextPage={table.nextPage}
-        getCanNextPage={table.getCanNextPage}
       />
       <FullPageModal show={openDetails}>
         <Dialog open={openDetails} onOpenChange={setOpenDetails}>
