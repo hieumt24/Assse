@@ -13,6 +13,6 @@ namespace AssetManagement.Application.Interfaces.Repositories
     {
         Task<string> GenerateAssetCodeAsync(Guid CategoryId);
 
-        IQueryable<Asset> Query(EnumLocation adminLocation);
+        Task<IQueryable<Asset>> FilterAsset(EnumLocation adminLocation, string? search, Guid? categoryId, ICollection<AssetStateType?>? assetStateType);
     }
 }

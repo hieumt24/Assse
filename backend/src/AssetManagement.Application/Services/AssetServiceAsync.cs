@@ -104,15 +104,16 @@ namespace AssetManagement.Application.Services
         {
             try
             {
-                var assetQuery = AssetSpecificationHelper.CreateAssetQuery(search, categoryId, assetStateType, adminLocation, orderBy, isDescending);
+                if (pagination == null)
+                {
+                    pagination = new PaginationFilter();
+                }
+                var filterAsset = await _assetRepository.FilterAsset(adminLocation, search, categoryId, assetStateType);
 
-                var query = SpecificationEvaluator<Asset>.GetQuery(_assetRepository.Query(adminLocation), assetQuery);
-                var totalRecords = await query.CountAsync();
+                var totalRecords = await filterAsset.CountAsync();
+                var specAsset = AssetSpecificationHelper.AssetSpecificationWithCategory(pagination, orderBy, isDescending);
 
-                var assetPaginationSpec = AssetSpecificationHelper.CreateAssetPagination(assetQuery, pagination);
-                var paginatedQuery = SpecificationEvaluator<Asset>.GetQuery(query, assetPaginationSpec);
-
-                var assets = await paginatedQuery.ToListAsync();
+                var assets = await SpecificationEvaluator<Asset>.GetQuery(filterAsset, specAsset).ToListAsync();
 
                 //Map to asset reponse
                 var responseAssetDtos = _mapper.Map<List<AssetResponseDto>>(assets);
