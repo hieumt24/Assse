@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { GENDERS, LOCATIONS, ROLES } from "@/constants";
+import { GENDERS, ROLES } from "@/constants";
 import { useLoading } from "@/context/LoadingContext";
 import { useAuth } from "@/hooks";
 import { UserRes } from "@/models";
@@ -45,9 +45,7 @@ export const EditUserForm = () => {
       joinedDate: "",
       gender: "2",
       role: "2",
-      location: LOCATIONS.find(
-        (location) => location.label === user.location,
-      )?.value.toString(),
+      location: user.location.toString(),
     },
   });
 

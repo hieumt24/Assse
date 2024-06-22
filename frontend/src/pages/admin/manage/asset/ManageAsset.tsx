@@ -3,6 +3,12 @@ import { FullPageModal } from "@/components/FullPageModal";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { assetColumns } from "@/components/tables/asset/assetColumns";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import {
   Dialog,
   DialogContent,
@@ -18,14 +24,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ASSET_STATES, LOCATIONS } from "@/constants";
+import { ASSET_STATES } from "@/constants";
 import { useLoading } from "@/context/LoadingContext";
 import { useAuth, usePagination } from "@/hooks";
 import { useAssets } from "@/hooks/useAssets";
 import useClickOutside from "@/hooks/useClickOutside";
 import { CategoryRes } from "@/models";
 import { deleteAssetByIdService, getAllCategoryService } from "@/services";
-import { useEffect, useRef, useState } from "react";
+import { CaretSortIcon } from "@radix-ui/react-icons";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AssetTable } from "../../../../components/tables/asset/AssetTable";
@@ -37,18 +44,19 @@ export const ManageAsset = () => {
   const [search, setSearch] = useState("");
   const [orderBy, setOrderBy] = useState("");
   const [isDescending, setIsDescending] = useState(false);
-  const [assetStateType, setAssetStateType] = useState(0);
+  const [assetStateType, setAssetStateType] = useState<number[]>([1, 2, 3]);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const { assets, loading, error, pageCount, fetchAssets } = useAssets(
     token!,
     pagination,
-    LOCATIONS.find((location) => location.label === user.location)?.value || 1,
+    user.location,
     search,
     orderBy,
     isDescending,
     assetStateType,
     selectedCategory,
   );
+  const [isStateListOpen, setIsStateListOpen] = useState(false);
   const [categories, setCategories] = useState(Array<CategoryRes>);
   const [filteredCategories, setFilteredCategories] = useState(
     Array<CategoryRes>,
@@ -85,9 +93,21 @@ export const ManageAsset = () => {
     fetchCategories();
   }, []);
 
-  useClickOutside(selectRef, () => {
-    setCategorySearch("");
-  });
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      selectRef.current &&
+      !selectRef.current.contains(event.target as Node)
+    ) {
+      setCategorySearch("");
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const { setIsLoading } = useLoading();
   const [assetIdToDelete, setAssetIdToDelete] = useState<string>("");
@@ -115,59 +135,97 @@ export const ManageAsset = () => {
     }
   };
   const [openDisable, setOpenDisable] = useState(false);
+  const stateListRef = useRef<HTMLDivElement>(null);
+
+  useClickOutside(
+    stateListRef,
+    useCallback(() => setIsStateListOpen(false), []),
+  );
+
+  const handleCheckboxChange = (stateValue: number) => {
+    setAssetStateType((prev) => {
+      if (prev.includes(stateValue)) {
+        return prev.filter((value) => value !== stateValue);
+      } else {
+        return [...prev, stateValue];
+      }
+    });
+  };
 
   return (
     <div className="m-24 flex h-full flex-grow flex-col gap-8">
       <p className="text-2xl font-bold text-red-600">Asset List</p>
       <div className="flex items-center justify-between">
         <div className="flex gap-2">
-          <Select
-            onValueChange={(value) => {
-              setAssetStateType(parseInt(value));
-            }}
+          <Collapsible
+            open={isStateListOpen}
+            onOpenChange={setIsStateListOpen}
+            className="relative w-[100px]"
+            ref={stateListRef}
           >
-            <SelectTrigger className="w-32">
-              <SelectValue placeholder="Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="0">All</SelectItem>
+            <CollapsibleTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm font-normal shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1"
+              >
+                State
+                <CaretSortIcon className="h-4 w-4 opacity-50" />
+              </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="absolute z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover bg-white p-1 font-semibold text-popover-foreground shadow-md transition-all data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2">
               {ASSET_STATES.map((state) => (
-                <SelectItem value={state.value.toString()}>
-                  {state.label}
-                </SelectItem>
+                <div className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm font-normal text-zinc-900 transition-all hover:bg-zinc-100">
+                  <Checkbox
+                    value={state.value.toString()}
+                    key={state.value}
+                    id={`state-checkbox-${state.value}`}
+                    onCheckedChange={() => {
+                      handleCheckboxChange(state.value);
+                    }}
+                    checked={assetStateType.includes(state.value)}
+                  >
+                    {state.label}
+                  </Checkbox>
+                  <label htmlFor={`state-checkbox-${state.value}`}>
+                    {state.label}
+                  </label>
+                </div>
               ))}
-            </SelectContent>
-          </Select>
-          <Select
-            onValueChange={(value) => {
-              setSelectedCategory(value);
-            }}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select category" />
-            </SelectTrigger>
-            <SelectContent>
-              <Input
-                ref={inputRef}
-                placeholder="Search category ..."
-                className="border-none shadow-none focus-visible:ring-0"
-                value={categorySearch}
-                onChange={(e) => {
-                  setCategorySearch(e.target.value);
-                }}
-              />
-              <div className="max-h-[100px] overflow-y-scroll">
-                <SelectItem key={0} value="all">
-                  All
-                </SelectItem>
-                {filteredCategories?.map((category) => (
-                  <SelectItem key={category.id} value={category.id}>
-                    {category.categoryName} ({category.prefix})
+            </CollapsibleContent>
+          </Collapsible>
+          <div ref={selectRef} className="w-[150px]">
+            <Select
+              onValueChange={(value) => {
+                setSelectedCategory(value);
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Category" />
+              </SelectTrigger>
+              <SelectContent>
+                <Input
+                  ref={inputRef}
+                  placeholder="Search category ..."
+                  className="border-none shadow-none focus-visible:ring-0"
+                  value={categorySearch}
+                  onChange={(e) => {
+                    setCategorySearch(e.target.value);
+                  }}
+                />
+                <div className="max-h-[100px] overflow-y-scroll">
+                  <SelectItem key={0} value="all">
+                    All
                   </SelectItem>
-                ))}
-              </div>
-            </SelectContent>
-          </Select>
+                  {filteredCategories?.map((category) => (
+                    <SelectItem key={category.id} value={category.id}>
+                      {category.categoryName} ({category.prefix})
+                    </SelectItem>
+                  ))}
+                </div>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         <div className="flex justify-between gap-6">
@@ -192,6 +250,7 @@ export const ManageAsset = () => {
               setOrderBy,
               setIsDescending,
               isDescending,
+              orderBy,
             })}
             data={assets!}
             pagination={pagination}

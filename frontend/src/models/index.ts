@@ -80,7 +80,7 @@ export interface GetAssetReq {
   };
   search?: string;
   categoryId?: string;
-  assetStateType?: number;
+  assetStateType?: Array<number>;
   adminLocation?: number;
   orderBy?: string;
   isDescending?: boolean;
