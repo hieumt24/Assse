@@ -35,7 +35,7 @@ namespace AssetManagement.Application.Services
             var user = await _userRepositoriesAsync.FindByUsernameAsync(request.Username);
             if (user.IsFirstTimeLogin)
             {
-                return new Response<string> { Succeeded = false, Message = "You need to change your password before login" };
+                user.IsFirstTimeLogin = false;
             }
             else
             {
@@ -52,7 +52,6 @@ namespace AssetManagement.Application.Services
             }
 
             user.PasswordHash = _passwordHasher.HashPassword(user, request.NewPassword);
-            user.IsFirstTimeLogin = false;
             await _userRepositoriesAsync.UpdateUserAysnc(user);
 
             return new Response<string> { Succeeded = true, Message = "Password changed successfully" };
