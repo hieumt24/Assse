@@ -33,16 +33,22 @@ namespace AssetManagement.Application.Services
             }
 
             var user = await _userRepositoriesAsync.FindByUsernameAsync(request.Username);
-
-            if (user == null || !_passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.CurrentPassword).Equals(PasswordVerificationResult.Success))
+            if (user.IsFirstTimeLogin)
             {
-                return new Response<string> { Succeeded = false, Message = "Current password is incorrect" };
+                return new Response<string> { Succeeded = false, Message = "You need to change your password before login" };
             }
-
-            // Check if the new password is the same as the current password
-            if (_passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.NewPassword).Equals(PasswordVerificationResult.Success))
+            else
             {
-                return new Response<string> { Succeeded = false, Message = "New password cannot be the same as the current password" };
+                if (user == null || !_passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.CurrentPassword).Equals(PasswordVerificationResult.Success))
+                {
+                    return new Response<string> { Succeeded = false, Message = "Current password is incorrect" };
+                }
+
+                // Check if the new password is the same as the current password
+                if (_passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.NewPassword).Equals(PasswordVerificationResult.Success))
+                {
+                    return new Response<string> { Succeeded = false, Message = "New password cannot be the same as the current password" };
+                }
             }
 
             user.PasswordHash = _passwordHasher.HashPassword(user, request.NewPassword);
