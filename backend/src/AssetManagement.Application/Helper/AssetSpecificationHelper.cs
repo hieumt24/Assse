@@ -10,37 +10,9 @@ namespace AssetManagement.Application.Helper
 {
     public class AssetSpecificationHelper
     {
-        public static ISpecification<Asset> CreateAssetQuery(string? search, Guid? categoryId, ICollection<AssetStateType?>? assetStateType, EnumLocation enumLocation, string? orderBy, bool? isDescending)
+        public static ISpecification<Asset> AssetSpecificationWithCategory(PaginationFilter filter, string? orderBy, bool? isDescending)
         {
-            Expression<Func<Asset, bool>> criteria = asset => asset.AssetLocation == enumLocation;
-            //include category
-
-            if (!string.IsNullOrEmpty(search))
-            {
-                criteria = asset => asset.AssetCode.ToLower().Contains(search.ToLower()) || asset.AssetName.ToLower().Contains(search.ToLower());
-            }
-
-            if (assetStateType != null && assetStateType.Count > 0)
-            {
-                Expression<Func<Asset, bool>> stateCriteria = asset => assetStateType.Contains(asset.State);
-                criteria = criteria.And(stateCriteria);
-            }
-            else
-            {
-                Expression<Func<Asset, bool>> stateCriteria = asset => asset.State == AssetStateType.Available
-                                                                    || asset.State == AssetStateType.NotAvailable
-                                                                    || asset.State == AssetStateType.Assigned
-                                                                    || asset.State == AssetStateType.WaitingForRecycling
-                                                                    || asset.State == AssetStateType.Recycled;
-
-                criteria = criteria.And(stateCriteria);
-            }
-            if (categoryId.HasValue)
-            {
-                Expression<Func<Asset, bool>> categoryCriteria = asset => asset.CategoryId == categoryId.Value;
-                criteria = criteria.And(categoryCriteria);
-            }
-
+            Expression<Func<Asset, bool>> criteria = asset => true;
             var spec = new AssetSpecification(criteria);
             spec.AddInclude(x => x.Category);
             if (!string.IsNullOrEmpty(orderBy))
@@ -54,14 +26,8 @@ namespace AssetManagement.Application.Helper
                     spec.ApplyOrderBy(GetOrderByExpression(orderBy));
                 }
             }
+            spec.ApplyPaging(filter.PageSize * (filter.PageIndex - 1), filter.PageSize);
             return spec;
-        }
-
-        public static ISpecification<Asset> CreateAssetPagination(ISpecification<Asset> assetQuery, PaginationFilter filter)
-        {
-            var assetPagination = new AssetSpecification(assetQuery.Criteria);
-            assetPagination.ApplyPaging(filter.PageSize * (filter.PageIndex - 1), filter.PageSize);
-            return assetPagination;
         }
 
         private static Expression<Func<Asset, object>> GetOrderByExpression(string orderBy)

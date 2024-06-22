@@ -10,20 +10,10 @@ namespace AssetManagement.Application.Helper
 {
     public static class UserSpecificationHelper
     {
-        public static ISpecification<User> CreateSpecification(string? search, EnumLocation? adminLocation, RoleType? roleType, string? orderBy, bool? isDescending)
+        public static ISpecification<User> CreateSpecification(PaginationFilter pagination, string? orderBy, bool? isDescending)
         {
-            Expression<Func<User, bool>> criteria = user => user.Location == adminLocation;
+            Expression<Func<User, bool>> criteria = user => true;
 
-            if (!string.IsNullOrEmpty(search))
-            {
-                criteria = user => user.FirstName.Contains(search) || user.LastName.Contains(search) || user.Username.Contains(search) || user.StaffCode.Contains(search);
-            }
-
-            if (roleType.HasValue)
-            {
-                Expression<Func<User, bool>> roleCriteria = user => user.Role == roleType.Value;
-                criteria = criteria.And(roleCriteria);
-            }
             var spec = new UserSpecification(criteria);
 
             if (!string.IsNullOrEmpty(orderBy))
@@ -41,6 +31,7 @@ namespace AssetManagement.Application.Helper
             {
                 spec.ApplyOrderBy(u => u.FirstName);
             }
+            spec.ApplyPaging(pagination.PageSize * (pagination.PageIndex - 1), pagination.PageSize);
 
             return spec;
         }
@@ -86,17 +77,5 @@ namespace AssetManagement.Application.Helper
         {
             return new UserSpecification(user => user.StaffCode == staffCode);
         }
-
-        //public static Expression<Func<T, bool>> And<T>(this Expression<Func<T, bool>> expr1, Expression<Func<T, bool>> expr2)
-        //{
-        //    var parameter = Expression.Parameter(typeof(T));
-
-        //    var body = Expression.AndAlso(
-        //        Expression.Invoke(expr1, parameter),
-        //        Expression.Invoke(expr2, parameter)
-        //    );
-
-        //    return Expression.Lambda<Func<T, bool>>(body, parameter);
-        //}
     }
 }

@@ -78,6 +78,29 @@ namespace AssetManagement.Infrastructure.Repositories
             return _dbContext.Users.Where(x => x.Location == adminLocation);
         }
 
+        public async Task<IQueryable<User>> FilterUserAsync(EnumLocation adminLocation, string? search, RoleType? roleType)
+        {
+            //check adminlocatin
+            var query = _dbContext.Users.Where(x => x.Location == adminLocation);
+
+            //search
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(x => x.FirstName.ToLower().Contains(search.ToLower())
+                                                        || x.LastName.ToLower().Contains(search.ToLower())
+                                                        || x.Username.ToLower().Contains(search.ToLower()));
+            }
+
+            //filter by role
+
+            if (roleType != null)
+            {
+                query = query.Where(x => x.Role == roleType);
+            }
+
+            return query;
+        }
+
         public async Task<User> UpdateUserAysnc(User user)
         {
             var existingUser = await _dbContext.Users.FindAsync(user.Id);
