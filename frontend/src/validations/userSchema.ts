@@ -89,7 +89,7 @@ export const createUserSchema = z
           return true;
         },
         {
-          message: "Joined date can't be on Saturday, Sunday.",
+          message: "Joined date cannot be on Saturday, Sunday.",
         },
       ),
     gender: z.enum(["1", "2", "3"]),
@@ -178,7 +178,7 @@ export const updateUserSchema = z
           return true;
         },
         {
-          message: "Joined date can't be on Saturday, Sunday.",
+          message: "Joined date cannot be on Saturday, Sunday.",
         },
       ),
     gender: z.enum(["1", "2", "3"]),
