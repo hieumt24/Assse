@@ -233,7 +233,7 @@ export const ManageAsset = () => {
           <SearchForm setSearch={setSearch} />
           <Button
             variant={"destructive"}
-            onClick={() => navigate("assets/create")}
+            onClick={() => navigate("/assets/create")}
           >
             <span className="capitalize">Create new asset</span>
           </Button>
