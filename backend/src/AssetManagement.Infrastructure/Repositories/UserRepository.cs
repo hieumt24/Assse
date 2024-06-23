@@ -46,16 +46,32 @@ namespace AssetManagement.Infrastructure.Repositories
             // Combine first name and initials of last names
             string baseUserName = firstName + lastNameInitials;
 
-            string username = baseUserName;
-            int count = 1;
+            var lastUserName = await CheckLastUserName(baseUserName);
 
-            while (await IsUsernameExist(username))
+            string numericPart = lastUserName.Substring(baseUserName.Length);
+            if (int.TryParse(numericPart, out int number))
             {
-                username = baseUserName + count;
-                count++;
+                number++;
             }
+            else
+            {
+                number = 1;
+            }
+            return baseUserName + number;
+        }
 
-            return username;
+        private async Task<string> CheckLastUserName(string baseUserName)
+        {
+            var lastUserName = await _dbContext.Users
+                .Where(u => u.Username.StartsWith(baseUserName))
+                .OrderByDescending(u => u.Username)
+                .Select(u => u.Username)
+                .FirstOrDefaultAsync();
+            if (lastUserName == null)
+            {
+                return baseUserName;
+            }
+            return lastUserName;
         }
 
         public async Task<RoleType> GetRoleAsync(Guid userId)
