@@ -198,6 +198,8 @@ export const updateUserSchema = z
     },
   );
 
+const specialCharacters = /[!@#$%^&*(),.?":{}|<>]/;
+
 export const changePasswordSchema = z.object({
   currentPassword: z
     .string()
@@ -211,7 +213,7 @@ export const changePasswordSchema = z.object({
       message: "Password must contain at least one uppercase letter",
     })
     .regex(/[0-9]/, { message: "Password must contain at least one number" })
-    .regex(/[^a-zA-Z0-9]/, {
+    .regex(specialCharacters, {
       message: "Password must contain at least one special character",
     }),
   username: z.string(),
