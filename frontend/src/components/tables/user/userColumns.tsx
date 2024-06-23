@@ -1,3 +1,4 @@
+import { useAuth } from "@/hooks";
 import { renderHeader } from "@/lib/utils";
 import { UserRes } from "@/models";
 import { ColumnDef } from "@tanstack/react-table";
@@ -62,16 +63,17 @@ export const userColumns = ({
     accessorKey: "action",
     header: "Actions",
     cell: ({ row }) => {
-      const user = row.original;
-      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const userInfo = row.original;
       const navigate = useNavigate();
+      const { user } = useAuth();
+      if (user.id === userInfo.id) return;
       return (
         <div className="flex gap-4">
           <button
             className="text-blue-500 hover:text-blue-700"
             onClick={(e) => {
               e.stopPropagation();
-              navigate(`edit/${user.staffCode}`);
+              navigate(`edit/${userInfo.staffCode}`);
             }}
           >
             <FiEdit2 size={18} />
@@ -80,7 +82,7 @@ export const userColumns = ({
             className="text-red-500 hover:text-red-700"
             onClick={(e) => {
               e.stopPropagation();
-              handleOpenDisable(user.id);
+              handleOpenDisable(userInfo.id);
             }}
           >
             <IoCloseCircleOutline size={20} />
