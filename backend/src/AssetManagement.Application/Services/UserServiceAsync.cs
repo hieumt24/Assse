@@ -89,26 +89,25 @@ namespace AssetManagement.Application.Services
             }
         }
 
-        public async Task<PagedResponse<List<UserResponseDto>>> GetAllUsersAsync(PaginationFilter filter, string? search, EnumLocation adminLocation, RoleType? roleType, string? orderBy, bool? isDescending, string? route)
+        public async Task<PagedResponse<List<UserResponseDto>>> GetAllUsersAsync(PaginationFilter pagination, string? search, EnumLocation adminLocation, RoleType? roleType, string? orderBy, bool? isDescending, string? route)
         {
             try
             {
-                //search and filter users
-                var userQuery = UserSpecificationHelper.CreateSpecification(search, adminLocation, roleType, orderBy, isDescending);
+                if (pagination == null)
+                {
+                    pagination = new PaginationFilter();
+                }
+                //queryable user filter condition
+                var filterUser = await _userRepositoriesAsync.FilterUserAsync(adminLocation, search, roleType);
+                var totalRecords = await filterUser.CountAsync();
 
-                //query with conditions
-                var query = SpecificationEvaluator<User>.GetQuery(_userRepositoriesAsync.Query(adminLocation), userQuery);
+                var specUser = UserSpecificationHelper.CreateSpecification(pagination, orderBy, isDescending);
 
-                var totalRecordsSpec = await query.CountAsync();
-
-                var userPaginationSpec = UserSpecificationHelper.CreateSpecificationPagination(userQuery, filter);
-                var paginatedQuery = SpecificationEvaluator<User>.GetQuery(query, userPaginationSpec);
-
-                var users = await paginatedQuery.ToListAsync();
+                var users = await SpecificationEvaluator<User>.GetQuery(filterUser, specUser).ToListAsync();
 
                 var userDtos = _mapper.Map<List<UserResponseDto>>(users);
 
-                var pagedResponse = PaginationHelper.CreatePagedReponse(userDtos, filter, totalRecordsSpec, _uriService, route);
+                var pagedResponse = PaginationHelper.CreatePagedReponse(userDtos, pagination, totalRecords, _uriService, route);
                 return pagedResponse;
             }
             catch (Exception ex)

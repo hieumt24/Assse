@@ -19,6 +19,8 @@ namespace AssetManagement.Application.Interfaces.Repositories
 
         IQueryable<User> Query(EnumLocation adminLocation);
 
+        Task<IQueryable<User>> FilterUserAsync(EnumLocation adminLocation, string? search, RoleType? roleType);
+
         Task<User> UpdateUserAysnc(User user);
     }
 }

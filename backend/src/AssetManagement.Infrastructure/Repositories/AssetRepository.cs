@@ -1,5 +1,6 @@
 ﻿using AssetManagement.Application.Interfaces.Repositories;
 using AssetManagement.Domain.Entites;
+using AssetManagement.Domain.Enums;
 using AssetManagement.Infrastructure.Common;
 using AssetManagement.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,35 @@ namespace AssetManagement.Infrastructure.Repositories
     {
         public AssetRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
+        }
+
+        public async Task<IQueryable<Asset>> FilterAsset(EnumLocation adminLocation, string? search, Guid? categoryId, ICollection<AssetStateType?>? assetStateType)
+        {
+            //check asset by adminLocation
+
+            var query = _dbContext.Assets.Where(x => x.AssetLocation == adminLocation);
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(x => x.AssetName.ToLower().Contains(search.ToLower()) || x.AssetCode.ToLower().Contains(search.ToLower()));
+            }
+            if (categoryId.HasValue)
+            {
+                query = query.Where(x => x.CategoryId == categoryId);
+            }
+            if (assetStateType != null && assetStateType.Count > 0)
+            {
+                query = query.Where(x => assetStateType.Contains(x.State));
+            }
+            else
+            {
+                query = query.Where(x => x.State == AssetStateType.Available
+                                                       || x.State == AssetStateType.NotAvailable
+                                                       || x.State == AssetStateType.Assigned
+                                                       || x.State == AssetStateType.WaitingForRecycling
+                                                       || x.State == AssetStateType.Recycled
+                                                                                                                                                                            || x.State == AssetStateType.Recycled);
+            }
+            return query;
         }
 
         public async Task<string> GenerateAssetCodeAsync(Guid CategoryId)
@@ -40,11 +70,6 @@ namespace AssetManagement.Infrastructure.Repositories
             }
 
             return $"{prefix}{newNumber:D6}";
-        }
-
-        public IQueryable<Asset> Query()
-        {
-            return _dbContext.Assets;
         }
     }
 }
