@@ -19,6 +19,8 @@ export const useAssets = (
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean | null>(false);
   const [pageCount, setPageCount] = useState<number>(0);
+  const [totalRecords, setTotalRecords] = useState<number>(0);
+
   const fetchAssets = async () => {
     try {
       const data = await getAllAssestService({
@@ -34,6 +36,7 @@ export const useAssets = (
 
       setAssets(data.data.data);
       setPageCount(data.data.totalPages);
+      setTotalRecords(data.data.totalRecords);
     } catch (error) {
       setError(true);
     } finally {
@@ -53,5 +56,13 @@ export const useAssets = (
     categoryId,
   ]);
 
-  return { assets, loading, error, setAssets, pageCount, fetchAssets };
+  return {
+    assets,
+    loading,
+    error,
+    setAssets,
+    pageCount,
+    totalRecords,
+    fetchAssets,
+  };
 };

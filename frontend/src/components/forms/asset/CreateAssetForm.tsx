@@ -119,7 +119,7 @@ export const CreateAssetForm: React.FC = () => {
       });
       if (res.success) {
         toast.success("Asset created successfully!");
-        navigate("/admin/asset");
+        navigate("/assets");
       } else {
         toast.error(res.message);
       }

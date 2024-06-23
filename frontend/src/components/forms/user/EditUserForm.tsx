@@ -92,7 +92,7 @@ export const EditUserForm = () => {
       toast.error("Error updating user");
     } finally {
       setIsLoading(false);
-      navigate("/admin/user");
+      navigate("/users");
     }
   };
 
@@ -301,7 +301,7 @@ export const EditUserForm = () => {
             type="button"
             className="w-[76px] border bg-white text-black shadow-none hover:text-white"
             onClick={() => {
-              navigate("/admin/user");
+              navigate("/users");
             }}
           >
             Cancel

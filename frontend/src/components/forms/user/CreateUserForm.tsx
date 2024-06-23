@@ -51,25 +51,20 @@ export const CreateUserForm = () => {
     const gender = parseInt(values.gender);
     const role = parseInt(values.role);
     const location = parseInt(values.location);
-    try {
-      setIsLoading(true);
-      const res = await createUserService({
-        ...values,
-        gender,
-        role,
-        location,
-      });
-      if (res.success) {
-        toast.success(res.message);
-      } else {
-        toast.error(res.message);
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error("Error creating user");
-    } finally {
-      setIsLoading(false);
-      navigate("/admin/user");
+    setIsLoading(true);
+    const res = await createUserService({
+      ...values,
+      gender,
+      role,
+      location,
+    });
+    setIsLoading(false);
+    if (res.success) {
+      toast.success(res.message);
+
+      navigate("/users");
+    } else {
+      toast.error(res.message);
     }
   };
 
@@ -283,7 +278,7 @@ export const CreateUserForm = () => {
             type="button"
             className="w-[76px] border bg-white text-black shadow-none hover:text-white"
             onClick={() => {
-              navigate("/admin/user");
+              navigate("/users");
             }}
           >
             Cancel

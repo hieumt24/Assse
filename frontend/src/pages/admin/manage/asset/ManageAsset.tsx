@@ -46,16 +46,17 @@ export const ManageAsset = () => {
   const [isDescending, setIsDescending] = useState(false);
   const [assetStateType, setAssetStateType] = useState<number[]>([1, 2, 3]);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const { assets, loading, error, pageCount, fetchAssets } = useAssets(
-    token!,
-    pagination,
-    user.location,
-    search,
-    orderBy,
-    isDescending,
-    assetStateType,
-    selectedCategory,
-  );
+  const { assets, loading, error, pageCount, totalRecords, fetchAssets } =
+    useAssets(
+      token!,
+      pagination,
+      user.location,
+      search,
+      orderBy,
+      isDescending,
+      assetStateType,
+      selectedCategory,
+    );
   const [isStateListOpen, setIsStateListOpen] = useState(false);
   const [categories, setCategories] = useState(Array<CategoryRes>);
   const [filteredCategories, setFilteredCategories] = useState(
@@ -232,7 +233,7 @@ export const ManageAsset = () => {
           <SearchForm setSearch={setSearch} />
           <Button
             variant={"destructive"}
-            onClick={() => navigate("/admin/asset/create-asset")}
+            onClick={() => navigate("assets/create")}
           >
             <span className="capitalize">Create new asset</span>
           </Button>
@@ -256,6 +257,7 @@ export const ManageAsset = () => {
             pagination={pagination}
             onPaginationChange={onPaginationChange}
             pageCount={pageCount}
+            totalRecords={totalRecords}
           />
           <FullPageModal show={openDisable}>
             <Dialog open={openDisable} onOpenChange={setOpenDisable}>

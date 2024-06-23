@@ -18,6 +18,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { ADMIN_NAV_FUNCTIONS, BREADCRUMB_COMPONENTS } from "@/constants";
 import { useAuth } from "@/hooks";
 import useClickOutside from "@/hooks/useClickOutside";
 import { useCallback, useRef, useState } from "react";
@@ -29,7 +30,6 @@ import { Separator } from "./ui/separator";
 export const Header = () => {
   const { user, setIsAuthenticated } = useAuth();
   const location = useLocation();
-  const pathnames = location.pathname.split("/").filter(Boolean);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [openLogout, setOpenLogout] = useState(false);
   const [openChangePassword, setOpenChangePassword] = useState(false);
@@ -53,14 +53,29 @@ export const Header = () => {
     <div className="flex w-full justify-between bg-red-600 p-6">
       <Breadcrumb className="flex">
         <BreadcrumbList className="text-xl font-bold text-white">
-          {pathnames.length > 0 && (
-            <>
-              <BreadcrumbItem>
-                <Link to="/admin">Admin</Link>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-            </>
-          )}
+          {ADMIN_NAV_FUNCTIONS.map((item) => {
+            return location.pathname.includes(item.path) ? (
+              <>
+                <BreadcrumbItem>
+                  <Link to={item.path}>{item.name}</Link>
+                </BreadcrumbItem>
+              </>
+            ) : (
+              <></>
+            );
+          })}
+          {BREADCRUMB_COMPONENTS.map((item) => {
+            return location.pathname.includes(item.path) ? (
+              <>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <Link to={item.path}>{item.name}</Link>
+                </BreadcrumbItem>
+              </>
+            ) : (
+              <></>
+            );
+          })}
         </BreadcrumbList>
       </Breadcrumb>
       <Collapsible

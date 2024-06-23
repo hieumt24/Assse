@@ -19,4 +19,20 @@ axiosInstance.interceptors.request.use(
   },
 );
 
+axiosInstance.interceptors.response.use(
+  (res) => {
+    return res;
+    // return {data: res?.data, status: res.status};
+  },
+  async (error) => {
+    if (error.response.status === 401) {
+      localStorage.removeItem("token");
+      if (window.location.pathname !== "/auth/login")
+        window.location.href = "/auth/login";
+      return Promise.reject(error.response.data);
+    }
+    return Promise.reject(error);
+  },
+);
+
 export default axiosInstance;

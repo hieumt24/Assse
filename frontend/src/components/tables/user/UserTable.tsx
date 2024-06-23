@@ -30,9 +30,13 @@ interface UserTableProps<TData, TValue> {
   data: TData[];
   pagination: PaginationState;
   onPaginationChange: Dispatch<
-    SetStateAction<{ pageSize: number; pageIndex: number }>
+    SetStateAction<{
+      pageSize: number;
+      pageIndex: number;
+    }>
   >;
   pageCount?: number;
+  totalRecords: number;
 }
 
 export function UserTable<TData, TValue>({
@@ -41,6 +45,7 @@ export function UserTable<TData, TValue>({
   pagination,
   onPaginationChange,
   pageCount,
+  totalRecords,
 }: Readonly<UserTableProps<TData, TValue>>) {
   const table = useReactTable({
     data,
@@ -140,6 +145,7 @@ export function UserTable<TData, TValue>({
         pageIndex={pagination.pageIndex}
         pageCount={pageCount || 1}
         setPage={setPage}
+        totalRecords={totalRecords}
       />
       <FullPageModal show={openDetails}>
         <Dialog open={openDetails} onOpenChange={setOpenDetails}>
