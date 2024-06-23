@@ -18,6 +18,7 @@ export const useUsers = (
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean | null>(false);
   const [pageCount, setPageCount] = useState<number>(0);
+  const [totalRecords, setTotalRecords] = useState<number>(0);
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -34,6 +35,7 @@ export const useUsers = (
 
       setUsers(data.data.data);
       setPageCount(data.data.totalPages);
+      setTotalRecords(data.data.totalRecords);
     } catch (error) {
       setError(true);
     } finally {
@@ -53,5 +55,13 @@ export const useUsers = (
     adminLocation,
   ]);
 
-  return { users, loading, error, setUsers, pageCount, fetchUsers };
+  return {
+    users,
+    loading,
+    error,
+    setUsers,
+    pageCount,
+    totalRecords,
+    fetchUsers,
+  };
 };

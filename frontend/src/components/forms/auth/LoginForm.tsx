@@ -41,7 +41,7 @@ export const LoginForm = () => {
       if (res.success) {
         setIsAuthenticated(true);
         toast.success(res.message);
-        navigate("/admin");
+        navigate("/home");
       } else {
         toast.error(res.data.message);
       }

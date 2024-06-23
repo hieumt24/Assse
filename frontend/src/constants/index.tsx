@@ -5,15 +5,15 @@ export const ADMIN_NAV_FUNCTIONS = [
   },
   {
     name: "Manage User",
-    path: "/user",
+    path: "/users",
   },
   {
     name: "Manage Asset",
-    path: "/asset",
+    path: "/assets",
   },
   {
     name: "Manage Assignment",
-    path: "/assignment",
+    path: "/assignments",
   },
   {
     name: "Request for Returning",
@@ -21,7 +21,26 @@ export const ADMIN_NAV_FUNCTIONS = [
   },
   {
     name: "Report",
-    path: "/report",
+    path: "/reports",
+  },
+];
+
+export const BREADCRUMB_COMPONENTS = [
+  {
+    name: "Create New User",
+    path: "/users/create",
+  },
+  {
+    name: "Edit User",
+    path: "/users/edit",
+  },
+  {
+    name: "Create New Asset",
+    path: "/assets/create",
+  },
+  {
+    name: "Edit Asset",
+    path: "/assets/edit",
   },
 ];
 
