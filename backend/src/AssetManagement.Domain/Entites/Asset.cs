@@ -28,5 +28,7 @@ namespace AssetManagement.Domain.Entites
         public Guid CategoryId { get; set; }
 
         public virtual Category? Category { get; set; }
+
+        public virtual ICollection<Assignment>? Assignments { get; set; }
     }
 }

@@ -48,5 +48,10 @@ namespace AssetManagement.Domain.Entites
 
         [Required]
         public bool IsFirstTimeLogin { get; set; } = true;
+
+        //relationship 
+        public virtual ICollection<Assignment>? AssignmentsTo { get; set; } 
+        public virtual ICollection<Assignment>? AssignmentsBy { get; set; } 
+        public virtual ICollection<ReturnRequest>? ReturnRequestsAccepted { get; set; } 
     }
 }
