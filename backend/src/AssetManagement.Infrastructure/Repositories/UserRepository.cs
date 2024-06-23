@@ -88,7 +88,10 @@ namespace AssetManagement.Infrastructure.Repositories
             {
                 query = query.Where(x => x.FirstName.ToLower().Contains(search.ToLower())
                                                         || x.LastName.ToLower().Contains(search.ToLower())
-                                                        || x.Username.ToLower().Contains(search.ToLower()));
+                                                        || x.Username.ToLower().Contains(search.ToLower())
+                                                        || (x.FirstName.ToLower() + " " + x.LastName.ToLower()).Contains(search.ToLower())
+                                                        || x.StaffCode.ToLower().Contains(search.ToLower())
+                                                        );
             }
 
             //filter by role
