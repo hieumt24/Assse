@@ -28,9 +28,13 @@ interface AssetTableProps<TData, TValue> {
   data: TData[];
   pagination: PaginationState;
   onPaginationChange: Dispatch<
-    SetStateAction<{ pageSize: number; pageIndex: number }>
+    SetStateAction<{
+      pageSize: number;
+      pageIndex: number;
+    }>
   >;
   pageCount?: number;
+  totalRecords: number;
 }
 
 export function AssetTable<TData, TValue>({
@@ -39,6 +43,7 @@ export function AssetTable<TData, TValue>({
   pagination,
   onPaginationChange,
   pageCount,
+  totalRecords,
 }: Readonly<AssetTableProps<TData, TValue>>) {
   const table = useReactTable({
     data,
@@ -141,6 +146,7 @@ export function AssetTable<TData, TValue>({
         pageIndex={pagination.pageIndex}
         pageCount={pageCount || 1}
         setPage={setPage}
+        totalRecords={totalRecords}
       />
       <FullPageModal show={openDetails}>
         <Dialog open={openDetails} onOpenChange={setOpenDetails}>

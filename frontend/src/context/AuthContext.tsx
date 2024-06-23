@@ -23,6 +23,7 @@ export interface AuthContextProps {
   setIsAuthenticated: (value: boolean) => void;
   user: User;
   setUser: (value: User) => void;
+  loading: boolean;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
@@ -39,6 +40,7 @@ export const AuthContext = createContext<AuthContextProps>({
     location: 1,
   },
   setUser: () => {},
+  loading: true,
 });
 
 interface AuthProviderProps {
@@ -69,6 +71,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     location: 1,
   });
 
+  const [loading, setLoading] = useState<boolean>(true);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!token);
 
   const fetchUserFromToken = () => {
@@ -104,6 +107,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
       setIsAuthenticated(false);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -117,8 +121,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setIsAuthenticated,
       user,
       setUser,
+      loading,
     }),
-    [token, user, isAuthenticated],
+    [token, user, isAuthenticated, loading],
   );
 
   return (

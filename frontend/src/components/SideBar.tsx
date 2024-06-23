@@ -23,10 +23,10 @@ export const Sidebar = () => {
       <div className="mt-4 w-full bg-zinc-100 font-semibold">
         {ADMIN_NAV_FUNCTIONS.map((item) => (
           <Link
-            to={`/admin${item.path}`}
+            to={`${item.path}`}
             key={item.path}
             className={`flex w-full items-center gap-3 p-3 transition duration-200 ${
-              location.pathname.includes(`/admin${item.path}`)
+              location.pathname.includes(`${item.path}`)
                 ? "bg-red-600 text-white"
                 : "text-black hover:bg-red-600 hover:text-white"
             }`}

@@ -22,7 +22,7 @@ import { useAuth, useUsers } from "@/hooks";
 import { usePagination } from "@/hooks/usePagination";
 import { disableUserService } from "@/services";
 import { useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export const ManageUser = () => {
@@ -32,15 +32,16 @@ export const ManageUser = () => {
   const [orderBy, setOrderBy] = useState("");
   const [isDescending, setIsDescending] = useState(true);
   const [roleType, setRoleType] = useState(0);
-  const { users, loading, error, pageCount, fetchUsers } = useUsers(
-    token!,
-    pagination,
-    user.location,
-    search,
-    roleType,
-    orderBy,
-    isDescending,
-  );
+  const { users, loading, error, pageCount, fetchUsers, totalRecords } =
+    useUsers(
+      token!,
+      pagination,
+      user.location,
+      search,
+      roleType,
+      orderBy,
+      isDescending,
+    );
 
   const navigate = useNavigate();
   const { setIsLoading } = useLoading();
@@ -92,7 +93,7 @@ export const ManageUser = () => {
           <SearchForm setSearch={setSearch} />
           <Button
             variant={"destructive"}
-            onClick={() => navigate("/admin/user/create-user")}
+            onClick={() => navigate("/users/create")}
           >
             <span className="capitalize">Create new user</span>
           </Button>
@@ -116,6 +117,7 @@ export const ManageUser = () => {
             onPaginationChange={onPaginationChange}
             pagination={pagination}
             pageCount={pageCount}
+            totalRecords={totalRecords}
           />
           <FullPageModal show={openDisable}>
             <Dialog open={openDisable} onOpenChange={setOpenDisable}>
@@ -144,7 +146,6 @@ export const ManageUser = () => {
           </FullPageModal>
         </>
       )}
-      <Outlet />
     </div>
   );
 };

@@ -1,18 +1,25 @@
 import { AuthRequired } from "@/components/AuthRequired";
-import { Admin, Login, NotFound } from "@/pages";
-import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Login, NotFound } from "@/pages";
+import { Forbidden } from "@/pages/Forbidden";
+import { Layout } from "@/pages/Layout";
+import { Route, Routes } from "react-router-dom";
 
 export const RouteProvider: React.FC = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<AuthRequired><Navigate to="/admin"/></AuthRequired>} />
-        <Route path="/admin/*" element={<AuthRequired><Admin /></AuthRequired>} />
-        <Route path="*" element={<NotFound />} />
-        <Route path="/auth">
-          <Route path="login" element={<Login />} />
-        </Route>
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path="/auth">
+        <Route path="login" element={<Login />} />
+      </Route>
+      <Route
+        path="/*"
+        element={
+          <AuthRequired>
+            <Layout />
+          </AuthRequired>
+        }
+      />
+      <Route path="/notfound" element={<NotFound />} />
+      <Route path="/Forbidden" element={<Forbidden />} />
+    </Routes>
   );
 };
