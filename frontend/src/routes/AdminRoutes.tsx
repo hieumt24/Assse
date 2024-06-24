@@ -1,6 +1,7 @@
 import { CreateAsset, CreateUser, Home, ManageUser } from "@/pages";
 import { EditAsset } from "@/pages/admin/manage/asset/EditAsset";
 import { ManageAsset } from "@/pages/admin/manage/asset/ManageAsset";
+import { CreateAssignment } from "@/pages/admin/manage/assignment/CreateAssignment";
 import { EditUser } from "@/pages/admin/manage/user/EditUser";
 import { Navigate, useRoutes } from "react-router-dom";
 
@@ -27,16 +28,20 @@ export const AdminRoutes = () => {
       element: <EditUser />,
     },
     {
-      path: "assets",
+      path: "/assets",
       element: <ManageAsset />,
     },
     {
-      path: "assets/create",
+      path: "/assets/create",
       element: <CreateAsset />,
     },
     {
-      path: "assets/edit/:assetCode",
+      path: "/assets/edit/:assetCode",
       element: <EditAsset />,
+    },
+    {
+      path: "/assignment/create",
+      element: <CreateAssignment />,
     },
     {
       path: "*",
