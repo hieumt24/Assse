@@ -61,7 +61,7 @@ export const CreateUserForm = () => {
     setIsLoading(false);
     if (res.success) {
       toast.success(res.message);
-
+      localStorage.setItem("orderBy", "createdon");
       navigate("/users");
     } else {
       toast.error(res.message);
