@@ -1,12 +1,8 @@
 ﻿using AssetManagement.Application.Common;
 using AssetManagement.Application.Interfaces.Repositories;
-using AssetManagement.Application.Services;
-using AssetManagement.Domain.Common.Settings;
-using AssetManagement.Domain.Entites;
 using AssetManagement.Infrastructure.Common;
 using AssetManagement.Infrastructure.Contexts;
 using AssetManagement.Infrastructure.Repositories;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +17,8 @@ namespace AssetManagement.Infrastructure
             service.AddScoped<IUserRepositoriesAsync, UserRepository>();
             service.AddScoped<IAssetRepositoriesAsync, AssetRepository>();
             service.AddScoped<ICategoryRepositoriesAsync, CategoryRepository>();
+            service.AddScoped<IAssignmentRepositoriesAsync, AssignmentRepository>();
+
 
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             service.AddDbContext<ApplicationDbContext>(options =>

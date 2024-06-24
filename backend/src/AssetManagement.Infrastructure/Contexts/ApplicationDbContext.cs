@@ -47,14 +47,6 @@ namespace AssetManagement.Infrastructure.Contexts
                 .IsUnique();
 
             // 1-n category-asset
-            modelBuilder.Entity<Category>()
-                .HasMany(c => c.Assets)
-                .WithOne(a => a.Category)
-                .HasForeignKey(a => a.CategoryId);
-
-            modelBuilder.Entity<Category>().HasIndex(c => c.CategoryName).IsUnique();
-            modelBuilder.Entity<Category>().HasIndex(c => c.Prefix).IsUnique();
-
             modelBuilder.Entity<Assignment>()
                 .HasOne(a => a.AssignedTo)
                 .WithMany(u => u.AssignmentsTo)

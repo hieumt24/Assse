@@ -1,8 +1,6 @@
-using AssetManagement.Application.Extensions;
 using AssetManagement.Application.Filter;
 using AssetManagement.Domain.Common.Specifications;
 using AssetManagement.Domain.Entites;
-using AssetManagement.Domain.Enums;
 using AssetManagement.Domain.Specifications;
 using System.Linq.Expressions;
 
@@ -42,7 +40,7 @@ namespace AssetManagement.Application.Helper
                 "categoryname" => u => u.Category.CategoryName,
                 "createdon" => u =>  u.CreatedOn,
                 "lastmodifiedon" => u => u.LastModifiedOn,
-                _ => u => u.AssetName
+                _ => u => u.AssetCode
             };
         }
 
