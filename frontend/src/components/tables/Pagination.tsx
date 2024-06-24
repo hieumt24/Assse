@@ -48,10 +48,12 @@ const Pagination: React.FC<PaginationProps> = ({
 
   return (
     <div className="flex items-center justify-end space-x-2 py-4">
-      <div>
-        Showing {(pageIndex - 1) * 10 + 1} -{" "}
-        {Math.min(pageIndex * 10, totalRecords)} of {totalRecords} records
-      </div>
+      {totalRecords !== 0 && (
+        <div>
+          Showing {(pageIndex - 1) * 10 + 1} -{" "}
+          {Math.min(pageIndex * 10, totalRecords)} of {totalRecords} records
+        </div>
+      )}
       {pageCount > 1 && (
         <>
           <Button

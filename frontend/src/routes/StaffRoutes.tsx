@@ -24,15 +24,15 @@ export const StaffRoutes = () => {
       element: <Navigate to="/forbidden" />,
     },
     {
-      path: "assets",
+      path: "/assets",
       element: <Navigate to="/forbidden" />,
     },
     {
-      path: "assets/create",
+      path: "/assets/create",
       element: <Navigate to="/forbidden" />,
     },
     {
-      path: "assets/edit/:id",
+      path: "/assets/edit/:id",
       element: <Navigate to="/forbidden" />,
     },
     {
