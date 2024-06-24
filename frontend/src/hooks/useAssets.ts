@@ -22,12 +22,14 @@ export const useAssets = (
   const [totalRecords, setTotalRecords] = useState<number>(0);
 
   const fetchAssets = async () => {
+    // Check if localStorage have item
+    const orderByLocalStorage = localStorage.getItem("orderBy");
     try {
       const data = await getAllAssestService({
         token,
         pagination,
         search,
-        orderBy,
+        orderBy: orderByLocalStorage ?? "",
         isDescending,
         adminLocation,
         assetStateType,
