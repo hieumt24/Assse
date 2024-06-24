@@ -24,7 +24,7 @@ const Pagination: React.FC<PaginationProps> = ({
     } else {
       pageNumbers.push(1); // Always include the first page
 
-      if (pageIndex > 2) {
+      if (pageIndex > 3) {
         pageNumbers.push("...");
       }
 
