@@ -31,7 +31,7 @@ export const useUsers = (
         search,
         roleType,
         adminLocation,
-        orderBy: orderByLocalStorage ?? "",
+        orderBy: orderByLocalStorage ?? orderBy,
         isDescending,
       });
 
