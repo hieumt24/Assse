@@ -39,6 +39,7 @@ AssetManagement is a comprehensive solution designed to streamline the managemen
 
    ```bash
    cd backend
+   cd src
    dotnet restore
    dotnet build
    dotnet run
