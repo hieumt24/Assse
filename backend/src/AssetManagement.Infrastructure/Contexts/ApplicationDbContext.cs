@@ -21,6 +21,8 @@ namespace AssetManagement.Infrastructure.Contexts
 
         public DbSet<Asset> Assets { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Assignment> Assignments { get; set; }
+        public DbSet<ReturnRequest> ReturnRequests { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -49,6 +51,37 @@ namespace AssetManagement.Infrastructure.Contexts
                 .HasMany(c => c.Assets)
                 .WithOne(a => a.Category)
                 .HasForeignKey(a => a.CategoryId);
+
+            modelBuilder.Entity<Category>().HasIndex(c => c.CategoryName).IsUnique();
+            modelBuilder.Entity<Category>().HasIndex(c => c.Prefix).IsUnique();
+
+            modelBuilder.Entity<Assignment>()
+                .HasOne(a => a.AssignedTo)
+                .WithMany(u => u.AssignmentsTo)
+                .HasForeignKey(a => a.AssignedIdTo)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Assignment>()
+                .HasOne(a => a.AssignedBy)
+                .WithMany(u => u.AssignmentsBy)
+                .HasForeignKey(a => a.AssignedIdBy)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Assignment>()
+                .HasOne(a => a.Asset)
+                .WithMany(a => a.Assignments)
+                .HasForeignKey(a => a.AssetId);
+
+            modelBuilder.Entity<ReturnRequest>()
+               .HasOne(rr => rr.Assignment)
+               .WithOne(a => a.ReturnRequest)
+               .HasForeignKey<ReturnRequest>(rr => rr.AssignmentId);
+
+            modelBuilder.Entity<ReturnRequest>()
+                .HasOne(rr => rr.AcceptedUser)
+                .WithMany(u => u.ReturnRequestsAccepted)
+                .HasForeignKey(rr => rr.AcceptedBy)
+                .OnDelete(DeleteBehavior.Restrict);
 
             //seed admin user
 
@@ -97,8 +130,7 @@ namespace AssetManagement.Infrastructure.Contexts
 
             modelBuilder.Entity<User>().Property(u => u.StaffCodeId).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
 
-            modelBuilder.Entity<Category>().HasIndex(c => c.CategoryName).IsUnique();
-            modelBuilder.Entity<Category>().HasIndex(c => c.Prefix).IsUnique();
+            
             // seed category
             modelBuilder.Entity<Category>().HasData(
                 new Category { CategoryName = "Laptop", Prefix = "LA" },

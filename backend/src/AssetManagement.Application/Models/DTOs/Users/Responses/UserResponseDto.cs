@@ -25,5 +25,7 @@ namespace AssetManagement.Application.Models.DTOs.Users.Responses
         public EnumLocation Location { get; set; }
 
         public DateTimeOffset CreatedOn { get; set; }
+
+        public DateTimeOffset LastModifiedOn { get; set; }
     }
 }

@@ -137,6 +137,7 @@ namespace AssetManagement.Application.Services
                 existingUser.Gender = request.Gender;
                 existingUser.JoinedDate = request.JoinedDate;
                 existingUser.Role = request.Role;
+                existingUser.LastModifiedOn = DateTime.Now;
 
                 await _userRepositoriesAsync.UpdateAsync(existingUser);
 

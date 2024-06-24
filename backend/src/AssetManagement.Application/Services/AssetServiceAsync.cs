@@ -51,6 +51,7 @@ namespace AssetManagement.Application.Services
 
                 newAsset.CreatedBy = request.AdminId;
                 newAsset.CreatedOn = DateTime.Now;
+
                 var asset = await _assetRepository.AddAsync(newAsset);
 
                 var assetDto = _mapper.Map<AssetDto>(asset);
