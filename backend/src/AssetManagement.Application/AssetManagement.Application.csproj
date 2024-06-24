@@ -36,6 +36,7 @@
 
   <ItemGroup>
     <Folder Include="Models\DTOs\Category\Responses\" />
+    <Folder Include="Validations\NewFolder\" />
   </ItemGroup>
 
 </Project>

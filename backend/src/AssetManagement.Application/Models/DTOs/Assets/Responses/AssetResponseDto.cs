@@ -13,9 +13,8 @@ namespace AssetManagement.Application.Models.DTOs.Assets.Responses
         public EnumLocation AssetLocation { get; set; }
         public Guid CategoryId { get; set; }
         public string? CategoryName { get; set; }
-
-        public DateTimeOffset CreatedOn { get; set; }
-        public DateTimeOffset LastModifiedOn { get; set; }
+        //public DateTimeOffset CreatedOn { get; set; }
+        //public DateTimeOffset LastModifiedOn { get; set; }
 
     }
 }
