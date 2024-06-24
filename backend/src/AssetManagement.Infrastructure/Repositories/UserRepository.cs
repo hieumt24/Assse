@@ -62,16 +62,28 @@ namespace AssetManagement.Infrastructure.Repositories
 
         private async Task<string> CheckLastUserName(string baseUserName)
         {
-            var lastUserName = await _dbContext.Users
+            var matchingUserNames = await _dbContext.Users
                 .Where(u => u.Username.StartsWith(baseUserName))
-                .OrderByDescending(u => u.Username)
-                .Select(u => u.Username)
-                .FirstOrDefaultAsync();
-            if (lastUserName == null)
+                .ToListAsync();
+
+            int maxNumber = 0;
+
+            foreach (var userName in matchingUserNames)
+            {
+                string numericPart = userName.Username.Substring(baseUserName.Length);
+                if (int.TryParse(numericPart, out int number))
+                {
+                    if (number > maxNumber)
+                    {
+                        maxNumber = number;
+                    }
+                }
+            }
+            if (maxNumber == 0)
             {
                 return baseUserName;
             }
-            return lastUserName;
+            return baseUserName + maxNumber;
         }
 
         public async Task<RoleType> GetRoleAsync(Guid userId)
