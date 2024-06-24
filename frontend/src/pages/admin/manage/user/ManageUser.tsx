@@ -29,6 +29,7 @@ export const ManageUser = () => {
   const { token, user } = useAuth();
   const { onPaginationChange, pagination } = usePagination();
   const [search, setSearch] = useState("");
+
   const [orderBy, setOrderBy] = useState("");
   const [isDescending, setIsDescending] = useState(true);
   const [roleType, setRoleType] = useState(0);
@@ -90,7 +91,15 @@ export const ManageUser = () => {
         </Select>
 
         <div className="flex justify-between gap-6">
-          <SearchForm setSearch={setSearch} />
+          <SearchForm
+            setSearch={setSearch}
+            onSubmit={() => {
+              onPaginationChange((prev) => ({
+                ...prev,
+                pageIndex: 1,
+              }));
+            }}
+          />
           <Button
             variant={"destructive"}
             onClick={() => navigate("/users/create")}

@@ -75,6 +75,37 @@ namespace AssetManagement.Infrastructure.Contexts
                 .HasForeignKey(rr => rr.AcceptedBy)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Category>().HasIndex(c => c.CategoryName).IsUnique();
+            modelBuilder.Entity<Category>().HasIndex(c => c.Prefix).IsUnique();
+
+            modelBuilder.Entity<Assignment>()
+                .HasOne(a => a.AssignedTo)
+                .WithMany(u => u.AssignmentsTo)
+                .HasForeignKey(a => a.AssignedIdTo)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Assignment>()
+                .HasOne(a => a.AssignedBy)
+                .WithMany(u => u.AssignmentsBy)
+                .HasForeignKey(a => a.AssignedIdBy)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Assignment>()
+                .HasOne(a => a.Asset)
+                .WithMany(a => a.Assignments)
+                .HasForeignKey(a => a.AssetId);
+
+            modelBuilder.Entity<ReturnRequest>()
+               .HasOne(rr => rr.Assignment)
+               .WithOne(a => a.ReturnRequest)
+               .HasForeignKey<ReturnRequest>(rr => rr.AssignmentId);
+
+            modelBuilder.Entity<ReturnRequest>()
+                .HasOne(rr => rr.AcceptedUser)
+                .WithMany(u => u.ReturnRequestsAccepted)
+                .HasForeignKey(rr => rr.AcceptedBy)
+                .OnDelete(DeleteBehavior.Restrict);
+
             //seed admin user
 
             var adminHN = new User

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const specialCharacters = /[!@#$%^&*(),.?":{}|<>]/;
+const specialCharacters = /[!@#$%^&*(),.?":{}|<>\/-_\\+=;\]\['`~]/;
 
 const passwordSchema = z
   .string()

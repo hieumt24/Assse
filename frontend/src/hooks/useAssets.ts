@@ -22,12 +22,15 @@ export const useAssets = (
   const [totalRecords, setTotalRecords] = useState<number>(0);
 
   const fetchAssets = async () => {
+    // Check if localStorage have item
+    const orderByLocalStorage = localStorage.getItem("orderBy");
+    setLoading(true);
     try {
       const data = await getAllAssestService({
         token,
         pagination,
         search,
-        orderBy,
+        orderBy: orderByLocalStorage ?? orderBy,
         isDescending,
         adminLocation,
         assetStateType,
@@ -37,6 +40,7 @@ export const useAssets = (
       setAssets(data.data.data);
       setPageCount(data.data.totalPages);
       setTotalRecords(data.data.totalRecords);
+      localStorage.removeItem("orderBy");
     } catch (error) {
       setError(true);
     } finally {

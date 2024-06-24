@@ -39,6 +39,7 @@ AssetManagement is a comprehensive solution designed to streamline the managemen
 
    ```bash
    cd backend
+   cd src
    dotnet restore
    dotnet build
    dotnet run
@@ -62,5 +63,5 @@ AssetManagement is a comprehensive solution designed to streamline the managemen
 Usage
 
 - Access the application at http://localhost:3000.
-- -Log in with your credentials.
+- Log in with your credentials.
 - Navigate through the dashboard to manage assets.

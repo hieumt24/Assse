@@ -17,6 +17,7 @@ import { z } from "zod";
 
 interface SearchFormProps {
   setSearch: React.Dispatch<React.SetStateAction<string>>;
+  onSubmit: any;
 }
 
 export const SearchForm = (props: SearchFormProps) => {
@@ -32,6 +33,7 @@ export const SearchForm = (props: SearchFormProps) => {
   // Function handle onSubmit
   const onSubmit = async (values: z.infer<typeof searchSchema>) => {
     props.setSearch(values.searchTerm);
+    props.onSubmit();
   };
   return (
     <Form {...form}>
