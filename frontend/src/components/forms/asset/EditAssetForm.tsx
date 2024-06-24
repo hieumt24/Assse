@@ -86,6 +86,7 @@ export const EditAssetForm: React.FC = () => {
       });
       if (res.success) {
         toast.success("Asset created successfully!");
+        localStorage.setItem("orderBy", "lastmodifiedon");
         navigate("/assets");
       } else {
         toast.error(res.message);
@@ -232,7 +233,7 @@ export const EditAssetForm: React.FC = () => {
                     <FormControl>
                       <RadioGroupItem value={"5"} />
                     </FormControl>
-                    <FormLabel className="font-normal">Recycle</FormLabel>
+                    <FormLabel className="font-normal">Recycled</FormLabel>
                   </FormItem>
                 </RadioGroup>
               </FormControl>

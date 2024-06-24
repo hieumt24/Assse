@@ -43,8 +43,9 @@ export const ManageAsset = () => {
   const { onPaginationChange, pagination } = usePagination();
   const [search, setSearch] = useState("");
   const [orderBy, setOrderBy] = useState("");
-  const [isDescending, setIsDescending] = useState(false);
+  const [isDescending, setIsDescending] = useState(true);
   const [assetStateType, setAssetStateType] = useState<number[]>([1, 2, 3]);
+  const [selectAllState, setSelectAllState] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const { assets, loading, error, pageCount, totalRecords, fetchAssets } =
     useAssets(
@@ -65,6 +66,18 @@ export const ManageAsset = () => {
   const [categorySearch, setCategorySearch] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const selectRef = useRef<HTMLDivElement>(null);
+
+  const handleSelectAllChange = () => {
+    if (selectAllState) {
+      setAssetStateType([]);
+    } else {
+      setAssetStateType(ASSET_STATES.map((state) => state.value));
+    }
+  };
+
+  useEffect(() => {
+    setSelectAllState(assetStateType.length === ASSET_STATES.length);
+  }, [assetStateType]);
 
   useEffect(() => {
     setFilteredCategories(
@@ -175,6 +188,15 @@ export const ManageAsset = () => {
               </Button>
             </CollapsibleTrigger>
             <CollapsibleContent className="absolute z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover bg-white p-1 font-semibold text-popover-foreground shadow-md transition-all data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2">
+              <div className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm font-normal text-zinc-900 transition-all hover:bg-zinc-100">
+                <Checkbox
+                  value="select-all"
+                  id={`state-checkbox-select-all`}
+                  onCheckedChange={handleSelectAllChange}
+                  checked={selectAllState}
+                />
+                <label htmlFor={`state-checkbox-select-all`}>Select All</label>
+              </div>
               {ASSET_STATES.map((state) => (
                 <div className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm font-normal text-zinc-900 transition-all hover:bg-zinc-100">
                   <Checkbox
@@ -185,9 +207,7 @@ export const ManageAsset = () => {
                       handleCheckboxChange(state.value);
                     }}
                     checked={assetStateType.includes(state.value)}
-                  >
-                    {state.label}
-                  </Checkbox>
+                  />
                   <label htmlFor={`state-checkbox-${state.value}`}>
                     {state.label}
                   </label>
@@ -230,7 +250,15 @@ export const ManageAsset = () => {
         </div>
 
         <div className="flex justify-between gap-6">
-          <SearchForm setSearch={setSearch} />
+          <SearchForm
+            setSearch={setSearch}
+            onSubmit={() => {
+              onPaginationChange((prev) => ({
+                ...prev,
+                pageIndex: 1,
+              }));
+            }}
+          />
           <Button
             variant={"destructive"}
             onClick={() => navigate("/assets/create")}
