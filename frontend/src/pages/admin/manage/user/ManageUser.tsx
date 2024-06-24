@@ -29,6 +29,7 @@ export const ManageUser = () => {
   const { token, user } = useAuth();
   const { onPaginationChange, pagination } = usePagination();
   const [search, setSearch] = useState("");
+
   const [orderBy, setOrderBy] = useState("");
   const [isDescending, setIsDescending] = useState(true);
   const [roleType, setRoleType] = useState(0);

@@ -84,6 +84,7 @@ export const EditUserForm = () => {
       });
       if (res.success) {
         toast.success(res.message);
+        localStorage.setItem("orderBy", "lastmodifiedon");
       } else {
         toast.error(res.message);
       }

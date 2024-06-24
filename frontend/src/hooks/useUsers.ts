@@ -21,6 +21,8 @@ export const useUsers = (
   const [totalRecords, setTotalRecords] = useState<number>(0);
 
   const fetchUsers = async () => {
+    // Check if localStorage have item
+    const orderByLocalStorage = localStorage.getItem("orderBy");
     setLoading(true);
     try {
       const data = await getAllUserService({
@@ -29,13 +31,14 @@ export const useUsers = (
         search,
         roleType,
         adminLocation,
-        orderBy,
+        orderBy: orderByLocalStorage ?? "",
         isDescending,
       });
 
       setUsers(data.data.data);
       setPageCount(data.data.totalPages);
       setTotalRecords(data.data.totalRecords);
+      localStorage.removeItem("orderBy");
     } catch (error) {
       setError(true);
     } finally {
