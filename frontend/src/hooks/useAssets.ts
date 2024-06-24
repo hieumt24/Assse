@@ -39,6 +39,7 @@ export const useAssets = (
       setAssets(data.data.data);
       setPageCount(data.data.totalPages);
       setTotalRecords(data.data.totalRecords);
+      localStorage.removeItem("orderBy");
     } catch (error) {
       setError(true);
     } finally {
