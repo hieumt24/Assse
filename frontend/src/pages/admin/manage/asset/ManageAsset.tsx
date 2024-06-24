@@ -230,7 +230,15 @@ export const ManageAsset = () => {
         </div>
 
         <div className="flex justify-between gap-6">
-          <SearchForm setSearch={setSearch} />
+          <SearchForm
+            setSearch={setSearch}
+            onSubmit={() => {
+              onPaginationChange((prev) => ({
+                ...prev,
+                pageIndex: 1,
+              }));
+            }}
+          />
           <Button
             variant={"destructive"}
             onClick={() => navigate("/assets/create")}
