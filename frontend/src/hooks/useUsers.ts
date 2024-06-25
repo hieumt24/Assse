@@ -3,7 +3,6 @@ import { getAllUserService } from "@/services";
 import { useEffect, useState } from "react";
 
 export const useUsers = (
-  token: string,
   pagination: {
     pageIndex: number;
     pageSize: number;
@@ -26,7 +25,6 @@ export const useUsers = (
     setLoading(true);
     try {
       const data = await getAllUserService({
-        token,
         pagination,
         search,
         roleType,
@@ -48,15 +46,7 @@ export const useUsers = (
 
   useEffect(() => {
     fetchUsers();
-  }, [
-    token,
-    pagination,
-    search,
-    roleType,
-    orderBy,
-    isDescending,
-    adminLocation,
-  ]);
+  }, [pagination, search, roleType, orderBy, isDescending, adminLocation]);
 
   return {
     users,
