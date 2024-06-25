@@ -13,15 +13,15 @@ namespace AssetManagement.Infrastructure.Repositories
         {
         }
 
-        public async Task<IQueryable<Assignment>> FilterAssignment(EnumLocation adminLocation, string? search, EnumAssignmentStatus? assignmentStatus, DateTime? assignedDate)
+        public async Task<IQueryable<Assignment>> FilterAssignmentAsync(EnumLocation adminLocation, string? search, EnumAssignmentStatus? assignmentStatus, DateTime? assignedDate)
         {
             var query = _dbContext.Assignments.Include(x => x.Asset).Where(x => x.Location == adminLocation);
             if (!string.IsNullOrEmpty(search))
             {
-                query = query.Where(x => x.Asset.AssetCode.ToLower().Contains(search)
-                                        || x.Asset.AssetName.ToLower().Contains(search)
-                                        || x.AssignedBy.Username.ToLower().Contains(search)
-                                        || x.AssignedTo.Username.ToLower().Contains(search));
+                query = query.Where(x => x.Asset.AssetCode.ToLower().Contains(search.ToLower())
+                                        || x.Asset.AssetName.ToLower().Contains(search.ToLower())
+                                        || x.AssignedBy.Username.ToLower().Contains(search.ToLower())
+                                        || x.AssignedTo.Username.ToLower().Contains(search.ToLower()));
             }
             if (assignmentStatus.HasValue)
             {

@@ -1,10 +1,5 @@
 ﻿using AssetManagement.Application.Models.DTOs.Category.Requests;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AssetManagement.Application.Validations.Category
 {

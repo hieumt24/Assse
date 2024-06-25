@@ -45,7 +45,7 @@ export const CreateAssetForm: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const selectRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
-  const { setIsLoading } = useLoading();
+  const { isLoading, setIsLoading } = useLoading();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -222,7 +222,14 @@ export const CreateAssetForm: React.FC = () => {
                 Specification <span className="text-red-600">*</span>
               </FormLabel>
               <FormControl>
-                <Textarea placeholder="Enter specification" {...field} />
+                <Textarea
+                  placeholder="Enter specification"
+                  {...field}
+                  onBlur={(e) => {
+                    const cleanedValue = removeExtraWhitespace(e.target.value);
+                    field.onChange(cleanedValue);
+                  }}
+                />
               </FormControl>
               <FormMessage>
                 {form.formState.errors.specification?.message}
@@ -307,9 +314,9 @@ export const CreateAssetForm: React.FC = () => {
           <Button
             type="submit"
             className="w-[76px] bg-red-500 hover:bg-white hover:text-red-500"
-            disabled={!form.formState.isValid}
+            disabled={!form.formState.isValid || isLoading}
           >
-            Save
+            {isLoading ? "Saving..." : "Save"}
           </Button>
           <Button
             type="button"

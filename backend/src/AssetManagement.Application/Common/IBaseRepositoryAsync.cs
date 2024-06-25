@@ -18,6 +18,8 @@ namespace AssetManagement.Application.Common
 
         Task<T> DeleteAsync(Guid id);
 
+        Task<T> DeletePermanentAsync(Guid id);
+
         Task<int> CountAsync(ISpecification<T> spec);
     }
 }

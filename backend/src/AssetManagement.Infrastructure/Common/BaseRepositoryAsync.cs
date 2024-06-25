@@ -40,6 +40,20 @@ namespace AssetManagement.Infrastructure.Common
             return entity;
         }
 
+        public async Task<T> DeletePermanentAsync(Guid id)
+        {
+            var entity = await GetByIdAsync(id);
+            if (entity == null)
+            {
+                return null;
+            }
+
+            _dbContext.Set<T>().Remove(entity);
+            await _dbContext.SaveChangesAsync();
+
+            return entity;
+        }
+
         public async Task<T> FirstOrDefaultAsync(ISpecification<T> spec)
         {
             return await ApplySpecification(spec).FirstOrDefaultAsync();
