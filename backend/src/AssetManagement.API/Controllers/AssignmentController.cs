@@ -1,7 +1,6 @@
 ﻿using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Models.DTOs.Assignments.Request;
 using AssetManagement.Application.Models.Filters;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AssetManagement.API.Controllers

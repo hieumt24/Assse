@@ -8,7 +8,7 @@ namespace AssetManagement.Application.Helper
 {
     public class AssetSpecificationHelper
     {
-        public static ISpecification<Asset> AssetSpecificationWithCategory(PaginationFilter filter, string? orderBy, bool? isDescending)
+        public static ISpecification<Asset> AssetSpecificationWithCategory(PaginationFilter pagination, string? orderBy, bool? isDescending)
         {
             Expression<Func<Asset, bool>> criteria = asset => true;
             var spec = new AssetSpecification(criteria);
@@ -24,7 +24,7 @@ namespace AssetManagement.Application.Helper
                     spec.ApplyOrderBy(GetOrderByExpression(orderBy));
                 }
             }
-            spec.ApplyPaging(filter.PageSize * (filter.PageIndex - 1), filter.PageSize);
+            spec.ApplyPaging(pagination.PageSize * (pagination.PageIndex - 1), pagination.PageSize);
             return spec;
         }
 
