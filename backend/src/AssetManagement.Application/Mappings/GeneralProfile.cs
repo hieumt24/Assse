@@ -6,6 +6,7 @@ using AssetManagement.Application.Models.DTOs.Assignment.Request;
 using AssetManagement.Application.Models.DTOs.Assignment.Response;
 using AssetManagement.Application.Models.DTOs.Category;
 using AssetManagement.Application.Models.DTOs.Category.Requests;
+using AssetManagement.Application.Models.DTOs.Return;
 using AssetManagement.Application.Models.DTOs.Users;
 using AssetManagement.Application.Models.DTOs.Users.Requests;
 using AssetManagement.Application.Models.DTOs.Users.Responses;
@@ -47,6 +48,18 @@ namespace AssetManagement.Application.Mappings
                 .ForMember(dest => dest.AssignedTo, opt => opt.MapFrom(opt => opt.AssignedTo.Username))
                 .ForMember(dest => dest.AssignedBy, opt => opt.MapFrom(opt => opt.AssignedBy.Username))
                 .ReverseMap()
+                ;
+
+            //Return Mapping
+
+            CreateMap<ReturnRequest, ReturnRequestResponseDto>()
+                .ForMember(dest => dest.AssetCode, opt => opt.MapFrom(src => src.Assignment.Asset.AssetCode))
+                .ForMember(dest => dest.AssetName, opt => opt.MapFrom(src => src.Assignment.Asset.AssetName))
+                .ForMember(dest => dest.RequestedByUserName, opt => opt.MapFrom(src => src.RequestedUser.Username))
+                .ForMember(dest => dest.AssignedDate, opt => opt.MapFrom(src => src.Assignment.AssignedDate))
+                .ForMember(dest => dest.AcceptedByUserName, opt => opt.MapFrom(src => src.AcceptedUser.Username))
+                .ForMember(dest => dest.ReturnedDate, opt => opt.MapFrom(src => src.ReturnedDate))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.ReturnStatus))
                 ;
         }
     }

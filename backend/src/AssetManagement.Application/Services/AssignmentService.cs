@@ -78,7 +78,7 @@ namespace AssetManagement.Application.Services
                 {
                     paginationFilter = new PaginationFilter();
                 }
-                var filterAsset = await _assignmentRepositoriesAsync.FilterAssignment(adminLocation, search, assignmentStatus, assignedDate);
+                var filterAsset = await _assignmentRepositoriesAsync.FilterAssignmentAsync(adminLocation, search, assignmentStatus, assignedDate);
 
                 var totalRecords = filterAsset.Count();
 
