@@ -1,11 +1,16 @@
-﻿using AssetManagement.Application.Interfaces.Repositories;
+﻿using AssetManagement.Application.Common;
+using AssetManagement.Application.Filter;
+using AssetManagement.Application.Helper;
+using AssetManagement.Application.Interfaces.Repositories;
 using AssetManagement.Application.Interfaces.Services;
-using AssetManagement.Application.Models.DTOs.Assets;
 using AssetManagement.Application.Models.DTOs.Assignment;
 using AssetManagement.Application.Models.DTOs.Assignment.Request;
+using AssetManagement.Application.Models.DTOs.Assignment.Response;
 using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Entites;
+using AssetManagement.Domain.Enums;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace AssetManagement.Application.Services
 {
@@ -13,17 +18,18 @@ namespace AssetManagement.Application.Services
     {
         private readonly IMapper _mapper;
         private readonly IAssignmentRepositoriesAsync _assignmentRepositoriesAsync;
-        //private readonly validate 
+        private readonly IUriService _uriService;
 
         public AssignmentServiceAsync(IAssignmentRepositoriesAsync assignmentRepositoriesAsync,
-             IMapper mapper
+             IMapper mapper,
+             IUriService uriService
             )
         {
             _mapper = mapper;
             _assignmentRepositoriesAsync = assignmentRepositoriesAsync;
-            
-            
+            _uriService = uriService;
         }
+
         public async Task<Response<AssignmentDto>> AddAssignmentAsync(AddAssignmentRequestDto request)
         {
             //var validationResult = await _addCategoryValidator.ValidateAsync(request);
@@ -37,7 +43,8 @@ namespace AssetManagement.Application.Services
             //    };
             //}
 
-            try {
+            try
+            {
                 var newAssigment = _mapper.Map<Assignment>(request);
                 newAssigment.CreatedOn = DateTime.Now;
 
@@ -45,7 +52,7 @@ namespace AssetManagement.Application.Services
 
                 var assetDto = _mapper.Map<AssignmentDto>(asignment);
 
-                return new Response<AssignmentDto> { Succeeded = true , Message=" Create Assignment Successfully!"};
+                return new Response<AssignmentDto> { Succeeded = true, Message = " Create Assignment Successfully!" };
             }
             catch (Exception ex)
             {
@@ -63,9 +70,32 @@ namespace AssetManagement.Application.Services
             throw new NotImplementedException();
         }
 
-        public Task<Response<List<AssignmentDto>>> GetAllAssignmentsAsync()
+        public async Task<PagedResponse<List<AssignmentResponseDto>>> GetAllAssignmentsAsync(PaginationFilter paginationFilter, string? search, EnumAssignmentStatus? assignmentStatus, DateTime? assignedDate, EnumLocation adminLocation, string? orderBy, bool? isDescending, string? route)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (paginationFilter == null)
+                {
+                    paginationFilter = new PaginationFilter();
+                }
+                var filterAsset = await _assignmentRepositoriesAsync.FilterAssignment(adminLocation, search, assignmentStatus, assignedDate);
+
+                var totalRecords = filterAsset.Count();
+
+                var specAssignment = AssignmentSpecificationHelper.AssignmentSpecificationWithAsset(paginationFilter, orderBy, isDescending);
+
+                var assignments = await SpecificationEvaluator<Assignment>.GetQuery(filterAsset, specAssignment).ToListAsync();
+
+                var responseAssignmentDtos = _mapper.Map<List<AssignmentResponseDto>>(assignments);
+
+                var pagedResponse = PaginationHelper.CreatePagedReponse(responseAssignmentDtos, paginationFilter, totalRecords, _uriService, route);
+
+                return pagedResponse;
+            }
+            catch (Exception ex)
+            {
+                return new PagedResponse<List<AssignmentResponseDto>> { Succeeded = false, Errors = { ex.Message } };
+            }
         }
 
         public Task<Response<AssignmentDto>> GetAssignmentByIdAsync(Guid assignmentId)
