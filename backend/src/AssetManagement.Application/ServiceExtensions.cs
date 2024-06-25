@@ -31,6 +31,10 @@ namespace AssetManagement.Application
             service.AddScoped<IValidator<UpdateCategoryRequestDto>, UpdateCategoryRequestValidation>();
             service.AddScoped<IValidator<EditAssetRequestDto>, EditAssetRequestValidation>();
 
+            //assignment
+            service.AddScoped<IAssignmentServicesAsync, AssignmentServiceAsync>();
+            //service.AddScoped<AssigmentValidator>();
+
             service.AddAutoMapper(typeof(GeneralProfile));
             service.AddScoped<IValidator<AddUserRequestDto>, AddUserRequestValidation>();
             service.AddScoped<IValidator<EditUserRequestDto>, EditUserRequestValidation>();

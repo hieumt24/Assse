@@ -5,8 +5,8 @@ namespace AssetManagement.Application.Models.DTOs.Assets.Requests
 {
     public class EditAssetRequestDto
     {
-        public string AssetName { get; set; }
-        public string Specification { get; set; }
+        public string AssetName { get; set; } = string.Empty;
+        public string Specification { get; set; } = string.Empty;
 
         [DataType(DataType.Date)]
         public DateTime InstalledDate { get; set; }
