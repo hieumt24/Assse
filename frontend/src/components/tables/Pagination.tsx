@@ -47,7 +47,7 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   return (
-    <div className="flex items-center justify-end space-x-2 py-4">
+    <div className="flex flex-wrap items-center justify-end space-x-2 py-4">
       {totalRecords !== 0 && (
         <div>
           Showing {(pageIndex - 1) * 10 + 1} -{" "}
@@ -55,7 +55,7 @@ const Pagination: React.FC<PaginationProps> = ({
         </div>
       )}
       {pageCount > 1 && (
-        <>
+        <div className="flex space-x-2">
           <Button
             variant="destructive"
             size="sm"
@@ -88,7 +88,7 @@ const Pagination: React.FC<PaginationProps> = ({
           >
             <MdKeyboardArrowRight size={24} />
           </Button>
-        </>
+        </div>
       )}
     </div>
   );

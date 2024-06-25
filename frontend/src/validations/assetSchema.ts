@@ -2,7 +2,7 @@ import { isAfter, isBefore, isValid } from "date-fns";
 import { z } from "zod";
 
 const dateFormat = /^\d{4}-?\d{2}-?\d{2}$/;
-const nameFormat = /^[a-zA-Z0-9\s]*$/;
+const nameFormat = /^[a-zA-Z0-9\s()-_!@#$%^&*=+]*$/;
 const containsLetters = /[a-zA-Z]/;
 
 export const createAssetSchema = z.object({

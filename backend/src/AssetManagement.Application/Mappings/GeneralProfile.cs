@@ -1,10 +1,12 @@
 ﻿using AssetManagement.Application.Models.DTOs.Assets;
 using AssetManagement.Application.Models.DTOs.Assets.Requests;
 using AssetManagement.Application.Models.DTOs.Assets.Responses;
-using AssetManagement.Application.Models.DTOs.Assignment;
-using AssetManagement.Application.Models.DTOs.Assignment.Request;
+using AssetManagement.Application.Models.DTOs.Assignments;
+using AssetManagement.Application.Models.DTOs.Assignments.Request;
 using AssetManagement.Application.Models.DTOs.Category;
 using AssetManagement.Application.Models.DTOs.Category.Requests;
+using AssetManagement.Application.Models.DTOs.ReturnRequests;
+using AssetManagement.Application.Models.DTOs.ReturnRequests.Request;
 using AssetManagement.Application.Models.DTOs.Users;
 using AssetManagement.Application.Models.DTOs.Users.Requests;
 using AssetManagement.Application.Models.DTOs.Users.Responses;
@@ -27,7 +29,7 @@ namespace AssetManagement.Application.Mappings
             CreateMap<EditAssetRequestDto, Asset>().ReverseMap();
             CreateMap<Asset, AssetDto>()
                 .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.CategoryName))
-                .ReverseMap(); ;
+                .ReverseMap();
             CreateMap<Asset, AssetResponseDto>()
                 .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.CategoryName))
                 .ReverseMap();
@@ -37,7 +39,7 @@ namespace AssetManagement.Application.Mappings
             CreateMap<AddCategoryRequestDto, Category>().ReverseMap();
             CreateMap<CategoryDto, UpdateCategoryRequestDto>().ReverseMap();
 
-            //Assignment Mapping 
+            //Assignment Mapping
             CreateMap<Assignment, AssignmentDto>().ReverseMap();
             CreateMap<AddAssignmentRequestDto, Assignment>().ReverseMap();
 

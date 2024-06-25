@@ -1,15 +1,11 @@
 ﻿using AssetManagement.Application.Common;
 using AssetManagement.Domain.Entites;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AssetManagement.Domain.Enums;
 
 namespace AssetManagement.Application.Interfaces.Repositories
 {
     public interface IAssignmentRepositoriesAsync : IBaseRepositoryAsync<Assignment>
     {
-
+        Task<IQueryable<Assignment>> FilterAssignment(EnumLocation adminLocation, string? search, EnumAssignmentStatus? assignmentStatus, DateTime? assignedDate);
     }
 }
