@@ -1,5 +1,5 @@
-﻿using AssetManagement.Application.Models.DTOs.Assignment;
-using AssetManagement.Application.Models.DTOs.Assignment.Request;
+﻿using AssetManagement.Application.Models.DTOs.Assignments;
+using AssetManagement.Application.Models.DTOs.Assignments.Request;
 using AssetManagement.Application.Wrappers;
 
 namespace AssetManagement.Application.Interfaces.Services

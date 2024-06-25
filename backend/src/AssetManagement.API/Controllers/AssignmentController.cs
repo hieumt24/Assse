@@ -1,5 +1,5 @@
 ﻿using AssetManagement.Application.Interfaces.Services;
-using AssetManagement.Application.Models.DTOs.Assignment.Request;
+using AssetManagement.Application.Models.DTOs.Assignments.Request;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

@@ -3,8 +3,7 @@ using AssetManagement.Domain.Entites;
 
 namespace AssetManagement.Application.Interfaces.Repositories
 {
-    public interface IAssignmentRepositoriesAsync : IBaseRepositoryAsync<Assignment>
+    public interface IReturnRequestRepositoriesAsync : IBaseRepositoryAsync<ReturnRequest>
     {
-
     }
 }

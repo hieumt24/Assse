@@ -2,9 +2,9 @@
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
 
-namespace AssetManagement.Application.Models.DTOs.Assignment.Response
+namespace AssetManagement.Application.Models.DTOs.Assignments
 {
-    public class AssignmentResponseDto : BaseEntity
+    public class AssignmentDto : BaseEntity
     {
         public Guid AssignedIdTo { get; set; }
         public User? AssignedTo { get; set; }
@@ -16,7 +16,7 @@ namespace AssetManagement.Application.Models.DTOs.Assignment.Response
         public Guid? ReturnRequestId { get; set; }
         public ReturnRequest? ReturnRequest { get; set; }
         public EnumLocation Location { get; set; }
-        public EnumAssignmentStatus Status { get; set; }
+        public EnumAssignmentStatus Status { get; set; } 
         public string Note { get; set; } = string.Empty;
     }
 }
