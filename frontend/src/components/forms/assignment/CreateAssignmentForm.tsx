@@ -39,14 +39,13 @@ export const CreateAssignmentForm = () => {
   const { user } = useAuth();
   const [orderBy, setOrderBy] = useState("");
   const [isDescending, setIsDescending] = useState(true);
-  const [roleType, setRoleType] = useState(0);
   const [selectedUser, setSelectedUser] = useState<UserRes>();
   pagination.pageSize = 5;
   const { users, loading, pageCount, totalRecords } = useUsers(
     pagination,
     user.location,
     userSearchQuery,
-    roleType,
+    0,
     orderBy,
     isDescending,
   );
