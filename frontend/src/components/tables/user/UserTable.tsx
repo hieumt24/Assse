@@ -36,6 +36,8 @@ interface UserTableProps<TData, TValue> {
   >;
   pageCount?: number;
   totalRecords: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onRowClick?: any;
 }
 
 export function UserTable<TData, TValue>({
@@ -45,6 +47,7 @@ export function UserTable<TData, TValue>({
   onPaginationChange,
   pageCount,
   totalRecords,
+  onRowClick,
 }: Readonly<UserTableProps<TData, TValue>>) {
   const table = useReactTable({
     data,
@@ -115,7 +118,13 @@ export function UserTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className="hover:cursor-pointer"
-                  onClick={async () => handleOpenDetails(row.getValue("id"))}
+                  onClick={
+                    onRowClick
+                      ? () => {
+                          onRowClick(row.original);
+                        }
+                      : async () => handleOpenDetails(row.getValue("id"))
+                  }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
