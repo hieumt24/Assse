@@ -157,7 +157,10 @@ namespace AssetManagement.Application.Services
             try
             {
                 var categories = await _categoryRepository.ListAllActiveAsync();
-                var categoryDtos = _mapper.Map<List<CategoryDto>>(categories);
+                var sortedCategories = categories.OrderBy(c => c.CategoryName).ToList();
+
+                var categoryDtos = _mapper.Map<List<CategoryDto>>(sortedCategories);
+
                 return new Response<List<CategoryDto>> { Succeeded = true, Data = categoryDtos };
             }
             catch (Exception ex)
