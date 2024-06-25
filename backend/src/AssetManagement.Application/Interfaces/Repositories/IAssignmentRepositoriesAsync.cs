@@ -1,5 +1,6 @@
 ﻿using AssetManagement.Application.Common;
 using AssetManagement.Domain.Entites;
+using AssetManagement.Domain.Enums;
 
 namespace AssetManagement.Application.Interfaces.Repositories
 {

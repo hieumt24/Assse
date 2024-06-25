@@ -1,5 +1,7 @@
-﻿using AssetManagement.Application.Models.DTOs.Assignments;
+﻿using AssetManagement.Application.Filter;
+using AssetManagement.Application.Models.DTOs.Assignments;
 using AssetManagement.Application.Models.DTOs.Assignments.Request;
+using AssetManagement.Application.Models.DTOs.Assignments.Response;
 using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Enums;
 
