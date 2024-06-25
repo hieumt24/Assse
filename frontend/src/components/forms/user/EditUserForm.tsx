@@ -1,3 +1,4 @@
+import { GenericDialog } from "@/components";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import {
@@ -48,6 +49,10 @@ export const EditUserForm = () => {
       location: user.location.toString(),
     },
   });
+
+  const handleReset = () => {
+    console.log("reset");
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -290,23 +295,32 @@ export const EditUserForm = () => {
             </FormItem>
           )}
         />
-        <div className="flex justify-end gap-4">
-          <Button
-            type="submit"
-            className="w-[76px] bg-red-500 hover:bg-white hover:text-red-500"
-            disabled={!form.formState.isValid}
-          >
-            Save
-          </Button>
-          <Button
-            type="button"
-            className="w-[76px] border bg-white text-black shadow-none hover:text-white"
-            onClick={() => {
-              navigate("/users");
-            }}
-          >
-            Cancel
-          </Button>
+        <div className="flex justify-between">
+          <GenericDialog
+            trigger="Reset password"
+            title="Reset password"
+            desc="Are you sure to reset password of this account?"
+            confirmText="Reset"
+            onConfirm={handleReset}
+          />
+          <div className="flex justify-center gap-4">
+            <Button
+              type="submit"
+              className="w-[76px] bg-red-500 hover:bg-white hover:text-red-500"
+              disabled={!form.formState.isValid}
+            >
+              Save
+            </Button>
+            <Button
+              type="button"
+              className="w-[76px] border bg-white text-black shadow-none hover:text-white"
+              onClick={() => {
+                navigate("/users");
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
         </div>
       </form>
     </Form>
