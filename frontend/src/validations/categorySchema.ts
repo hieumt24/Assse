@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+const containsLetters = /[a-zA-Z]/;
+
 export const createCategorySchema = z.object({
   categoryName: z
     .string()
@@ -7,7 +9,8 @@ export const createCategorySchema = z.object({
     .min(2, { message: "Category name must be at least 2 characters long." })
     .max(50, {
       message: "Category name must be no longer than 50 characters.",
-    }),
+    })
+    .regex(containsLetters, { message: "Category name must contain letters." }),
   prefix: z
     .string()
     .min(1, { message: "Prefix cannot be blank" })

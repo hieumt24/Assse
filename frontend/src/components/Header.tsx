@@ -7,7 +7,7 @@ import {
 import { useAuth } from "@/hooks";
 import useClickOutside from "@/hooks/useClickOutside";
 import { useCallback, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { MyBreadcrumb } from "./MyBreadcrumb";
 import { ChangePasswordForm } from "./forms/user/ChangePasswordForm";
@@ -16,7 +16,6 @@ import { Separator } from "./ui/separator";
 
 export const Header = () => {
   const { user, setIsAuthenticated } = useAuth();
-  const location = useLocation();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [openLogout, setOpenLogout] = useState(false);
   const [openChangePassword, setOpenChangePassword] = useState(false);
