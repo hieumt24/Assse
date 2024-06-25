@@ -1,36 +1,29 @@
-﻿using AssetManagement.Application.Interfaces.Repositories;
+﻿using AssetManagement.Application.Common;
+using AssetManagement.Application.Filter;
+using AssetManagement.Application.Helper;
+using AssetManagement.Application.Interfaces.Repositories;
 using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Models.DTOs.Assignments;
 using AssetManagement.Application.Models.DTOs.Assignments.Request;
 using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Entites;
+using AssetManagement.Domain.Enums;
 using AutoMapper;
-using FluentValidation;
 
 namespace AssetManagement.Application.Services
 {
     public class AssignmentServiceAsync : IAssignmentServicesAsync
     {
         private readonly IMapper _mapper;
-        private readonly IAssignmentRepositoriesAsync _assignmentRepositories;
-        private readonly IAssetRepositoriesAsync _assetRepository;
-        private readonly IUserRepositoriesAsync _userRepository;
-        private readonly IValidator<AddAssignmentRequestDto> _addAssignmentValidator;
+        private readonly IAssignmentRepositoriesAsync _assignmentRepositoriesAsync;
+        //private readonly validate 
 
-
-        public AssignmentServiceAsync(
-             IAssignmentRepositoriesAsync assignmentRepositories,
-             IAssetRepositoriesAsync assetRepository,
-             IUserRepositoriesAsync userRepository,
-             IMapper mapper,
-             IValidator<AddAssignmentRequestDto> addAssignmentValidator
+        public AssignmentServiceAsync(IAssignmentRepositoriesAsync assignmentRepositoriesAsync,
+             IMapper mapper
             )
         {
             _mapper = mapper;
-            _assignmentRepositories = assignmentRepositories;
-            _addAssignmentValidator = addAssignmentValidator;
-            _assetRepository = assetRepository;
-            _userRepository = userRepository;
+            _assignmentRepositoriesAsync = assignmentRepositoriesAsync;
             
             
         }
@@ -65,12 +58,6 @@ namespace AssetManagement.Application.Services
             }
 
 
-            var existingAssignedIdTo = await _userRepository.GetByIdAsync(request.AssignedIdTo);
-            if (existingAssignedIdTo == null)
-            {
-                return new Response<AssignmentDto> { Succeeded = false, Message = "User assigned to not found." };
-            }
-            //add new assignment
             try {
                 var newAssigment = _mapper.Map<Assignment>(request);
                 newAssigment.CreatedOn = DateTime.Now;
@@ -79,7 +66,7 @@ namespace AssetManagement.Application.Services
 
                 var assetDto = _mapper.Map<AssignmentDto>(asignment);
 
-                return new Response<AssignmentDto> { Succeeded = true , Message=" Create Assignment Successfully!"};
+                return new Response<AssignmentDto> { Succeeded = true, Message = " Create Assignment Successfully!" };
             }
             catch (Exception ex)
             {
@@ -97,9 +84,32 @@ namespace AssetManagement.Application.Services
             throw new NotImplementedException();
         }
 
-        public Task<Response<List<AssignmentDto>>> GetAllAssignmentsAsync()
+        public async Task<PagedResponse<List<AssignmentResponseDto>>> GetAllAssignmentsAsync(PaginationFilter paginationFilter, string? search, EnumAssignmentStatus? assignmentStatus, DateTime? assignedDate, EnumLocation adminLocation, string? orderBy, bool? isDescending, string? route)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (paginationFilter == null)
+                {
+                    paginationFilter = new PaginationFilter();
+                }
+                var filterAsset = await _assignmentRepositoriesAsync.FilterAssignment(adminLocation, search, assignmentStatus, assignedDate);
+
+                var totalRecords = filterAsset.Count();
+
+                var specAssignment = AssignmentSpecificationHelper.AssignmentSpecificationWithAsset(paginationFilter, orderBy, isDescending);
+
+                var assignments = await SpecificationEvaluator<Assignment>.GetQuery(filterAsset, specAssignment).ToListAsync();
+
+                var responseAssignmentDtos = _mapper.Map<List<AssignmentResponseDto>>(assignments);
+
+                var pagedResponse = PaginationHelper.CreatePagedReponse(responseAssignmentDtos, paginationFilter, totalRecords, _uriService, route);
+
+                return pagedResponse;
+            }
+            catch (Exception ex)
+            {
+                return new PagedResponse<List<AssignmentResponseDto>> { Succeeded = false, Errors = { ex.Message } };
+            }
         }
 
         public Task<Response<AssignmentDto>> GetAssignmentByIdAsync(Guid assignmentId)

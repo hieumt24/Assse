@@ -42,6 +42,14 @@ export const BREADCRUMB_COMPONENTS = [
     name: "Edit Asset",
     path: "/assets/edit",
   },
+  {
+    name: "Create Assignment",
+    path: "/assignments/create",
+  },
+  {
+    name: "Edit Assignment",
+    path: "/assignments/edit",
+  },
 ];
 
 export const GENDERS = [

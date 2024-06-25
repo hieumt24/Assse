@@ -60,7 +60,6 @@ export interface CategoryRes {
 }
 
 export interface GetUserReq {
-  token: string;
   pagination: {
     pageSize: number;
     pageIndex: number;
@@ -73,7 +72,6 @@ export interface GetUserReq {
 }
 
 export interface GetAssetReq {
-  token: string;
   pagination: {
     pageSize: number;
     pageIndex: number;

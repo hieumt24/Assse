@@ -29,7 +29,7 @@ namespace AssetManagement.Application.Mappings
             CreateMap<EditAssetRequestDto, Asset>().ReverseMap();
             CreateMap<Asset, AssetDto>()
                 .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.CategoryName))
-                .ReverseMap(); ;
+                .ReverseMap();
             CreateMap<Asset, AssetResponseDto>()
                 .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.CategoryName))
                 .ReverseMap();
@@ -39,13 +39,10 @@ namespace AssetManagement.Application.Mappings
             CreateMap<AddCategoryRequestDto, Category>().ReverseMap();
             CreateMap<CategoryDto, UpdateCategoryRequestDto>().ReverseMap();
 
-            //Assignment Mapping 
+            //Assignment Mapping
             CreateMap<Assignment, AssignmentDto>().ReverseMap();
             CreateMap<AddAssignmentRequestDto, Assignment>().ReverseMap();
 
-            //ReturnRequest Mapping 
-            CreateMap<ReturnRequest, ReturnRequestDto>().ReverseMap();
-            CreateMap<AddReturnRequestDto, ReturnRequest>().ReverseMap();
         }
     }
 }
