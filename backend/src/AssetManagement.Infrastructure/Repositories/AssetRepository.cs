@@ -42,6 +42,12 @@ namespace AssetManagement.Infrastructure.Repositories
             return query;
         }
 
+        public async Task<Asset> FindExitingCategory(Guid categoryId)
+        {
+            return await _dbContext.Set<Asset>()
+                .FirstOrDefaultAsync(asset => asset.CategoryId == categoryId);
+        }
+
         public async Task<string> GenerateAssetCodeAsync(Guid CategoryId)
         {
             // Get the category to access its prefix

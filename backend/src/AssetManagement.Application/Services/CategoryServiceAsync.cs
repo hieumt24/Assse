@@ -6,10 +6,6 @@ using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Entites;
 using AutoMapper;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AssetManagement.Application.Services
 {
@@ -18,19 +14,23 @@ namespace AssetManagement.Application.Services
         private readonly IMapper _mapper;
         private readonly ICategoryRepositoriesAsync _categoryRepository;
         private readonly IValidator<AddCategoryRequestDto> _addCategoryValidator;
+        private readonly IAssetRepositoriesAsync _assetRepository;
         private readonly IValidator<UpdateCategoryRequestDto> _editCategoryValidator;
+
 
         public CategoryServiceAsync(
             ICategoryRepositoriesAsync categoryRepository,
             IMapper mapper,
             IValidator<AddCategoryRequestDto> addCategoryValidator,
-            IValidator<UpdateCategoryRequestDto> editCategoryValidator
+            IValidator<UpdateCategoryRequestDto> editCategoryValidator,
+            IAssetRepositoriesAsync assetRepository
         )
         {
             _categoryRepository = categoryRepository;
             _mapper = mapper;
             _addCategoryValidator = addCategoryValidator;
             _editCategoryValidator = editCategoryValidator;
+            _assetRepository = assetRepository;
         }
 
         public async Task<Response<CategoryDto>> AddCategoryAsync(AddCategoryRequestDto request)
@@ -138,7 +138,13 @@ namespace AssetManagement.Application.Services
         {
             try
             {
-                var category = await _categoryRepository.DeleteAsync(categoryId);
+                var assetInCategory = await _assetRepository.FindExitingCategory(categoryId);
+                if (assetInCategory != null)
+                {
+                    return new Response<CategoryDto> { Succeeded = false, Message = "Cannot delete category because there are assets associated with it." };
+                }
+
+                var category = await _categoryRepository.DeletePermanentAsync(categoryId);
                 if (category == null)
                 {
                     return new Response<CategoryDto> { Succeeded = false, Message = "Category not found." };
@@ -151,6 +157,7 @@ namespace AssetManagement.Application.Services
                 return new Response<CategoryDto> { Succeeded = false, Errors = { ex.Message } };
             }
         }
+
 
         public async Task<Response<List<CategoryDto>>> GetAllCategoriesAsync()
         {

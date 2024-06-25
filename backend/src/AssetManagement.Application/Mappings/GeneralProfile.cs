@@ -50,7 +50,11 @@ namespace AssetManagement.Application.Mappings
                 .ReverseMap()
                 ;
 
-            //Return Mapping
+
+            CreateMap<ReturnRequest, ReturnRequestDto>().ReverseMap();
+            CreateMap<AddReturnRequestDto, ReturnRequest>().ReverseMap();
+
+
 
             CreateMap<ReturnRequest, ReturnRequestResponseDto>()
                 .ForMember(dest => dest.AssetCode, opt => opt.MapFrom(src => src.Assignment.Asset.AssetCode))
@@ -61,6 +65,7 @@ namespace AssetManagement.Application.Mappings
                 .ForMember(dest => dest.ReturnedDate, opt => opt.MapFrom(src => src.ReturnedDate))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.ReturnStatus))
                 ;
+
         }
     }
 }
