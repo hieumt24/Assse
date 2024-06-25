@@ -19,6 +19,15 @@ interface GenericDialogProps {
   open?: boolean;
   setOpen?: React.Dispatch<SetStateAction<boolean>>;
   classButton?: string;
+  variant?:
+    | "link"
+    | "default"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | null
+    | undefined;
 }
 
 export const GenericDialog = (props: GenericDialogProps) => {
@@ -30,13 +39,14 @@ export const GenericDialog = (props: GenericDialogProps) => {
     onConfirm,
     open,
     setOpen,
+    variant,
     classButton,
   } = props;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>
-        <Button type="button" className={classButton}>
+      <DialogTrigger className="w-full">
+        <Button type="button" variant={variant} className={classButton}>
           {trigger}
         </Button>
       </DialogTrigger>

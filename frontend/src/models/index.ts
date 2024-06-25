@@ -59,6 +59,29 @@ export interface CategoryRes {
   createdOn: string;
 }
 
+export interface AssignmentRes {
+  id?: string;
+  assetCode?: string;
+  assetName?: string;
+  assignedTo?: string;
+  assignedBy?: string;
+  assignedDate?: Date;
+  location?: number;
+  status?: number;
+}
+export interface GetAssignemntReq {
+  pagination: {
+    pageSize: number;
+    pageIndex: number;
+  };
+  assignmentStatus?: number;
+  assignedDate?: Date;
+  search?: string;
+  orderBy?: string;
+  adminLocation?: number;
+  isDescending?: boolean;
+}
+
 export interface GetUserReq {
   pagination: {
     pageSize: number;
