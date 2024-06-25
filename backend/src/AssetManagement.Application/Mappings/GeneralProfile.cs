@@ -3,10 +3,10 @@ using AssetManagement.Application.Models.DTOs.Assets.Requests;
 using AssetManagement.Application.Models.DTOs.Assets.Responses;
 using AssetManagement.Application.Models.DTOs.Assignments;
 using AssetManagement.Application.Models.DTOs.Assignments.Request;
+using AssetManagement.Application.Models.DTOs.Assignments.Response;
 using AssetManagement.Application.Models.DTOs.Category;
 using AssetManagement.Application.Models.DTOs.Category.Requests;
-using AssetManagement.Application.Models.DTOs.ReturnRequests;
-using AssetManagement.Application.Models.DTOs.ReturnRequests.Request;
+using AssetManagement.Application.Models.DTOs.Return;
 using AssetManagement.Application.Models.DTOs.Users;
 using AssetManagement.Application.Models.DTOs.Users.Requests;
 using AssetManagement.Application.Models.DTOs.Users.Responses;
@@ -42,10 +42,29 @@ namespace AssetManagement.Application.Mappings
             //Assignment Mapping
             CreateMap<Assignment, AssignmentDto>().ReverseMap();
             CreateMap<AddAssignmentRequestDto, Assignment>().ReverseMap();
+            CreateMap<Assignment, AssignmentResponseDto>()
+                .ForMember(dest => dest.AssetCode, opt => opt.MapFrom(src => src.Asset.AssetCode))
+                .ForMember(dest => dest.AssetName, opt => opt.MapFrom(opt => opt.Asset.AssetName))
+                .ForMember(dest => dest.AssignedTo, opt => opt.MapFrom(opt => opt.AssignedTo.Username))
+                .ForMember(dest => dest.AssignedBy, opt => opt.MapFrom(opt => opt.AssignedBy.Username))
+                .ReverseMap()
+                ;
 
-            //Return Request
+
             CreateMap<ReturnRequest, ReturnRequestDto>().ReverseMap();
             CreateMap<AddReturnRequestDto, ReturnRequest>().ReverseMap();
+
+
+
+            CreateMap<ReturnRequest, ReturnRequestResponseDto>()
+                .ForMember(dest => dest.AssetCode, opt => opt.MapFrom(src => src.Assignment.Asset.AssetCode))
+                .ForMember(dest => dest.AssetName, opt => opt.MapFrom(src => src.Assignment.Asset.AssetName))
+                .ForMember(dest => dest.RequestedByUserName, opt => opt.MapFrom(src => src.RequestedUser.Username))
+                .ForMember(dest => dest.AssignedDate, opt => opt.MapFrom(src => src.Assignment.AssignedDate))
+                .ForMember(dest => dest.AcceptedByUserName, opt => opt.MapFrom(src => src.AcceptedUser.Username))
+                .ForMember(dest => dest.ReturnedDate, opt => opt.MapFrom(src => src.ReturnedDate))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.ReturnStatus))
+                ;
 
         }
     }
