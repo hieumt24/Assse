@@ -38,9 +38,9 @@ namespace AssetManagement.Application.Helper
                 "state" => u => u.State,
                 "assetlocation" => u => u.AssetLocation,
                 "categoryname" => u => u.Category.CategoryName,
-                "createdon" => u =>  u.CreatedOn,
+                "createdon" => u => u.CreatedOn,
                 "lastmodifiedon" => u => u.LastModifiedOn,
-                _ => u => u.AssetCode
+                "" => u => u.AssetCode
             };
         }
 

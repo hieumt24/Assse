@@ -4,19 +4,15 @@ using AssetManagement.Domain.Enums;
 
 namespace AssetManagement.Application.Models.DTOs.Assignment.Response
 {
-    public class AssignmentResponseDto : BaseEntity
+    public class AssignmentResponseDto
     {
-        public Guid AssignedIdTo { get; set; }
-        public User? AssignedTo { get; set; }
-        public Guid AssignedIdBy { get; set; }
-        public User? AssignedBy { get; set; }
+        public Guid Id { get; set; }
+        public string? AssetCode { get; set; }
+        public string? AssetName { get; set; }
+        public string? AssignedTo { get; set; }
+        public string? AssignedBy { get; set; }
         public DateTime AssignedDate { get; set; }
-        public Guid AssetId { get; set; }
-        public Asset? Asset { get; set; }
-        public Guid? ReturnRequestId { get; set; }
-        public ReturnRequest? ReturnRequest { get; set; }
         public EnumLocation Location { get; set; }
         public EnumAssignmentStatus Status { get; set; }
-        public string Note { get; set; } = string.Empty;
     }
 }
