@@ -17,7 +17,7 @@ import { z } from "zod";
 
 interface SearchFormProps {
   setSearch: React.Dispatch<React.SetStateAction<string>>;
-  onSubmit: any;
+  onSubmit?: any;
 }
 
 export const SearchForm = (props: SearchFormProps) => {
@@ -37,10 +37,7 @@ export const SearchForm = (props: SearchFormProps) => {
   };
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex w-1/5 flex-grow text-lg"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex text-lg">
         {/* Search term */}
         <FormField
           control={form.control}

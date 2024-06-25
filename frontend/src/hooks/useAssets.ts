@@ -3,7 +3,6 @@ import { getAllAssestService } from "@/services/";
 import { useEffect, useState } from "react";
 
 export const useAssets = (
-  token: string,
   pagination: {
     pageIndex: number;
     pageSize: number;
@@ -27,7 +26,6 @@ export const useAssets = (
     setLoading(true);
     try {
       const data = await getAllAssestService({
-        token,
         pagination,
         search,
         orderBy: orderByLocalStorage ?? orderBy,
@@ -50,15 +48,7 @@ export const useAssets = (
 
   useEffect(() => {
     fetchAssets();
-  }, [
-    token,
-    pagination,
-    search,
-    orderBy,
-    isDescending,
-    assetStateType,
-    categoryId,
-  ]);
+  }, [pagination, search, orderBy, isDescending, assetStateType, categoryId]);
 
   return {
     assets,
