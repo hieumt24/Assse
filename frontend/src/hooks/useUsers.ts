@@ -46,7 +46,8 @@ export const useUsers = (
 
   useEffect(() => {
     fetchUsers();
-  }, [pagination, search, roleType, orderBy, isDescending, adminLocation]);
+    console.log("use user");
+  }, [pagination, search, roleType, orderBy, isDescending]);
 
   return {
     users,

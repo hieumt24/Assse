@@ -29,26 +29,32 @@ export const BREADCRUMB_COMPONENTS = [
   {
     name: "Create New User",
     path: "/users/create",
+    link: "#",
   },
   {
     name: "Edit User",
-    path: "/users/edit",
+    path: "/users/edit/",
+    link: "#",
   },
   {
     name: "Create New Asset",
     path: "/assets/create",
+    link: "#",
   },
   {
     name: "Edit Asset",
     path: "/assets/edit",
+    link: "#",
   },
   {
     name: "Create Assignment",
     path: "/assignments/create",
+    link: "#",
   },
   {
     name: "Edit Assignment",
     path: "/assignments/edit",
+    link: "",
   },
 ];
 
