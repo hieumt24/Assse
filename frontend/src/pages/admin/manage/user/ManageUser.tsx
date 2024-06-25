@@ -1,5 +1,4 @@
 import { SearchForm, UserTable, userColumns } from "@/components";
-import { FullPageModal } from "@/components/FullPageModal";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,7 +25,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export const ManageUser = () => {
-  const { token, user } = useAuth();
+  const { user } = useAuth();
   const { onPaginationChange, pagination } = usePagination();
   const [search, setSearch] = useState("");
 
@@ -35,7 +34,6 @@ export const ManageUser = () => {
   const [roleType, setRoleType] = useState(0);
   const { users, loading, error, pageCount, fetchUsers, totalRecords } =
     useUsers(
-      token!,
       pagination,
       user.location,
       search,
@@ -128,31 +126,29 @@ export const ManageUser = () => {
             pageCount={pageCount}
             totalRecords={totalRecords}
           />
-          <FullPageModal show={openDisable}>
-            <Dialog open={openDisable} onOpenChange={setOpenDisable}>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle className="text-center text-2xl font-bold text-red-600">
-                    Are you sure?
-                  </DialogTitle>
-                  <DialogDescription className="text-center text-lg">
-                    Do you want to disable this user
-                  </DialogDescription>
-                  <div className="flex items-center justify-center gap-4">
-                    <Button variant={"destructive"} onClick={handleDisable}>
-                      Yes
-                    </Button>
-                    <Button
-                      variant="outline"
-                      onClick={() => setOpenDisable(false)}
-                    >
-                      Cancel
-                    </Button>
-                  </div>
-                </DialogHeader>
-              </DialogContent>
-            </Dialog>
-          </FullPageModal>
+          <Dialog open={openDisable} onOpenChange={setOpenDisable}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle className="text-center text-2xl font-bold text-red-600">
+                  Are you sure?
+                </DialogTitle>
+                <DialogDescription className="text-center text-lg">
+                  Do you want to disable this user
+                </DialogDescription>
+                <div className="flex items-center justify-center gap-4">
+                  <Button variant={"destructive"} onClick={handleDisable}>
+                    Yes
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setOpenDisable(false)}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
         </>
       )}
     </div>

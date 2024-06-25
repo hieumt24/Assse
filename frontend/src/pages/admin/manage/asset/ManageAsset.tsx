@@ -39,7 +39,7 @@ import { AssetTable } from "../../../../components/tables/asset/AssetTable";
 
 export const ManageAsset = () => {
   const navigate = useNavigate();
-  const { token, user } = useAuth();
+  const { user } = useAuth();
   const { onPaginationChange, pagination } = usePagination();
   const [search, setSearch] = useState("");
   const [orderBy, setOrderBy] = useState("");
@@ -49,7 +49,6 @@ export const ManageAsset = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const { assets, loading, error, pageCount, totalRecords, fetchAssets } =
     useAssets(
-      token!,
       pagination,
       user.location,
       search,
