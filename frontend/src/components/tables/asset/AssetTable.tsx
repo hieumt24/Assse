@@ -1,6 +1,7 @@
 import { FullPageModal } from "@/components/FullPageModal";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { DetailInformation } from "@/components/shared/DetailInformation";
+import { Dialog } from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -9,7 +10,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ASSET_STATES, LOCATIONS } from "@/constants";
 import { useLoading } from "@/context/LoadingContext";
 import { AssetRes, PaginationState } from "@/models";
 import { getAssetByAssetCodeService } from "@/services";
@@ -19,7 +19,6 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { format } from "date-fns";
 import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "react-toastify";
 import Pagination from "../Pagination";
@@ -154,62 +153,7 @@ export function AssetTable<TData, TValue>({
           {isLoading ? (
             <LoadingSpinner />
           ) : (
-            <DialogContent className="max-w-[40%] border-none p-0">
-              <div className="rounded-lg p-0 text-lg shadow-lg">
-                <h1 className="rounded-t-lg bg-zinc-300 p-6 px-16 text-xl font-bold text-red-600">
-                  Detailed Asset Information
-                </h1>
-                <div className="w-full px-16 py-6">
-                  <table className="w-full">
-                    <tr>
-                      <td className="w-[40%] font-semibold">Asset Code</td>
-                      <td>{assetDetails?.assetCode}</td>
-                    </tr>
-                    <tr>
-                      <td className="font-semibold">Asset Name</td>
-                      <td>{assetDetails?.assetName}</td>
-                    </tr>
-                    <tr>
-                      <td className="font-semibold">Category</td>
-                      <td>{assetDetails?.categoryName}</td>
-                    </tr>
-                    <tr>
-                      <td className="font-semibold">State</td>
-                      <td>
-                        {
-                          ASSET_STATES.find(
-                            (state) => state.value === assetDetails?.state,
-                          )?.label
-                        }
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="font-semibold">Location</td>
-                      <td>
-                        {
-                          LOCATIONS.find(
-                            (location) =>
-                              location.value === assetDetails?.assetLocation,
-                          )?.label
-                        }
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="font-semibold">Installed Date</td>
-                      <td>
-                        {assetDetails?.installedDate
-                          ? format(assetDetails?.installedDate, "MM/dd/yyyy")
-                          : ""}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="font-semibold">Specification</td>
-                      <td>{assetDetails?.specification}</td>
-                    </tr>
-                  </table>
-                </div>
-              </div>
-            </DialogContent>
+            <DetailInformation info={assetDetails!} variant="Asset" />
           )}
         </Dialog>
       </FullPageModal>

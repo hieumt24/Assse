@@ -1,11 +1,15 @@
 using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Mappings;
 using AssetManagement.Application.Models.DTOs.Assets.Requests;
+using AssetManagement.Application.Models.DTOs.Assignments.Request;
 using AssetManagement.Application.Models.DTOs.Category.Requests;
+using AssetManagement.Application.Models.DTOs.ReturnRequests.Request;
 using AssetManagement.Application.Models.DTOs.Users.Requests;
 using AssetManagement.Application.Services;
 using AssetManagement.Application.Validations.Asset;
+using AssetManagement.Application.Validations.Assignment;
 using AssetManagement.Application.Validations.Category;
+using AssetManagement.Application.Validations.ReturnRequest;
 using AssetManagement.Application.Validations.User;
 using AssetManagement.Domain.Common.Settings;
 using AssetManagement.Domain.Enums;
@@ -33,7 +37,13 @@ namespace AssetManagement.Application
 
             //assignment
             service.AddScoped<IAssignmentServicesAsync, AssignmentServiceAsync>();
-            //service.AddScoped<AssigmentValidator>();
+            service.AddScoped<IValidator<AddAssignmentRequestDto>, AddAssignmentRequestValidation>();
+
+            //return request
+            service.AddScoped<IReturnRequestServiceAsync, ReturnRequestServiceAsync>();
+            service.AddScoped<IValidator<AddReturnRequestDto>, AddReturnRequestValidator>();
+
+
 
             service.AddAutoMapper(typeof(GeneralProfile));
             service.AddScoped<IValidator<AddUserRequestDto>, AddUserRequestValidation>();
