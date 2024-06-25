@@ -43,6 +43,10 @@ namespace AssetManagement.Application.Mappings
             CreateMap<Assignment, AssignmentDto>().ReverseMap();
             CreateMap<AddAssignmentRequestDto, Assignment>().ReverseMap();
 
+            //Return Request
+            CreateMap<ReturnRequest, ReturnRequestDto>().ReverseMap();
+            CreateMap<AddReturnRequestDto, ReturnRequest>().ReverseMap();
+
         }
     }
 }
