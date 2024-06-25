@@ -1,9 +1,9 @@
 import { Input } from "@/components/ui/input";
 import { renderHeader } from "@/lib/utils";
-import { UserRes } from "@/models";
+import { AssetRes } from "@/models";
 import { ColumnDef } from "@tanstack/react-table";
 
-interface AssignmentUserColumnsProps {
+interface AssignmentAssetColumnsProps {
   selectedId: string;
   setOrderBy: React.Dispatch<React.SetStateAction<string>>;
   setIsDescending: React.Dispatch<React.SetStateAction<boolean>>;
@@ -11,13 +11,13 @@ interface AssignmentUserColumnsProps {
   orderBy: string;
 }
 
-export const assignmentUserColumns = ({
+export const assignmentAssetColumns = ({
   selectedId,
   setOrderBy,
   setIsDescending,
   isDescending,
   orderBy,
-}: AssignmentUserColumnsProps): ColumnDef<UserRes>[] => [
+}: AssignmentAssetColumnsProps): ColumnDef<AssetRes>[] => [
   {
     accessorKey: "id",
     header: "",
@@ -27,33 +27,25 @@ export const assignmentUserColumns = ({
           className="w-4"
           type="radio"
           checked={selectedId === row.original.id}
-          name={"assignment-user-select"}
+          name={"assignment-asset-select"}
           readOnly
         />
       );
     },
   },
   {
-    accessorKey: "staffCode",
+    accessorKey: "assetCode",
     header: ({ column }) =>
       renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),
   },
   {
-    accessorKey: "fullName",
+    accessorKey: "assetName",
     header: ({ column }) =>
       renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),
-    cell: ({ row }) => {
-      const user = row.original;
-      return <p>{`${user.firstName} ${user.lastName}`}</p>;
-    },
   },
   {
-    accessorKey: "role",
+    accessorKey: "categoryName",
     header: ({ column }) =>
       renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),
-    cell: ({ row }) => {
-      const role = row.original.role;
-      return <p>{role === 1 ? "Admin" : "Staff"}</p>;
-    },
   },
 ];

@@ -47,6 +47,7 @@ export const useAssets = (
   };
 
   useEffect(() => {
+    console.log("use asset");
     fetchAssets();
   }, [pagination, search, orderBy, isDescending, assetStateType, categoryId]);
 

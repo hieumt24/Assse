@@ -153,6 +153,7 @@ export function UserTable<TData, TValue>({
         pageCount={pageCount || 1}
         setPage={setPage}
         totalRecords={totalRecords}
+        pageSize={pagination.pageSize}
       />
       <Dialog open={openDetails} onOpenChange={setOpenDetails}>
         <DialogContent className="max-w-[40%] border-none p-0">

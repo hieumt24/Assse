@@ -52,6 +52,7 @@ export const CreateCategoryForm = (props: DialogProps) => {
       console.log(error);
       toast.error("Error creating category");
     } finally {
+      form.reset();
       setIsLoading(false);
       setOpen(false);
     }
@@ -125,6 +126,7 @@ export const CreateCategoryForm = (props: DialogProps) => {
                   variant="outline"
                   onClick={() => {
                     setOpen(false);
+                    form.reset();
                   }}
                 >
                   Cancel
