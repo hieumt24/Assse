@@ -1,11 +1,12 @@
 ﻿using AssetManagement.Application.Models.DTOs.Assets;
 using AssetManagement.Application.Models.DTOs.Assets.Requests;
 using AssetManagement.Application.Models.DTOs.Assets.Responses;
-using AssetManagement.Application.Models.DTOs.Assignment;
-using AssetManagement.Application.Models.DTOs.Assignment.Request;
-using AssetManagement.Application.Models.DTOs.Assignment.Response;
+using AssetManagement.Application.Models.DTOs.Assignments;
+using AssetManagement.Application.Models.DTOs.Assignments.Request;
 using AssetManagement.Application.Models.DTOs.Category;
 using AssetManagement.Application.Models.DTOs.Category.Requests;
+using AssetManagement.Application.Models.DTOs.ReturnRequests;
+using AssetManagement.Application.Models.DTOs.ReturnRequests.Request;
 using AssetManagement.Application.Models.DTOs.Users;
 using AssetManagement.Application.Models.DTOs.Users.Requests;
 using AssetManagement.Application.Models.DTOs.Users.Responses;
@@ -41,13 +42,7 @@ namespace AssetManagement.Application.Mappings
             //Assignment Mapping
             CreateMap<Assignment, AssignmentDto>().ReverseMap();
             CreateMap<AddAssignmentRequestDto, Assignment>().ReverseMap();
-            CreateMap<Assignment, AssignmentResponseDto>()
-                .ForMember(dest => dest.AssetCode, opt => opt.MapFrom(src => src.Asset.AssetCode))
-                .ForMember(dest => dest.AssetName, opt => opt.MapFrom(opt => opt.Asset.AssetName))
-                .ForMember(dest => dest.AssignedTo, opt => opt.MapFrom(opt => opt.AssignedTo.Username))
-                .ForMember(dest => dest.AssignedBy, opt => opt.MapFrom(opt => opt.AssignedBy.Username))
-                .ReverseMap()
-                ;
+
         }
     }
 }
