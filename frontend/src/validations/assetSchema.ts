@@ -9,23 +9,22 @@ export const createAssetSchema = z.object({
   name: z
     .string()
     .trim()
-    .min(2, { message: "Name must be at least 2 letters long." })
-    .max(50, { message: "Name must be no longer than 50 letters." })
-    .regex(containsLetters, {
-      message: "The asset name must contain letters.",
+    .min(1, "The asset name cannot be blank")
+    .min(2, { message: "The asset name must be at least 2 characters long." })
+    .max(50, {
+      message: "The asset name must be no longer than 50 characters.",
     })
     .regex(nameFormat, {
-      message: "Name must not contain accent marks.",
+      message: "The asset name must not contain accent marks.",
     }),
   category: z.string(),
   specification: z
     .string()
     .trim()
-    .regex(containsLetters, {
-      message: "The specification name must contain letters.",
-    })
-    .min(2, { message: "Specification must be at least 2 letters long." })
-    .max(100, { message: "Specification must be no longer than 100 letters." }),
+    .min(2, { message: "Specification must be at least 2 characters long." })
+    .max(100, {
+      message: "Specification must be no longer than 100 characters.",
+    }),
   installedDate: z
     .string()
     .regex(dateFormat, { message: "Please select a valid Installed Date." })
@@ -57,23 +56,22 @@ export const updateAssetSchema = z.object({
   name: z
     .string()
     .trim()
-    .min(1, "Asset name cannot be blank")
-    .min(2, { message: "Name must be at least 2 letters long." })
-    .max(50, { message: "Name must be no longer than 50 letters." })
-    .regex(containsLetters, {
-      message: "The asset name must contain letters.",
+    .min(1, "The asset name cannot be blank")
+    .min(2, { message: "The asset name must be at least 2 characters long." })
+    .max(50, {
+      message: "The asset name must be no longer than 50 characters.",
     })
     .regex(nameFormat, {
-      message: "Name must not contain accent marks.",
+      message: "The asset name must not contain accent marks.",
     }),
   specification: z
     .string()
     .trim()
-    .regex(containsLetters, {
-      message: "The specification name must contain letters.",
-    })
-    .min(2, { message: "Specification must be at least 2 letters long." })
-    .max(100, { message: "Specification must be no longer than 100 letters." }),
+    .min(1, { message: "Specification cannot be blank" })
+    .min(2, { message: "Specification must be at least 2 characters long." })
+    .max(100, {
+      message: "Specification must be no longer than 100 characters.",
+    }),
   installedDate: z
     .string()
     .regex(dateFormat, { message: "Please select a valid Installed Date." })

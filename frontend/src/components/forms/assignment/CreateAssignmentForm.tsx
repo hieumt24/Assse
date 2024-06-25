@@ -11,6 +11,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { useAuth, usePagination, useUsers } from "@/hooks";
 import { UserRes } from "@/models";
 import { createAssigmentSchema } from "@/validations/assignmentSchema";
@@ -59,7 +60,7 @@ export const CreateAssignmentForm = () => {
         <FormField
           control={form.control}
           name="userId"
-          render={() => (
+          render={({ field }) => (
             <FormItem>
               <FormLabel className="text-md">
                 User <span className="text-red-600">*</span>
@@ -72,6 +73,7 @@ export const CreateAssignmentForm = () => {
                         ? `${selectedUser?.staffCode} ${selectedUser?.firstName} ${selectedUser?.lastName}`
                         : "Choose user"}
                     </span>
+                    <Input type="hidden" {...field} />
                     <IoIosSearch />
                   </DialogTrigger>
                   <DialogContent className="max-w-2xl">
@@ -108,8 +110,9 @@ export const CreateAssignmentForm = () => {
                       <div className="flex justify-end gap-2">
                         <Button
                           variant={"destructive"}
-                          onClick={() => {
+                          onClick={async () => {
                             form.setValue("userId", selectedUser?.id || "");
+                            await form.trigger();
                             setOpenChooseUser(false);
                           }}
                         >
@@ -117,7 +120,10 @@ export const CreateAssignmentForm = () => {
                         </Button>
                         <Button
                           variant={"ghost"}
-                          onClick={() => setOpenChooseUser(false)}
+                          onClick={async () => {
+                            setOpenChooseUser(false);
+                            await form.trigger();
+                          }}
                         >
                           Cancel
                         </Button>
