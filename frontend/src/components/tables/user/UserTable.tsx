@@ -5,8 +5,10 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
+import { FullPageModal } from "@/components/FullPageModal";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { DetailInformation } from "@/components/shared/DetailInformation";
+import { Dialog } from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -15,11 +17,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { LOCATIONS } from "@/constants";
 import { useLoading } from "@/context/LoadingContext";
 import { PaginationState, UserRes } from "@/models";
 import { getUserByIdService } from "@/services";
-import { format } from "date-fns";
 import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "react-toastify";
 import Pagination from "../Pagination";
@@ -36,6 +36,7 @@ interface UserTableProps<TData, TValue> {
   >;
   pageCount?: number;
   totalRecords: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onRowClick?: any;
 }
 
@@ -154,73 +155,15 @@ export function UserTable<TData, TValue>({
         setPage={setPage}
         totalRecords={totalRecords}
       />
-      <Dialog open={openDetails} onOpenChange={setOpenDetails}>
-        <DialogContent className="max-w-[40%] border-none p-0">
+      <FullPageModal show={openDetails}>
+        <Dialog open={openDetails} onOpenChange={setOpenDetails}>
           {isLoading ? (
             <LoadingSpinner />
           ) : (
-            <div className="border-1 w-[100%] rounded-lg border-black p-0 text-lg shadow-lg">
-              <h1 className="border-b-1 rounded-t-lg border-black bg-zinc-300 p-6 px-16 text-xl font-bold text-red-600">
-                Detailed User Information
-              </h1>
-              <div className="w-full px-16 py-6">
-                <table className="w-full">
-                  <tr>
-                    <td className="w-[40%] font-semibold">Staff code</td>
-                    <td className="text-wrap">{userDetails?.staffCode}</td>
-                  </tr>
-                  <tr>
-                    <td className="font-semibold">Username</td>
-                    <td className="text-wrap">{userDetails?.username}</td>
-                  </tr>
-                  <tr>
-                    <td className="font-semibold">First name</td>
-                    <td className="truncate text-wrap">
-                      {userDetails?.firstName}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="font-semibold">Last name</td>
-                    <td className="text-wrap">{userDetails?.lastName}</td>
-                  </tr>
-                  <tr>
-                    <td className="font-semibold">Date of birth</td>
-                    <td>
-                      {userDetails?.dateOfBirth
-                        ? format(userDetails?.dateOfBirth, "MM/dd/yyyy")
-                        : ""}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="font-semibold">Joined date</td>
-                    <td>
-                      {userDetails?.joinedDate
-                        ? format(userDetails?.joinedDate, "MM/dd/yyyy")
-                        : ""}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="font-semibold">Gender</td>
-                    <td>{userDetails?.gender === 2 ? "Male" : "Female"}</td>
-                  </tr>
-                  <tr>
-                    <td className="font-semibold">Role</td>
-                    <td>{userDetails?.role === 1 ? "Admin" : "Staff"}</td>
-                  </tr>
-                  <tr>
-                    <td className="font-semibold">Location</td>
-                    <td>
-                      {userDetails?.location
-                        ? LOCATIONS[userDetails.location - 1].label
-                        : ""}
-                    </td>
-                  </tr>
-                </table>
-              </div>
-            </div>
+            <DetailInformation info={userDetails!} variant="User" />
           )}
-        </DialogContent>
-      </Dialog>
+        </Dialog>
+      </FullPageModal>
     </div>
   );
 }
