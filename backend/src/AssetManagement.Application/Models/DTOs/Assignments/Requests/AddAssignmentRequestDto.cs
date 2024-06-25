@@ -1,7 +1,7 @@
 ﻿using AssetManagement.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace AssetManagement.Application.Models.DTOs.Assignment.Request
+namespace AssetManagement.Application.Models.DTOs.Assignments.Request
 {
     public class AddAssignmentRequestDto
     {
@@ -15,8 +15,9 @@ namespace AssetManagement.Application.Models.DTOs.Assignment.Request
         [DataType(DataType.Date)]
         public DateTime AssignedDate { get; set; }
         public string Note { get; set; } = string.Empty;
-
+        [Required]
         public EnumLocation Location { get; set; }
+        [Required]
         public EnumAssignmentStatus Status { get; set; } = EnumAssignmentStatus.WaitingForAcceptance;
 
     }

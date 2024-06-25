@@ -1,7 +1,7 @@
 ﻿using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
 
-namespace AssetManagement.Application.Models.DTOs.Assignment.Request
+namespace AssetManagement.Application.Models.DTOs.Assignments.Request
 {
     public class EditAssignmentRequestDto
     {
