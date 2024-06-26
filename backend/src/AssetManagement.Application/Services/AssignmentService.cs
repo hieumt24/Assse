@@ -102,7 +102,7 @@ namespace AssetManagement.Application.Services
             throw new NotImplementedException();
         }
 
-        public async Task<PagedResponse<List<AssignmentResponseDto>>> GetAllAssignmentsAsync(PaginationFilter paginationFilter, string? search, EnumAssignmentStatus? assignmentStatus, DateTime? assignedDate, EnumLocation adminLocation, string? orderBy, bool? isDescending, string? route)
+        public async Task<PagedResponse<List<AssignmentResponseDto>>> GetAllAssignmentsAsync(PaginationFilter paginationFilter, string? search, EnumAssignmentState? assignmentState, DateTime? assignedDate, EnumLocation adminLocation, string? orderBy, bool? isDescending, string? route)
         {
             try
             {
@@ -111,7 +111,7 @@ namespace AssetManagement.Application.Services
                     paginationFilter = new PaginationFilter();
                 }
 
-                var filterAsset = await _assignmentRepositoriesAsync.FilterAssignmentAsync(adminLocation, search, assignmentStatus, assignedDate);
+                var filterAsset = await _assignmentRepositoriesAsync.FilterAssignmentAsync(adminLocation, search, assignmentState, assignedDate);
 
                 var totalRecords = filterAsset.Count();
 

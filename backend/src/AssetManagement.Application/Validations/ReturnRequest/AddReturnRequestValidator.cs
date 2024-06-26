@@ -29,9 +29,9 @@ namespace AssetManagement.Application.Validations.ReturnRequest
                 .NotEmpty().WithMessage("ReturnedDate can not be blank.")
                 .Must(date => date > new DateTime(2000, 1, 1)).WithMessage("ReturnedDate must be greater than the year 2000.");
 
-            RuleFor(x => x.ReturnStatus)
-               .NotEmpty().WithMessage("Please enter status")
-               .Must(status => status == EnumReturnRequestStatus.WaitingForReturning).WithMessage("Invalid status.");
+            RuleFor(x => x.ReturnState)
+               .NotEmpty().WithMessage("Please enter state")
+               .Must(state => state == EnumReturnRequestState.WaitingForReturning).WithMessage("Invalid state.");
         }
     }
 }

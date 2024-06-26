@@ -117,7 +117,7 @@ namespace AssetManagement.Infrastructure.Migrations
                     b.Property<Guid?>("ReturnRequestId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Status")
+                    b.Property<int>("State")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -230,7 +230,7 @@ namespace AssetManagement.Infrastructure.Migrations
                     b.Property<Guid>("RequestedBy")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("ReturnStatus")
+                    b.Property<int>("ReturnState")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("ReturnedDate")
