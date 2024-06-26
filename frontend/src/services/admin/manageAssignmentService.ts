@@ -1,6 +1,10 @@
 import axiosInstance from "@/api/axiosInstance";
-import { GetAssignemntReq, CreateAssignmentReq } from "@/models";
+import { CreateAssignmentReq, GetAssignemntReq } from "@/models";
 export const getAllAssignmentService = (req: GetAssignemntReq) => {
+  if (req.assignmentStatus === 0) {
+    delete req.assignmentStatus;
+  }
+
   return axiosInstance
     .post("/assignments/filter-assignments", req)
     .then((res) => {
@@ -34,6 +38,6 @@ export const createAssignmentService = (req: CreateAssignmentReq) => {
         success: false,
         message: "Failed to fetch assignments.",
         data: err,
-      }
+      };
     });
 };
