@@ -32,7 +32,7 @@ import { SearchForm } from "../user";
 
 export const CreateAssignmentForm = () => {
   const form = useForm<z.infer<typeof createAssigmentSchema>>({
-    mode: "all",
+    mode: "onBlur",
     resolver: zodResolver(createAssigmentSchema),
     defaultValues: {
       userId: "",

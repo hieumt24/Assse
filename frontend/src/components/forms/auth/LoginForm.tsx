@@ -23,7 +23,7 @@ import { z } from "zod";
 export const LoginForm = () => {
   // Define form
   const form = useForm<z.infer<typeof loginSchema>>({
-    mode: "all",
+    mode: "onBlur",
     resolver: zodResolver(loginSchema),
     defaultValues: {
       username: "",
@@ -76,8 +76,9 @@ export const LoginForm = () => {
                   placeholder="Enter username"
                   {...field}
                   onBlur={(e) => {
-                    const cleanedValue = removeExtraWhitespace(e.target.value); // Clean the input value
-                    field.onChange(cleanedValue); // Update the form state
+                    const cleanedValue = removeExtraWhitespace(e.target.value);
+                    field.onChange(cleanedValue);
+                    field.onBlur();
                   }}
                   autoFocus
                 />

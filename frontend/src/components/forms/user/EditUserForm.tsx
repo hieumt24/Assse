@@ -39,7 +39,7 @@ export const EditUserForm = () => {
   const [userDetails, setUserDetails] = useState<UserRes>();
   const { user } = useAuth();
   const form = useForm<z.infer<typeof updateUserSchema>>({
-    mode: "all",
+    mode: "onBlur",
     resolver: zodResolver(updateUserSchema),
     defaultValues: {
       dateOfBirth: "",

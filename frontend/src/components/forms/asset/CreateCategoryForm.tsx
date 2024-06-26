@@ -28,7 +28,7 @@ interface DialogProps {
 export const CreateCategoryForm = (props: DialogProps) => {
   const { open, setOpen, onCreate } = props;
   const form = useForm<z.infer<typeof createCategorySchema>>({
-    mode: "all",
+    mode: "onBlur",
     resolver: zodResolver(createCategorySchema),
     defaultValues: {
       categoryName: "",
@@ -85,6 +85,7 @@ export const CreateCategoryForm = (props: DialogProps) => {
                               e.target.value,
                             );
                             field.onChange(cleanedValue);
+                            field.onBlur();
                           }}
                         />
                       </FormControl>
@@ -109,6 +110,7 @@ export const CreateCategoryForm = (props: DialogProps) => {
                               e.target.value,
                             );
                             field.onChange(cleanedValue);
+                            field.onBlur();
                           }}
                         />
                       </FormControl>
