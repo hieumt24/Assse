@@ -3,7 +3,7 @@ import { AssignmentRes } from "@/models";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { FiEdit2 } from "react-icons/fi";
-import { IoCloseCircleOutline } from "react-icons/io5";
+import { IoCloseCircleOutline, IoReload } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 
 interface AssignmentColumnsProps {
@@ -23,8 +23,11 @@ export const assignmentColumns = ({
 }: AssignmentColumnsProps): ColumnDef<AssignmentRes>[] => [
   {
     accessorKey: "id",
-    header: ({ column }) =>
-      renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),
+    header: "",
+    cell: ({ row }) => {
+      const assignment = row.original;
+      return <div className="hidden">{assignment.id}</div>;
+    },
   },
   {
     accessorKey: "assetCode",
@@ -56,6 +59,22 @@ export const assignmentColumns = ({
     },
   },
   {
+    accessorKey: "status",
+    header: ({ column }) =>
+      renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),
+    cell: ({ row }) => {
+      const state = row.original.status;
+      switch (state) {
+        case 1:
+          return <p className="text-green-600">Accepted</p>;
+        case 2:
+          return <p className="text-yellow-600">Waiting for acceptance</p>;
+        default:
+          return <p>{}</p>;
+      }
+    },
+  },
+  {
     accessorKey: "action",
     header: "Actions",
     cell: ({ row }) => {
@@ -63,7 +82,7 @@ export const assignmentColumns = ({
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const navigate = useNavigate();
       return (
-        <div className="flex gap-4">
+        <div className="flex gap-3">
           <button
             className="text-blue-500 hover:text-blue-700"
             onClick={(e) => {
@@ -81,6 +100,9 @@ export const assignmentColumns = ({
             }}
           >
             <IoCloseCircleOutline size={20} />
+          </button>
+          <button className="text-green-500 hover:text-green-700">
+            <IoReload size={20} />
           </button>
         </div>
       );

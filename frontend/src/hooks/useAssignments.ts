@@ -29,8 +29,8 @@ export const useAssignments = (
         orderBy,
         isDescending,
         adminLocation,
-        assignedDate,
         assignmentStatus,
+        assignedDate,
       });
 
       setAssignments(data.data.data);
