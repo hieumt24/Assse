@@ -55,7 +55,7 @@ namespace AssetManagement.Infrastructure.Repositories
             }
             else
             {
-                number = 1;
+                number = 0;
             }
             return baseUserName + number;
         }
