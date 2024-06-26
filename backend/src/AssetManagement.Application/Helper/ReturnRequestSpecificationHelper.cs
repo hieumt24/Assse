@@ -13,10 +13,7 @@ namespace AssetManagement.Application.Helper
         {
             Expression<Func<ReturnRequest, bool>> criteria = returnRequest => true;
             var spec = new ReturnRequestSpecification(criteria);
-            spec.AddInclude(x => x.AcceptedBy);
-            spec.AddInclude(x => x.Assignment);
-            spec.AddInclude(x => x.Assignment.Asset);
-            spec.AddInclude(x => x.AcceptedUser);
+
             if (!string.IsNullOrEmpty(orderBy))
             {
                 if (isDescending.HasValue && isDescending.Value)

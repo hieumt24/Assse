@@ -11,6 +11,7 @@ import useDebounce from "@/hooks/useDebounce";
 import { removeExtraWhitespace } from "@/lib/utils";
 import { searchSchema } from "@/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { MdSearch } from "react-icons/md";
 
@@ -31,19 +32,31 @@ export const SearchForm = (props: SearchFormProps) => {
     },
   });
 
+  const [isInitialRender, setIsInitialRender] = useState(true);
+
+  useEffect(() => {
+    setIsInitialRender(false);
+  }, []);
+
   useDebounce(
     () => {
-      props.setSearch(form.getValues("searchTerm"));
-      props.onSubmit();
+      if (!isInitialRender) {
+        props.setSearch(form.getValues("searchTerm"));
+        if (props.onSubmit) {
+          props.onSubmit();
+        }
+      }
     },
-    [form],
-    1000,
+    [form.watch("searchTerm")],
+    500,
   );
 
   // Function handle onSubmit
   const onSubmit = async (values: z.infer<typeof searchSchema>) => {
     props.setSearch(values.searchTerm);
-    props.onSubmit();
+    if (props.onSubmit) {
+      props.onSubmit();
+    }
   };
   return (
     <Form {...form}>
@@ -63,8 +76,9 @@ export const SearchForm = (props: SearchFormProps) => {
                   placeholder="Search"
                   {...field}
                   onBlur={(e) => {
-                    const cleanedValue = removeExtraWhitespace(e.target.value); // Clean the input value
-                    field.onChange(cleanedValue); // Update the form state
+                    const cleanedValue = removeExtraWhitespace(e.target.value);
+                    field.onChange(cleanedValue);
+                    field.onBlur();
                   }}
                 />
               </FormControl>

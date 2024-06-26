@@ -15,6 +15,6 @@ namespace AssetManagement.Application.Models.Filters
         public string? search { get; set; }
         public string? orderBy { get; set; }
         public bool? isDescending { get; set; } = false;
-        public EnumLocation adminLocation { get; set; }
+        public EnumLocation location { get; set; }
     }
 }

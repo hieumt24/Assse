@@ -31,7 +31,7 @@ export const FirstTimeForm = () => {
 
   // Define form
   const form = useForm<z.infer<typeof firstTimeLoginSchema>>({
-    mode: "all",
+    mode: "onBlur",
     resolver: zodResolver(firstTimeLoginSchema),
     defaultValues: {
       newPassword: "",
@@ -98,6 +98,7 @@ export const FirstTimeForm = () => {
                       {...field}
                       onBlur={(e) => {
                         field.onChange(e.target.value);
+                        field.onBlur();
                       }}
                     />
                   </FormControl>
