@@ -4,6 +4,7 @@ using AssetManagement.Application.Helper;
 using AssetManagement.Application.Interfaces.Repositories;
 using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Models.DTOs.Assignments;
+using AssetManagement.Application.Models.DTOs.Assignments.Reques;
 using AssetManagement.Application.Models.DTOs.Assignments.Request;
 using AssetManagement.Application.Models.DTOs.Assignments.Response;
 using AssetManagement.Application.Wrappers;
