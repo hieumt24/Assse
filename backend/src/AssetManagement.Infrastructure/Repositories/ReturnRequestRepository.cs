@@ -15,9 +15,11 @@ namespace AssetManagement.Infrastructure.Repositories
 
         public async Task<IQueryable<ReturnRequest>> FilterReturnRequestAsync(EnumLocation adminLocation, string? search, EnumReturnRequestStatus? returnStatus, DateTime? returnDate)
         {
-            var query = _dbContext.ReturnRequests.Include(x => x.AcceptedUser)
+            var query = _dbContext.ReturnRequests
+                .Include(x => x.AcceptedUser)
                 .Include(x => x.RequestedUser)
-                .Include(x => x.Assignment.Asset);
+                .Include(x => x.Assignment)
+                .ThenInclude(a => a.Asset);
             var queryByAdmin = query.Where(x => x.Location == adminLocation);
             if (!string.IsNullOrEmpty(search))
             {

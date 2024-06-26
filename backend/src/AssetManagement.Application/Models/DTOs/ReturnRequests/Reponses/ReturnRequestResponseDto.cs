@@ -1,6 +1,6 @@
 ﻿using AssetManagement.Domain.Enums;
 
-namespace AssetManagement.Application.Models.DTOs.Return
+namespace AssetManagement.Application.Models.DTOs.ReturnRequests.Reponses
 {
     public class ReturnRequestResponseDto
     {
