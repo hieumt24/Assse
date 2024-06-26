@@ -36,7 +36,7 @@ export const EditAssetForm: React.FC = () => {
   const [asset, setAsset] = useState<AssetRes>();
 
   const form = useForm<z.infer<typeof updateAssetSchema>>({
-    mode: "all",
+    mode: "onBlur",
     resolver: zodResolver(updateAssetSchema),
     defaultValues: {
       name: "",
@@ -134,6 +134,7 @@ export const EditAssetForm: React.FC = () => {
                   onBlur={(e) => {
                     const cleanedValue = removeExtraWhitespace(e.target.value);
                     field.onChange(cleanedValue);
+                    field.onBlur();
                   }}
                   autoFocus
                 />

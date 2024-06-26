@@ -28,7 +28,7 @@ export const ChangePasswordForm = (props: {
   const { open, onOpenChange } = props;
   const { user, setIsAuthenticated } = useAuth();
   const form = useForm<z.infer<typeof changePasswordSchema>>({
-    mode: "all",
+    mode: "onBlur",
     resolver: zodResolver(changePasswordSchema),
     defaultValues: {
       newPassword: "",

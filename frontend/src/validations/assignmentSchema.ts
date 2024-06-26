@@ -21,5 +21,10 @@ export const createAssigmentSchema = z.object({
       },
       { message: "Assigned Date can only be today or in the future." },
     ),
-  note: z.string().min(1, "Note is required."),
+  note: z
+    .string()
+    .min(1, "Note is required.")
+    .min(2, "Note must be at least 2 characters long.")
+    .max(256, "Note must not be longer than 256 characters.")
+    .regex(/[a-zA-Z]/, "Note must contain letters."),
 });
