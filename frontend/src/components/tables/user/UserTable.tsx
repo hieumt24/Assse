@@ -36,6 +36,7 @@ interface UserTableProps<TData, TValue> {
   >;
   pageCount?: number;
   totalRecords: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onRowClick?: any;
 }
 
