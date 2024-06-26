@@ -8,8 +8,11 @@
 
   <ItemGroup>
     <Compile Remove="Common\Specifications\**" />
+    <Compile Remove="Models\DTOs\ReturnRequests\Response\**" />
     <EmbeddedResource Remove="Common\Specifications\**" />
+    <EmbeddedResource Remove="Models\DTOs\ReturnRequests\Response\**" />
     <None Remove="Common\Specifications\**" />
+    <None Remove="Models\DTOs\ReturnRequests\Response\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,7 +39,6 @@
 
   <ItemGroup>
     <Folder Include="Models\DTOs\Category\Responses\" />
-    <Folder Include="Models\DTOs\ReturnRequest\Response\" />
   </ItemGroup>
 
 </Project>

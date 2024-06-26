@@ -32,7 +32,7 @@ import { SearchForm } from "../user";
 
 export const CreateAssignmentForm = () => {
   const form = useForm<z.infer<typeof createAssigmentSchema>>({
-    mode: "all",
+    mode: "onBlur",
     resolver: zodResolver(createAssigmentSchema),
     defaultValues: {
       userId: "",
@@ -148,7 +148,7 @@ export const CreateAssignmentForm = () => {
                   <DialogTrigger className="flex min-h-10 w-full items-center justify-between rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors">
                     <span className="w-full text-left text-zinc-500">
                       {form.getValues("userId") !== ""
-                        ? `${selectedUser?.staffCode} ${selectedUser?.firstName} ${selectedUser?.lastName}`
+                        ? `${selectedUser?.staffCode} - ${selectedUser?.firstName} ${selectedUser?.lastName}`
                         : "Choose user"}
                     </span>
                     <Input type="hidden" {...field} />

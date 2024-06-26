@@ -34,7 +34,7 @@ export const CreateUserForm = () => {
   const { setIsLoading } = useLoading();
   const { user } = useAuth();
   const form = useForm<z.infer<typeof createUserSchema>>({
-    mode: "all",
+    mode: "onBlur",
     resolver: zodResolver(createUserSchema),
     defaultValues: {
       firstName: "",
@@ -92,6 +92,7 @@ export const CreateUserForm = () => {
                   onBlur={(e) => {
                     const cleanedValue = removeExtraWhitespace(e.target.value); // Clean the input value
                     field.onChange(cleanedValue); // Update the form state
+                    field.onBlur();
                   }}
                   autoFocus
                 />
@@ -115,6 +116,7 @@ export const CreateUserForm = () => {
                   onBlur={(e) => {
                     const cleanedValue = removeExtraWhitespace(e.target.value);
                     field.onChange(cleanedValue);
+                    field.onBlur();
                   }}
                 />
               </FormControl>

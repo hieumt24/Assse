@@ -93,7 +93,7 @@ export const CreateAssetForm: React.FC = () => {
   }, []);
 
   const form = useForm<z.infer<typeof createAssetSchema>>({
-    mode: "all",
+    mode: "onBlur",
     resolver: zodResolver(createAssetSchema),
     defaultValues: {
       name: "",
@@ -155,6 +155,7 @@ export const CreateAssetForm: React.FC = () => {
                   onBlur={(e) => {
                     const cleanedValue = removeExtraWhitespace(e.target.value);
                     field.onChange(cleanedValue);
+                    field.onBlur();
                   }}
                   autoFocus
                 />
@@ -228,6 +229,7 @@ export const CreateAssetForm: React.FC = () => {
                   onBlur={(e) => {
                     const cleanedValue = removeExtraWhitespace(e.target.value);
                     field.onChange(cleanedValue);
+                    field.onBlur();
                   }}
                 />
               </FormControl>

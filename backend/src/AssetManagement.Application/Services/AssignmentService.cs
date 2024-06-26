@@ -4,6 +4,7 @@ using AssetManagement.Application.Helper;
 using AssetManagement.Application.Interfaces.Repositories;
 using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Models.DTOs.Assignments;
+using AssetManagement.Application.Models.DTOs.Assignments.Reques;
 using AssetManagement.Application.Models.DTOs.Assignments.Request;
 using AssetManagement.Application.Models.DTOs.Assignments.Response;
 using AssetManagement.Application.Wrappers;
@@ -69,7 +70,8 @@ namespace AssetManagement.Application.Services
             {
                 return new Response<AssignmentDto> { Succeeded = false, Message = "User assigned by not found." };
             }
-            if(existingAssignedIdBy.JoinedDate > request.AssignedDate) {
+            if (existingAssignedIdBy.JoinedDate > request.AssignedDate)
+            {
                 return new Response<AssignmentDto> { Succeeded = false, Message = "Assigned Date must be greater than Joined Date." };
             }
 

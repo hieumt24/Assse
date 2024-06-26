@@ -7,9 +7,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import useDebounce from "@/hooks/useDebounce";
 import { removeExtraWhitespace } from "@/lib/utils";
 import { searchSchema } from "@/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { MdSearch } from "react-icons/md";
 
@@ -30,14 +32,38 @@ export const SearchForm = (props: SearchFormProps) => {
     },
   });
 
+  const [isInitialRender, setIsInitialRender] = useState(true);
+
+  useEffect(() => {
+    setIsInitialRender(false);
+  }, []);
+
+  useDebounce(
+    () => {
+      if (!isInitialRender) {
+        props.setSearch(form.getValues("searchTerm"));
+        if (props.onSubmit) {
+          props.onSubmit();
+        }
+      }
+    },
+    [form.watch("searchTerm")],
+    500,
+  );
+
   // Function handle onSubmit
   const onSubmit = async (values: z.infer<typeof searchSchema>) => {
     props.setSearch(values.searchTerm);
-    props.onSubmit();
+    if (props.onSubmit) {
+      props.onSubmit();
+    }
   };
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex text-lg">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex rounded-lg border border-zinc-200 text-lg"
+      >
         {/* Search term */}
         <FormField
           control={form.control}
@@ -46,13 +72,14 @@ export const SearchForm = (props: SearchFormProps) => {
             <FormItem>
               <FormControl>
                 <Input
+                  className="border-none focus-visible:ring-0"
                   placeholder="Search"
                   {...field}
                   onBlur={(e) => {
-                    const cleanedValue = removeExtraWhitespace(e.target.value); // Clean the input value
-                    field.onChange(cleanedValue); // Update the form state
+                    const cleanedValue = removeExtraWhitespace(e.target.value);
+                    field.onChange(cleanedValue);
+                    field.onBlur();
                   }}
-                  autoFocus
                 />
               </FormControl>
               <FormMessage />
@@ -60,7 +87,11 @@ export const SearchForm = (props: SearchFormProps) => {
           )}
         />
 
-        <Button type="submit" variant={"outline"}>
+        <Button
+          type="submit"
+          variant={"outline"}
+          className="border-none p-2 hover:bg-transparent"
+        >
           <MdSearch />
         </Button>
       </form>

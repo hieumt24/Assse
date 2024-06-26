@@ -16,10 +16,10 @@ export const createCategorySchema = z.object({
     .min(1, { message: "Prefix cannot be blank" })
     .min(2, { message: "Prefix must be at least 2 characters long." })
     .max(5, { message: "Prefix must be no longer than 5 characters." })
+    .regex(/^[a-zA-Z\s]*$/, {
+      message: "Prefix contains only letters.",
+    })
     .regex(/^[A-Za-z]+$/, {
       message: "Prefix must only contain 1 word.",
-    })
-    .regex(/^[a-zA-Z]*$/, {
-      message: "Prefix must not contain special characters or numbers.",
     }),
 });
