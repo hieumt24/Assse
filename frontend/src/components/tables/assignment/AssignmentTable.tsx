@@ -11,7 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useLoading } from "@/context/LoadingContext";
-import { AssetRes, PaginationState } from "@/models";
+import { AssignmentRes, PaginationState } from "@/models";
 import { getAssetByAssetCodeService } from "@/services";
 import {
   ColumnDef,
@@ -23,7 +23,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "react-toastify";
 import Pagination from "../Pagination";
 
-interface AssetTableProps<TData, TValue> {
+interface AssignmentTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   pagination: PaginationState;
@@ -35,18 +35,16 @@ interface AssetTableProps<TData, TValue> {
   >;
   pageCount?: number;
   totalRecords: number;
-  onRowClick?: any;
 }
 
-export function AssetTable<TData, TValue>({
+export function AssignmentTable<TData, TValue>({
   columns,
   data,
   pagination,
   onPaginationChange,
   pageCount,
   totalRecords,
-  onRowClick,
-}: Readonly<AssetTableProps<TData, TValue>>) {
+}: Readonly<AssignmentTableProps<TData, TValue>>) {
   const table = useReactTable({
     data,
     columns,
@@ -58,16 +56,16 @@ export function AssetTable<TData, TValue>({
   });
 
   const [openDetails, setOpenDetails] = useState(false);
-  const [assetDetails, setAssetDetails] = useState<AssetRes>();
+  const [assignmentDetails, setAssignmentDetails] = useState<AssignmentRes>();
 
-  const handleOpenDetails = async (assetCode: string) => {
+  const handleOpenDetails = async (id: string) => {
     setOpenDetails(true);
     try {
       setIsLoading(true);
-      const result = await getAssetByAssetCodeService(assetCode);
+      const result = await getAssetByAssetCodeService(id);
       console.log(result.data);
       if (result.success) {
-        setAssetDetails(result.data);
+        setAssignmentDetails(result.data);
       } else {
         toast.error(result.message);
       }
@@ -117,13 +115,7 @@ export function AssetTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className="hover:cursor-pointer"
-                  onClick={
-                    onRowClick
-                      ? () => {
-                          onRowClick(row.original);
-                        }
-                      : async () => handleOpenDetails(row.getValue("assetCode"))
-                  }
+                  onClick={async () => handleOpenDetails(row.getValue("id"))}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -153,14 +145,13 @@ export function AssetTable<TData, TValue>({
         pageCount={pageCount || 1}
         setPage={setPage}
         totalRecords={totalRecords}
-        pageSize={pagination.pageSize}
       />
       <FullPageModal show={openDetails}>
         <Dialog open={openDetails} onOpenChange={setOpenDetails}>
           {isLoading ? (
             <LoadingSpinner />
           ) : (
-            <DetailInformation info={assetDetails!} variant="Asset" />
+            <DetailInformation info={assignmentDetails!} variant="Asset" />
           )}
         </Dialog>
       </FullPageModal>

@@ -1,28 +1,21 @@
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ADMIN_NAV_FUNCTIONS, BREADCRUMB_COMPONENTS } from "@/constants";
 import { useAuth } from "@/hooks";
 import useClickOutside from "@/hooks/useClickOutside";
 import { useCallback, useRef, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { MyBreadcrumb } from "./MyBreadcrumb";
 import { ChangePasswordForm } from "./forms/user/ChangePasswordForm";
 import { GenericDialog } from "./shared";
 import { Separator } from "./ui/separator";
 
 export const Header = () => {
   const { user, setIsAuthenticated } = useAuth();
-  const location = useLocation();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [openLogout, setOpenLogout] = useState(false);
   const [openChangePassword, setOpenChangePassword] = useState(false);
@@ -44,33 +37,7 @@ export const Header = () => {
 
   return (
     <div className="flex w-full justify-between bg-red-600 p-6">
-      <Breadcrumb className="flex">
-        <BreadcrumbList className="text-xl font-bold text-white">
-          {ADMIN_NAV_FUNCTIONS.map((item) => {
-            return location.pathname.includes(item.path) ? (
-              <>
-                <BreadcrumbItem>
-                  <Link to={item.path}>{item.name}</Link>
-                </BreadcrumbItem>
-              </>
-            ) : (
-              <></>
-            );
-          })}
-          {BREADCRUMB_COMPONENTS.map((item) => {
-            return location.pathname.includes(item.path) ? (
-              <>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <Link to={item.path}>{item.name}</Link>
-                </BreadcrumbItem>
-              </>
-            ) : (
-              <></>
-            );
-          })}
-        </BreadcrumbList>
-      </Breadcrumb>
+      <MyBreadcrumb />
       <Collapsible
         open={isUserMenuOpen}
         onOpenChange={setIsUserMenuOpen}
@@ -109,6 +76,8 @@ export const Header = () => {
             onConfirm={handleLogout}
             open={openLogout}
             setOpen={setOpenLogout}
+            variant={"outline"}
+            classButton="border-none w-full justify-start"
           />
         </CollapsibleContent>
       </Collapsible>

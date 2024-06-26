@@ -1,42 +1,41 @@
-import { UserRes } from "@/models";
-import { getAllUserService } from "@/services";
+import { AssignmentRes } from "@/models";
+import { getAllAssignmentService } from "@/services/admin/manageAssignmentService";
 import { useEffect, useState } from "react";
 
-export const useUsers = (
+export const useAssignments = (
   pagination: {
-    pageIndex: number;
     pageSize: number;
+    pageIndex: number;
   },
-  adminLocation: number,
   search?: string,
-  roleType?: number,
   orderBy?: string,
+  adminLocation?: number,
   isDescending?: boolean,
+  assignmentStatus?: number,
+  assignedDate?: Date,
 ) => {
-  const [users, setUsers] = useState<UserRes[] | null>(null);
+  const [assignments, setAssignments] = useState<AssignmentRes[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean | null>(false);
   const [pageCount, setPageCount] = useState<number>(0);
   const [totalRecords, setTotalRecords] = useState<number>(0);
 
-  const fetchUsers = async () => {
-    // Check if localStorage have item
-    const orderByLocalStorage = localStorage.getItem("orderBy");
+  const fetchAssignments = async () => {
     setLoading(true);
     try {
-      const data = await getAllUserService({
+      const data = await getAllAssignmentService({
         pagination,
         search,
-        roleType,
-        adminLocation,
-        orderBy: orderByLocalStorage ?? orderBy,
+        orderBy,
         isDescending,
+        adminLocation,
+        assignedDate,
+        assignmentStatus,
       });
 
-      setUsers(data.data.data);
+      setAssignments(data.data.data);
       setPageCount(data.data.totalPages);
       setTotalRecords(data.data.totalRecords);
-      localStorage.removeItem("orderBy");
     } catch (error) {
       setError(true);
     } finally {
@@ -45,17 +44,24 @@ export const useUsers = (
   };
 
   useEffect(() => {
-    fetchUsers();
-    console.log("use user");
-  }, [pagination, search, roleType, orderBy, isDescending]);
+    fetchAssignments();
+  }, [
+    pagination,
+    search,
+    orderBy,
+    isDescending,
+    adminLocation,
+    assignedDate,
+    assignmentStatus,
+  ]);
 
   return {
-    users,
+    assignments,
     loading,
     error,
-    setUsers,
+    setAssignments,
     pageCount,
     totalRecords,
-    fetchUsers,
+    fetchAssignments,
   };
 };
