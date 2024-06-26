@@ -139,7 +139,7 @@ namespace AssetManagement.Infrastructure.Migrations
 
                     b.Property<string>("CategoryName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -158,16 +158,22 @@ namespace AssetManagement.Infrastructure.Migrations
 
                     b.Property<string>("Prefix")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryName")
+                        .IsUnique();
+
+                    b.HasIndex("Prefix")
+                        .IsUnique();
 
                     b.ToTable("Categories");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("83c193e6-d7f3-43e9-ba36-da3c5a882605"),
+                            Id = new Guid("fff4a035-0f7c-42ae-a3ab-c700c7139095"),
                             CategoryName = "Laptop",
                             CreatedOn = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
@@ -175,7 +181,7 @@ namespace AssetManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("58e96250-8e5a-4715-b593-35408c13b4bb"),
+                            Id = new Guid("80c13e12-2336-436c-8282-c5bea32ad46c"),
                             CategoryName = "Monitor",
                             CreatedOn = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
@@ -183,7 +189,7 @@ namespace AssetManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("9dd0de7f-7167-49ee-83fa-403d120cf706"),
+                            Id = new Guid("5b42906d-c30f-47ef-bbce-1c73eba607d7"),
                             CategoryName = "Desk",
                             CreatedOn = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
@@ -218,10 +224,10 @@ namespace AssetManagement.Infrastructure.Migrations
                     b.Property<DateTimeOffset?>("LastModifiedOn")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<Guid>("RequestedBy")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("Location")
+                        .HasColumnType("int");
 
-                    b.Property<Guid?>("RequestedUserId")
+                    b.Property<Guid>("RequestedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("ReturnStatus")
@@ -237,58 +243,7 @@ namespace AssetManagement.Infrastructure.Migrations
                     b.HasIndex("AssignmentId")
                         .IsUnique();
 
-                    b.HasIndex("RequestedUserId");
-
-                    b.ToTable("ReturnRequests");
-                });
-
-            modelBuilder.Entity("AssetManagement.Domain.Entites.ReturnRequest", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AcceptedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AssignmentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset>("CreatedOn")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset?>("LastModifiedOn")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<Guid>("RequestedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("RequestedUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("ReturnStatus")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("ReturnedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AcceptedBy");
-
-                    b.HasIndex("AssignmentId")
-                        .IsUnique();
-
-                    b.HasIndex("RequestedUserId");
+                    b.HasIndex("RequestedBy");
 
                     b.ToTable("ReturnRequests");
                 });
@@ -372,9 +327,9 @@ namespace AssetManagement.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d2eeec7b-b6f3-4abc-b289-ead045ea2422"),
+                            Id = new Guid("32b90501-6751-445b-bfc5-4a8ebd9334f2"),
                             CreatedBy = "System",
-                            CreatedOn = new DateTimeOffset(new DateTime(2024, 6, 21, 17, 35, 44, 606, DateTimeKind.Unspecified).AddTicks(1244), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedOn = new DateTimeOffset(new DateTime(2024, 6, 26, 10, 6, 48, 573, DateTimeKind.Unspecified).AddTicks(1732), new TimeSpan(0, 7, 0, 0, 0)),
                             DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Admin",
                             Gender = 0,
@@ -383,7 +338,7 @@ namespace AssetManagement.Infrastructure.Migrations
                             JoinedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastName = "Ha Noi",
                             Location = 1,
-                            PasswordHash = "AQAAAAIAAYagAAAAENz1V+sVOaINDgX/JKaY32nzPpMVOuMteKuF0ZRalnNHsFjgx3jAAMStAHsN/+C3Wg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEG2zpC05AwLMl/BK5WlGaBWRxPPCPzMlyGoPVvnOk9Wg1SPb1LXRfmqOwLtcPg6aIw==",
                             Role = 1,
                             StaffCode = "",
                             StaffCodeId = 0,
@@ -391,9 +346,9 @@ namespace AssetManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("078afd66-e9ec-4369-9e4b-ca49b2c92964"),
+                            Id = new Guid("dcee55e0-3c38-4ba9-b33d-d86aed1db88f"),
                             CreatedBy = "System",
-                            CreatedOn = new DateTimeOffset(new DateTime(2024, 6, 21, 17, 35, 44, 691, DateTimeKind.Unspecified).AddTicks(530), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedOn = new DateTimeOffset(new DateTime(2024, 6, 26, 10, 6, 48, 640, DateTimeKind.Unspecified).AddTicks(5595), new TimeSpan(0, 7, 0, 0, 0)),
                             DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Admin",
                             Gender = 0,
@@ -402,7 +357,7 @@ namespace AssetManagement.Infrastructure.Migrations
                             JoinedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastName = "Ho Chi Minh",
                             Location = 3,
-                            PasswordHash = "AQAAAAIAAYagAAAAEIkkb+UaLmv+9KvJzjEx9j+WDiPO5Az4ok2iEbFAccKyEdq0CuA/X83VohrAc5DNqw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHJP5D6F5V8BbnxKFrVcpwe+mkp9SMwLUq390uPON14PuesO7vSKmU/NW8nV+CVm1w==",
                             Role = 1,
                             StaffCode = "",
                             StaffCodeId = 0,
@@ -410,9 +365,9 @@ namespace AssetManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("b4ac67e9-6909-41d4-8a96-c32614f9d5ce"),
+                            Id = new Guid("5d32afe2-f7e8-4514-8a82-9e863be20f87"),
                             CreatedBy = "System",
-                            CreatedOn = new DateTimeOffset(new DateTime(2024, 6, 21, 17, 35, 44, 779, DateTimeKind.Unspecified).AddTicks(6188), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedOn = new DateTimeOffset(new DateTime(2024, 6, 26, 10, 6, 48, 701, DateTimeKind.Unspecified).AddTicks(1141), new TimeSpan(0, 7, 0, 0, 0)),
                             DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Admin",
                             Gender = 0,
@@ -421,7 +376,7 @@ namespace AssetManagement.Infrastructure.Migrations
                             JoinedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastName = "Da Nang",
                             Location = 2,
-                            PasswordHash = "AQAAAAIAAYagAAAAEPKUq0twjk9dxvPeJ0Sqyd4XMbHYDNKu6wWicTbsPvpY8mwLpuoNS9d5eBMMupCL0w==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBiMkjamdjl8qYRdNVftWh81CMEypHg5lKg7NdqtYgIvMmmS/cGhh4VhrCpvD9kxMw==",
                             Role = 1,
                             StaffCode = "",
                             StaffCodeId = 0,
@@ -445,17 +400,17 @@ namespace AssetManagement.Infrastructure.Migrations
                     b.HasOne("AssetManagement.Domain.Entites.Asset", "Asset")
                         .WithMany("Assignments")
                         .HasForeignKey("AssetId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("AssetManagement.Domain.Entites.User", "AssignedBy")
-                        .WithMany("AssignmentsBy")
+                        .WithMany("AssignmentsCreated")
                         .HasForeignKey("AssignedIdBy")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("AssetManagement.Domain.Entites.User", "AssignedTo")
-                        .WithMany("AssignmentsTo")
+                        .WithMany("AssignmentsReceived")
                         .HasForeignKey("AssignedIdTo")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -467,6 +422,43 @@ namespace AssetManagement.Infrastructure.Migrations
                     b.Navigation("AssignedTo");
                 });
 
+            modelBuilder.Entity("AssetManagement.Domain.Entites.ReturnRequest", b =>
+                {
+                    b.HasOne("AssetManagement.Domain.Entites.User", "AcceptedUser")
+                        .WithMany("ReturnRequestsAccepted")
+                        .HasForeignKey("AcceptedBy")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AssetManagement.Domain.Entites.Assignment", "Assignment")
+                        .WithOne("ReturnRequest")
+                        .HasForeignKey("AssetManagement.Domain.Entites.ReturnRequest", "AssignmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AssetManagement.Domain.Entites.User", "RequestedUser")
+                        .WithMany("ReturnRequestsRequested")
+                        .HasForeignKey("RequestedBy")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("AcceptedUser");
+
+                    b.Navigation("Assignment");
+
+                    b.Navigation("RequestedUser");
+                });
+
+            modelBuilder.Entity("AssetManagement.Domain.Entites.Asset", b =>
+                {
+                    b.Navigation("Assignments");
+                });
+
+            modelBuilder.Entity("AssetManagement.Domain.Entites.Assignment", b =>
+                {
+                    b.Navigation("ReturnRequest");
+                });
+
             modelBuilder.Entity("AssetManagement.Domain.Entites.Category", b =>
                 {
                     b.Navigation("Assets");
@@ -474,11 +466,13 @@ namespace AssetManagement.Infrastructure.Migrations
 
             modelBuilder.Entity("AssetManagement.Domain.Entites.User", b =>
                 {
-                    b.Navigation("AssignmentsBy");
+                    b.Navigation("AssignmentsCreated");
 
-                    b.Navigation("AssignmentsTo");
+                    b.Navigation("AssignmentsReceived");
 
                     b.Navigation("ReturnRequestsAccepted");
+
+                    b.Navigation("ReturnRequestsRequested");
                 });
 #pragma warning restore 612, 618
         }
