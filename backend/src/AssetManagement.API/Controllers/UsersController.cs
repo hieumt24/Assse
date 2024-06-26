@@ -85,7 +85,7 @@ namespace AssetManagement.API.Controllers
             return BadRequest(result);
         }
 
-        [HttpPost]
+        [HttpDelete]
         [Route("disable/{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DisableUser(Guid id)

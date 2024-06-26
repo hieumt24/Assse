@@ -160,16 +160,12 @@ namespace AssetManagement.Application.Services
                     return new Response<UserDto> { Succeeded = false, Message = "User not found" };
                 }
 
-                user.IsDeleted = !user.IsDeleted;
-                await _userRepositoriesAsync.UpdateAsync(user);
-                if (user.IsDeleted == true)
+                var disableUser = await _userRepositoriesAsync.DeleteAsync(user.Id);
+                if (disableUser == null)
                 {
-                    return new Response<UserDto> { Succeeded = true, Message = "User disabled successfully" };
+                    return new Response<UserDto> { Succeeded = false, Message = "Disable user failed" };
                 }
-                else
-                {
-                    return new Response<UserDto> { Succeeded = true, Message = "User enable successfully" };
-                }
+                return new Response<UserDto> { Succeeded = true, Message = "Disable user successfully" };
             }
             catch (Exception ex)
             {
