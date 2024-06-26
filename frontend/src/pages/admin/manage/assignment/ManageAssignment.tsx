@@ -1,4 +1,9 @@
-import { GenericDialog, SearchForm, assignmentColumns } from "@/components";
+import {
+  DatePicker,
+  GenericDialog,
+  SearchForm,
+  assignmentColumns,
+} from "@/components";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { AssignmentTable } from "@/components/tables/assignment/AssignmentTable";
 import { Button } from "@/components/ui/button";
@@ -22,6 +27,7 @@ export const ManageAssignment = () => {
   const [orderBy, setOrderBy] = useState("");
   const [isDescending, setIsDescending] = useState(true);
   const [assignmentState, setAssignmentState] = useState(0);
+  const [assignedDate, setAssignedDate] = useState<Date | null>(null);
   const { user } = useAuth();
 
   const {
@@ -38,6 +44,7 @@ export const ManageAssignment = () => {
     user.location,
     isDescending,
     assignmentState,
+    assignedDate!,
   );
 
   const { setIsLoading } = useLoading();
@@ -87,6 +94,7 @@ export const ManageAssignment = () => {
               <SelectItem value="2">Waiting</SelectItem>
             </SelectContent>
           </Select>
+          <DatePicker setValue={setAssignedDate} />
         </div>
         <div className="flex justify-between gap-6">
           <SearchForm
