@@ -144,3 +144,13 @@ export interface AssetRes {
   assetLocation?: number;
   categoryName?: string;
 }
+
+export interface CreateAssignmentReq {
+  assignedIdTo: string;
+  assignedIdBy: string;
+  assetId: string;
+  assignedDate: string;
+  note: string;
+  location: number;
+  status: number;
+}

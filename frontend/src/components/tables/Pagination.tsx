@@ -5,12 +5,14 @@ import { Button } from "../ui/button";
 interface PaginationProps {
   pageIndex: number;
   pageCount: number;
+  pageSize: number;
   totalRecords: number;
   setPage: (pageIndex: number) => void;
 }
 const Pagination: React.FC<PaginationProps> = ({
   pageIndex,
   pageCount,
+  pageSize,
   setPage,
   totalRecords,
 }) => {
@@ -50,8 +52,9 @@ const Pagination: React.FC<PaginationProps> = ({
     <div className="flex flex-wrap items-center justify-end space-x-2 py-4">
       {totalRecords !== 0 && (
         <div>
-          Showing {(pageIndex - 1) * 10 + 1} -{" "}
-          {Math.min(pageIndex * 10, totalRecords)} of {totalRecords} records
+          Showing {(pageIndex - 1) * pageSize + 1} -{" "}
+          {Math.min(pageIndex * pageSize, totalRecords)} of {totalRecords}{" "}
+          records
         </div>
       )}
       {pageCount > 1 && (

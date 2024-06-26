@@ -9,5 +9,7 @@ namespace AssetManagement.Application.Interfaces.Repositories
         Task<string> GenerateAssetCodeAsync(Guid CategoryId);
 
         Task<IQueryable<Asset>> FilterAsset(EnumLocation adminLocation, string? search, Guid? categoryId, ICollection<AssetStateType?>? assetStateType);
+
+        Task<Asset> FindExitingCategory(Guid categoryId);
     }
 }

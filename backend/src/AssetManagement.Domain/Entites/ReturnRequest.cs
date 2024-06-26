@@ -12,6 +12,7 @@ namespace AssetManagement.Domain.Entites
         public Guid AcceptedBy { get; set; }
         public User? AcceptedUser { get; set; }
         public DateTime ReturnedDate { get; set; }
-        public EnumReturnRequestStatus ReturnStatus { get; set; } 
+        public EnumLocation Location { get; set; }
+        public EnumReturnRequestStatus ReturnStatus { get; set; } = EnumReturnRequestStatus.WaitingForReturning;
     }
 }

@@ -35,6 +35,7 @@ interface AssetTableProps<TData, TValue> {
   >;
   pageCount?: number;
   totalRecords: number;
+  onRowClick?: any;
 }
 
 export function AssetTable<TData, TValue>({
@@ -44,6 +45,7 @@ export function AssetTable<TData, TValue>({
   onPaginationChange,
   pageCount,
   totalRecords,
+  onRowClick,
 }: Readonly<AssetTableProps<TData, TValue>>) {
   const table = useReactTable({
     data,
@@ -115,8 +117,12 @@ export function AssetTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className="hover:cursor-pointer"
-                  onClick={async () =>
-                    handleOpenDetails(row.getValue("assetCode"))
+                  onClick={
+                    onRowClick
+                      ? () => {
+                          onRowClick(row.original);
+                        }
+                      : async () => handleOpenDetails(row.getValue("assetCode"))
                   }
                 >
                   {row.getVisibleCells().map((cell) => (
@@ -147,6 +153,7 @@ export function AssetTable<TData, TValue>({
         pageCount={pageCount || 1}
         setPage={setPage}
         totalRecords={totalRecords}
+        pageSize={pagination.pageSize}
       />
       <FullPageModal show={openDetails}>
         <Dialog open={openDetails} onOpenChange={setOpenDetails}>

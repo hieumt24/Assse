@@ -253,6 +253,7 @@ export const EditAssetForm: React.FC = () => {
           <Button
             type="button"
             className="w-[76px] border bg-white text-black shadow-none hover:text-white"
+            onClick={() => navigate("/assets")}
           >
             Cancel
           </Button>

@@ -18,11 +18,12 @@ namespace AssetManagement.Application.Services
     public class AssignmentServiceAsync : IAssignmentServicesAsync
     {
         private readonly IMapper _mapper;
-        private readonly IAssignmentRepositoriesAsync _assignmentRepository;
-        private readonly IAssetRepositoriesAsync _assetRepository;
-        private readonly IUserRepositoriesAsync _userRepository;
+        private readonly IAssignmentRepositoriesAsync _assignmentRepositoriesAsync;
         private readonly IUriService _uriService;
         private readonly IValidator<AddAssignmentRequestDto> _addAssignmentValidator;
+        private readonly IAssignmentRepositoriesAsync _assignmentRepository;
+        private readonly IUserRepositoriesAsync _userRepository;
+        private readonly IAssetRepositoriesAsync _assetRepository;
 
         public AssignmentServiceAsync(IAssignmentRepositoriesAsync assignmentRepositoriesAsync,
              IMapper mapper,
@@ -33,14 +34,15 @@ namespace AssetManagement.Application.Services
             )
         {
             _mapper = mapper;
+            _assignmentRepositoriesAsync = assignmentRepositoriesAsync;
+            _uriService = uriService;
             _assignmentRepository = assignmentRepositoriesAsync;
             _addAssignmentValidator = addAssignmentValidator;
             _assetRepository = assetRepository;
             _userRepository = userRepository;
             _uriService = uriService;
-
-
         }
+
         public async Task<Response<AssignmentDto>> AddAssignmentAsync(AddAssignmentRequestDto request)
         {
             //validate data
@@ -57,22 +59,22 @@ namespace AssetManagement.Application.Services
 
             //check null
             var existingAsset = await _assetRepository.GetByIdAsync(request.AssetId);
-            if (existingAsset == null) 
+            if (existingAsset == null)
             {
-                return new Response<AssignmentDto> { Succeeded = false , Message = "Asset not found."};
+                return new Response<AssignmentDto> { Succeeded = false, Message = "Asset not found." };
             }
 
             var existingAssignedIdBy = await _userRepository.GetByIdAsync(request.AssignedIdBy);
             if (existingAssignedIdBy == null)
             {
                 return new Response<AssignmentDto> { Succeeded = false, Message = "User assigned by not found." };
-            } 
-            if(existingAssignedIdBy.JoinedDate < request.AssignedDate) {
+
+            if(existingAssignedIdBy.JoinedDate > request.AssignedDate) {
                 return new Response<AssignmentDto> { Succeeded = false, Message = "Assigned Date must be greater than Joined Date." };
             }
 
-
-            try {
+            try
+            {
                 var newAssigment = _mapper.Map<Assignment>(request);
                 newAssigment.CreatedOn = DateTime.Now;
                 newAssigment.CreatedBy = request.AssignedIdBy.ToString();
@@ -106,7 +108,8 @@ namespace AssetManagement.Application.Services
                 {
                     paginationFilter = new PaginationFilter();
                 }
-                var filterAsset = await _assignmentRepository.FilterAssignment(adminLocation, search, assignmentStatus, assignedDate);
+
+                var filterAsset = await _assignmentRepositoriesAsync.FilterAssignmentAsync(adminLocation, search, assignmentStatus, assignedDate);
 
                 var totalRecords = filterAsset.Count();
 

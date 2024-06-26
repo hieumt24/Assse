@@ -48,9 +48,10 @@ namespace AssetManagement.Application.Services
             {
                 var newAsset = _mapper.Map<Asset>(request);
                 newAsset.AssetCode = await _assetRepository.GenerateAssetCodeAsync(newAsset.CategoryId);
-
                 newAsset.CreatedBy = request.AdminId;
                 newAsset.CreatedOn = DateTime.Now;
+
+                newAsset.Specification = string.Join(" ", request.Specification.Split(' ', StringSplitOptions.RemoveEmptyEntries));
 
                 var asset = await _assetRepository.AddAsync(newAsset);
 
