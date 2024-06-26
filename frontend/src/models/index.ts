@@ -154,3 +154,28 @@ export interface CreateAssignmentReq {
   location: number;
   status: number;
 }
+
+export interface ReturningRequestRes {
+  id: string;
+  assetCode: string;
+  assetName: string;
+  requestedByUsername: string;
+  assignedDate: Date;
+  acceptedByUsername: string;
+  returnedDate: Date;
+  status: number;
+  location: number;
+}
+
+export interface GetReturningRequestReq {
+  pagination: {
+    pageSize: number;
+    pageIndex: number;
+  };
+  search?: string;
+  orderBy?: string;
+  isDescending?: boolean;
+  returnStatus?: number;
+  returnDate?: string;
+  location?: number;
+}
