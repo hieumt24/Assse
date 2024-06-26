@@ -48,16 +48,23 @@ namespace AssetManagement.Infrastructure.Repositories
 
             var lastUserName = await CheckLastUserName(baseUserName);
 
-            string numericPart = lastUserName.Substring(baseUserName.Length);
-            if (int.TryParse(numericPart, out int number))
+            if (lastUserName == baseUserName)
             {
-                number++;
+                return baseUserName;
             }
             else
             {
-                number = 0;
+                string numericPart = lastUserName.Substring(baseUserName.Length);
+                if (int.TryParse(numericPart, out int number))
+                {
+                    number++;
+                }
+                else
+                {
+                    number = 1;
+                }
+                return baseUserName + number;
             }
-            return baseUserName + number;
         }
 
         private async Task<string> CheckLastUserName(string baseUserName)

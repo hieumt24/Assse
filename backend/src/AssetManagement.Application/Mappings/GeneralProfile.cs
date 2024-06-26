@@ -56,14 +56,15 @@ namespace AssetManagement.Application.Mappings
             CreateMap<AddReturnRequestDto, ReturnRequest>().ReverseMap();
 
             CreateMap<ReturnRequest, ReturnRequestResponseDto>()
-                .ForMember(dest => dest.AssetCode, opt => opt.MapFrom(src => src.Assignment.Asset.AssetCode))
-                .ForMember(dest => dest.AssetName, opt => opt.MapFrom(src => src.Assignment.Asset.AssetName))
-                .ForMember(dest => dest.RequestedByUserName, opt => opt.MapFrom(src => src.RequestedUser.Username))
-                .ForMember(dest => dest.AssignedDate, opt => opt.MapFrom(src => src.Assignment.AssignedDate))
-                .ForMember(dest => dest.AcceptedByUserName, opt => opt.MapFrom(src => src.AcceptedUser.Username))
-                .ForMember(dest => dest.ReturnedDate, opt => opt.MapFrom(src => src.ReturnedDate))
-                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.ReturnStatus))
-                ;
+                 .ForMember(dest => dest.AssetCode, opt => opt.MapFrom(src => src.Assignment.Asset.AssetCode))
+                 .ForMember(dest => dest.AssetName, opt => opt.MapFrom(src => src.Assignment.Asset.AssetName))
+                 .ForMember(dest => dest.RequestedByUserName, opt => opt.MapFrom(src => src.RequestedUser.Username))
+                 .ForMember(dest => dest.AssignedDate, opt => opt.MapFrom(src => src.Assignment.AssignedDate))
+                 .ForMember(dest => dest.AcceptedByUserName, opt => opt.MapFrom(src => src.AcceptedUser.Username))
+                 .ForMember(dest => dest.ReturnedDate, opt => opt.MapFrom(src => src.ReturnedDate))
+                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.ReturnStatus))
+                 .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Location))
+                 .ReverseMap();
         }
     }
 }

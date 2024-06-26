@@ -11,6 +11,7 @@ using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
 using AutoMapper;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 
 namespace AssetManagement.Application.Services
 {
@@ -109,11 +110,11 @@ namespace AssetManagement.Application.Services
                 }
                 var filterReturnRequest = await _returnRequestRepository.FilterReturnRequestAsync(location, search, status, returnDate);
 
-                var totalRecords = filterReturnRequest.Count();
+                var totalRecords = await filterReturnRequest.CountAsync();
 
                 var specRequestReturn = ReturnRequestSpecificationHelper.CreateSpecReturnRequest(pagination, orderBy, isDescending);
 
-                var returnRequests = SpecificationEvaluator<ReturnRequest>.GetQuery(filterReturnRequest, specRequestReturn);
+                var returnRequests = await SpecificationEvaluator<ReturnRequest>.GetQuery(filterReturnRequest, specRequestReturn).ToListAsync();
 
                 var returnRequestResponseDtos = _mapper.Map<List<ReturnRequestResponseDto>>(returnRequests);
 
