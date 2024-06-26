@@ -78,6 +78,7 @@ namespace AssetManagement.Application.Services
                 var newAssigment = _mapper.Map<Assignment>(request);
                 newAssigment.CreatedOn = DateTime.Now;
                 newAssigment.CreatedBy = request.AssignedIdBy.ToString();
+                newAssigment.Note = request.Note.Trim();
                 var asignment = await _assignmentRepository.AddAsync(newAssigment);
 
                 var assetDto = _mapper.Map<AssignmentDto>(asignment);
