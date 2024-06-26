@@ -11,7 +11,7 @@ import { SetStateAction } from "react";
 import { Button } from "../ui/button";
 
 interface GenericDialogProps {
-  trigger: string;
+  trigger?: string;
   title: string;
   desc: string;
   confirmText: string;
