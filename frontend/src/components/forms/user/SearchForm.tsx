@@ -7,6 +7,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import useDebounce from "@/hooks/useDebounce";
 import { removeExtraWhitespace } from "@/lib/utils";
 import { searchSchema } from "@/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -30,6 +31,15 @@ export const SearchForm = (props: SearchFormProps) => {
     },
   });
 
+  useDebounce(
+    () => {
+      props.setSearch(form.getValues("searchTerm"));
+      props.onSubmit();
+    },
+    [form],
+    1000,
+  );
+
   // Function handle onSubmit
   const onSubmit = async (values: z.infer<typeof searchSchema>) => {
     props.setSearch(values.searchTerm);
@@ -37,7 +47,10 @@ export const SearchForm = (props: SearchFormProps) => {
   };
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex text-lg">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex rounded-lg border border-zinc-200 text-lg"
+      >
         {/* Search term */}
         <FormField
           control={form.control}
@@ -46,13 +59,13 @@ export const SearchForm = (props: SearchFormProps) => {
             <FormItem>
               <FormControl>
                 <Input
+                  className="border-none focus-visible:ring-0"
                   placeholder="Search"
                   {...field}
                   onBlur={(e) => {
                     const cleanedValue = removeExtraWhitespace(e.target.value); // Clean the input value
                     field.onChange(cleanedValue); // Update the form state
                   }}
-                  autoFocus
                 />
               </FormControl>
               <FormMessage />
@@ -60,7 +73,11 @@ export const SearchForm = (props: SearchFormProps) => {
           )}
         />
 
-        <Button type="submit" variant={"outline"}>
+        <Button
+          type="submit"
+          variant={"outline"}
+          className="border-none p-2 hover:bg-transparent"
+        >
           <MdSearch />
         </Button>
       </form>

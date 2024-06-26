@@ -45,11 +45,13 @@ export const GenericDialog = (props: GenericDialogProps) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="w-full">
-        <Button type="button" variant={variant} className={classButton}>
-          {trigger}
-        </Button>
-      </DialogTrigger>
+      {trigger && (
+        <DialogTrigger className="w-full">
+          <Button type="button" variant={variant} className={classButton}>
+            {trigger}
+          </Button>
+        </DialogTrigger>
+      )}
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>
