@@ -7,6 +7,8 @@ using AssetManagement.Application.Models.DTOs.Assignments.Response;
 using AssetManagement.Application.Models.DTOs.Category;
 using AssetManagement.Application.Models.DTOs.Category.Requests;
 using AssetManagement.Application.Models.DTOs.Return;
+using AssetManagement.Application.Models.DTOs.ReturnRequests;
+using AssetManagement.Application.Models.DTOs.ReturnRequests.Request;
 using AssetManagement.Application.Models.DTOs.Users;
 using AssetManagement.Application.Models.DTOs.Users.Requests;
 using AssetManagement.Application.Models.DTOs.Users.Responses;
