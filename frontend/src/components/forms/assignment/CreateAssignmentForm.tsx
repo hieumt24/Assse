@@ -110,7 +110,7 @@ export const CreateAssignmentForm = () => {
         assignedIdTo: values.userId,
         assignedIdBy: user.id,
         location: user.location,
-        status: 2,
+        state: 2,
       });
       if (res.success) {
         toast.success(res.message);

@@ -59,11 +59,11 @@ export const assignmentColumns = ({
     },
   },
   {
-    accessorKey: "status",
+    accessorKey: "state",
     header: ({ column }) =>
       renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),
     cell: ({ row }) => {
-      const state = row.original.status;
+      const state = row.original.state;
       switch (state) {
         case 1:
           return <p className="text-green-600">Accepted</p>;
