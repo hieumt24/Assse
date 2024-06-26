@@ -68,8 +68,9 @@ namespace AssetManagement.Application.Services
             if (existingAssignedIdBy == null)
             {
                 return new Response<AssignmentDto> { Succeeded = false, Message = "User assigned by not found." };
-
-            if(existingAssignedIdBy.JoinedDate > request.AssignedDate) {
+            }
+            if (existingAssignedIdBy.JoinedDate > request.AssignedDate)
+            {
                 return new Response<AssignmentDto> { Succeeded = false, Message = "Assigned Date must be greater than Joined Date." };
             }
 
