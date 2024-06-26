@@ -18,7 +18,6 @@ namespace AssetManagement.Infrastructure.Contexts
         }
 
         public DbSet<User> Users { get; set; }
-
         public DbSet<Asset> Assets { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
@@ -28,8 +27,7 @@ namespace AssetManagement.Infrastructure.Contexts
         {
             base.OnModelCreating(modelBuilder);
 
-            //And global query filter
-
+            // Global query filter
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
                 if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
@@ -49,65 +47,56 @@ namespace AssetManagement.Infrastructure.Contexts
             // 1-n category-asset
             modelBuilder.Entity<Assignment>()
                 .HasOne(a => a.AssignedTo)
-                .WithMany(u => u.AssignmentsTo)
+                .WithMany(u => u.AssignmentsReceived)
                 .HasForeignKey(a => a.AssignedIdTo)
                 .OnDelete(DeleteBehavior.Restrict);
 
+
+
+
+
             modelBuilder.Entity<Assignment>()
                 .HasOne(a => a.AssignedBy)
-                .WithMany(u => u.AssignmentsBy)
+                .WithMany(u => u.AssignmentsCreated)
                 .HasForeignKey(a => a.AssignedIdBy)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Assignment>()
                 .HasOne(a => a.Asset)
                 .WithMany(a => a.Assignments)
-                .HasForeignKey(a => a.AssetId);
+                .HasForeignKey(a => a.AssetId)
+                .OnDelete(DeleteBehavior.Restrict);
+
 
             modelBuilder.Entity<ReturnRequest>()
                .HasOne(rr => rr.Assignment)
                .WithOne(a => a.ReturnRequest)
-               .HasForeignKey<ReturnRequest>(rr => rr.AssignmentId);
+               .HasForeignKey<ReturnRequest>(rr => rr.AssignmentId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ReturnRequest>()
+                .HasOne(rr => rr.RequestedUser)
+                .WithMany(u => u.ReturnRequestsRequested)
+                .HasForeignKey(rr => rr.RequestedBy)
+               .OnDelete(DeleteBehavior.Restrict);
+
 
             modelBuilder.Entity<ReturnRequest>()
                 .HasOne(rr => rr.AcceptedUser)
                 .WithMany(u => u.ReturnRequestsAccepted)
                 .HasForeignKey(rr => rr.AcceptedBy)
-                .OnDelete(DeleteBehavior.Restrict);
+               .OnDelete(DeleteBehavior.Restrict);
+
+
 
             modelBuilder.Entity<Category>().HasIndex(c => c.CategoryName).IsUnique();
             modelBuilder.Entity<Category>().HasIndex(c => c.Prefix).IsUnique();
 
-            modelBuilder.Entity<Assignment>()
-                .HasOne(a => a.AssignedTo)
-                .WithMany(u => u.AssignmentsTo)
-                .HasForeignKey(a => a.AssignedIdTo)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Assignment>()
-                .HasOne(a => a.AssignedBy)
-                .WithMany(u => u.AssignmentsBy)
-                .HasForeignKey(a => a.AssignedIdBy)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Assignment>()
-                .HasOne(a => a.Asset)
-                .WithMany(a => a.Assignments)
-                .HasForeignKey(a => a.AssetId);
-
-            modelBuilder.Entity<ReturnRequest>()
-               .HasOne(rr => rr.Assignment)
-               .WithOne(a => a.ReturnRequest)
-               .HasForeignKey<ReturnRequest>(rr => rr.AssignmentId);
-
-            modelBuilder.Entity<ReturnRequest>()
-                .HasOne(rr => rr.AcceptedUser)
-                .WithMany(u => u.ReturnRequestsAccepted)
-                .HasForeignKey(rr => rr.AcceptedBy)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            //seed admin user
-
+            // Seed data and other configurations
+            SeedData(modelBuilder);
+        }
+        private void SeedData(ModelBuilder modelBuilder)
+        {
             var adminHN = new User
             {
                 FirstName = "Admin",
@@ -143,18 +132,13 @@ namespace AssetManagement.Infrastructure.Contexts
                 IsFirstTimeLogin = false,
                 Username = "adminDN"
             };
-
             adminDN.PasswordHash = _passwordHasher.HashPassword(adminDN, "adminpassword");
             adminDN.CreatedOn = DateTime.Now;
             adminDN.CreatedBy = "System";
 
-            modelBuilder.Entity<User>()
-                .HasData(adminHN, adminHCM, adminDN);
-
+            modelBuilder.Entity<User>().HasData(adminHN, adminHCM, adminDN);
             modelBuilder.Entity<User>().Property(u => u.StaffCodeId).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
 
-            
-            // seed category
             modelBuilder.Entity<Category>().HasData(
                 new Category { CategoryName = "Laptop", Prefix = "LA" },
                 new Category { CategoryName = "Monitor", Prefix = "MO" },
