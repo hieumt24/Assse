@@ -30,6 +30,8 @@ namespace AssetManagement.Application.Services
                 new Claim(ClaimTypes.Role, role.ToString()),
                 new Claim("IsFirstTimeLogin", user.IsFirstTimeLogin.ToString().ToLowerInvariant()),
                 new Claim("DateOfBirth", user.DateOfBirth.ToString("dd-MM-yyyy"))
+
+
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
