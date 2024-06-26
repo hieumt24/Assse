@@ -39,5 +39,16 @@ namespace AssetManagement.API.Controllers
             }
             return BadRequest(result);
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> CancelReturnRequest(Guid returnRequestId)
+        {
+            var result = await _returnRequestServicesAsync.CancelReturnRequestAsync(returnRequestId);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
     }
 }

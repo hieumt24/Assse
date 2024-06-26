@@ -90,9 +90,29 @@ namespace AssetManagement.Application.Services
             }
         }
 
-        public Task<Response<ReturnRequestDto>> DeleteReturnRequestAsync(Guid assignmentId)
+        public async Task<Response<string>> CancelReturnRequestAsync(Guid returnRequestId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var returnRequest = await _returnRequestRepository.GetByIdAsync(returnRequestId);
+                if (returnRequest == null)
+                {
+                    return new Response<string> { Succeeded = false, Message = "Return Request not found." };
+                }
+                if (returnRequest.ReturnStatus == EnumReturnRequestStatus.WaitingForReturning)
+                {
+                    var cancelReturnRequest = await _returnRequestRepository.DeleteAsync(returnRequest.Id);
+                    if (cancelReturnRequest == null)
+                    {
+                        return new Response<string> { Succeeded = false, Message = "Cancel Return Request failed." };
+                    }
+                }
+                return new Response<string> { Succeeded = true, Message = "Cancel Return Request Successfully." };
+            }
+            catch (Exception ex)
+            {
+                return new Response<string> { Succeeded = false, Errors = { ex.Message } };
+            }
         }
 
         public Task<Response<ReturnRequestDto>> EditReturnRequestAsync(EditReturnRequestDto request)
