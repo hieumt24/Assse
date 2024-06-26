@@ -1,5 +1,23 @@
 import axiosInstance from "@/api/axiosInstance";
-import { CreateAssignmentReq } from "@/models";
+import { GetAssignemntReq, CreateAssignmentReq } from "@/models";
+export const getAllAssignmentService = (req: GetAssignemntReq) => {
+  return axiosInstance
+    .post("/assignments/filter-assignments", req)
+    .then((res) => {
+      return {
+        success: true,
+        message: "Assignments fetched successfully!",
+        data: res.data,
+      };
+    })
+    .catch((err) => {
+      return {
+        success: false,
+        message: "Failed to fetch assignments.",
+        data: err,
+      };
+    });
+};
 
 export const createAssignmentService = (req: CreateAssignmentReq) => {
   return axiosInstance
@@ -12,11 +30,10 @@ export const createAssignmentService = (req: CreateAssignmentReq) => {
       };
     })
     .catch((err) => {
-      console.log(err.response?.data);
       return {
         success: false,
-        message: err.response?.data.message,
-        data: err.response,
-      };
+        message: "Failed to fetch assignments.",
+        data: err,
+      }
     });
 };

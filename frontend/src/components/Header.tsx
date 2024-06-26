@@ -76,6 +76,8 @@ export const Header = () => {
             onConfirm={handleLogout}
             open={openLogout}
             setOpen={setOpenLogout}
+            variant={"outline"}
+            classButton="border-none w-full justify-start"
           />
         </CollapsibleContent>
       </Collapsible>

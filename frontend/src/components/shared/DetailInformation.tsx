@@ -67,7 +67,7 @@ export const DetailInformation = <T extends UserRes | AssetRes>({
     key.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase());
 
   return (
-    <DialogContent className="max-w-md border-none p-0">
+    <DialogContent className="max-w-md border-none p-0" title={"white"}>
       <div className="overflow-hidden rounded-lg bg-white shadow-lg">
         <h2 className="bg-red-600 p-6 text-xl font-semibold text-white">
           Detailed {variant} Information
