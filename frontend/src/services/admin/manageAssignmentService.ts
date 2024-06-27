@@ -29,7 +29,7 @@ export const getAllAssignmentService = (req: GetAssignemntReq) => {
 
 export const getAssignmentByIdService = (id: string) => {
   return axiosInstance
-    .get(`/assignments/${id}`)
+    .get(`/assignments?assignmentId=${id}`)
     .then((res) => {
       return {
         success: true,
