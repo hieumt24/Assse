@@ -4,6 +4,7 @@ using AssetManagement.Domain.Enums;
 using AssetManagement.Infrastructure.Common;
 using AssetManagement.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace AssetManagement.Infrastructure.Repositories
 {
@@ -44,40 +45,25 @@ namespace AssetManagement.Infrastructure.Repositories
             var lastNameInitials = string.Join("", lastNameParts.Select(part => part[0]));
 
             // Combine first name and initials of last names
+
             string baseUserName = firstName + lastNameInitials;
+            return await GenerateUniqueUserName(baseUserName);
+        }
 
-            var lastUserName = await CheckLastUserName(baseUserName);
-
-            if (lastUserName == baseUserName)
+        private async Task<string> GenerateUniqueUserName(string baseUserName)
+        {
+            var matchingUserNames = _dbContext.Users
+                .Where(u => u.Username.StartsWith(baseUserName)).
+                Select(u => u.Username).ToList();
+            if (matchingUserNames.Count == 0)
             {
                 return baseUserName;
             }
-            else
-            {
-                string numericPart = lastUserName.Substring(baseUserName.Length);
-                if (int.TryParse(numericPart, out int number))
-                {
-                    number++;
-                }
-                else
-                {
-                    number = 1;
-                }
-                return baseUserName + number;
-            }
-        }
-
-        private async Task<string> CheckLastUserName(string baseUserName)
-        {
-            var matchingUserNames = await _dbContext.Users
-                .Where(u => u.Username.StartsWith(baseUserName))
-                .ToListAsync();
-
             int maxNumber = 0;
 
             foreach (var userName in matchingUserNames)
             {
-                string numericPart = userName.Username.Substring(baseUserName.Length);
+                string numericPart = userName.Substring(baseUserName.Length);
                 if (int.TryParse(numericPart, out int number))
                 {
                     if (number > maxNumber)
@@ -86,11 +72,8 @@ namespace AssetManagement.Infrastructure.Repositories
                     }
                 }
             }
-            if (maxNumber == 0)
-            {
-                return baseUserName;
-            }
-            return baseUserName + maxNumber;
+
+            return baseUserName + (maxNumber + 1);
         }
 
         public async Task<RoleType> GetRoleAsync(Guid userId)
