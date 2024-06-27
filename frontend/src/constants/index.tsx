@@ -17,7 +17,7 @@ export const ADMIN_NAV_FUNCTIONS = [
   },
   {
     name: "Request for Returning",
-    path: "/return",
+    path: "/returning-request",
   },
   {
     name: "Report",

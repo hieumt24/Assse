@@ -76,7 +76,7 @@ export const ManageAssignment = () => {
 
   const navigate = useNavigate();
   return (
-    <div className="m-24 flex h-full flex-grow flex-col gap-8">
+    <div className="m-16 flex h-full flex-grow flex-col gap-8">
       <p className="text-2xl font-bold text-red-600">Assignment List</p>
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-center gap-4">

@@ -34,7 +34,14 @@ export const returningRequestColumns = ({
   {
     accessorKey: "requestedByUsername",
     header: ({ column }) =>
-      renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),
+      renderHeader(
+        column,
+        setOrderBy,
+        setIsDescending,
+        isDescending,
+        orderBy,
+        "Requested by",
+      ),
   },
   {
     accessorKey: "assignedDate",
@@ -48,7 +55,14 @@ export const returningRequestColumns = ({
   {
     accessorKey: "acceptedByUsername",
     header: ({ column }) =>
-      renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),
+      renderHeader(
+        column,
+        setOrderBy,
+        setIsDescending,
+        isDescending,
+        orderBy,
+        "Accepted by",
+      ),
   },
   {
     accessorKey: "returnedDate",
