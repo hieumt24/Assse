@@ -60,11 +60,7 @@ namespace AssetManagement.Application.Services
                 return new Response<ReturnRequestDto> { Succeeded = false, Message = "Assignment not found." };
             }
 
-            var existingUserRequest = await _userRepository.GetByIdAsync(request.RequestedBy);
-            if (existingUserRequest == null)
-            {
-                return new Response<ReturnRequestDto> { Succeeded = false, Message = "User request not found." };
-            }
+
 
             var existingUserAccept = await _userRepository.GetByIdAsync(request.AcceptedBy);
             if (existingUserAccept == null)

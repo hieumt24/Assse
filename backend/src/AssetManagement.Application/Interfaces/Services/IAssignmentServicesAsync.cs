@@ -18,6 +18,8 @@ namespace AssetManagement.Application.Interfaces.Services
 
         Task<Response<AssignmentDto>> DeleteAssignmentAsync(Guid assignmentId);
 
+        Task<Response<List<AssignmentResponseDto>>> GetAssignmentsOfUser(Guid userId);
+
         Task<PagedResponse<List<AssignmentResponseDto>>> GetAllAssignmentsAsync(PaginationFilter paginationFilter, string? search, EnumAssignmentStatus? assignmentStatus, DateTime? assignedDate, EnumLocation adminLocation, string? orderBy, bool? isDescending, string? route);
     }
 }

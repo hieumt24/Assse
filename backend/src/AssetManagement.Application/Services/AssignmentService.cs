@@ -135,6 +135,19 @@ namespace AssetManagement.Application.Services
         public Task<Response<AssignmentDto>> GetAssignmentByIdAsync(Guid assignmentId)
         {
             throw new NotImplementedException();
+
+        }
+
+        public async Task<Response<List<AssignmentResponseDto>>> GetAssignmentsOfUser(Guid userId)
+        {
+            var assignments = await _assignmentRepository.GetAssignmentsByUserId(userId);
+            var assignmentDtos = assignments.Select(assignment => _mapper.Map<AssignmentResponseDto>(assignment)).ToList();
+
+            return new Response<List<AssignmentResponseDto>>
+            {
+                Succeeded = true,
+                Data = assignmentDtos
+            };
         }
     }
 }
