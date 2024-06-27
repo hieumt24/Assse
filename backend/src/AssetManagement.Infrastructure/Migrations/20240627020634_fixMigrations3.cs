@@ -171,25 +171,25 @@ namespace AssetManagement.Infrastructure.Migrations
             //             onDelete: ReferentialAction.Restrict);
             //     });
 
-            migrationBuilder.InsertData(
-                table: "Categories",
-                columns: new[] { "Id", "CategoryName", "CreatedBy", "CreatedOn", "IsDeleted", "LastModifiedBy", "LastModifiedOn", "Prefix" },
-                values: new object[,]
-                {
-                    { new Guid("20f28140-61d3-4885-b07a-8d4107832be2"), "Monitor", null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), false, null, null, "MO" },
-                    { new Guid("3a597164-7cf3-4fcf-a111-8e9d35c8cc00"), "Laptop", null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), false, null, null, "LA" },
-                    { new Guid("ee41c86d-87ff-49cf-83d9-baae7db13bbb"), "Desk", null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), false, null, null, "DE" }
-                });
+            //migrationBuilder.InsertData(
+            //    table: "Categories",
+            //    columns: new[] { "Id", "CategoryName", "CreatedBy", "CreatedOn", "IsDeleted", "LastModifiedBy", "LastModifiedOn", "Prefix" },
+            //    values: new object[,]
+            //    {
+            //        { new Guid("20f28140-61d3-4885-b07a-8d4107832be2"), "Monitor", null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), false, null, null, "MO" },
+            //        { new Guid("3a597164-7cf3-4fcf-a111-8e9d35c8cc00"), "Laptop", null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), false, null, null, "LA" },
+            //        { new Guid("ee41c86d-87ff-49cf-83d9-baae7db13bbb"), "Desk", null, new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), false, null, null, "DE" }
+            //    });
 
-            migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "Id", "CreatedBy", "CreatedOn", "DateOfBirth", "FirstName", "Gender", "IsDeleted", "IsFirstTimeLogin", "JoinedDate", "LastModifiedBy", "LastModifiedOn", "LastName", "Location", "PasswordHash", "Role", "Username" },
-                values: new object[,]
-                {
-                    { new Guid("023e549e-2cf7-4984-8cdc-4989ff9c5c2a"), "System", new DateTimeOffset(new DateTime(2024, 6, 27, 9, 6, 33, 206, DateTimeKind.Unspecified).AddTicks(9731), new TimeSpan(0, 7, 0, 0, 0)), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Admin", 0, false, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "Ha Noi", 1, "AQAAAAIAAYagAAAAEA2vI5KZK39+Yq61npnL3VZjdJf3pAgb9BNydZSrVse4l9xRoqWyLC4ITV7rYFci1A==", 1, "adminHN" },
-                    { new Guid("29d54d97-39f8-4301-b172-5d8454043d9e"), "System", new DateTimeOffset(new DateTime(2024, 6, 27, 9, 6, 33, 678, DateTimeKind.Unspecified).AddTicks(5219), new TimeSpan(0, 7, 0, 0, 0)), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Admin", 0, false, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "Da Nang", 2, "AQAAAAIAAYagAAAAEJvydqlHc9cR7Gfj2v++h7J4sbDf1zoXGGN2MXE8BqG5OYba+BgO29qflUpueaJA4Q==", 1, "adminDN" },
-                    { new Guid("34c7d5ff-10fc-430a-a0fc-cb112da46b62"), "System", new DateTimeOffset(new DateTime(2024, 6, 27, 9, 6, 33, 440, DateTimeKind.Unspecified).AddTicks(2168), new TimeSpan(0, 7, 0, 0, 0)), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Admin", 0, false, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "Ho Chi Minh", 3, "AQAAAAIAAYagAAAAEHrhOMB8WQrWLl2mB2BnZ7vmTsIwQJJiWTLU7m/rw5PHMytLQQj/Q/lC0rxl8x5scg==", 1, "adminHCM" }
-                });
+            //migrationBuilder.InsertData(
+            //    table: "Users",
+            //    columns: new[] { "Id", "CreatedBy", "CreatedOn", "DateOfBirth", "FirstName", "Gender", "IsDeleted", "IsFirstTimeLogin", "JoinedDate", "LastModifiedBy", "LastModifiedOn", "LastName", "Location", "PasswordHash", "Role", "Username" },
+            //    values: new object[,]
+            //    {
+            //        { new Guid("023e549e-2cf7-4984-8cdc-4989ff9c5c2a"), "System", new DateTimeOffset(new DateTime(2024, 6, 27, 9, 6, 33, 206, DateTimeKind.Unspecified).AddTicks(9731), new TimeSpan(0, 7, 0, 0, 0)), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Admin", 0, false, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "Ha Noi", 1, "AQAAAAIAAYagAAAAEA2vI5KZK39+Yq61npnL3VZjdJf3pAgb9BNydZSrVse4l9xRoqWyLC4ITV7rYFci1A==", 1, "adminHN" },
+            //        { new Guid("29d54d97-39f8-4301-b172-5d8454043d9e"), "System", new DateTimeOffset(new DateTime(2024, 6, 27, 9, 6, 33, 678, DateTimeKind.Unspecified).AddTicks(5219), new TimeSpan(0, 7, 0, 0, 0)), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Admin", 0, false, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "Da Nang", 2, "AQAAAAIAAYagAAAAEJvydqlHc9cR7Gfj2v++h7J4sbDf1zoXGGN2MXE8BqG5OYba+BgO29qflUpueaJA4Q==", 1, "adminDN" },
+            //        { new Guid("34c7d5ff-10fc-430a-a0fc-cb112da46b62"), "System", new DateTimeOffset(new DateTime(2024, 6, 27, 9, 6, 33, 440, DateTimeKind.Unspecified).AddTicks(2168), new TimeSpan(0, 7, 0, 0, 0)), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Admin", 0, false, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "Ho Chi Minh", 3, "AQAAAAIAAYagAAAAEHrhOMB8WQrWLl2mB2BnZ7vmTsIwQJJiWTLU7m/rw5PHMytLQQj/Q/lC0rxl8x5scg==", 1, "adminHCM" }
+            //    });
 
         //     migrationBuilder.CreateIndex(
         //         name: "IX_Assets_CategoryId",
