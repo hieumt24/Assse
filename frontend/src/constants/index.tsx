@@ -17,11 +17,18 @@ export const ADMIN_NAV_FUNCTIONS = [
   },
   {
     name: "Request for Returning",
-    path: "/return",
+    path: "/returning-request",
   },
   {
     name: "Report",
     path: "/reports",
+  },
+];
+
+export const STAFF_NAV_FUNCTIONS = [
+  {
+    name: "Home",
+    path: "/home",
   },
 ];
 

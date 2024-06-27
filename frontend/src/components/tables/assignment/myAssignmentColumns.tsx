@@ -2,22 +2,23 @@ import { renderHeader } from "@/lib/utils";
 import { AssignmentRes } from "@/models";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { FiEdit2 } from "react-icons/fi";
+import { FaCheck } from "react-icons/fa";
 import { IoCloseCircleOutline, IoReload } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
 
 interface AssignmentColumnsProps {
   handleOpenCreateRequest: (id: string) => void;
-  handleOpenDisable: (id: string) => void;
+  handleOpenAccept: (id: string) => void;
+  handleOpenDecline: (id: string) => void;
   setOrderBy: React.Dispatch<React.SetStateAction<string>>;
   setIsDescending: React.Dispatch<React.SetStateAction<boolean>>;
   isDescending: boolean;
   orderBy: string;
 }
 
-export const assignmentColumns = ({
+export const myAssignmentColumns = ({
   handleOpenCreateRequest,
-  handleOpenDisable,
+  handleOpenAccept,
+  handleOpenDecline,
   setOrderBy,
   setIsDescending,
   isDescending,
@@ -38,11 +39,6 @@ export const assignmentColumns = ({
   },
   {
     accessorKey: "assetName",
-    header: ({ column }) =>
-      renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),
-  },
-  {
-    accessorKey: "assignedTo",
     header: ({ column }) =>
       renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),
   },
@@ -81,24 +77,23 @@ export const assignmentColumns = ({
     header: "Actions",
     cell: ({ row }) => {
       const assignment = row.original;
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      const navigate = useNavigate();
       return (
         <div className="flex gap-3">
           <button
             className="text-blue-500 hover:text-blue-700"
             onClick={(e) => {
               e.stopPropagation();
-              navigate(`edit/${assignment.id}`);
+              handleOpenAccept(assignment.id!);
             }}
+            disabled={assignment.state !== 2}
           >
-            <FiEdit2 size={18} />
+            <FaCheck size={18} />
           </button>
           <button
             className="text-red-500 hover:text-red-700"
             onClick={(e) => {
               e.stopPropagation();
-              handleOpenDisable(assignment.id!);
+              handleOpenDecline(assignment.id!);
             }}
             disabled={assignment.state !== 2}
           >

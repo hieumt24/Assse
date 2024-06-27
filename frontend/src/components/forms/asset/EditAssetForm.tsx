@@ -209,6 +209,7 @@ export const EditAssetForm: React.FC = () => {
                   onValueChange={field.onChange}
                   {...field}
                   className=""
+                  disabled={asset?.state === 3}
                 >
                   <FormItem className="flex items-center gap-1 space-y-0">
                     <FormControl>
@@ -236,6 +237,14 @@ export const EditAssetForm: React.FC = () => {
                     </FormControl>
                     <FormLabel className="font-normal">Recycled</FormLabel>
                   </FormItem>
+                  {asset?.state === 3 && (
+                    <FormItem className="flex items-center gap-1 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value={"3"} />
+                      </FormControl>
+                      <FormLabel className="font-normal">Assigned</FormLabel>
+                    </FormItem>
+                  )}
                 </RadioGroup>
               </FormControl>
               <FormMessage>{form.formState.errors.state?.message}</FormMessage>

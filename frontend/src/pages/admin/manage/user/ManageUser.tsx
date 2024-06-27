@@ -70,7 +70,7 @@ export const ManageUser = () => {
   };
   const [openDisable, setOpenDisable] = useState(false);
   return (
-    <div className="m-24 flex flex-grow flex-col gap-8">
+    <div className="m-16 flex flex-grow flex-col gap-8">
       <p className="text-2xl font-bold text-red-600">User List</p>
       <div className="flex items-center justify-between">
         <Select

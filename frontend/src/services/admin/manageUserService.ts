@@ -82,7 +82,7 @@ export const updateUserService = (req: UpdateUserReq) => {
 
 export const disableUserService = (id: string) => {
   return axiosInstance
-    .post(`/users/disable/${id}`)
+    .delete(`/users/disable/${id}`)
     .then((res) => {
       return {
         success: true,

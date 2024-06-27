@@ -32,7 +32,7 @@ export const useReturningRequests = (
         isDescending,
         returnState,
         returnedDate,
-        location,
+        adminLocation: location,
       });
 
       setRequests(data.data.data);
