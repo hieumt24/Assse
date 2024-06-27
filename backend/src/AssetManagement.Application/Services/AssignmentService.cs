@@ -80,6 +80,7 @@ namespace AssetManagement.Application.Services
                 var newAssigment = _mapper.Map<Assignment>(request);
                 newAssigment.CreatedOn = DateTime.Now;
                 newAssigment.CreatedBy = request.AssignedIdBy.ToString();
+                newAssigment.Note = request.Note.Trim();
                 var asignment = await _assignmentRepository.AddAsync(newAssigment);
                 existingAsset.State = AssetStateType.Assigned;
                 await _assetRepository.UpdateAsync(existingAsset);
@@ -135,6 +136,19 @@ namespace AssetManagement.Application.Services
         public Task<Response<AssignmentDto>> GetAssignmentByIdAsync(Guid assignmentId)
         {
             throw new NotImplementedException();
+
+        }
+
+        public async Task<Response<List<AssignmentResponseDto>>> GetAssignmentsOfUser(Guid userId)
+        {
+            var assignments = await _assignmentRepository.GetAssignmentsByUserId(userId);
+            var assignmentDtos = assignments.Select(assignment => _mapper.Map<AssignmentResponseDto>(assignment)).ToList();
+
+            return new Response<List<AssignmentResponseDto>>
+            {
+                Succeeded = true,
+                Data = assignmentDtos
+            };
         }
     }
 }

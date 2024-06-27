@@ -33,5 +33,11 @@ namespace AssetManagement.Infrastructure.Repositories
             }
             return query;
         }
+
+        public async Task<IQueryable<Assignment>> GetAssignmentsByUserId(Guid userId)
+        {
+            return _dbContext.Assignments.Include(x => x.Asset).Where(x => x.AssignedIdTo == userId);
+        }
+
     }
 }

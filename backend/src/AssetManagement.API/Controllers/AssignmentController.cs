@@ -39,5 +39,16 @@ namespace AssetManagement.API.Controllers
             }
             return Ok(response);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAssignmentsForUser(Guid userId)
+        {
+            var result = await _assignmentServicesAsync.GetAssignmentsOfUser(userId);
+            if (result.Succeeded)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
     }
 }
