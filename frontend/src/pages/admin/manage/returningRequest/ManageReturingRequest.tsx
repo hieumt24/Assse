@@ -24,8 +24,8 @@ export const ManageReturningRequest = () => {
   const [orderBy, setOrderBy] = useState("");
   const [isDescending, setIsDescending] = useState(true);
   const [requestState, setRequestState] = useState(0);
-  const [returnedDate, setreturnedDate] = useState<Date>();
-  const { requests, loading, error, pageCount, fetchRequests, totalRecords } =
+  const [returnedDate] = useState<Date>();
+  const { requests, loading, error, pageCount, totalRecords } =
     useReturningRequests(
       pagination,
       user.location,
