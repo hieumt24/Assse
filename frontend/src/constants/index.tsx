@@ -25,6 +25,13 @@ export const ADMIN_NAV_FUNCTIONS = [
   },
 ];
 
+export const STAFF_NAV_FUNCTIONS = [
+  {
+    name: "Home",
+    path: "/home",
+  },
+];
+
 export const BREADCRUMB_COMPONENTS = [
   {
     name: "Create New User",
