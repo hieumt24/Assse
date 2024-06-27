@@ -81,7 +81,7 @@ namespace AssetManagement.Application.Services
                 newAssigment.CreatedOn = DateTime.Now;
                 newAssigment.CreatedBy = request.AssignedIdBy.ToString();
                 var asignment = await _assignmentRepository.AddAsync(newAssigment);
-
+                existingAsset.State = AssetStateType.Assigned;
                 var assetDto = _mapper.Map<AssignmentDto>(asignment);
 
                 return new Response<AssignmentDto> { Succeeded = true, Message = " Create Assignment Successfully!" };
