@@ -63,6 +63,7 @@ export const ManageAssignment = () => {
 
   const handleDelete = async () => {
     alert("Not implemented");
+    fetchAssignments();
   };
 
   const handleCreateRequest = async () => {
