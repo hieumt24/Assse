@@ -16,7 +16,7 @@ namespace AssetManagement.Application.Models.DTOs.Assignments.Reques
         public ReturnRequest? ReturnRequest { get; set; }
         public EnumLocation Location { get; set; }
 
-        public EnumAssignmentStatus Status { get; set; }
+        public EnumAssignmentState State { get; set; }
         public string Note { get; set; } = string.Empty;
     }
 }

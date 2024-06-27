@@ -7,6 +7,8 @@ using AssetManagement.Application.Models.DTOs.Assignments;
 using AssetManagement.Application.Models.DTOs.Assignments.Reques;
 using AssetManagement.Application.Models.DTOs.Assignments.Request;
 using AssetManagement.Application.Models.DTOs.Assignments.Response;
+using AssetManagement.Application.Models.DTOs.Category;
+using AssetManagement.Application.Models.DTOs.ReturnRequests.Request;
 using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
@@ -80,8 +82,9 @@ namespace AssetManagement.Application.Services
                 var newAssigment = _mapper.Map<Assignment>(request);
                 newAssigment.CreatedOn = DateTime.Now;
                 newAssigment.CreatedBy = request.AssignedIdBy.ToString();
+                newAssigment.Note = request.Note.Trim();
                 var asignment = await _assignmentRepository.AddAsync(newAssigment);
-
+                existingAsset.State = AssetStateType.Assigned;
                 var assetDto = _mapper.Map<AssignmentDto>(asignment);
 
                 return new Response<AssignmentDto> { Succeeded = true, Message = " Create Assignment Successfully!" };
@@ -102,7 +105,7 @@ namespace AssetManagement.Application.Services
             throw new NotImplementedException();
         }
 
-        public async Task<PagedResponse<List<AssignmentResponseDto>>> GetAllAssignmentsAsync(PaginationFilter paginationFilter, string? search, EnumAssignmentStatus? assignmentStatus, DateTime? assignedDate, EnumLocation adminLocation, string? orderBy, bool? isDescending, string? route)
+        public async Task<PagedResponse<List<AssignmentResponseDto>>> GetAllAssignmentsAsync(PaginationFilter paginationFilter, string? search, EnumAssignmentState? assignmentState, DateTime? assignedDate, EnumLocation adminLocation, string? orderBy, bool? isDescending, string? route)
         {
             try
             {
@@ -111,7 +114,7 @@ namespace AssetManagement.Application.Services
                     paginationFilter = new PaginationFilter();
                 }
 
-                var filterAsset = await _assignmentRepositoriesAsync.FilterAssignmentAsync(adminLocation, search, assignmentStatus, assignedDate);
+                var filterAsset = await _assignmentRepositoriesAsync.FilterAssignmentAsync(adminLocation, search, assignmentState, assignedDate);
 
                 var totalRecords = filterAsset.Count();
 
@@ -131,9 +134,68 @@ namespace AssetManagement.Application.Services
             }
         }
 
-        public Task<Response<AssignmentDto>> GetAssignmentByIdAsync(Guid assignmentId)
+        public async Task<Response<AssignmentResponseDto>> GetAssignmentByIdAsync(Guid assignmentId)
         {
-            throw new NotImplementedException();
+            var assigment = await _assignmentRepositoriesAsync.GetAssignemntByIdAsync(assignmentId);
+            if (assigment == null)
+            {
+                return new Response<AssignmentResponseDto> { Succeeded = false, Message = "Assignment not found" };
+            }
+            var assigmentDto = _mapper.Map<AssignmentResponseDto>(assigment);
+            return new Response<AssignmentResponseDto> { Succeeded = true, Data = assigmentDto };
+
+        }
+
+        public async Task<Response<List<AssignmentResponseDto>>> GetAssignmentsOfUser(Guid userId)
+        {
+            var assignments = await _assignmentRepository.GetAssignmentsByUserId(userId);
+            var assignmentDtos = assignments.Select(assignment => _mapper.Map<AssignmentResponseDto>(assignment)).ToList();
+
+            return new Response<List<AssignmentResponseDto>>
+            {
+                Succeeded = true,
+                Data = assignmentDtos
+            };
+        }
+
+        public async Task<Response<AssignmentDto>> ChangeAssignmentStateAsync(ChangeStateReturnRequestDto request)
+        {
+            var assignment = await _assignmentRepository.GetByIdAsync(request.AssignmentId);
+
+            if (assignment == null)
+            {
+                return new Response<AssignmentDto>
+                {
+                    Succeeded = false,
+                    Message = "Assignment not found."
+                };
+            }
+            if (assignment.State == EnumAssignmentState.Accepted || assignment.State == EnumAssignmentState.Declined)
+            {
+                return new Response<AssignmentDto> { Succeeded = false, Message = "Assignment state cannot be changed." };
+            }
+            assignment.State = request.NewState;
+
+            try
+            {
+                await _assignmentRepository.UpdateAsync(assignment);
+                var assignmentDto = _mapper.Map<AssignmentDto>(assignment);
+                return new Response<AssignmentDto>
+                {
+                    Succeeded = true,
+                    Message = "Assignment state changed successfully.",
+                    Data = assignmentDto
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Response<AssignmentDto>
+                {
+                    Succeeded = false,
+                    Message = "An error occurred while changing the assignment state.",
+                    Errors = new List<string> { ex.Message }
+                };
+            }
         }
     }
 }

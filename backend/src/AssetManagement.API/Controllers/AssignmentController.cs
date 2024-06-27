@@ -1,6 +1,8 @@
 ﻿using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Models.DTOs.Assignments.Request;
+using AssetManagement.Application.Models.DTOs.ReturnRequests.Request;
 using AssetManagement.Application.Models.Filters;
+using AssetManagement.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AssetManagement.API.Controllers
@@ -32,12 +34,47 @@ namespace AssetManagement.API.Controllers
         public async Task<IActionResult> FilterAssignment([FromBody] AssignmentFilter filter)
         {
             string route = Request.Path.Value;
-            var response = await _assignmentServicesAsync.GetAllAssignmentsAsync(filter.pagination, filter.search, filter.assignmentStatus, filter.assignedDate, filter.adminLocation, filter.orderBy, filter.isDescending, route);
+            var response = await _assignmentServicesAsync.GetAllAssignmentsAsync(filter.pagination, filter.search, filter.assignmentState, filter.assignedDate, filter.adminLocation, filter.orderBy, filter.isDescending, route);
             if (!response.Succeeded)
             {
                 return BadRequest(response);
             }
             return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("user-assigned/{userId}")]
+        public async Task<IActionResult> GetAssignmentsForUser(Guid userId)
+        {
+            var result = await _assignmentServicesAsync.GetAssignmentsOfUser(userId);
+            if (result.Succeeded)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> GerAssignmentById(Guid assignmentId)
+        {
+            var result = await _assignmentServicesAsync.GetAssignmentByIdAsync(assignmentId);
+            if (result.Succeeded)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> ChangeAssignmentStatus(ChangeStateReturnRequestDto request)
+        {
+            var result = await _assignmentServicesAsync.ChangeAssignmentStateAsync(request);
+            if (result.Succeeded)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
     }
 }

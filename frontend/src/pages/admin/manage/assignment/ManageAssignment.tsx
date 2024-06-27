@@ -1,7 +1,19 @@
-import { GenericDialog, SearchForm, assignmentColumns } from "@/components";
+import {
+  DatePicker,
+  GenericDialog,
+  SearchForm,
+  assignmentColumns,
+} from "@/components";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { AssignmentTable } from "@/components/tables/assignment/AssignmentTable";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useLoading } from "@/context/LoadingContext";
 import { useAssignments, useAuth, usePagination } from "@/hooks";
 import { deleteAssetByIdService } from "@/services";
@@ -14,6 +26,8 @@ export const ManageAssignment = () => {
   const [search, setSearch] = useState("");
   const [orderBy, setOrderBy] = useState("");
   const [isDescending, setIsDescending] = useState(true);
+  const [assignmentState, setAssignmentState] = useState(0);
+  const [assignedDate, setAssignedDate] = useState<Date | null>(null);
   const { user } = useAuth();
 
   const {
@@ -23,7 +37,15 @@ export const ManageAssignment = () => {
     pageCount,
     totalRecords,
     fetchAssignments,
-  } = useAssignments(pagination, search, orderBy, user.location, isDescending);
+  } = useAssignments(
+    pagination,
+    search,
+    orderBy,
+    user.location,
+    isDescending,
+    assignmentState,
+    assignedDate!,
+  );
 
   const { setIsLoading } = useLoading();
   const [openDisable, setOpenDisable] = useState(false);
@@ -35,6 +57,7 @@ export const ManageAssignment = () => {
   const handleDelete = async () => {
     try {
       setIsLoading(true);
+      // TODO : Need change the function into delete assignment not asset
       const res = await deleteAssetByIdService(assignmentIdToDelete);
       if (res.success) {
         toast.success(res.message);
@@ -56,7 +79,23 @@ export const ManageAssignment = () => {
     <div className="m-24 flex h-full flex-grow flex-col gap-8">
       <p className="text-2xl font-bold text-red-600">Assignment List</p>
       <div className="flex items-center justify-between">
-        <div className="flex gap-2"></div>
+        <div className="flex items-center justify-center gap-4">
+          <Select
+            onValueChange={(value) => {
+              setAssignmentState(Number(value));
+            }}
+          >
+            <SelectTrigger className="w-32">
+              <SelectValue placeholder="State" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="0">All</SelectItem>
+              <SelectItem value="1">Accepted</SelectItem>
+              <SelectItem value="2">Waiting</SelectItem>
+            </SelectContent>
+          </Select>
+          <DatePicker setValue={setAssignedDate} />
+        </div>
         <div className="flex justify-between gap-6">
           <SearchForm
             setSearch={setSearch}
@@ -89,6 +128,7 @@ export const ManageAssignment = () => {
               setIsDescending,
               isDescending,
               orderBy,
+              requestedBy: user.id,
             })}
             data={assignments!}
             pagination={pagination}

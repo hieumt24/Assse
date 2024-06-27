@@ -37,7 +37,7 @@ namespace AssetManagement.Infrastructure.Repositories
                                                        || x.State == AssetStateType.Assigned
                                                        || x.State == AssetStateType.WaitingForRecycling
                                                        || x.State == AssetStateType.Recycled
-                                                                                                                                                                            || x.State == AssetStateType.Recycled);
+                                                       || x.State == AssetStateType.Recycled);
             }
             return query;
         }

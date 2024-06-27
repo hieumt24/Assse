@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AssetManagement.Domain.Enums
 {
-    public enum EnumAssignmentStatus
+    public enum EnumAssignmentState
     {
         Accepted = 1,
         WaitingForAcceptance = 2,

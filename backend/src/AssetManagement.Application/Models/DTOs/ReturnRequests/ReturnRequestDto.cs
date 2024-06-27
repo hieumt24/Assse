@@ -11,6 +11,6 @@ namespace AssetManagement.Application.Models.DTOs.ReturnRequests
         public User? RequestedUser { get; set; }
         public Guid AcceptedBy { get; set; }
         public User? AcceptedUser { get; set; }
-        public EnumReturnRequestStatus ReturnStatus { get; set; }
+        public EnumReturnRequestState ReturnState { get; set; }
     }
 }

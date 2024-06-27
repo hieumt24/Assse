@@ -18,7 +18,7 @@ namespace AssetManagement.Application.Models.DTOs.Assignments.Request
         [Required]
         public EnumLocation Location { get; set; }
         [Required]
-        public EnumAssignmentStatus Status { get; set; } = EnumAssignmentStatus.WaitingForAcceptance;
+        public EnumAssignmentState State { get; set; } = EnumAssignmentState.WaitingForAcceptance;
 
     }
 }

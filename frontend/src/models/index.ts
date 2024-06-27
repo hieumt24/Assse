@@ -67,14 +67,14 @@ export interface AssignmentRes {
   assignedBy?: string;
   assignedDate?: Date;
   location?: number;
-  status?: number;
+  state?: number;
 }
 export interface GetAssignemntReq {
   pagination: {
     pageSize: number;
     pageIndex: number;
   };
-  assignmentStatus?: number;
+  assignmentState?: number;
   assignedDate?: Date;
   search?: string;
   orderBy?: string;
@@ -152,5 +152,35 @@ export interface CreateAssignmentReq {
   assignedDate: string;
   note: string;
   location: number;
-  status: number;
+  state: number;
+}
+
+export interface ReturningRequestRes {
+  id: string;
+  assetCode: string;
+  assetName: string;
+  requestedByUsername: string;
+  assignedDate: Date;
+  acceptedByUsername?: string;
+  returnedDate?: Date;
+  state: number;
+  location: number;
+}
+
+export interface GetReturningRequestReq {
+  pagination: {
+    pageSize: number;
+    pageIndex: number;
+  };
+  search?: string;
+  orderBy?: string;
+  isDescending?: boolean;
+  returnState?: number;
+  returnedDate?: string;
+  location?: number;
+}
+
+export interface CreateReturningRequestReq {
+  assignmentId?: string;
+  requestedBy?: string;
 }

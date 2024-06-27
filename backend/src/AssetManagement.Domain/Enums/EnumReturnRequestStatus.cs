@@ -1,6 +1,6 @@
 ﻿namespace AssetManagement.Domain.Enums
 {
-    public enum EnumReturnRequestStatus
+    public enum EnumReturnRequestState
     {
         WaitingForReturning = 1,
         Completed = 2,

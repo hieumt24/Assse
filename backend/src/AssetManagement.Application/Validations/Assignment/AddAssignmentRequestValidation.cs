@@ -32,9 +32,9 @@ namespace AssetManagement.Application.Validations.Assignment
                 .NotEmpty().WithMessage("Location can not be blank.")
                 .Must(location => Enum.IsDefined(typeof(EnumLocation), location)).WithMessage("Invalid Location");
 
-            RuleFor(x => x.Status)
-               .NotEmpty().WithMessage("Please enter status")
-               .Must(status => status == EnumAssignmentStatus.WaitingForAcceptance).WithMessage("Invalid status.");
+            RuleFor(x => x.State)
+               .NotEmpty().WithMessage("Please enter state")
+               .Must(state => state == EnumAssignmentState.WaitingForAcceptance).WithMessage("Invalid state.");
         }
     }
 }
