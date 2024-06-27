@@ -62,10 +62,10 @@ namespace AssetManagement.Application.Services
 
 
 
-            var existingUserAccept = await _userRepository.GetByIdAsync(request.AcceptedBy);
-            if (existingUserAccept == null)
+            var existingUserRequested = await _userRepository.GetByIdAsync(request.RequestedBy);
+            if (existingUserRequested == null)
             {
-                return new Response<ReturnRequestDto> { Succeeded = false, Message = "User accept not found." };
+                return new Response<ReturnRequestDto> { Succeeded = false, Message = "Requester not found." };
             }
 
             try
@@ -73,7 +73,8 @@ namespace AssetManagement.Application.Services
                 var newReturnRequest = _mapper.Map<ReturnRequest>(request);
                 newReturnRequest.ReturnedDate = DateTime.Now;
                 newReturnRequest.CreatedOn = DateTime.Now;
-                newReturnRequest.CreatedBy = request.AcceptedBy.ToString();
+                newReturnRequest.CreatedBy = request.RequestedBy.ToString();
+                newReturnRequest.ReturnState = EnumReturnRequestState.WaitingForReturning;
                 var returnrequest = await _returnRequestRepository.AddAsync(newReturnRequest);
 
                 var assetDto = _mapper.Map<ReturnRequestDto>(returnrequest);

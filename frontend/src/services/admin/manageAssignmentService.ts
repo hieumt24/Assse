@@ -1,5 +1,9 @@
 import axiosInstance from "@/api/axiosInstance";
-import { CreateAssignmentReq, GetAssignemntReq } from "@/models";
+import {
+  CreateAssignmentReq,
+  GetAssignemntReq,
+  UpdateAssignmentStateReq,
+} from "@/models";
 export const getAllAssignmentService = (req: GetAssignemntReq) => {
   if (req.assignmentState === 0) {
     delete req.assignmentState;
@@ -23,6 +27,25 @@ export const getAllAssignmentService = (req: GetAssignemntReq) => {
     });
 };
 
+export const getAssignmentByIdService = (id: string) => {
+  return axiosInstance
+    .get(`/assignments/${id}`)
+    .then((res) => {
+      return {
+        success: true,
+        message: "Assignment fetched successfully!",
+        data: res.data,
+      };
+    })
+    .catch((err) => {
+      return {
+        success: false,
+        message: "Failed to fetch assignment.",
+        data: err,
+      };
+    });
+};
+
 export const createAssignmentService = (req: CreateAssignmentReq) => {
   return axiosInstance
     .post("/assignments", req)
@@ -37,6 +60,25 @@ export const createAssignmentService = (req: CreateAssignmentReq) => {
       return {
         success: false,
         message: "Failed to create assignment.",
+        data: err,
+      };
+    });
+};
+
+export const updateAssignmentStateService = (req: UpdateAssignmentStateReq) => {
+  return axiosInstance
+    .put("/assignments", req)
+    .then((res) => {
+      return {
+        success: true,
+        message: "Assignment state updated successfully!",
+        data: res.data,
+      };
+    })
+    .catch((err) => {
+      return {
+        success: false,
+        message: "Failed to update assignment state.",
         data: err,
       };
     });

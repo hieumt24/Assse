@@ -33,7 +33,7 @@ export function DatePicker(props: DatePickerProps) {
           {date ? (
             format(date, formatDate ?? "dd/MM/yyyy")
           ) : (
-            <span>Assined Date</span>
+            <span>Assigned Date</span>
           )}
           <IoCalendar size={20} />
         </Button>

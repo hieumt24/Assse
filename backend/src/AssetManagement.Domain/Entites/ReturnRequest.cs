@@ -8,8 +8,8 @@ namespace AssetManagement.Domain.Entites
         public Guid AssignmentId { get; set; }
        
         public Guid RequestedBy { get; set; }
-        public Guid AcceptedBy { get; set; }
-        public DateTime ReturnedDate { get; set; } 
+        public Guid? AcceptedBy { get; set; }
+        public DateTime ReturnedDate { get; set; }
         public EnumLocation Location { get; set; }
         public EnumReturnRequestState ReturnState { get; set; }
 

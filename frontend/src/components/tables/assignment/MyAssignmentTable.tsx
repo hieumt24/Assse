@@ -1,10 +1,7 @@
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-
+import { FullPageModal } from "@/components/FullPageModal";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { DetailInformation } from "@/components/shared/DetailInformation";
+import { Dialog } from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -13,11 +10,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { PaginationState } from "@/models";
-import { Dispatch, SetStateAction } from "react";
+import { useLoading } from "@/context/LoadingContext";
+import { AssignmentRes, PaginationState } from "@/models";
+import { getAssignmentByIdService } from "@/services/admin/manageAssignmentService";
+import {
+  ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { Dispatch, SetStateAction, useState } from "react";
+import { toast } from "react-toastify";
 import Pagination from "../Pagination";
 
-interface ReturningRequestTableProps<TData, TValue> {
+interface MyAssignmentTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   pagination: PaginationState;
@@ -29,18 +35,16 @@ interface ReturningRequestTableProps<TData, TValue> {
   >;
   pageCount?: number;
   totalRecords: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onRowClick?: any;
 }
 
-export function ReturningRequestTable<TData, TValue>({
+export function MyAssignmentTable<TData, TValue>({
   columns,
   data,
   pagination,
   onPaginationChange,
   pageCount,
   totalRecords,
-}: Readonly<ReturningRequestTableProps<TData, TValue>>) {
+}: Readonly<MyAssignmentTableProps<TData, TValue>>) {
   const table = useReactTable({
     data,
     columns,
@@ -50,8 +54,30 @@ export function ReturningRequestTable<TData, TValue>({
     onPaginationChange,
     pageCount,
   });
+  const [openDetails, setOpenDetails] = useState(false);
+  const [assignmentDetails, setAssignmentDetails] = useState<AssignmentRes>();
 
-  // Set the page directly in the table state
+  const handleOpenDetails = async (id: string) => {
+    setOpenDetails(true);
+    try {
+      setIsLoading(true);
+      const result = await getAssignmentByIdService(id);
+      console.log(result.data);
+      if (result.success) {
+        setAssignmentDetails(result.data);
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error fetching asset details");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const { isLoading, setIsLoading } = useLoading();
+
   const setPage = (pageIndex: number) => {
     onPaginationChange((prev) => ({
       ...prev,
@@ -88,6 +114,7 @@ export function ReturningRequestTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className="hover:cursor-pointer"
+                  onClick={async () => handleOpenDetails(row.getValue("id"))}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -119,6 +146,15 @@ export function ReturningRequestTable<TData, TValue>({
         totalRecords={totalRecords}
         pageSize={pagination.pageSize}
       />
+      <FullPageModal show={openDetails}>
+        <Dialog open={openDetails} onOpenChange={setOpenDetails}>
+          {isLoading ? (
+            <LoadingSpinner />
+          ) : (
+            <DetailInformation info={assignmentDetails!} variant="Asset" />
+          )}
+        </Dialog>
+      </FullPageModal>
     </div>
   );
 }
