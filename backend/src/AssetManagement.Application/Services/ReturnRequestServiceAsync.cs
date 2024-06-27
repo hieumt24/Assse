@@ -99,7 +99,7 @@ namespace AssetManagement.Application.Services
                 {
                     return new Response<string> { Succeeded = false, Message = "Return Request not found." };
                 }
-                if (returnRequest.ReturnStatus == EnumReturnRequestStatus.WaitingForReturning)
+                if (returnRequest.ReturnState == EnumReturnRequestState.WaitingForReturning)
                 {
                     var cancelReturnRequest = await _returnRequestRepository.DeleteAsync(returnRequest.Id);
                     if (cancelReturnRequest == null)
@@ -120,7 +120,7 @@ namespace AssetManagement.Application.Services
             throw new NotImplementedException();
         }
 
-        public async Task<PagedResponse<List<ReturnRequestResponseDto>>> GetAllReturnRequestAsync(PaginationFilter pagination, string? search, EnumReturnRequestStatus? status, DateTime? returnDate, EnumLocation location, string? orderBy, bool? isDescending, string? route)
+        public async Task<PagedResponse<List<ReturnRequestResponseDto>>> GetAllReturnRequestAsync(PaginationFilter pagination, string? search, EnumReturnRequestState? state, DateTime? returnedDate, EnumLocation location, string? orderBy, bool? isDescending, string? route)
         {
             try
             {
@@ -128,7 +128,7 @@ namespace AssetManagement.Application.Services
                 {
                     pagination = new PaginationFilter();
                 }
-                var filterReturnRequest = await _returnRequestRepository.FilterReturnRequestAsync(location, search, status, returnDate);
+                var filterReturnRequest = await _returnRequestRepository.FilterReturnRequestAsync(location, search, state, returnedDate);
 
                 var totalRecords = await filterReturnRequest.CountAsync();
 

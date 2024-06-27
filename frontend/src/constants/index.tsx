@@ -117,3 +117,14 @@ export const ASSET_STATES = [
     label: "Recycled",
   },
 ];
+
+export const RETURNING_REQUEST_STATES = [
+  {
+    value: 1,
+    label: "Waiting for returning",
+  },
+  {
+    value: 2,
+    label: "Completed",
+  },
+];

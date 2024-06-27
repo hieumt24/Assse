@@ -8,7 +8,7 @@ export const createAssetSchema = z.object({
   name: z
     .string()
     .trim()
-    .min(1, "The asset name cannot be blank")
+    .min(1, "The asset name must not be blank")
     .min(2, { message: "The asset name must be at least 2 characters long." })
     .max(50, {
       message: "The asset name must be no longer than 50 characters.",
@@ -55,7 +55,7 @@ export const updateAssetSchema = z.object({
   name: z
     .string()
     .trim()
-    .min(1, "The asset name cannot be blank")
+    .min(1, "The asset name must not be blank")
     .min(2, { message: "The asset name must be at least 2 characters long." })
     .max(50, {
       message: "The asset name must be no longer than 50 characters.",
@@ -66,7 +66,7 @@ export const updateAssetSchema = z.object({
   specification: z
     .string()
     .trim()
-    .min(1, { message: "Specification cannot be blank" })
+    .min(1, { message: "Specification must not be blank" })
     .min(2, { message: "Specification must be at least 2 characters long." })
     .max(100, {
       message: "Specification must be no longer than 100 characters.",

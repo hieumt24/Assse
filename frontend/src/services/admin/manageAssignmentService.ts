@@ -1,8 +1,8 @@
 import axiosInstance from "@/api/axiosInstance";
 import { CreateAssignmentReq, GetAssignemntReq } from "@/models";
 export const getAllAssignmentService = (req: GetAssignemntReq) => {
-  if (req.assignmentStatus === 0) {
-    delete req.assignmentStatus;
+  if (req.assignmentState === 0) {
+    delete req.assignmentState;
   }
 
   return axiosInstance

@@ -17,6 +17,6 @@ namespace AssetManagement.Application.Interfaces.Services
 
         Task<Response<string>> CancelReturnRequestAsync(Guid returnRequestId);
 
-        Task<PagedResponse<List<ReturnRequestResponseDto>>> GetAllReturnRequestAsync(PaginationFilter pagination, string? search, EnumReturnRequestStatus? status, DateTime? returnDate, EnumLocation location, string? orderBy, bool? isDescending, string? route);
+        Task<PagedResponse<List<ReturnRequestResponseDto>>> GetAllReturnRequestAsync(PaginationFilter pagination, string? search, EnumReturnRequestState? state, DateTime? returnedDate, EnumLocation location, string? orderBy, bool? isDescending, string? route);
     }
 }

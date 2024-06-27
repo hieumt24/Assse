@@ -8,7 +8,7 @@ namespace AssetManagement.Application.Models.Filters
     {
         public PaginationFilter pagination { get; set; }
         public string? search { get; set; }
-        public EnumAssignmentStatus? assignmentStatus { get; set; }
+        public EnumAssignmentState? assignmentState { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime? assignedDate { get; set; }

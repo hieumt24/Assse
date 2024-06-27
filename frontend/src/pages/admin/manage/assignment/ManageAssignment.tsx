@@ -26,7 +26,7 @@ export const ManageAssignment = () => {
   const [search, setSearch] = useState("");
   const [orderBy, setOrderBy] = useState("");
   const [isDescending, setIsDescending] = useState(true);
-  const [assignmentStatus, setAssignmentStatus] = useState(0);
+  const [assignmentState, setAssignmentState] = useState(0);
   const [assignedDate, setAssignedDate] = useState<Date | null>(null);
   const { user } = useAuth();
 
@@ -43,7 +43,7 @@ export const ManageAssignment = () => {
     orderBy,
     user.location,
     isDescending,
-    assignmentStatus,
+    assignmentState,
     assignedDate!,
   );
 
@@ -82,7 +82,7 @@ export const ManageAssignment = () => {
         <div className="flex items-center justify-center gap-4">
           <Select
             onValueChange={(value) => {
-              setAssignmentStatus(Number(value));
+              setAssignmentState(Number(value));
             }}
           >
             <SelectTrigger className="w-32">

@@ -39,7 +39,7 @@ namespace AssetManagement.Application.Helper
                 "assignedto" => u => u.AssignedTo.Username,
                 "assignedby" => u => u.AssignedBy.Username,
                 "assigneddate" => u => u.AssignedDate,
-                "state" => u => u.Status,
+                "state" => u => u.State,
                 "" => u => u.Id
             };
         }

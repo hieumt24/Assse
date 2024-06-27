@@ -19,7 +19,7 @@ import { useAuth, usePagination, useUsers } from "@/hooks";
 import { useAssets } from "@/hooks/useAssets";
 import { AssetRes, UserRes } from "@/models";
 import { createAssignmentService } from "@/services/admin/manageAssignmentService";
-import { createAssigmentSchema } from "@/validations/assignmentSchema";
+import { createAssignmentSchema } from "@/validations/assignmentSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { ChangeEvent, useState } from "react";
@@ -31,9 +31,9 @@ import { z } from "zod";
 import { SearchForm } from "../user";
 
 export const CreateAssignmentForm = () => {
-  const form = useForm<z.infer<typeof createAssigmentSchema>>({
+  const form = useForm<z.infer<typeof createAssignmentSchema>>({
     mode: "onBlur",
-    resolver: zodResolver(createAssigmentSchema),
+    resolver: zodResolver(createAssignmentSchema),
     defaultValues: {
       userId: "",
       assetId: "",
@@ -101,7 +101,7 @@ export const CreateAssignmentForm = () => {
   const navigate = useNavigate();
 
   const handleSubmitForm = async (
-    values: z.infer<typeof createAssigmentSchema>,
+    values: z.infer<typeof createAssignmentSchema>,
   ) => {
     try {
       setIsLoading(true);
@@ -110,10 +110,11 @@ export const CreateAssignmentForm = () => {
         assignedIdTo: values.userId,
         assignedIdBy: user.id,
         location: user.location,
-        status: 2,
+        state: 2,
       });
       if (res.success) {
         toast.success(res.message);
+        navigate("/assignments");
       } else {
         toast.error(res.message);
       }
