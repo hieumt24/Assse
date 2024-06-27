@@ -13,163 +13,163 @@ namespace AssetManagement.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Categories",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CategoryName = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Prefix = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModifiedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Categories", x => x.Id);
-                });
+            // migrationBuilder.CreateTable(
+            //     name: "Categories",
+            //     columns: table => new
+            //     {
+            //         Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+            //         CategoryName = table.Column<string>(type: "nvarchar(450)", nullable: false),
+            //         Prefix = table.Column<string>(type: "nvarchar(450)", nullable: false),
+            //         CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+            //         CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+            //         LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+            //         LastModifiedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+            //         IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+            //     },
+            //     constraints: table =>
+            //     {
+            //         table.PrimaryKey("PK_Categories", x => x.Id);
+            //     });
 
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    JoinedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Gender = table.Column<int>(type: "int", nullable: false),
-                    Role = table.Column<int>(type: "int", nullable: false),
-                    StaffCode = table.Column<string>(type: "nvarchar(max)", nullable: false, computedColumnSql: "CONCAT('SD', RIGHT('0000' + CAST(StaffCodeId AS VARCHAR(4)), 4))"),
-                    StaffCodeId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Username = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Location = table.Column<int>(type: "int", nullable: false),
-                    IsFirstTimeLogin = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModifiedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
-                });
+            // migrationBuilder.CreateTable(
+            //     name: "Users",
+            //     columns: table => new
+            //     {
+            //         Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+            //         FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+            //         LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+            //         DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
+            //         JoinedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+            //         Gender = table.Column<int>(type: "int", nullable: false),
+            //         Role = table.Column<int>(type: "int", nullable: false),
+            //         StaffCode = table.Column<string>(type: "nvarchar(max)", nullable: false, computedColumnSql: "CONCAT('SD', RIGHT('0000' + CAST(StaffCodeId AS VARCHAR(4)), 4))"),
+            //         StaffCodeId = table.Column<int>(type: "int", nullable: false)
+            //             .Annotation("SqlServer:Identity", "1, 1"),
+            //         Username = table.Column<string>(type: "nvarchar(450)", nullable: false),
+            //         PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
+            //         Location = table.Column<int>(type: "int", nullable: false),
+            //         IsFirstTimeLogin = table.Column<bool>(type: "bit", nullable: false),
+            //         CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+            //         CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+            //         LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+            //         LastModifiedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+            //         IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+            //     },
+            //     constraints: table =>
+            //     {
+            //         table.PrimaryKey("PK_Users", x => x.Id);
+            //     });
 
-            migrationBuilder.CreateTable(
-                name: "Assets",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AssetCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AssetName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Specification = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    InstalledDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    State = table.Column<int>(type: "int", nullable: false),
-                    AssetLocation = table.Column<int>(type: "int", nullable: false),
-                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModifiedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Assets", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Assets_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+            // migrationBuilder.CreateTable(
+            //     name: "Assets",
+            //     columns: table => new
+            //     {
+            //         Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+            //         AssetCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+            //         AssetName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+            //         Specification = table.Column<string>(type: "nvarchar(max)", nullable: false),
+            //         InstalledDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+            //         State = table.Column<int>(type: "int", nullable: false),
+            //         AssetLocation = table.Column<int>(type: "int", nullable: false),
+            //         CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+            //         CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+            //         CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+            //         LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+            //         LastModifiedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+            //         IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+            //     },
+            //     constraints: table =>
+            //     {
+            //         table.PrimaryKey("PK_Assets", x => x.Id);
+            //         table.ForeignKey(
+            //             name: "FK_Assets_Categories_CategoryId",
+            //             column: x => x.CategoryId,
+            //             principalTable: "Categories",
+            //             principalColumn: "Id",
+            //             onDelete: ReferentialAction.Cascade);
+            //     });
 
-            migrationBuilder.CreateTable(
-                name: "Assignments",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AssignedIdTo = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AssignedIdBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AssignedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AssetId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ReturnRequestId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    Location = table.Column<int>(type: "int", nullable: true),
-                    State = table.Column<int>(type: "int", nullable: false),
-                    Note = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModifiedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Assignments", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Assignments_Assets_AssetId",
-                        column: x => x.AssetId,
-                        principalTable: "Assets",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Assignments_Users_AssignedIdBy",
-                        column: x => x.AssignedIdBy,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Assignments_Users_AssignedIdTo",
-                        column: x => x.AssignedIdTo,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
+            // migrationBuilder.CreateTable(
+            //     name: "Assignments",
+            //     columns: table => new
+            //     {
+            //         Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+            //         AssignedIdTo = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+            //         AssignedIdBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+            //         AssignedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+            //         AssetId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+            //         ReturnRequestId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+            //         Location = table.Column<int>(type: "int", nullable: true),
+            //         State = table.Column<int>(type: "int", nullable: false),
+            //         Note = table.Column<string>(type: "nvarchar(max)", nullable: false),
+            //         CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+            //         CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+            //         LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+            //         LastModifiedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+            //         IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+            //     },
+            //     constraints: table =>
+            //     {
+            //         table.PrimaryKey("PK_Assignments", x => x.Id);
+            //         table.ForeignKey(
+            //             name: "FK_Assignments_Assets_AssetId",
+            //             column: x => x.AssetId,
+            //             principalTable: "Assets",
+            //             principalColumn: "Id",
+            //             onDelete: ReferentialAction.Restrict);
+            //         table.ForeignKey(
+            //             name: "FK_Assignments_Users_AssignedIdBy",
+            //             column: x => x.AssignedIdBy,
+            //             principalTable: "Users",
+            //             principalColumn: "Id",
+            //             onDelete: ReferentialAction.Restrict);
+            //         table.ForeignKey(
+            //             name: "FK_Assignments_Users_AssignedIdTo",
+            //             column: x => x.AssignedIdTo,
+            //             principalTable: "Users",
+            //             principalColumn: "Id",
+            //             onDelete: ReferentialAction.Restrict);
+            //     });
 
-            migrationBuilder.CreateTable(
-                name: "ReturnRequests",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AssignmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RequestedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AcceptedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ReturnedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Location = table.Column<int>(type: "int", nullable: false),
-                    ReturnState = table.Column<int>(type: "int", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModifiedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ReturnRequests", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ReturnRequests_Assignments_AssignmentId",
-                        column: x => x.AssignmentId,
-                        principalTable: "Assignments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ReturnRequests_Users_AcceptedBy",
-                        column: x => x.AcceptedBy,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ReturnRequests_Users_RequestedBy",
-                        column: x => x.RequestedBy,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
+            // migrationBuilder.CreateTable(
+            //     name: "ReturnRequests",
+            //     columns: table => new
+            //     {
+            //         Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+            //         AssignmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+            //         RequestedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+            //         AcceptedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+            //         ReturnedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+            //         Location = table.Column<int>(type: "int", nullable: false),
+            //         ReturnState = table.Column<int>(type: "int", nullable: false),
+            //         CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+            //         CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+            //         LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+            //         LastModifiedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+            //         IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+            //     },
+            //     constraints: table =>
+            //     {
+            //         table.PrimaryKey("PK_ReturnRequests", x => x.Id);
+            //         table.ForeignKey(
+            //             name: "FK_ReturnRequests_Assignments_AssignmentId",
+            //             column: x => x.AssignmentId,
+            //             principalTable: "Assignments",
+            //             principalColumn: "Id",
+            //             onDelete: ReferentialAction.Restrict);
+            //         table.ForeignKey(
+            //             name: "FK_ReturnRequests_Users_AcceptedBy",
+            //             column: x => x.AcceptedBy,
+            //             principalTable: "Users",
+            //             principalColumn: "Id",
+            //             onDelete: ReferentialAction.Restrict);
+            //         table.ForeignKey(
+            //             name: "FK_ReturnRequests_Users_RequestedBy",
+            //             column: x => x.RequestedBy,
+            //             principalTable: "Users",
+            //             principalColumn: "Id",
+            //             onDelete: ReferentialAction.Restrict);
+            //     });
 
             migrationBuilder.InsertData(
                 table: "Categories",
@@ -191,59 +191,59 @@ namespace AssetManagement.Infrastructure.Migrations
                     { new Guid("34c7d5ff-10fc-430a-a0fc-cb112da46b62"), "System", new DateTimeOffset(new DateTime(2024, 6, 27, 9, 6, 33, 440, DateTimeKind.Unspecified).AddTicks(2168), new TimeSpan(0, 7, 0, 0, 0)), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Admin", 0, false, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "Ho Chi Minh", 3, "AQAAAAIAAYagAAAAEHrhOMB8WQrWLl2mB2BnZ7vmTsIwQJJiWTLU7m/rw5PHMytLQQj/Q/lC0rxl8x5scg==", 1, "adminHCM" }
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Assets_CategoryId",
-                table: "Assets",
-                column: "CategoryId");
+        //     migrationBuilder.CreateIndex(
+        //         name: "IX_Assets_CategoryId",
+        //         table: "Assets",
+        //         column: "CategoryId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Assignments_AssetId",
-                table: "Assignments",
-                column: "AssetId");
+        //     migrationBuilder.CreateIndex(
+        //         name: "IX_Assignments_AssetId",
+        //         table: "Assignments",
+        //         column: "AssetId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Assignments_AssignedIdBy",
-                table: "Assignments",
-                column: "AssignedIdBy");
+        //     migrationBuilder.CreateIndex(
+        //         name: "IX_Assignments_AssignedIdBy",
+        //         table: "Assignments",
+        //         column: "AssignedIdBy");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Assignments_AssignedIdTo",
-                table: "Assignments",
-                column: "AssignedIdTo");
+        //     migrationBuilder.CreateIndex(
+        //         name: "IX_Assignments_AssignedIdTo",
+        //         table: "Assignments",
+        //         column: "AssignedIdTo");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Categories_CategoryName",
-                table: "Categories",
-                column: "CategoryName",
-                unique: true);
+        //     migrationBuilder.CreateIndex(
+        //         name: "IX_Categories_CategoryName",
+        //         table: "Categories",
+        //         column: "CategoryName",
+        //         unique: true);
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Categories_Prefix",
-                table: "Categories",
-                column: "Prefix",
-                unique: true);
+        //     migrationBuilder.CreateIndex(
+        //         name: "IX_Categories_Prefix",
+        //         table: "Categories",
+        //         column: "Prefix",
+        //         unique: true);
 
-            migrationBuilder.CreateIndex(
-                name: "IX_ReturnRequests_AcceptedBy",
-                table: "ReturnRequests",
-                column: "AcceptedBy");
+        //     migrationBuilder.CreateIndex(
+        //         name: "IX_ReturnRequests_AcceptedBy",
+        //         table: "ReturnRequests",
+        //         column: "AcceptedBy");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_ReturnRequests_AssignmentId",
-                table: "ReturnRequests",
-                column: "AssignmentId",
-                unique: true);
+        //     migrationBuilder.CreateIndex(
+        //         name: "IX_ReturnRequests_AssignmentId",
+        //         table: "ReturnRequests",
+        //         column: "AssignmentId",
+        //         unique: true);
 
-            migrationBuilder.CreateIndex(
-                name: "IX_ReturnRequests_RequestedBy",
-                table: "ReturnRequests",
-                column: "RequestedBy");
+        //     migrationBuilder.CreateIndex(
+        //         name: "IX_ReturnRequests_RequestedBy",
+        //         table: "ReturnRequests",
+        //         column: "RequestedBy");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_Username",
-                table: "Users",
-                column: "Username",
-                unique: true);
+        //     migrationBuilder.CreateIndex(
+        //         name: "IX_Users_Username",
+        //         table: "Users",
+        //         column: "Username",
+        //         unique: true);
         }
 
         /// <inheritdoc />
