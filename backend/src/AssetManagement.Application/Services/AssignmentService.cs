@@ -6,6 +6,7 @@ using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Models.DTOs.Assignments;
 using AssetManagement.Application.Models.DTOs.Assignments.Reques;
 using AssetManagement.Application.Models.DTOs.Assignments.Request;
+using AssetManagement.Application.Models.DTOs.Assignments.Requests;
 using AssetManagement.Application.Models.DTOs.Assignments.Response;
 using AssetManagement.Application.Models.DTOs.Category;
 using AssetManagement.Application.Models.DTOs.ReturnRequests.Request;
@@ -158,7 +159,7 @@ namespace AssetManagement.Application.Services
             };
         }
 
-        public async Task<Response<AssignmentDto>> ChangeAssignmentStateAsync(ChangeStateReturnRequestDto request)
+        public async Task<Response<AssignmentDto>> ChangeAssignmentStateAsync(ChangeStateAssigmentDto request)
         {
             var assignment = await _assignmentRepository.GetByIdAsync(request.AssignmentId);
 
