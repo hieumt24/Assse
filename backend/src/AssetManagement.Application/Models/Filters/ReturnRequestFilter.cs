@@ -7,10 +7,10 @@ namespace AssetManagement.Application.Models.Filters
     public class ReturnRequestFilter
     {
         public PaginationFilter pagination { get; set; }
-        public EnumReturnRequestStatus? returnStatus { get; set; }
+        public EnumReturnRequestState? returnState { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime? returnDate { get; set; }
+        public DateTime? returnedDate { get; set; }
 
         public string? search { get; set; }
         public string? orderBy { get; set; }

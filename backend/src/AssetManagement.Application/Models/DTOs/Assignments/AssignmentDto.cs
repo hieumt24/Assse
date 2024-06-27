@@ -12,7 +12,7 @@ namespace AssetManagement.Application.Models.DTOs.Assignments
         public string? AssignedBy { get; set; }
         public DateTime AssignedDate { get; set; }
         public EnumLocation Location { get; set; }
-        public EnumAssignmentStatus Status { get; set; }
+        public EnumAssignmentState State { get; set; }
         public string Note { get; set; } = string.Empty;
     }
 }

@@ -32,7 +32,7 @@ namespace AssetManagement.API.Controllers
         public async Task<IActionResult> FilterAssignment([FromBody] AssignmentFilter filter)
         {
             string route = Request.Path.Value;
-            var response = await _assignmentServicesAsync.GetAllAssignmentsAsync(filter.pagination, filter.search, filter.assignmentStatus, filter.assignedDate, filter.adminLocation, filter.orderBy, filter.isDescending, route);
+            var response = await _assignmentServicesAsync.GetAllAssignmentsAsync(filter.pagination, filter.search, filter.assignmentState, filter.assignedDate, filter.adminLocation, filter.orderBy, filter.isDescending, route);
             if (!response.Succeeded)
             {
                 return BadRequest(response);

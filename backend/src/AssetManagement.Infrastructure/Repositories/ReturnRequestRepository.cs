@@ -13,7 +13,7 @@ namespace AssetManagement.Infrastructure.Repositories
         {
         }
 
-        public async Task<IQueryable<ReturnRequest>> FilterReturnRequestAsync(EnumLocation adminLocation, string? search, EnumReturnRequestStatus? returnStatus, DateTime? returnDate)
+        public async Task<IQueryable<ReturnRequest>> FilterReturnRequestAsync(EnumLocation adminLocation, string? search, EnumReturnRequestState? returnState, DateTime? returnedDate)
         {
             var query = _dbContext.ReturnRequests
                 .Include(x => x.AcceptedUser)
@@ -28,13 +28,13 @@ namespace AssetManagement.Infrastructure.Repositories
                 || x.RequestedUser.Username.ToLower().Contains(search.ToLower())
                 );
             }
-            if (returnStatus.HasValue)
+            if (returnState.HasValue)
             {
-                queryByAdmin = query.Where(x => x.ReturnStatus == returnStatus);
+                queryByAdmin = query.Where(x => x.ReturnState == returnState);
             }
-            if (returnDate.HasValue)
+            if (returnedDate.HasValue)
             {
-                queryByAdmin = query.Where(x => x.ReturnedDate.Date == returnDate.Value.Date);
+                queryByAdmin = query.Where(x => x.ReturnedDate.Date == returnedDate.Value.Date);
             }
 
             return queryByAdmin;

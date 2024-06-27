@@ -38,8 +38,8 @@ namespace AssetManagement.Application.Helper
                 "requestedby" => u => u.RequestedUser.Username,
                 "assignedate" => u => u.Assignment.AssignedDate,
                 "acceptedby" => u => u.AcceptedUser.Username,
-                "returndate" => u => u.ReturnedDate,
-                "state" => u => u.ReturnStatus,
+                "returneddate" => u => u.ReturnedDate,
+                "state" => u => u.ReturnState,
                 "" => u => u.Assignment.Asset.AssetCode
             };
         }

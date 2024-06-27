@@ -11,7 +11,7 @@ export const useAssignments = (
   orderBy?: string,
   adminLocation?: number,
   isDescending?: boolean,
-  assignmentStatus?: number,
+  assignmentState?: number,
   assignedDate?: Date,
 ) => {
   const [assignments, setAssignments] = useState<AssignmentRes[] | null>(null);
@@ -29,8 +29,8 @@ export const useAssignments = (
         orderBy,
         isDescending,
         adminLocation,
+        assignmentState,
         assignedDate,
-        assignmentStatus,
       });
 
       setAssignments(data.data.data);
@@ -52,7 +52,7 @@ export const useAssignments = (
     isDescending,
     adminLocation,
     assignedDate,
-    assignmentStatus,
+    assignmentState,
   ]);
 
   return {

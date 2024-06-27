@@ -10,21 +10,23 @@ export const createUserSchema = z
     firstName: z
       .string()
       .trim()
-      .min(2, { message: "The First Name must be at least 2 letters long." })
-      .max(50, { message: "The First Name must be no longer than 50 letters." })
+      .min(1, "First Name must not be blank.")
+      .min(2, { message: "First Name must be at least 2 letters long." })
+      .max(50, { message: "First Name must be no longer than 50 letters." })
       .regex(nameFormat, {
         message: "First name must not contain accent marks or numbers.",
       })
       .regex(firstNameFormat, {
-        message: "The First Name must contain only 1 word.",
+        message: "First Name must contain only 1 word.",
       }),
     lastName: z
       .string()
       .trim()
-      .min(2, { message: "The Last Name must be at least 2 letters long." })
-      .max(50, { message: "The Last Name must be no longer than 50 letters." })
+      .min(1, "Last Name must not be blank.")
+      .min(2, { message: "Last Name must be at least 2 letters long." })
+      .max(50, { message: "Last Name must be no longer than 50 letters." })
       .regex(nameFormat, {
-        message: "The Last Name must only contain letters and spaces.",
+        message: "Last Name must only contain letters and spaces.",
       }),
     dateOfBirth: z
       .string()

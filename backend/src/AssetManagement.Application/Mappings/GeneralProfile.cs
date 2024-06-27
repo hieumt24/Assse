@@ -62,7 +62,7 @@ namespace AssetManagement.Application.Mappings
                  .ForMember(dest => dest.AssignedDate, opt => opt.MapFrom(src => src.Assignment.AssignedDate))
                  .ForMember(dest => dest.AcceptedByUserName, opt => opt.MapFrom(src => src.AcceptedUser.Username))
                  .ForMember(dest => dest.ReturnedDate, opt => opt.MapFrom(src => src.ReturnedDate))
-                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.ReturnStatus))
+                 .ForMember(dest => dest.State, opt => opt.MapFrom(src => src.ReturnState))
                  .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Location))
                  .ReverseMap();
         }

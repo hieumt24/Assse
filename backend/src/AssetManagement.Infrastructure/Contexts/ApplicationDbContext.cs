@@ -80,17 +80,15 @@ namespace AssetManagement.Infrastructure.Contexts
                 .HasForeignKey(rr => rr.RequestedBy)
                .OnDelete(DeleteBehavior.Restrict);
 
-
             modelBuilder.Entity<ReturnRequest>()
                 .HasOne(rr => rr.AcceptedUser)
                 .WithMany(u => u.ReturnRequestsAccepted)
                 .HasForeignKey(rr => rr.AcceptedBy)
                .OnDelete(DeleteBehavior.Restrict);
 
-
-
             modelBuilder.Entity<Category>().HasIndex(c => c.CategoryName).IsUnique();
             modelBuilder.Entity<Category>().HasIndex(c => c.Prefix).IsUnique();
+            modelBuilder.Entity<Category>().Property(c => c.Id).ValueGeneratedOnAdd();
 
             // Seed data and other configurations
             SeedData(modelBuilder);

@@ -6,6 +6,6 @@ namespace AssetManagement.Application.Interfaces.Repositories
 {
     public interface IReturnRequestRepositoriesAsync : IBaseRepositoryAsync<ReturnRequest>
     {
-        Task<IQueryable<ReturnRequest>> FilterReturnRequestAsync(EnumLocation adminLocation, string? search, EnumReturnRequestStatus? returnStatus, DateTime? returnDate);
+        Task<IQueryable<ReturnRequest>> FilterReturnRequestAsync(EnumLocation adminLocation, string? search, EnumReturnRequestState? returnState, DateTime? returnedDate);
     }
 }

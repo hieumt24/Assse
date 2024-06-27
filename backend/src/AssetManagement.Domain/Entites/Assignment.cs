@@ -11,7 +11,7 @@ namespace AssetManagement.Domain.Entites
         public Guid AssetId { get; set; }
         public Guid? ReturnRequestId { get; set; }
         public EnumLocation? Location { get; set; }
-        public EnumAssignmentStatus Status { get; set; } 
+        public EnumAssignmentState State { get; set; } 
         public string Note { get; set; } = string.Empty;
 
         //relationship 

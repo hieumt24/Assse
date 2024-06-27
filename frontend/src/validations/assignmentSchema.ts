@@ -1,7 +1,7 @@
 import { isBefore, isValid, startOfDay } from "date-fns";
 import { z } from "zod";
 
-export const createAssigmentSchema = z.object({
+export const createAssignmentSchema = z.object({
   userId: z.string().min(1, "User is required."),
   assetId: z.string().min(1, "Asset is required."),
   assignedDate: z
@@ -23,7 +23,7 @@ export const createAssigmentSchema = z.object({
     ),
   note: z
     .string()
-    .min(1, "Note is required.")
+    .min(1, "Note must not be blank.")
     .min(2, "Note must be at least 2 characters long.")
     .max(256, "Note must not be longer than 256 characters.")
     .regex(/[a-zA-Z]/, "Note must contain letters."),
