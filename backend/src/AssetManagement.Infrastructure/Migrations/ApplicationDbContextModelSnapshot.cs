@@ -173,7 +173,7 @@ namespace AssetManagement.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("5eda2384-0781-4d9e-95a4-433560bc54cb"),
+                            Id = new Guid("3a597164-7cf3-4fcf-a111-8e9d35c8cc00"),
                             CategoryName = "Laptop",
                             CreatedOn = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
@@ -181,7 +181,7 @@ namespace AssetManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("06b4c630-2a62-48fb-9467-a616e1c70139"),
+                            Id = new Guid("20f28140-61d3-4885-b07a-8d4107832be2"),
                             CategoryName = "Monitor",
                             CreatedOn = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
@@ -189,7 +189,7 @@ namespace AssetManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("11a2931b-13d4-4fac-bd2c-fd7b1207469b"),
+                            Id = new Guid("ee41c86d-87ff-49cf-83d9-baae7db13bbb"),
                             CategoryName = "Desk",
                             CreatedOn = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
@@ -327,9 +327,9 @@ namespace AssetManagement.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("af031c44-e35b-4ca5-a82a-284a787c7aaf"),
+                            Id = new Guid("023e549e-2cf7-4984-8cdc-4989ff9c5c2a"),
                             CreatedBy = "System",
-                            CreatedOn = new DateTimeOffset(new DateTime(2024, 6, 27, 9, 2, 20, 343, DateTimeKind.Unspecified).AddTicks(6149), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedOn = new DateTimeOffset(new DateTime(2024, 6, 27, 9, 6, 33, 206, DateTimeKind.Unspecified).AddTicks(9731), new TimeSpan(0, 7, 0, 0, 0)),
                             DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Admin",
                             Gender = 0,
@@ -338,7 +338,7 @@ namespace AssetManagement.Infrastructure.Migrations
                             JoinedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastName = "Ha Noi",
                             Location = 1,
-                            PasswordHash = "AQAAAAIAAYagAAAAEDcYBBt4nwSZkH/5GBR+3HN5gID9i3olErHX8PdKLTbAtxLVKv5dI2dbYOMNtFYusQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEA2vI5KZK39+Yq61npnL3VZjdJf3pAgb9BNydZSrVse4l9xRoqWyLC4ITV7rYFci1A==",
                             Role = 1,
                             StaffCode = "",
                             StaffCodeId = 0,
@@ -346,9 +346,9 @@ namespace AssetManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f0a50102-489f-4308-ae82-5c6f6bf97097"),
+                            Id = new Guid("34c7d5ff-10fc-430a-a0fc-cb112da46b62"),
                             CreatedBy = "System",
-                            CreatedOn = new DateTimeOffset(new DateTime(2024, 6, 27, 9, 2, 20, 582, DateTimeKind.Unspecified).AddTicks(3397), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedOn = new DateTimeOffset(new DateTime(2024, 6, 27, 9, 6, 33, 440, DateTimeKind.Unspecified).AddTicks(2168), new TimeSpan(0, 7, 0, 0, 0)),
                             DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Admin",
                             Gender = 0,
@@ -357,7 +357,7 @@ namespace AssetManagement.Infrastructure.Migrations
                             JoinedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastName = "Ho Chi Minh",
                             Location = 3,
-                            PasswordHash = "AQAAAAIAAYagAAAAEHnf86w95EqwJImBpwQfOAIi9XvyQ3tXFiMzhNBqsnO2Bf7d9fev+C2VJflkUbCrVQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHrhOMB8WQrWLl2mB2BnZ7vmTsIwQJJiWTLU7m/rw5PHMytLQQj/Q/lC0rxl8x5scg==",
                             Role = 1,
                             StaffCode = "",
                             StaffCodeId = 0,
@@ -365,9 +365,9 @@ namespace AssetManagement.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("e9790531-cf15-48be-91b5-7f3a8e846382"),
+                            Id = new Guid("29d54d97-39f8-4301-b172-5d8454043d9e"),
                             CreatedBy = "System",
-                            CreatedOn = new DateTimeOffset(new DateTime(2024, 6, 27, 9, 2, 20, 810, DateTimeKind.Unspecified).AddTicks(3964), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedOn = new DateTimeOffset(new DateTime(2024, 6, 27, 9, 6, 33, 678, DateTimeKind.Unspecified).AddTicks(5219), new TimeSpan(0, 7, 0, 0, 0)),
                             DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Admin",
                             Gender = 0,
@@ -376,7 +376,7 @@ namespace AssetManagement.Infrastructure.Migrations
                             JoinedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastName = "Da Nang",
                             Location = 2,
-                            PasswordHash = "AQAAAAIAAYagAAAAED0FInYoawzWki3bzAfUIbn2zEvmKT76fDXVt7KmEflM9iuThaPOKjkSjXpG8Wfc5w==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJvydqlHc9cR7Gfj2v++h7J4sbDf1zoXGGN2MXE8BqG5OYba+BgO29qflUpueaJA4Q==",
                             Role = 1,
                             StaffCode = "",
                             StaffCodeId = 0,
