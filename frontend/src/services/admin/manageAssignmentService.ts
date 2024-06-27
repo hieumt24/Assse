@@ -36,7 +36,7 @@ export const createAssignmentService = (req: CreateAssignmentReq) => {
     .catch((err) => {
       return {
         success: false,
-        message: "Failed to fetch assignments.",
+        message: "Failed to create assignment.",
         data: err,
       };
     });
