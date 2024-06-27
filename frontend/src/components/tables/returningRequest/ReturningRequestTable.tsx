@@ -40,7 +40,6 @@ export function ReturningRequestTable<TData, TValue>({
   onPaginationChange,
   pageCount,
   totalRecords,
-  onRowClick,
 }: Readonly<ReturningRequestTableProps<TData, TValue>>) {
   const table = useReactTable({
     data,
