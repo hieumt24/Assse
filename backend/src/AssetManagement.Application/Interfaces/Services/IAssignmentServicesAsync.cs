@@ -3,6 +3,7 @@ using AssetManagement.Application.Models.DTOs.Assignments;
 using AssetManagement.Application.Models.DTOs.Assignments.Reques;
 using AssetManagement.Application.Models.DTOs.Assignments.Request;
 using AssetManagement.Application.Models.DTOs.Assignments.Response;
+using AssetManagement.Application.Models.DTOs.ReturnRequests.Request;
 using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Enums;
 
@@ -12,7 +13,7 @@ namespace AssetManagement.Application.Interfaces.Services
     {
         Task<Response<AssignmentDto>> AddAssignmentAsync(AddAssignmentRequestDto request);
 
-        Task<Response<AssignmentDto>> GetAssignmentByIdAsync(Guid assignmentId);
+        Task<Response<AssignmentResponseDto>> GetAssignmentByIdAsync(Guid assignmentId);
 
         Task<Response<AssignmentDto>> EditAssignmentAsync(EditAssignmentRequestDto request);
 
@@ -20,6 +21,8 @@ namespace AssetManagement.Application.Interfaces.Services
 
         Task<Response<List<AssignmentResponseDto>>> GetAssignmentsOfUser(Guid userId);
 
-        Task<PagedResponse<List<AssignmentResponseDto>>> GetAllAssignmentsAsync(PaginationFilter paginationFilter, string? search, EnumAssignmentStatus? assignmentStatus, DateTime? assignedDate, EnumLocation adminLocation, string? orderBy, bool? isDescending, string? route);
+        Task<Response<AssignmentDto>> ChangeAssignmentStateAsync(ChangeStateReturnRequestDto request);
+
+        Task<PagedResponse<List<AssignmentResponseDto>>> GetAllAssignmentsAsync(PaginationFilter paginationFilter, string? search, EnumAssignmentState? assignmentState, DateTime? assignedDate, EnumLocation adminLocation, string? orderBy, bool? isDescending, string? route);
     }
 }

@@ -7,6 +7,8 @@ using AssetManagement.Application.Models.DTOs.Assignments;
 using AssetManagement.Application.Models.DTOs.Assignments.Reques;
 using AssetManagement.Application.Models.DTOs.Assignments.Request;
 using AssetManagement.Application.Models.DTOs.Assignments.Response;
+using AssetManagement.Application.Models.DTOs.Category;
+using AssetManagement.Application.Models.DTOs.ReturnRequests.Request;
 using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
@@ -132,9 +134,15 @@ namespace AssetManagement.Application.Services
             }
         }
 
-        public Task<Response<AssignmentDto>> GetAssignmentByIdAsync(Guid assignmentId)
+        public async Task<Response<AssignmentResponseDto>> GetAssignmentByIdAsync(Guid assignmentId)
         {
-            throw new NotImplementedException();
+            var assigment = await _assignmentRepositoriesAsync.GetAssignemntByIdAsync(assignmentId);
+            if (assigment == null)
+            {
+                return new Response<AssignmentResponseDto> { Succeeded = false, Message = "Assignment not found" };
+            }
+            var assigmentDto = _mapper.Map<AssignmentResponseDto>(assigment);
+            return new Response<AssignmentResponseDto> { Succeeded = true, Data = assigmentDto };
 
         }
 
@@ -148,6 +156,46 @@ namespace AssetManagement.Application.Services
                 Succeeded = true,
                 Data = assignmentDtos
             };
+        }
+
+        public async Task<Response<AssignmentDto>> ChangeAssignmentStateAsync(ChangeStateReturnRequestDto request)
+        {
+            var assignment = await _assignmentRepository.GetByIdAsync(request.AssignmentId);
+
+            if (assignment == null)
+            {
+                return new Response<AssignmentDto>
+                {
+                    Succeeded = false,
+                    Message = "Assignment not found."
+                };
+            }
+            if (assignment.State == EnumAssignmentState.Accepted || assignment.State == EnumAssignmentState.Declined)
+            {
+                return new Response<AssignmentDto> { Succeeded = false, Message = "Assignment state cannot be changed." };
+            }
+            assignment.State = request.NewState;
+
+            try
+            {
+                await _assignmentRepository.UpdateAsync(assignment);
+                var assignmentDto = _mapper.Map<AssignmentDto>(assignment);
+                return new Response<AssignmentDto>
+                {
+                    Succeeded = true,
+                    Message = "Assignment state changed successfully.",
+                    Data = assignmentDto
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Response<AssignmentDto>
+                {
+                    Succeeded = false,
+                    Message = "An error occurred while changing the assignment state.",
+                    Errors = new List<string> { ex.Message }
+                };
+            }
         }
     }
 }

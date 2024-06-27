@@ -1,6 +1,8 @@
 ﻿using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Models.DTOs.Assignments.Request;
+using AssetManagement.Application.Models.DTOs.ReturnRequests.Request;
 using AssetManagement.Application.Models.Filters;
+using AssetManagement.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AssetManagement.API.Controllers
@@ -41,9 +43,33 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpGet]
+        [Route("user-assigned/{userId}")]
         public async Task<IActionResult> GetAssignmentsForUser(Guid userId)
         {
             var result = await _assignmentServicesAsync.GetAssignmentsOfUser(userId);
+            if (result.Succeeded)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> GerAssignmentById(Guid assignmentId)
+        {
+            var result = await _assignmentServicesAsync.GetAssignmentByIdAsync(assignmentId);
+            if (result.Succeeded)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> ChangeAssignmentStatus(ChangeStateReturnRequestDto request)
+        {
+            var result = await _assignmentServicesAsync.ChangeAssignmentStateAsync(request);
             if (result.Succeeded)
             {
                 return Ok(result);
