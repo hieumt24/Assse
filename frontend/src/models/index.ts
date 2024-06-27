@@ -155,6 +155,11 @@ export interface CreateAssignmentReq {
   state: number;
 }
 
+export interface UpdateAssignmentStateReq {
+  assignmentId: string;
+  newState: number;
+}
+
 export interface ReturningRequestRes {
   id: string;
   assetCode: string;
@@ -177,10 +182,12 @@ export interface GetReturningRequestReq {
   isDescending?: boolean;
   returnState?: number;
   returnedDate?: string;
-  location?: number;
+  adminLocation?: number;
 }
 
 export interface CreateReturningRequestReq {
   assignmentId?: string;
   requestedBy?: string;
+  returnedDate?: string;
+  adminLocation?: number;
 }

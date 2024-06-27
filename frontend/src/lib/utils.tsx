@@ -34,6 +34,7 @@ export const renderHeader = <T,>(
   setIsDescending: React.Dispatch<React.SetStateAction<boolean>>,
   isDescending: boolean,
   orderBy: string,
+  displayName?: string,
 ) => (
   <Button
     variant={"ghost"}
@@ -46,7 +47,7 @@ export const renderHeader = <T,>(
       <span
         className={`${orderBy === column.id ? "font-black text-red-600" : ""}`}
       >
-        {formatHeader(column.id?.toString() || "")}
+        {displayName || formatHeader(column.id?.toString() || "")}
       </span>
       {isDescending && orderBy === column.id ? (
         <IoMdArrowDropup

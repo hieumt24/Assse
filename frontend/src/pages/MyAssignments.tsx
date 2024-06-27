@@ -1,11 +1,7 @@
-import {
-  DatePicker,
-  GenericDialog,
-  SearchForm,
-  assignmentColumns,
-} from "@/components";
+import { DatePicker, GenericDialog, SearchForm } from "@/components";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { AssignmentTable } from "@/components/tables/assignment/AssignmentTable";
+import { MyAssignmentTable } from "@/components/tables/assignment/MyAssignmentTable";
+import { myAssignmentColumns } from "@/components/tables/assignment/myAssignmentColumns";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -17,13 +13,14 @@ import {
 import { useLoading } from "@/context/LoadingContext";
 import { useAssignments, useAuth, usePagination } from "@/hooks";
 import { deleteAssetByIdService } from "@/services";
+import { updateAssignmentStateService } from "@/services/admin/manageAssignmentService";
 import { createReturnRequest } from "@/services/admin/manageReturningRequestService";
 import { format } from "date-fns";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-export const ManageAssignment = () => {
+export const MyAssignment = () => {
   const { onPaginationChange, pagination } = usePagination();
   const [search, setSearch] = useState("");
   const [orderBy, setOrderBy] = useState("");
@@ -50,33 +47,39 @@ export const ManageAssignment = () => {
   );
 
   const { setIsLoading } = useLoading();
-  const [openDisable, setOpenDisable] = useState(false);
-  const [assignmentIdToDelete, setAssignmentIdToDelete] = useState<string>("");
+  const [assignmentId, setAssignmentId] = useState<string>("");
+  const [openDecline, setOpenDecline] = useState(false);
   const [openCreateRequest, setOpenCreateRequest] = useState(false);
-  const [assigmentIdToRequest, setAssignmentIdToRequest] = useState<string>();
-  const handleOpenDisable = (id: string) => {
-    setAssignmentIdToDelete(id);
+  const [openAccept, setOpenAccept] = useState(false);
+
+  const handleOpenDecline = (id: string) => {
+    setAssignmentId(id);
   };
   const handleOpenCreateRequest = (id: string) => {
-    setAssignmentIdToRequest(id);
+    setAssignmentId(id);
     setOpenCreateRequest(true);
   };
 
-  const handleDelete = async () => {
+  const handleOpenAccept = (id: string) => {
+    setAssignmentId(id);
+    setOpenAccept(true);
+  };
+
+  const handleDecline = async () => {
     try {
       setIsLoading(true);
       // TODO : Need change the function into delete assignment not asset
-      const res = await deleteAssetByIdService(assignmentIdToDelete);
+      const res = await deleteAssetByIdService(assignmentId);
       if (res.success) {
         toast.success(res.message);
       } else {
         toast.error(res.message);
       }
       fetchAssignments();
-      setOpenDisable(false);
+      setOpenDecline(false);
     } catch (err) {
       console.log(err);
-      toast.error("Error when disable user");
+      toast.error("Error when decline user");
     } finally {
       setIsLoading(false);
     }
@@ -87,7 +90,7 @@ export const ManageAssignment = () => {
       setIsLoading(true);
       // TODO : Need change the function into delete assignment not asset
       const res = await createReturnRequest({
-        assignmentId: assigmentIdToRequest,
+        assignmentId: assignmentId,
         requestedBy: user.id,
         returnedDate: format(new Date(), "yyyy-MM-dd"),
         adminLocation: user.location,
@@ -106,10 +109,33 @@ export const ManageAssignment = () => {
     }
   };
 
+  const handleAccept = async () => {
+    try {
+      setIsLoading(true);
+      // TODO : Need change the function into delete assignment not asset
+      const res = await updateAssignmentStateService({
+        assignmentId: assignmentId,
+        newState: 1,
+      });
+      if (res.success) {
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
+      }
+      fetchAssignments();
+      setOpenAccept(false);
+    } catch (err) {
+      console.log(err);
+      toast.error("Error when updating assignment.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const navigate = useNavigate();
   return (
     <div className="m-16 flex h-full flex-grow flex-col gap-8">
-      <p className="text-2xl font-bold text-red-600">Assignment List</p>
+      <p className="text-2xl font-bold text-red-600">My Assignment</p>
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-center gap-4">
           <Select
@@ -154,10 +180,11 @@ export const ManageAssignment = () => {
         <div>Error</div>
       ) : (
         <>
-          <AssignmentTable
-            columns={assignmentColumns({
+          <MyAssignmentTable
+            columns={myAssignmentColumns({
               handleOpenCreateRequest,
-              handleOpenDisable,
+              handleOpenAccept,
+              handleOpenDecline,
               setOrderBy,
               setIsDescending,
               isDescending,
@@ -171,11 +198,11 @@ export const ManageAssignment = () => {
           />
           <GenericDialog
             title="Are you sure?"
-            desc="Do you want to delete this assignment"
+            desc="Do you want to decline this assignment"
             confirmText="Yes"
-            onConfirm={handleDelete}
-            open={openDisable}
-            setOpen={setOpenDisable}
+            onConfirm={handleDecline}
+            open={openDecline}
+            setOpen={setOpenDecline}
           />
           <GenericDialog
             title="Are you sure?"
@@ -184,6 +211,14 @@ export const ManageAssignment = () => {
             open={openCreateRequest}
             setOpen={setOpenCreateRequest}
             onConfirm={handleCreateRequest}
+          />
+          <GenericDialog
+            title="Are you sure?"
+            desc="Do you want to accept this assignment?"
+            confirmText="Yes"
+            open={openAccept}
+            setOpen={setOpenAccept}
+            onConfirm={handleAccept}
           />
         </>
       )}

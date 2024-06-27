@@ -17,9 +17,9 @@ namespace AssetManagement.Application.Validations.ReturnRequest
               .NotEmpty().WithMessage("AssignmentId can not be blank.")
               .Must(id => id != Guid.Empty).WithMessage("AssignmentId must be a valid GUID.");
 
-            RuleFor(x => x.AcceptedBy)
-                .NotEmpty().WithMessage("AcceptedBy can not be blank.")
-                .Must(id => id != Guid.Empty).WithMessage("AcceptedBy must be a valid GUID.");
+            RuleFor(x => x.RequestedBy)
+                .NotEmpty().WithMessage("RequestedBy can not be blank.")
+                .Must(id => id != Guid.Empty).WithMessage("RequestedBy must be a valid GUID.");
         }
     }
 }
