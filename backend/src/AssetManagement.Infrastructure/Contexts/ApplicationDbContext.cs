@@ -91,6 +91,7 @@ namespace AssetManagement.Infrastructure.Contexts
 
             modelBuilder.Entity<Category>().HasIndex(c => c.CategoryName).IsUnique();
             modelBuilder.Entity<Category>().HasIndex(c => c.Prefix).IsUnique();
+            modelBuilder.Entity<Category>().Property(c => c.Id).ValueGeneratedOnAdd();
 
             // Seed data and other configurations
             SeedData(modelBuilder);
