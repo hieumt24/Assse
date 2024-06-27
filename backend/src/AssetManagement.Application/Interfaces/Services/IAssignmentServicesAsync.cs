@@ -22,7 +22,7 @@ namespace AssetManagement.Application.Interfaces.Services
 
         Task<Response<List<AssignmentResponseDto>>> GetAssignmentsOfUser(Guid userId);
 
-        Task<Response<AssignmentDto>> ChangeAssignmentStateAsync(ChangeStateAssigmentDto request);
+        Task<Response<AssignmentDto>> ChangeAssignmentStateAsync(ChangeStateAssignmentDto request);
 
         Task<PagedResponse<List<AssignmentResponseDto>>> GetAllAssignmentsAsync(PaginationFilter paginationFilter, string? search, EnumAssignmentState? assignmentState, DateTime? assignedDate, EnumLocation adminLocation, string? orderBy, bool? isDescending, string? route);
     }

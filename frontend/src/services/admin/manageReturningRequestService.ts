@@ -1,5 +1,9 @@
 import axiosInstance from "@/api/axiosInstance";
-import { CreateReturningRequestReq, GetReturningRequestReq } from "@/models";
+import {
+  CreateReturningRequestReq,
+  GetReturningRequestReq,
+  UpdateReturningRequestReq,
+} from "@/models";
 
 export const getReturningRequest = (req: GetReturningRequestReq) => {
   if (req.returnState === 0) {
@@ -42,6 +46,44 @@ export const createReturnRequest = (req: CreateReturningRequestReq) => {
       return {
         success: false,
         message: "Failed to create request.",
+        data: err,
+      };
+    });
+};
+
+export const updateReturnRequest = (req: UpdateReturningRequestReq) => {
+  return axiosInstance
+    .put("/returnRequests", req)
+    .then((res) => {
+      return {
+        success: true,
+        message: "Request updated successfully!",
+        data: res.data,
+      };
+    })
+    .catch((err) => {
+      return {
+        success: false,
+        message: "Failed to update request.",
+        data: err,
+      };
+    });
+};
+
+export const cancelReturnRequest = (id: string) => {
+  return axiosInstance
+    .delete(`/returnRequests?returnRequestId=${id}`)
+    .then((res) => {
+      return {
+        success: true,
+        message: "Request cancelled successfully!",
+        data: res.data,
+      };
+    })
+    .catch((err) => {
+      return {
+        success: false,
+        message: "Failed to cancel request.",
         data: err,
       };
     });

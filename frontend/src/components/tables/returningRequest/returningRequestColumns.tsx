@@ -106,8 +106,16 @@ export const returningRequestColumns = ({
               e.stopPropagation();
               handleOpenComplete(request.id);
             }}
+            disabled={request.state === 2}
           >
-            <FaCheck size={18} />
+            {request.state === 2 ? (
+              <FaCheck
+                size={18}
+                className="text-black opacity-25 hover:text-black"
+              />
+            ) : (
+              <FaCheck size={18} />
+            )}
           </button>
           <button
             className="text-red-500 hover:text-red-700"
@@ -115,8 +123,16 @@ export const returningRequestColumns = ({
               e.stopPropagation();
               handleOpenCancel(request.id);
             }}
+            disabled={request.state === 2}
           >
-            <IoCloseCircleOutline size={20} />
+            {request.state === 2 ? (
+              <IoCloseCircleOutline
+                size={20}
+                className="text-black opacity-25 hover:text-black"
+              />
+            ) : (
+              <IoCloseCircleOutline size={20} />
+            )}
           </button>
         </div>
       );

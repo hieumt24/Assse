@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 interface AssignmentColumnsProps {
   handleOpenCreateRequest: (id: string) => void;
-  handleOpenDisable: (id: string) => void;
+  handleOpenDelete: (id: string) => void;
   setOrderBy: React.Dispatch<React.SetStateAction<string>>;
   setIsDescending: React.Dispatch<React.SetStateAction<boolean>>;
   isDescending: boolean;
@@ -17,7 +17,7 @@ interface AssignmentColumnsProps {
 
 export const assignmentColumns = ({
   handleOpenCreateRequest,
-  handleOpenDisable,
+  handleOpenDelete,
   setOrderBy,
   setIsDescending,
   isDescending,
@@ -71,6 +71,8 @@ export const assignmentColumns = ({
           return <p className="text-green-600">Accepted</p>;
         case 2:
           return <p className="text-yellow-600">Waiting for acceptance</p>;
+        case 3:
+          return <p className="text-red-600">Cancelled</p>;
         default:
           return <p>{}</p>;
       }
@@ -91,18 +93,33 @@ export const assignmentColumns = ({
               e.stopPropagation();
               navigate(`edit/${assignment.id}`);
             }}
+            disabled={assignment.state !== 2}
           >
-            <FiEdit2 size={18} />
+            {assignment.state !== 2 ? (
+              <FiEdit2
+                size={18}
+                className="text-black opacity-25 hover:text-black"
+              />
+            ) : (
+              <FiEdit2 size={18} />
+            )}
           </button>
           <button
             className="text-red-500 hover:text-red-700"
             onClick={(e) => {
               e.stopPropagation();
-              handleOpenDisable(assignment.id!);
+              handleOpenDelete(assignment.id!);
             }}
             disabled={assignment.state !== 2}
           >
-            <IoCloseCircleOutline size={20} />
+            {assignment.state !== 2 ? (
+              <IoCloseCircleOutline
+                size={20}
+                className="text-black opacity-25 hover:text-black"
+              />
+            ) : (
+              <IoCloseCircleOutline size={20} />
+            )}
           </button>
           <button
             className="text-green-500 hover:text-green-700"
@@ -112,7 +129,14 @@ export const assignmentColumns = ({
             }}
             disabled={assignment.state !== 1}
           >
-            <IoReload size={20} />
+            {assignment.state !== 1 ? (
+              <IoReload
+                size={20}
+                className="text-black opacity-25 hover:text-black"
+              />
+            ) : (
+              <IoReload size={20} />
+            )}
           </button>
         </div>
       );

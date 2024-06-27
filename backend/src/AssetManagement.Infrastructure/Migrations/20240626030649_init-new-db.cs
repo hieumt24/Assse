@@ -231,8 +231,7 @@ namespace AssetManagement.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_ReturnRequests_AssignmentId",
                 table: "ReturnRequests",
-                column: "AssignmentId",
-                unique: true);
+                column: "AssignmentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ReturnRequests_RequestedBy",
