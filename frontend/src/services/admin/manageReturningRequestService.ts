@@ -1,5 +1,5 @@
 import axiosInstance from "@/api/axiosInstance";
-import { GetReturningRequestReq } from "@/models";
+import { CreateReturningRequestReq, GetReturningRequestReq } from "@/models";
 
 export const getReturningRequest = (req: GetReturningRequestReq) => {
   if (req.returnState === 0) {
@@ -23,6 +23,25 @@ export const getReturningRequest = (req: GetReturningRequestReq) => {
       return {
         success: false,
         message: "Failed to fetch requests.",
+        data: err,
+      };
+    });
+};
+
+export const createReturnRequest = (req: CreateReturningRequestReq) => {
+  return axiosInstance
+    .post("/returnRequests", req)
+    .then((res) => {
+      return {
+        success: true,
+        message: "Request created successfully!",
+        data: res.data,
+      };
+    })
+    .catch((err) => {
+      return {
+        success: false,
+        message: "Failed to create request.",
         data: err,
       };
     });

@@ -128,6 +128,7 @@ export const ManageAssignment = () => {
               setIsDescending,
               isDescending,
               orderBy,
+              requestedBy: user.id,
             })}
             data={assignments!}
             pagination={pagination}

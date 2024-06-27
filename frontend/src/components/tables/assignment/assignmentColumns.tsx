@@ -1,7 +1,10 @@
+import { GenericDialog } from "@/components/shared";
 import { renderHeader } from "@/lib/utils";
 import { AssignmentRes } from "@/models";
+import { createReturnRequest } from "@/services/admin/manageReturningRequestService";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
+import { useState } from "react";
 import { FiEdit2 } from "react-icons/fi";
 import { IoCloseCircleOutline, IoReload } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +15,7 @@ interface AssignmentColumnsProps {
   setIsDescending: React.Dispatch<React.SetStateAction<boolean>>;
   isDescending: boolean;
   orderBy: string;
+  requestedBy?: string;
 }
 
 export const assignmentColumns = ({
@@ -20,6 +24,7 @@ export const assignmentColumns = ({
   setIsDescending,
   isDescending,
   orderBy,
+  requestedBy,
 }: AssignmentColumnsProps): ColumnDef<AssignmentRes>[] => [
   {
     accessorKey: "id",
@@ -78,16 +83,18 @@ export const assignmentColumns = ({
     accessorKey: "action",
     header: "Actions",
     cell: ({ row }) => {
-      const asignment = row.original;
+      const assignment = row.original;
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const navigate = useNavigate();
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const [openDelete, setOpenDelete] = useState(false);
       return (
         <div className="flex gap-3">
           <button
             className="text-blue-500 hover:text-blue-700"
             onClick={(e) => {
               e.stopPropagation();
-              navigate(`edit/${asignment.id}`);
+              navigate(`edit/${assignment.id}`);
             }}
           >
             <FiEdit2 size={18} />
@@ -96,13 +103,29 @@ export const assignmentColumns = ({
             className="text-red-500 hover:text-red-700"
             onClick={(e) => {
               e.stopPropagation();
-              handleOpenDisable(asignment.id!);
+              handleOpenDisable(assignment.id!);
             }}
           >
             <IoCloseCircleOutline size={20} />
           </button>
-          <button className="text-green-500 hover:text-green-700">
+          <button
+            className="text-green-500 hover:text-green-700"
+            onClick={() => setOpenDelete(!openDelete)}
+          >
             <IoReload size={20} />
+            <GenericDialog
+              title="Are you sure?"
+              desc="Do you want to delete this assignment?"
+              confirmText="Yes"
+              open={openDelete}
+              setOpen={setOpenDelete}
+              onConfirm={() =>
+                createReturnRequest({
+                  assignmentId: row.original.id,
+                  requestedBy: requestedBy,
+                })
+              }
+            />
           </button>
         </div>
       );
