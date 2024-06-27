@@ -2,12 +2,12 @@ import axiosInstance from "@/api/axiosInstance";
 import { GetReturningRequestReq } from "@/models";
 
 export const getReturningRequest = (req: GetReturningRequestReq) => {
-  if (req.returnStatus === 0) {
-    delete req.returnStatus;
+  if (req.returnState === 0) {
+    delete req.returnState;
   }
 
-  if (req.returnDate === "") {
-    delete req.returnDate;
+  if (req.returnedDate === "") {
+    delete req.returnedDate;
   }
 
   return axiosInstance

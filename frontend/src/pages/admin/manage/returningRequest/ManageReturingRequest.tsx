@@ -1,4 +1,4 @@
-import { SearchForm, UserTable, userColumns } from "@/components";
+import { SearchForm } from "@/components";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import {
@@ -32,13 +32,13 @@ export const ManageUser = () => {
   const [orderBy, setOrderBy] = useState("");
   const [isDescending, setIsDescending] = useState(true);
   const [requestState, setRequestState] = useState(0);
-  const [returnDate, setReturnDate] = useState<Date>();
+  const [returnedDate, setreturnedDate] = useState<Date>();
   const { requests, loading, error, pageCount, fetchRequests, totalRecords } =
     useReturningRequests(
       pagination,
       user.location,
       requestState,
-      returnDate ? format(returnDate, "yyyy-MM-dd") : "",
+      returnedDate ? format(returnedDate, "yyyy-MM-dd") : "",
       search,
       orderBy,
       isDescending,
@@ -97,7 +97,7 @@ export const ManageUser = () => {
         <div>Error</div>
       ) : (
         <>
-          <UserTable
+          {/* <UserTable
             columns={userColumns({
               handleOpenDisable,
               setOrderBy,
@@ -110,7 +110,7 @@ export const ManageUser = () => {
             pagination={pagination}
             pageCount={pageCount}
             totalRecords={totalRecords}
-          />
+          /> */}
           <Dialog open={openDisable} onOpenChange={setOpenDisable}>
             <DialogContent>
               <DialogHeader>
