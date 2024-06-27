@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/table";
 import { useLoading } from "@/context/LoadingContext";
 import { AssignmentRes, PaginationState } from "@/models";
-import { getAssetByAssetCodeService } from "@/services";
+import { getAssignmentByIdService } from "@/services/admin/manageAssignmentService";
 import {
   ColumnDef,
   flexRender,
@@ -62,7 +62,7 @@ export function AssignmentTable<TData, TValue>({
     setOpenDetails(true);
     try {
       setIsLoading(true);
-      const result = await getAssetByAssetCodeService(id);
+      const result = await getAssignmentByIdService(id);
       console.log(result.data);
       if (result.success) {
         setAssignmentDetails(result.data);

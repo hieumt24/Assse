@@ -87,7 +87,7 @@ export const assignmentColumns = ({
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const navigate = useNavigate();
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      const [openDelete, setOpenDelete] = useState(false);
+      const [openCancel, setOpenCancel] = useState(false);
       return (
         <div className="flex gap-3">
           <button
@@ -110,15 +110,19 @@ export const assignmentColumns = ({
           </button>
           <button
             className="text-green-500 hover:text-green-700"
-            onClick={() => setOpenDelete(!openDelete)}
+            onClick={(e) => {
+              console.log(222);
+              e.stopPropagation();
+              setOpenCancel(!openCancel);
+            }}
           >
             <IoReload size={20} />
             <GenericDialog
               title="Are you sure?"
-              desc="Do you want to delete this assignment?"
+              desc="Do you want to cancel this assignment?"
               confirmText="Yes"
-              open={openDelete}
-              setOpen={setOpenDelete}
+              open={openCancel}
+              setOpen={setOpenCancel}
               onConfirm={() =>
                 createReturnRequest({
                   assignmentId: row.original.id,

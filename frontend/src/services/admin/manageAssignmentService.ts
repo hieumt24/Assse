@@ -23,6 +23,25 @@ export const getAllAssignmentService = (req: GetAssignemntReq) => {
     });
 };
 
+export const getAssignmentByIdService = (id: string) => {
+  return axiosInstance
+    .get(`/assignments/${id}`)
+    .then((res) => {
+      return {
+        success: true,
+        message: "Assignment fetched successfully!",
+        data: res.data,
+      };
+    })
+    .catch((err) => {
+      return {
+        success: false,
+        message: "Failed to fetch assignment.",
+        data: err,
+      };
+    });
+};
+
 export const createAssignmentService = (req: CreateAssignmentReq) => {
   return axiosInstance
     .post("/assignments", req)
