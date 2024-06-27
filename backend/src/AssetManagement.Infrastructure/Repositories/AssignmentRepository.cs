@@ -39,7 +39,7 @@ namespace AssetManagement.Infrastructure.Repositories
             return _dbContext.Assignments.Include(x => x.Asset).Where(x => x.AssignedIdTo == userId);
         }
 
-        public async Task<Assignment> GetAssignemntByIdAsync(Guid assignmentId)
+        public async Task<Assignment>  GetAssignemntByIdAsync(Guid assignmentId)
         {
             return _dbContext.Assignments.Include(x => x.Asset)
                                          .Include(x => x.AssignedTo)
