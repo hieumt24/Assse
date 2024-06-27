@@ -9,5 +9,7 @@ namespace AssetManagement.Application.Interfaces.Repositories
         Task<IQueryable<Assignment>> FilterAssignmentAsync(EnumLocation adminLocation, string? search, EnumAssignmentState? assignmentState, DateTime? assignedDate);
 
         Task<IQueryable<Assignment>> GetAssignmentsByUserId(Guid userId);
+
+        Task<Assignment> GetAssignemntByIdAsync(Guid assignmentId);
     }
 }

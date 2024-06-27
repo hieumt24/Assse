@@ -17,17 +17,9 @@ namespace AssetManagement.Application.Validations.ReturnRequest
               .NotEmpty().WithMessage("AssignmentId can not be blank.")
               .Must(id => id != Guid.Empty).WithMessage("AssignmentId must be a valid GUID.");
 
-
-
             RuleFor(x => x.AcceptedBy)
                 .NotEmpty().WithMessage("AcceptedBy can not be blank.")
                 .Must(id => id != Guid.Empty).WithMessage("AcceptedBy must be a valid GUID.");
-
-            RuleFor(x => x.ReturnedDate)
-                .NotEmpty().WithMessage("ReturnedDate can not be blank.")
-                .Must(date => date > new DateTime(2000, 1, 1)).WithMessage("ReturnedDate must be greater than the year 2000.");
-
-
         }
     }
 }
