@@ -6,6 +6,8 @@ namespace AssetManagement.Application.Interfaces.Repositories
 {
     public interface IAssignmentRepositoriesAsync : IBaseRepositoryAsync<Assignment>
     {
-        Task<IQueryable<Assignment>> FilterAssignmentAsync(EnumLocation adminLocation, string? search, EnumAssignmentState? assignmentState, DateTime? assignedDate);
+        Task<IQueryable<Assignment>> FilterAssignmentAsync(EnumLocation adminLocation, string? search, EnumAssignmentStatus? assignmentStatus, DateTime? assignedDate);
+
+        Task<IQueryable<Assignment>> GetAssignmentsByUserId(Guid userId);
     }
 }
