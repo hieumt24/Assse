@@ -68,7 +68,7 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> ChangeAssignmentStatus(ChangeStateAssigmentDto request)
+        public async Task<IActionResult> ChangeAssignmentStatus(ChangeStateAssignmentDto request)
         {
             var result = await _assignmentServicesAsync.ChangeAssignmentStateAsync(request);
             if (result.Succeeded)

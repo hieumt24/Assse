@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/select";
 import { useLoading } from "@/context/LoadingContext";
 import { useAssignments, useAuth, usePagination } from "@/hooks";
-import { deleteAssetByIdService } from "@/services";
 import { updateAssignmentStateService } from "@/services/admin/manageAssignmentService";
 import { createReturnRequest } from "@/services/admin/manageReturningRequestService";
 import { format } from "date-fns";
@@ -54,6 +53,7 @@ export const MyAssignment = () => {
 
   const handleOpenDecline = (id: string) => {
     setAssignmentId(id);
+    setOpenDecline(true);
   };
   const handleOpenCreateRequest = (id: string) => {
     setAssignmentId(id);
@@ -66,70 +66,54 @@ export const MyAssignment = () => {
   };
 
   const handleDecline = async () => {
-    try {
-      setIsLoading(true);
-      // TODO : Need change the function into delete assignment not asset
-      const res = await deleteAssetByIdService(assignmentId);
-      if (res.success) {
-        toast.success(res.message);
-      } else {
-        toast.error(res.message);
-      }
+    setIsLoading(true);
+    const res = await updateAssignmentStateService({
+      assignmentId: assignmentId,
+      newState: 3,
+    });
+    if (res.success) {
+      toast.success(res.message);
       fetchAssignments();
-      setOpenDecline(false);
-    } catch (err) {
-      console.log(err);
-      toast.error("Error when decline user");
-    } finally {
-      setIsLoading(false);
+    } else {
+      toast.error(res.message);
     }
+
+    setOpenDecline(false);
+    setIsLoading(false);
   };
 
   const handleCreateRequest = async () => {
-    try {
-      setIsLoading(true);
-      // TODO : Need change the function into delete assignment not asset
-      const res = await createReturnRequest({
-        assignmentId: assignmentId,
-        requestedBy: user.id,
-        returnedDate: format(new Date(), "yyyy-MM-dd"),
-        adminLocation: user.location,
-      });
-      if (res.success) {
-        toast.success(res.message);
-      } else {
-        toast.error(res.message);
-      }
-      setOpenCreateRequest(false);
-    } catch (err) {
-      console.log(err);
-      toast.error("Error when creating request.");
-    } finally {
-      setIsLoading(false);
+    setIsLoading(true);
+    const res = await createReturnRequest({
+      assignmentId: assignmentId,
+      requestedBy: user.id,
+      returnedDate: format(new Date(), "yyyy-MM-dd"),
+      adminLocation: user.location,
+    });
+    if (res.success) {
+      toast.success(res.message);
+    } else {
+      toast.error(res.message);
     }
+    setOpenCreateRequest(false);
+    setIsLoading(false);
   };
 
   const handleAccept = async () => {
-    try {
-      setIsLoading(true);
-      // TODO : Need change the function into delete assignment not asset
-      const res = await updateAssignmentStateService({
-        assignmentId: assignmentId,
-        newState: 1,
-      });
-      if (res.success) {
-        toast.success(res.message);
-      } else {
-        toast.error(res.message);
-      }
+    setIsLoading(true);
+    const res = await updateAssignmentStateService({
+      assignmentId: assignmentId,
+      newState: 1,
+    });
+    if (res.success) {
+      toast.success(res.message);
       fetchAssignments();
-      setOpenAccept(false);
-    } catch (err) {
-      console.log(err);
-      toast.error("Error when updating assignment.");
-    } finally {
-      setIsLoading(false);
+    } else {
+      toast.error(res.message);
     }
+
+    setOpenAccept(false);
+    setIsLoading(false);
   };
 
   const navigate = useNavigate();

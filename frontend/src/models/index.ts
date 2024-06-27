@@ -191,3 +191,8 @@ export interface CreateReturningRequestReq {
   returnedDate?: string;
   adminLocation?: number;
 }
+
+export interface UpdateReturningRequestReq {
+  returnRequestId?: string;
+  newState?: number;
+}

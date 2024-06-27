@@ -240,8 +240,7 @@ namespace AssetManagement.Infrastructure.Migrations
 
                     b.HasIndex("AcceptedBy");
 
-                    b.HasIndex("AssignmentId")
-                        .IsUnique();
+                    b.HasIndex("AssignmentId");
 
                     b.HasIndex("RequestedBy");
 

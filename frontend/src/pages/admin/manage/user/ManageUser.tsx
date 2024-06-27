@@ -1,4 +1,9 @@
-import { SearchForm, UserTable, userColumns } from "@/components";
+import {
+  GenericDialog,
+  SearchForm,
+  UserTable,
+  userColumns,
+} from "@/components";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,13 +14,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { useLoading } from "@/context/LoadingContext";
 import { useAuth, useUsers } from "@/hooks";
 import { usePagination } from "@/hooks/usePagination";
@@ -126,29 +124,14 @@ export const ManageUser = () => {
             pageCount={pageCount}
             totalRecords={totalRecords}
           />
-          <Dialog open={openDisable} onOpenChange={setOpenDisable}>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle className="text-center text-2xl font-bold text-red-600">
-                  Are you sure?
-                </DialogTitle>
-                <DialogDescription className="text-center text-lg">
-                  Do you want to disable this user
-                </DialogDescription>
-                <div className="flex items-center justify-center gap-4">
-                  <Button variant={"destructive"} onClick={handleDisable}>
-                    Yes
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={() => setOpenDisable(false)}
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
+          <GenericDialog
+            title="Are you sure?"
+            desc="Do you want to disable this user"
+            confirmText="Yes"
+            open={openDisable}
+            setOpen={setOpenDisable}
+            onConfirm={handleDisable}
+          />
         </>
       )}
     </div>

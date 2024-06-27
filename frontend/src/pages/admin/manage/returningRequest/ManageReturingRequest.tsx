@@ -10,11 +10,17 @@ import {
 
 import { ReturningRequestTable } from "@/components/tables/returningRequest/ReturningRequestTable";
 import { returningRequestColumns } from "@/components/tables/returningRequest/returningRequestColumns";
+import { useLoading } from "@/context/LoadingContext";
 import { useAuth } from "@/hooks";
 import { usePagination } from "@/hooks/usePagination";
 import { useReturningRequests } from "@/hooks/useReturningRequests";
+import {
+  cancelReturnRequest,
+  updateReturnRequest,
+} from "@/services/admin/manageReturningRequestService";
 import { format } from "date-fns";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export const ManageReturningRequest = () => {
   const { user } = useAuth();
@@ -25,7 +31,7 @@ export const ManageReturningRequest = () => {
   const [isDescending, setIsDescending] = useState(true);
   const [requestState, setRequestState] = useState(0);
   const [returnedDate] = useState<Date>();
-  const { requests, loading, error, pageCount, totalRecords } =
+  const { requests, loading, error, pageCount, fetchRequests, totalRecords } =
     useReturningRequests(
       pagination,
       user.location,
@@ -45,9 +51,34 @@ export const ManageReturningRequest = () => {
     setOpenComplete(true);
   };
 
-  const handleCancel = async () => {};
+  const { setIsLoading } = useLoading();
+
+  const handleCancel = async () => {
+    setIsLoading(true);
+    const res = await cancelReturnRequest(requestId);
+    if (res.success) {
+      toast.success(res.message);
+      fetchRequests();
+    } else {
+      toast.error(res.message);
+    }
+    setOpenCancel(false);
+    setIsLoading(false);
+  };
   const handleComplete = async () => {
-    console.log(requestId);
+    setIsLoading(true);
+    const res = await updateReturnRequest({
+      returnRequestId: requestId,
+      newState: 2,
+    });
+    if (res.success) {
+      toast.success(res.message);
+      fetchRequests();
+    } else {
+      toast.error(res.message);
+    }
+    setOpenComplete(false);
+    setIsLoading(false);
   };
   const [openCancel, setOpenCancel] = useState(false);
   const [openComplete, setOpenComplete] = useState(false);
