@@ -1,4 +1,4 @@
-import { Home } from "@/pages";
+import { MyAssignment } from "@/pages/MyAssignments";
 import { Navigate, useRoutes } from "react-router-dom";
 
 export const StaffRoutes = () => {
@@ -9,7 +9,7 @@ export const StaffRoutes = () => {
     },
     {
       path: "/home",
-      element: <Home />,
+      element: <MyAssignment />,
     },
     {
       path: "/users",

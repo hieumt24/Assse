@@ -1,4 +1,5 @@
-import { CreateAsset, CreateUser, Home, ManageUser } from "@/pages";
+import { CreateAsset, CreateUser, ManageUser } from "@/pages";
+import { MyAssignment } from "@/pages/MyAssignments";
 import { EditAsset } from "@/pages/admin/manage/asset/EditAsset";
 import { ManageAsset } from "@/pages/admin/manage/asset/ManageAsset";
 import { CreateAssignment } from "@/pages/admin/manage/assignment/CreateAssignment";
@@ -15,7 +16,7 @@ export const AdminRoutes = () => {
     },
     {
       path: "/home",
-      element: <Home />,
+      element: <MyAssignment />,
     },
     {
       path: "/users",

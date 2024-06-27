@@ -2,6 +2,7 @@ import { renderHeader } from "@/lib/utils";
 import { ReturningRequestRes } from "@/models";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
+import { FaCheck } from "react-icons/fa";
 import { IoCloseCircleOutline } from "react-icons/io5";
 
 interface RequestColumnsProps {
@@ -32,7 +33,7 @@ export const returningRequestColumns = ({
       renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),
   },
   {
-    accessorKey: "requestedByUsername",
+    accessorKey: "requestedByUserName",
     header: ({ column }) =>
       renderHeader(
         column,
@@ -53,7 +54,7 @@ export const returningRequestColumns = ({
     },
   },
   {
-    accessorKey: "acceptedByUsername",
+    accessorKey: "acceptedByUserName",
     header: ({ column }) =>
       renderHeader(
         column,
@@ -79,6 +80,18 @@ export const returningRequestColumns = ({
     accessorKey: "state",
     header: ({ column }) =>
       renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),
+    cell: ({ row }) => {
+      const state = row.original.state;
+      switch (state) {
+        case 1:
+          return <p className="text-yellow-600">Waiting for returning</p>;
+        case 2:
+          return <p className="text-green-600">Completed</p>;
+
+        default:
+          return <p>{}</p>;
+      }
+    },
   },
   {
     accessorKey: "action",
@@ -93,7 +106,9 @@ export const returningRequestColumns = ({
               e.stopPropagation();
               handleOpenComplete(request.id);
             }}
-          ></button>
+          >
+            <FaCheck size={18} />
+          </button>
           <button
             className="text-red-500 hover:text-red-700"
             onClick={(e) => {

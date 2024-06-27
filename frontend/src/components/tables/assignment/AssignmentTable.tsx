@@ -54,7 +54,6 @@ export function AssignmentTable<TData, TValue>({
     onPaginationChange,
     pageCount,
   });
-
   const [openDetails, setOpenDetails] = useState(false);
   const [assignmentDetails, setAssignmentDetails] = useState<AssignmentRes>();
 
@@ -93,6 +92,7 @@ export function AssignmentTable<TData, TValue>({
           <TableHeader className="bg-zinc-200 font-bold">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
+                <TableHead className="text-center">No.</TableHead>
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
@@ -110,13 +110,14 @@ export function AssignmentTable<TData, TValue>({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+              table.getRowModel().rows.map((row, index) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className="hover:cursor-pointer"
                   onClick={async () => handleOpenDetails(row.getValue("id"))}
                 >
+                  <TableCell className="text-center">{index + 1}</TableCell>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(

@@ -1,6 +1,5 @@
-import { SearchForm } from "@/components";
+import { GenericDialog, SearchForm } from "@/components";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -11,20 +10,11 @@ import {
 
 import { ReturningRequestTable } from "@/components/tables/returningRequest/ReturningRequestTable";
 import { returningRequestColumns } from "@/components/tables/returningRequest/returningRequestColumns";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { useLoading } from "@/context/LoadingContext";
 import { useAuth } from "@/hooks";
 import { usePagination } from "@/hooks/usePagination";
 import { useReturningRequests } from "@/hooks/useReturningRequests";
 import { format } from "date-fns";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 export const ManageReturningRequest = () => {
   const { user } = useAuth();
@@ -45,21 +35,20 @@ export const ManageReturningRequest = () => {
       orderBy,
       isDescending,
     );
-
-  const navigate = useNavigate();
-  const { setIsLoading } = useLoading();
-  const [requestIdToCancel, setRequestIdToCancel] = useState<string>("");
-  const [requestIdToComplete, setRequestIdToComplete] = useState<string>("");
+  const [requestId, setRequestId] = useState<string>("");
   const handleOpenCancel = (id: string) => {
-    setRequestIdToCancel(id);
+    setRequestId(id);
     setOpenCancel(true);
   };
   const handleOpenComplete = (id: string) => {
-    setRequestIdToComplete(id);
+    setRequestId(id);
     setOpenComplete(true);
   };
 
   const handleCancel = async () => {};
+  const handleComplete = async () => {
+    console.log(requestId);
+  };
   const [openCancel, setOpenCancel] = useState(false);
   const [openComplete, setOpenComplete] = useState(false);
 
@@ -116,52 +105,23 @@ export const ManageReturningRequest = () => {
             pageCount={pageCount}
             totalRecords={totalRecords}
           />
-          <Dialog open={openCancel} onOpenChange={setOpenCancel}>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle className="text-center text-2xl font-bold text-red-600">
-                  Are you sure?
-                </DialogTitle>
-                <DialogDescription className="text-center text-lg">
-                  Do you want to cancel this request
-                </DialogDescription>
-                <div className="flex items-center justify-center gap-4">
-                  <Button variant={"destructive"} onClick={handleCancel}>
-                    Yes
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={() => setOpenCancel(false)}
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
-          <Dialog open={openComplete} onOpenChange={setOpenComplete}>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle className="text-center text-2xl font-bold text-red-600">
-                  Are you sure?
-                </DialogTitle>
-                <DialogDescription className="text-center text-lg">
-                  Do you want to mark this returning as 'Completed'?
-                </DialogDescription>
-                <div className="flex items-center justify-center gap-4">
-                  <Button variant={"destructive"} onClick={handleCancel}>
-                    Yes
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={() => setOpenCancel(false)}
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
+
+          <GenericDialog
+            title="Are you sure?"
+            desc="Do you want to cancel this request?"
+            confirmText="Yes"
+            open={openCancel}
+            setOpen={setOpenCancel}
+            onConfirm={handleCancel}
+          />
+          <GenericDialog
+            title="Are you sure?"
+            desc="Do you want to mark this returning as 'Completed'?"
+            confirmText="Yes"
+            open={openComplete}
+            setOpen={setOpenComplete}
+            onConfirm={handleComplete}
+          />
         </>
       )}
     </div>
