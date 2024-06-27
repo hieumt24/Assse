@@ -1,6 +1,8 @@
 ﻿using AssetManagement.Application.Interfaces.Services;
+using AssetManagement.Application.Models.DTOs.Assignments.Requests;
 using AssetManagement.Application.Models.DTOs.ReturnRequests.Request;
 using AssetManagement.Application.Models.Filters;
+using AssetManagement.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AssetManagement.API.Controllers
@@ -45,6 +47,17 @@ namespace AssetManagement.API.Controllers
         {
             var result = await _returnRequestServicesAsync.CancelReturnRequestAsync(returnRequestId);
             if (result != null)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> ChangeReturnRequestStatus(ChangeStateReturnRequestDto request)
+        {
+            var result = await _returnRequestServicesAsync.ChangeAssignmentStateAsync(request);
+            if (result.Succeeded)
             {
                 return Ok(result);
             }

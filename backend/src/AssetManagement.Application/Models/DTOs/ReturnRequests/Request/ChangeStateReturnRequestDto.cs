@@ -4,7 +4,7 @@ namespace AssetManagement.Application.Models.DTOs.ReturnRequests.Request
 {
     public class ChangeStateReturnRequestDto
     {
-        public Guid AssignmentId { get; set; }
-        public EnumAssignmentState NewState { get; set; }
+        public Guid ReturnRequestId { get; set; }
+        public EnumReturnRequestState NewState { get; set; }
     }
 }

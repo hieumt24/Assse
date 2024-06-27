@@ -2,6 +2,7 @@
 using AssetManagement.Application.Models.DTOs.Assignments;
 using AssetManagement.Application.Models.DTOs.Assignments.Reques;
 using AssetManagement.Application.Models.DTOs.Assignments.Request;
+using AssetManagement.Application.Models.DTOs.Assignments.Requests;
 using AssetManagement.Application.Models.DTOs.Assignments.Response;
 using AssetManagement.Application.Models.DTOs.ReturnRequests.Request;
 using AssetManagement.Application.Wrappers;
@@ -21,7 +22,7 @@ namespace AssetManagement.Application.Interfaces.Services
 
         Task<Response<List<AssignmentResponseDto>>> GetAssignmentsOfUser(Guid userId);
 
-        Task<Response<AssignmentDto>> ChangeAssignmentStateAsync(ChangeStateReturnRequestDto request);
+        Task<Response<AssignmentDto>> ChangeAssignmentStateAsync(ChangeStateAssigmentDto request);
 
         Task<PagedResponse<List<AssignmentResponseDto>>> GetAllAssignmentsAsync(PaginationFilter paginationFilter, string? search, EnumAssignmentState? assignmentState, DateTime? assignedDate, EnumLocation adminLocation, string? orderBy, bool? isDescending, string? route);
     }

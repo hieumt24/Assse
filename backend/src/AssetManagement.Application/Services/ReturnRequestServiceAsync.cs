@@ -3,8 +3,8 @@ using AssetManagement.Application.Filter;
 using AssetManagement.Application.Helper;
 using AssetManagement.Application.Interfaces.Repositories;
 using AssetManagement.Application.Interfaces.Services;
-using AssetManagement.Application.Models.DTOs.ReturnRequests.Reponses;
 using AssetManagement.Application.Models.DTOs.ReturnRequests;
+using AssetManagement.Application.Models.DTOs.ReturnRequests.Reponses;
 using AssetManagement.Application.Models.DTOs.ReturnRequests.Request;
 using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Entites;
@@ -148,5 +148,47 @@ namespace AssetManagement.Application.Services
         {
             throw new NotImplementedException();
         }
+
+        public async Task<Response<ReturnRequestDto>> ChangeAssignmentStateAsync(ChangeStateReturnRequestDto request)
+        {
+            var returnRequest = await _returnRequestRepository.GetByIdAsync(request.ReturnRequestId);
+
+            if (returnRequest == null)
+            {
+                return new Response<ReturnRequestDto>
+                {
+                    Succeeded = false,
+                    Message = "Assignment not found."
+                };
+            }
+            if (returnRequest.ReturnState == EnumReturnRequestState.Completed)
+            {
+                return new Response<ReturnRequestDto> { Succeeded = false, Message = "Assignment state cannot be changed." };
+            }
+            returnRequest.ReturnState = request.NewState;
+
+            try
+            {
+                await _returnRequestRepository.UpdateAsync(returnRequest);
+                var assignmentDto = _mapper.Map<ReturnRequestDto>(returnRequest);
+                return new Response<ReturnRequestDto>
+                {
+                    Succeeded = true,
+                    Message = "Return request state changed successfully.",
+                    Data = assignmentDto
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Response<ReturnRequestDto>
+                {
+                    Succeeded = false,
+                    Message = "An error occurred while changing the assignment state.",
+                    Errors = new List<string> { ex.Message }
+                };
+            }
+        }
+
+
     }
 }
