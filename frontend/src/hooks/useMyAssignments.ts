@@ -21,6 +21,7 @@ export const useMyAssignments = (
   const [totalRecords, setTotalRecords] = useState<number>(0);
 
   const fetchAssignments = async () => {
+    if (userId === "") return;
     setLoading(true);
     try {
       const data = await getAssignmentByUserAssignedService({
