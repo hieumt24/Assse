@@ -12,11 +12,11 @@ import { IoCalendar, IoClose } from "react-icons/io5";
 
 interface DatePickerProps {
   formatDate?: string;
-  setValue: Dispatch<SetStateAction<Date | undefined>>;
+  setValue: Dispatch<SetStateAction<Date | null>>;
   placeholder?: string;
 }
 
-export function DatePicker(props: DatePickerProps) {
+export function DatePicker(props: Readonly<DatePickerProps>) {
   const { formatDate, setValue, placeholder } = props;
   const [date, setDate] = useState<Date>();
 
@@ -29,7 +29,6 @@ export function DatePicker(props: DatePickerProps) {
       setValue(nextDay);
     } else {
       setValue(null);
-
     }
   };
 
@@ -37,7 +36,6 @@ export function DatePicker(props: DatePickerProps) {
     e.stopPropagation(); // Prevent the Popover from opening
     setDate(undefined);
     setValue(null);
-
   };
 
   return (

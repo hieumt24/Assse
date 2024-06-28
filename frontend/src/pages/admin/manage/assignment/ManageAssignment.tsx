@@ -28,7 +28,7 @@ export const ManageAssignment = () => {
   const [orderBy, setOrderBy] = useState("");
   const [isDescending, setIsDescending] = useState(true);
   const [assignmentState, setAssignmentState] = useState(0);
-  const [assignedDate, setAssignedDate] = useState<Date | undefined>(undefined);
+  const [assignedDate, setAssignedDate] = useState<Date | null>(null);
   const { user } = useAuth();
 
   const {
