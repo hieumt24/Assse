@@ -1,5 +1,6 @@
 ﻿using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Models.DTOs.Assignments.Request;
+using AssetManagement.Application.Models.DTOs.Assignments.Requests;
 using AssetManagement.Application.Models.DTOs.ReturnRequests.Request;
 using AssetManagement.Application.Models.Filters;
 using AssetManagement.Domain.Enums;
@@ -67,7 +68,7 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> ChangeAssignmentStatus(ChangeStateReturnRequestDto request)
+        public async Task<IActionResult> ChangeAssignmentStatus(ChangeStateAssignmentDto request)
         {
             var result = await _assignmentServicesAsync.ChangeAssignmentStateAsync(request);
             if (result.Succeeded)

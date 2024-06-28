@@ -67,6 +67,8 @@ export const myAssignmentColumns = ({
           return <p className="text-green-600">Accepted</p>;
         case 2:
           return <p className="text-yellow-600">Waiting for acceptance</p>;
+        case 3:
+          return <p className="text-red-600">Cancelled</p>;
         default:
           return <p>{}</p>;
       }
@@ -87,7 +89,14 @@ export const myAssignmentColumns = ({
             }}
             disabled={assignment.state !== 2}
           >
-            <FaCheck size={18} />
+            {assignment.state !== 2 ? (
+              <FaCheck
+                size={18}
+                className="text-black opacity-25 hover:text-black"
+              />
+            ) : (
+              <FaCheck size={18} />
+            )}
           </button>
           <button
             className="text-red-500 hover:text-red-700"
@@ -97,7 +106,14 @@ export const myAssignmentColumns = ({
             }}
             disabled={assignment.state !== 2}
           >
-            <IoCloseCircleOutline size={20} />
+            {assignment.state !== 2 ? (
+              <IoCloseCircleOutline
+                size={20}
+                className="text-black opacity-25 hover:text-black"
+              />
+            ) : (
+              <IoCloseCircleOutline size={20} />
+            )}
           </button>
           <button
             className="text-green-500 hover:text-green-700"
@@ -107,7 +123,14 @@ export const myAssignmentColumns = ({
             }}
             disabled={assignment.state !== 1}
           >
-            <IoReload size={20} />
+            {assignment.state !== 1 ? (
+              <IoReload
+                size={20}
+                className="text-black opacity-25 hover:text-black"
+              />
+            ) : (
+              <IoReload size={20} />
+            )}
           </button>
         </div>
       );

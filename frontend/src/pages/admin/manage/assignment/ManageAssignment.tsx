@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/select";
 import { useLoading } from "@/context/LoadingContext";
 import { useAssignments, useAuth, usePagination } from "@/hooks";
-import { deleteAssetByIdService } from "@/services";
 import { createReturnRequest } from "@/services/admin/manageReturningRequestService";
 import { format } from "date-fns";
 import { useState } from "react";
@@ -50,44 +49,28 @@ export const ManageAssignment = () => {
   );
 
   const { setIsLoading } = useLoading();
-  const [openDisable, setOpenDisable] = useState(false);
-  const [assignmentIdToDelete, setAssignmentIdToDelete] = useState<string>("");
+  const [openDelete, setOpenDelete] = useState(false);
+  const [assignmentId, setAssignmentId] = useState<string>("");
   const [openCreateRequest, setOpenCreateRequest] = useState(false);
-  const [assigmentIdToRequest, setAssignmentIdToRequest] = useState<string>();
-  const handleOpenDisable = (id: string) => {
-    setAssignmentIdToDelete(id);
+  const handleOpenDelete = (id: string) => {
+    setAssignmentId(id);
+    setOpenDelete(true);
   };
   const handleOpenCreateRequest = (id: string) => {
-    setAssignmentIdToRequest(id);
+    setAssignmentId(id);
     setOpenCreateRequest(true);
   };
 
   const handleDelete = async () => {
-    try {
-      setIsLoading(true);
-      // TODO : Need change the function into delete assignment not asset
-      const res = await deleteAssetByIdService(assignmentIdToDelete);
-      if (res.success) {
-        toast.success(res.message);
-      } else {
-        toast.error(res.message);
-      }
-      fetchAssignments();
-      setOpenDisable(false);
-    } catch (err) {
-      console.log(err);
-      toast.error("Error when disable user");
-    } finally {
-      setIsLoading(false);
-    }
+    alert("Not implemented");
+    fetchAssignments();
   };
 
   const handleCreateRequest = async () => {
     try {
       setIsLoading(true);
-      // TODO : Need change the function into delete assignment not asset
       const res = await createReturnRequest({
-        assignmentId: assigmentIdToRequest,
+        assignmentId: assignmentId,
         requestedBy: user.id,
         returnedDate: format(new Date(), "yyyy-MM-dd"),
         adminLocation: user.location,
@@ -157,7 +140,7 @@ export const ManageAssignment = () => {
           <AssignmentTable
             columns={assignmentColumns({
               handleOpenCreateRequest,
-              handleOpenDisable,
+              handleOpenDelete,
               setOrderBy,
               setIsDescending,
               isDescending,
@@ -174,8 +157,8 @@ export const ManageAssignment = () => {
             desc="Do you want to delete this assignment"
             confirmText="Yes"
             onConfirm={handleDelete}
-            open={openDisable}
-            setOpen={setOpenDisable}
+            open={openDelete}
+            setOpen={setOpenDelete}
           />
           <GenericDialog
             title="Are you sure?"

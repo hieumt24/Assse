@@ -6,6 +6,7 @@ using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Models.DTOs.Assignments;
 using AssetManagement.Application.Models.DTOs.Assignments.Reques;
 using AssetManagement.Application.Models.DTOs.Assignments.Request;
+using AssetManagement.Application.Models.DTOs.Assignments.Requests;
 using AssetManagement.Application.Models.DTOs.Assignments.Response;
 using AssetManagement.Application.Models.DTOs.Category;
 using AssetManagement.Application.Models.DTOs.ReturnRequests.Request;
@@ -79,11 +80,11 @@ namespace AssetManagement.Application.Services
 
             try
             {
-                var newAssigment = _mapper.Map<Assignment>(request);
-                newAssigment.CreatedOn = DateTime.Now;
-                newAssigment.CreatedBy = request.AssignedIdBy.ToString();
-                newAssigment.Note = request.Note.Trim();
-                var asignment = await _assignmentRepository.AddAsync(newAssigment);
+                var newAssignment = _mapper.Map<Assignment>(request);
+                newAssignment.CreatedOn = DateTime.Now;
+                newAssignment.CreatedBy = request.AssignedIdBy.ToString();
+                newAssignment.Note = request.Note.Trim();
+                var asignment = await _assignmentRepository.AddAsync(newAssignment);
                 existingAsset.State = AssetStateType.Assigned;
                 await _assetRepository.UpdateAsync(existingAsset);
                 var assetDto = _mapper.Map<AssignmentDto>(asignment);
@@ -137,13 +138,13 @@ namespace AssetManagement.Application.Services
 
         public async Task<Response<AssignmentResponseDto>> GetAssignmentByIdAsync(Guid assignmentId)
         {
-            var assigment = await _assignmentRepositoriesAsync.GetAssignemntByIdAsync(assignmentId);
-            if (assigment == null)
+            var assignment = await _assignmentRepositoriesAsync.GetAssignemntByIdAsync(assignmentId);
+            if (assignment == null)
             {
                 return new Response<AssignmentResponseDto> { Succeeded = false, Message = "Assignment not found" };
             }
-            var assigmentDto = _mapper.Map<AssignmentResponseDto>(assigment);
-            return new Response<AssignmentResponseDto> { Succeeded = true, Data = assigmentDto };
+            var assignmentDto = _mapper.Map<AssignmentResponseDto>(assignment);
+            return new Response<AssignmentResponseDto> { Succeeded = true, Data = assignmentDto };
 
         }
 
@@ -159,7 +160,7 @@ namespace AssetManagement.Application.Services
             };
         }
 
-        public async Task<Response<AssignmentDto>> ChangeAssignmentStateAsync(ChangeStateReturnRequestDto request)
+        public async Task<Response<AssignmentDto>> ChangeAssignmentStateAsync(ChangeStateAssignmentDto request)
         {
             var assignment = await _assignmentRepository.GetByIdAsync(request.AssignmentId);
 

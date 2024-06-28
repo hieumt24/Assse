@@ -64,9 +64,9 @@ export function AssignmentTable<TData, TValue>({
       const result = await getAssignmentByIdService(id);
       console.log(result.data);
       if (result.success) {
-        setAssignmentDetails(result.data);
+        setAssignmentDetails(result.data.data);
       } else {
-        toast.error(result.message);
+        toast.error(result.data.message);
       }
     } catch (error) {
       console.log(error);
