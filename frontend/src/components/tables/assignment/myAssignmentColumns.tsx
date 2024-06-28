@@ -121,9 +121,9 @@ export const myAssignmentColumns = ({
               e.stopPropagation();
               handleOpenCreateRequest(assignment.id!);
             }}
-            disabled={assignment.state !== 1}
+            disabled={assignment.state !== 1 || assignment.isRequested}
           >
-            {assignment.state !== 1 ? (
+            {assignment.state !== 1 || assignment.isRequested ? (
               <IoReload
                 size={20}
                 className="text-black opacity-25 hover:text-black"

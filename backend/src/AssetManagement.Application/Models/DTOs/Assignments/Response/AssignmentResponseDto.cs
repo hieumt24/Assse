@@ -14,5 +14,6 @@ namespace AssetManagement.Application.Models.DTOs.Assignments.Response
         public DateTime AssignedDate { get; set; }
         public EnumLocation Location { get; set; }
         public EnumAssignmentState State { get; set; }
+        public bool IsRequested {get;set;}
     }
 }
