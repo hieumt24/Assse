@@ -1,6 +1,6 @@
 import { UserRes } from "@/models";
 import { getAllUserService } from "@/services";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export const useUsers = (
   pagination: {
@@ -19,9 +19,7 @@ export const useUsers = (
   const [pageCount, setPageCount] = useState<number>(0);
   const [totalRecords, setTotalRecords] = useState<number>(0);
 
-  const fetchUsers = async () => {
-    // Check if localStorage have item
-    const orderByLocalStorage = localStorage.getItem("orderBy");
+  const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
       const data = await getAllUserService({
@@ -29,24 +27,76 @@ export const useUsers = (
         search,
         roleType,
         adminLocation,
-        orderBy: orderByLocalStorage ?? orderBy,
+        orderBy,
         isDescending,
       });
 
-      setUsers(data.data.data);
+      setUsers(data.data.data || []);
       setPageCount(data.data.totalPages);
       setTotalRecords(data.data.totalRecords);
-      localStorage.removeItem("orderBy");
+      return data.data.data || [];
     } catch (error) {
+      console.error("Error in fetchUsers:", error);
       setError(true);
+      return [];
     } finally {
       setLoading(false);
     }
-  };
+  }, [pagination, search, roleType, adminLocation, orderBy, isDescending]);
 
   useEffect(() => {
-    fetchUsers();
-  }, [pagination, search, roleType, orderBy, isDescending]);
+    const fetchAndUpdateUsers = async () => {
+      setLoading(true);
+      try {
+        const isAdded = localStorage.getItem("added");
+        const isEdited = localStorage.getItem("edited");
+
+        // Always fetch the latest data
+        const currentUsers = await fetchUsers();
+
+        if (isAdded || isEdited) {
+          const newUserData = await getAllUserService({
+            pagination,
+            search,
+            roleType,
+            adminLocation,
+            orderBy: isAdded
+              ? "createdOn"
+              : isEdited
+                ? "lastModifiedOn"
+                : orderBy,
+            isDescending: true, // Ensure we get the most recent user
+          });
+
+          const newUser = newUserData.data.data[0];
+          if (newUser) {
+            setUsers([
+              newUser,
+              ...currentUsers.filter((user: UserRes) => user.id !== newUser.id),
+            ]);
+          }
+
+          localStorage.removeItem("added");
+          localStorage.removeItem("edited");
+        }
+      } catch (error) {
+        console.error("Error in fetchAndUpdateUsers:", error);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAndUpdateUsers();
+  }, [
+    pagination,
+    search,
+    roleType,
+    adminLocation,
+    orderBy,
+    isDescending,
+    fetchUsers,
+  ]);
 
   return {
     users,
