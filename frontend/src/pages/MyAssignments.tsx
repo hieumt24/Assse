@@ -16,7 +16,6 @@ import { updateAssignmentStateService } from "@/services/admin/manageAssignmentS
 import { createReturnRequest } from "@/services/admin/manageReturningRequestService";
 import { format } from "date-fns";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export const MyAssignment = () => {
@@ -116,7 +115,6 @@ export const MyAssignment = () => {
     setIsLoading(false);
   };
 
-  const navigate = useNavigate();
   return (
     <div className="m-16 flex h-full flex-grow flex-col gap-8">
       <p className="text-2xl font-bold text-red-600">My Assignment</p>
