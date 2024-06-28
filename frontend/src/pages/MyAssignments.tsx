@@ -11,7 +11,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useLoading } from "@/context/LoadingContext";
-import { useAssignments, useAuth, usePagination } from "@/hooks";
+import { useAuth, usePagination } from "@/hooks";
+import { useMyAssignments } from "@/hooks/useMyAssignments";
 import { updateAssignmentStateService } from "@/services/admin/manageAssignmentService";
 import { createReturnRequest } from "@/services/admin/manageReturningRequestService";
 import { format } from "date-fns";
@@ -35,11 +36,11 @@ export const MyAssignment = () => {
     pageCount,
     totalRecords,
     fetchAssignments,
-  } = useAssignments(
+  } = useMyAssignments(
     pagination,
+    user.id,
     search,
     orderBy,
-    user.location,
     isDescending,
     assignmentState,
     assignedDate!,
