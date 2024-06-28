@@ -29,14 +29,14 @@ export interface FirstTimeLoginReq {
 
 export interface UserRes {
   id: string;
+  staffCode: string;
+  username: string;
   firstName: string;
   lastName: string;
   dateOfBirth: Date;
   joinedDate: Date;
   gender: number;
   role: number;
-  staffCode: string;
-  username: string;
   location?: number;
   createdOn: string;
 }
