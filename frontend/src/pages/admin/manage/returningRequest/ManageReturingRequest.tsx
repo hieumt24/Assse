@@ -99,12 +99,12 @@ export const ManageReturningRequest = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="0">All</SelectItem>
-              <SelectItem value="1">Completed</SelectItem>
-              <SelectItem value="2">Waiting</SelectItem>
+              <SelectItem value="1">Waiting</SelectItem>
+              <SelectItem value="2">Completed</SelectItem>
               {/* <SelectItem value="3">Cancelled</SelectItem> */}
             </SelectContent>
           </Select>
-          <DatePicker setValue={setReturnedDate} placeholder="Returned Date"/>
+          <DatePicker setValue={setReturnedDate} placeholder="Returned Date" />
         </div>
 
         <div className="flex justify-between gap-6">
