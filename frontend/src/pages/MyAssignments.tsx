@@ -91,6 +91,7 @@ export const MyAssignment = () => {
     });
     if (res.success) {
       toast.success(res.message);
+      fetchAssignments();
     } else {
       toast.error(res.message);
     }
