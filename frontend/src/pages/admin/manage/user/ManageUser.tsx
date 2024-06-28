@@ -78,7 +78,7 @@ export const ManageUser = () => {
           }}
         >
           <SelectTrigger className="w-32">
-            <SelectValue placeholder="Type" />
+            <SelectValue placeholder="Role" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="0">All</SelectItem>

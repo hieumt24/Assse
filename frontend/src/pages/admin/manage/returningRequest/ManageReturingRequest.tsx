@@ -96,7 +96,7 @@ export const ManageReturningRequest = () => {
             }}
           >
             <SelectTrigger className="w-32">
-              <SelectValue placeholder="Type" />
+              <SelectValue placeholder="State" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="0">All</SelectItem>
