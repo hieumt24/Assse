@@ -88,7 +88,7 @@ export const MyAssignment = () => {
       assignmentId: assignmentId,
       requestedBy: user.id,
       returnedDate: format(new Date(), "yyyy-MM-dd"),
-      adminLocation: user.location,
+      location: user.location,
     });
     if (res.success) {
       toast.success(res.message);

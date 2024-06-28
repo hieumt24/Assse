@@ -189,7 +189,7 @@ export interface CreateReturningRequestReq {
   assignmentId?: string;
   requestedBy?: string;
   returnedDate?: string;
-  adminLocation?: number;
+  location?: number;
 }
 
 export interface UpdateReturningRequestReq {
