@@ -47,5 +47,11 @@ namespace AssetManagement.Infrastructure.Repositories
                                          .Where(x => x.Id == assignmentId).FirstOrDefault();
         }
 
+        public async Task<Assignment> FindExitingAssignment(Guid AssetId)
+        {
+            return await _dbContext.Set<Assignment>()
+                .FirstOrDefaultAsync(assignment => assignment.AssetId == AssetId);
+        }
+
     }
 }

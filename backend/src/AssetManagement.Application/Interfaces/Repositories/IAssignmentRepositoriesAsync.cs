@@ -11,5 +11,7 @@ namespace AssetManagement.Application.Interfaces.Repositories
         Task<IQueryable<Assignment>> GetAssignmentsByUserId(Guid userId);
 
         Task<Assignment> GetAssignemntByIdAsync(Guid assignmentId);
+
+        Task<Assignment> FindExitingAssignment(Guid AssetId);
     }
 }
