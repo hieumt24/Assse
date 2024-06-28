@@ -16,7 +16,7 @@ interface DatePickerProps {
   placeholder?: string;
 }
 
-export function DatePicker(props: DatePickerProps) {
+export function DatePicker(props: Readonly<DatePickerProps>) {
   const { formatDate, setValue, placeholder } = props;
   const [date, setDate] = useState<Date>();
 
