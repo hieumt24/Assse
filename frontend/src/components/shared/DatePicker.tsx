@@ -12,7 +12,7 @@ import { IoCalendar, IoClose } from "react-icons/io5";
 
 interface DatePickerProps {
   formatDate?: string;
-  setValue: Dispatch<SetStateAction<Date | undefined>>;
+  setValue: Dispatch<SetStateAction<Date | null>>;
   placeholder?: string;
 }
 
@@ -28,14 +28,14 @@ export function DatePicker(props: DatePickerProps) {
       nextDay.setDate(nextDay.getDate() + 1);
       setValue(nextDay);
     } else {
-      setValue(undefined);
+      setValue(null);
     }
   };
 
   const handleClear = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation(); // Prevent the Popover from opening
     setDate(undefined);
-    setValue(undefined);
+    setValue(null);
   };
 
   return (
