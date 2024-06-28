@@ -39,5 +39,13 @@ namespace AssetManagement.Infrastructure.Repositories
 
             return queryByAdmin;
         }
+
+        public async Task<ReturnRequest> GetReturnRequestByIdWithAssignmentAsync(Guid returnRequestId)
+        {
+            var returnRequestIncludeWithAssignment = _dbContext.ReturnRequests.Include(x => x.Assignment);
+            var returnRequest = await returnRequestIncludeWithAssignment.FirstOrDefaultAsync(x => x.Id == returnRequestId);
+            return returnRequest;
+            
+        }
     }
 }
