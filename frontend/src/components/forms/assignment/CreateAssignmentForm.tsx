@@ -162,7 +162,15 @@ export const CreateAssignmentForm = () => {
                         <div className="flex items-center text-lg font-bold text-red-600">
                           Select User
                         </div>
-                        <SearchForm setSearch={setUserSearchQuery} />
+                        <SearchForm
+                          setSearch={setUserSearchQuery}
+                          onSubmit={() => {
+                            onUsersPaginationChange((prev) => ({
+                              ...prev,
+                              pageIndex: 1,
+                            }));
+                          }}
+                        />
                       </div>
                       <div className="mt-8">
                         {loading ? (
@@ -245,7 +253,15 @@ export const CreateAssignmentForm = () => {
                         <div className="flex items-center text-lg font-bold text-red-600">
                           Select Asset
                         </div>
-                        <SearchForm setSearch={setAssetSearchQuery} />
+                        <SearchForm
+                          setSearch={setAssetSearchQuery}
+                          onSubmit={() => {
+                            onAssetsPaginationChange((prev) => ({
+                              ...prev,
+                              pageIndex: 1,
+                            }));
+                          }}
+                        />
                       </div>
                       <div className="mt-8">
                         {assetsLoading ? (

@@ -167,7 +167,7 @@ export const ManageAsset = () => {
   };
 
   return (
-    <div className="m-16 flex h-full flex-grow flex-col gap-8">
+    <div className="m-16 flex flex-grow flex-col gap-8">
       <p className="text-2xl font-bold text-red-600">Asset List</p>
       <div className="flex items-center justify-between">
         <div className="flex gap-2">
