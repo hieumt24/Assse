@@ -8,18 +8,35 @@ import {
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Dispatch, SetStateAction, useState } from "react";
-import { IoCalendar } from "react-icons/io5";
+import { IoCalendar, IoClose } from "react-icons/io5";
 
 interface DatePickerProps {
   formatDate?: string;
-  setValue: Dispatch<SetStateAction<Date | null>>;
+  setValue: Dispatch<SetStateAction<Date | undefined>>;
   placeholder?: string;
 }
 
 export function DatePicker(props: DatePickerProps) {
   const { formatDate, setValue, placeholder } = props;
   const [date, setDate] = useState<Date>();
-  setValue(date!);
+
+  const handleDateSelect = (selectedDate: Date | undefined) => {
+    setDate(selectedDate);
+
+    if (selectedDate) {
+      const nextDay = new Date(selectedDate);
+      nextDay.setDate(nextDay.getDate() + 1);
+      setValue(nextDay);
+    } else {
+      setValue(undefined);
+    }
+  };
+
+  const handleClear = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation(); // Prevent the Popover from opening
+    setDate(undefined);
+    setValue(undefined);
+  };
 
   return (
     <Popover>
@@ -32,7 +49,17 @@ export function DatePicker(props: DatePickerProps) {
           )}
         >
           {date ? (
-            format(date, formatDate ?? "dd/MM/yyyy")
+            <>
+              {format(date, formatDate ?? "dd/MM/yyyy")}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-4 w-4 p-0"
+                onClick={handleClear}
+              >
+                <IoClose size={14} />
+              </Button>
+            </>
           ) : (
             <span>{placeholder || "Select date"}</span>
           )}
@@ -43,7 +70,7 @@ export function DatePicker(props: DatePickerProps) {
         <Calendar
           mode="single"
           selected={date}
-          onSelect={setDate}
+          onSelect={handleDateSelect}
           initialFocus
         />
       </PopoverContent>
