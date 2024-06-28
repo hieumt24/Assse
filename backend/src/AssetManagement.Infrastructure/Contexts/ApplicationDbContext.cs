@@ -67,12 +67,11 @@ namespace AssetManagement.Infrastructure.Contexts
                 .HasForeignKey(a => a.AssetId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-
             modelBuilder.Entity<ReturnRequest>()
                .HasOne(rr => rr.Assignment)
                .WithOne(a => a.ReturnRequest)
                .HasForeignKey<ReturnRequest>(rr => rr.AssignmentId)
-               .OnDelete(DeleteBehavior.Restrict);
+               .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<ReturnRequest>()
                 .HasOne(rr => rr.RequestedUser)

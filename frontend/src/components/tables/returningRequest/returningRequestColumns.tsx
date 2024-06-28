@@ -49,7 +49,9 @@ export const returningRequestColumns = ({
     header: ({ column }) =>
       renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),
     cell: ({ row }) => {
-      const formattedDate = format(row.original.assignedDate, "dd/MM/yyyy");
+      const formattedDate = row.original.assignedDate
+        ? format(row.original.assignedDate, "dd/MM/yyyy")
+        : "";
       return <p>{formattedDate}</p>;
     },
   },
