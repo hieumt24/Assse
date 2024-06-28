@@ -357,7 +357,7 @@ export const CreateAssignmentForm = () => {
             className="w-[76px] bg-red-500 hover:bg-white hover:text-red-500"
             disabled={!form.formState.isValid || isLoading}
           >
-            Save
+            {isLoading ? "Saving..." : "Save"}
           </Button>
           <Button
             type="button"

@@ -58,6 +58,8 @@ export const CreateCategoryForm = (props: DialogProps) => {
     }
   };
 
+  const { isLoading } = useLoading();
+
   return (
     <FullPageModal show={open}>
       <Dialog open={open} onOpenChange={setOpen}>
@@ -121,8 +123,12 @@ export const CreateCategoryForm = (props: DialogProps) => {
               </div>
 
               <div className="mt-4 flex items-center justify-end gap-4">
-                <Button variant={"destructive"} type="submit">
-                  Create
+                <Button
+                  variant={"destructive"}
+                  type="submit"
+                  disabled={!form.formState.isValid || isLoading}
+                >
+                  {isLoading ? "Creating..." : "Create"}
                 </Button>
                 <Button
                   variant="outline"
