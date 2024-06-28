@@ -43,18 +43,18 @@ namespace AssetManagement.API.Controllers
             return Ok(response);
         }
 
-        [HttpGet]
-        [Route("user-assigned/{userId}")]
-        public async Task<IActionResult> GetAssignmentsForUser(Guid userId)
+        [HttpPost]
+        [Route("filter-user-assigned")]
+        public async Task<IActionResult> GetAssignmentsForUser([FromBody] FilterAssignmentForUser filterAssignmentForUser)
         {
-            var result = await _assignmentServicesAsync.GetAssignmentsOfUser(userId);
+            string route = Request.Path.Value;
+            var result = await _assignmentServicesAsync.GetAssignmentsOfUser(filterAssignmentForUser.pagination, filterAssignmentForUser.userId, filterAssignmentForUser.search, filterAssignmentForUser.assignmentState, filterAssignmentForUser.assignedDate, filterAssignmentForUser.orderBy, filterAssignmentForUser.isDescending, route);
             if (result.Succeeded)
             {
                 return Ok(result);
             }
             return BadRequest(result);
         }
-
 
         [HttpGet]
         public async Task<IActionResult> GerAssignmentById(Guid assignmentId)
