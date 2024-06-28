@@ -86,7 +86,7 @@ export const EditAssetForm: React.FC = () => {
       });
       if (res.success) {
         toast.success("Asset created successfully!");
-        localStorage.setItem("orderBy", "lastmodifiedon");
+        localStorage.setItem("edited", "1");
         navigate("/assets");
       } else {
         toast.error(res.message);

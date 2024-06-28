@@ -58,10 +58,11 @@ export const CreateUserForm = () => {
       role,
       location,
     });
+
     setIsLoading(false);
     if (res.success) {
       toast.success(res.message);
-      localStorage.setItem("orderBy", "createdon");
+      localStorage.setItem("added", "1");
       navigate("/users");
     } else {
       toast.error(res.message);
