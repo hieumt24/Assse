@@ -23,6 +23,8 @@ namespace AssetManagement.Application.Services
         private readonly IAssignmentRepositoriesAsync _assignmentRepository;
         private readonly IValidator<AddReturnRequestDto> _addReturnRequestValidator;
         private readonly IUriService _uriService;
+        private readonly IAssetRepositoriesAsync _assetRepository;
+        private readonly IAssetServiceAsync _assetService;
 
         public ReturnRequestServiceAsync(
             IReturnRequestRepositoriesAsync returnRequestRepository,
@@ -30,7 +32,9 @@ namespace AssetManagement.Application.Services
             IValidator<AddReturnRequestDto> addReturnRequestValidator,
             IUserRepositoriesAsync userRepository,
             IAssignmentRepositoriesAsync assignmentRepository,
-            IUriService uriService
+            IUriService uriService,
+            IAssetRepositoriesAsync assetRepository,
+            IAssetServiceAsync assetService
             )
         {
             _mapper = mapper;
@@ -39,6 +43,8 @@ namespace AssetManagement.Application.Services
             _userRepository = userRepository;
             _assignmentRepository = assignmentRepository;
             _uriService = uriService;
+            _assetRepository = assetRepository;
+            _assetService = assetService;
         }
 
         public async Task<Response<ReturnRequestDto>> AddReturnRequestAsync(AddReturnRequestDto request)
@@ -166,6 +172,52 @@ namespace AssetManagement.Application.Services
                 return new Response<ReturnRequestDto> { Succeeded = false, Message = "Assignment state cannot be changed." };
             }
             returnRequest.ReturnState = request.NewState;
+
+            if (request.NewState == EnumReturnRequestState.Completed)
+            {
+
+
+
+                var assignment = await _assignmentRepository.GetByIdAsync(returnRequest.AssignmentId);
+
+                if (assignment == null)
+                {
+                    return new Response<ReturnRequestDto>
+                    {
+                        Succeeded = false,
+                        Message = "Assignment not found."
+                    };
+                }
+                var assetResponse = await _assetService.GetAssetByIdAsync(assignment.AssetId);
+                if (!assetResponse.Succeeded || assetResponse.Data == null)
+                {
+                    return new Response<ReturnRequestDto>
+                    {
+                        Succeeded = false,
+                        Message = "Associated asset not found."
+                    };
+                }
+
+                var asset = assetResponse.Data;
+                asset.State = AssetStateType.Available;
+
+                assignment.IsDeleted = true;
+
+                try
+                {
+                    await _assignmentRepository.UpdateAsync(assignment);
+                    await _assetRepository.UpdateAsync(_mapper.Map<Asset>(asset));
+                }
+                catch (Exception ex)
+                {
+                    return new Response<ReturnRequestDto>
+                    {
+                        Succeeded = false,
+                        Message = "An error occurred while updating assignment or asset state.",
+                        Errors = new List<string> { ex.Message }
+                    };
+                }
+            }
 
             try
             {

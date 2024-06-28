@@ -1,6 +1,7 @@
 import axiosInstance from "@/api/axiosInstance";
 import {
   CreateAssignmentReq,
+  GetAssignemntByUserAssignedReq,
   GetAssignemntReq,
   UpdateAssignmentStateReq,
 } from "@/models";
@@ -11,6 +12,31 @@ export const getAllAssignmentService = (req: GetAssignemntReq) => {
 
   return axiosInstance
     .post("/assignments/filter-assignments", req)
+    .then((res) => {
+      return {
+        success: true,
+        message: "Assignments fetched successfully!",
+        data: res.data,
+      };
+    })
+    .catch((err) => {
+      return {
+        success: false,
+        message: "Failed to fetch assignments.",
+        data: err,
+      };
+    });
+};
+
+export const getAssignmentByUserAssignedService = (
+  req: GetAssignemntByUserAssignedReq,
+) => {
+  if (req.assignmentState === 0) {
+    delete req.assignmentState;
+  }
+
+  return axiosInstance
+    .post("/assignments/filter-user-assigned", req)
     .then((res) => {
       return {
         success: true,

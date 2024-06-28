@@ -13,9 +13,11 @@ namespace AssetManagement.Infrastructure.Repositories
         {
         }
 
-        public async Task<IQueryable<Assignment>> FilterAssignmentAsync(EnumLocation adminLocation, string? search, EnumAssignmentState? assignmentState, DateTime? assignedDate)
+        public async Task<IQueryable<Assignment>> FilterAssignmentAsync(EnumLocation location, string? search, EnumAssignmentState? assignmentState, DateTime? assignedDate)
         {
-            var query = _dbContext.Assignments.Include(x => x.Asset).Where(x => x.Location == adminLocation);
+            var includeAssignment = _dbContext.Assignments.Include(x => x.Asset).Include(x => x.AssignedBy).Include(x => x.AssignedTo);
+            var query = includeAssignment.Where(x => x.Location == location).AsQueryable();
+
             if (!string.IsNullOrEmpty(search))
             {
                 query = query.Where(x => x.Asset.AssetCode.ToLower().Contains(search.ToLower())
@@ -39,13 +41,38 @@ namespace AssetManagement.Infrastructure.Repositories
             return _dbContext.Assignments.Include(x => x.Asset).Where(x => x.AssignedIdTo == userId);
         }
 
-        public async Task<Assignment>  GetAssignemntByIdAsync(Guid assignmentId)
+        public async Task<Assignment> GetAssignemntByIdAsync(Guid assignmentId)
         {
-            return _dbContext.Assignments.Include(x => x.Asset)
+            return await _dbContext.Assignments.Include(x => x.Asset)
                                          .Include(x => x.AssignedTo)
                                          .Include(x => x.AssignedBy)
-                                         .Where(x => x.Id == assignmentId).FirstOrDefault();
+                                         .Where(x => x.Id == assignmentId).FirstOrDefaultAsync();
         }
 
+        public async Task<Assignment> FindExitingAssignment(Guid assetId)
+        {
+            return await _dbContext.Set<Assignment>()
+                .FirstOrDefaultAsync(assigment => assigment.AssetId == assetId);
+        }
+
+        public async Task<IQueryable<Assignment>> FilterAssignmentOfUserAsync(Guid userId, string? search, EnumAssignmentState? assignmentState, DateTime? assignedDate)
+        {
+            var query = _dbContext.Assignments.Include(x => x.Asset).Where(x => x.AssignedIdTo == userId);
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(x => x.Asset.AssetCode.ToLower().Contains(search.ToLower())
+                                                       || x.Asset.AssetName.ToLower().Contains(search.ToLower())
+                                                       || x.AssignedTo.Username.ToLower().Contains(search.ToLower()));
+            }
+            if (assignmentState.HasValue)
+            {
+                query = query.Where(x => x.State == assignmentState);
+            }
+            if (assignedDate.HasValue)
+            {
+                query = query.Where(x => x.AssignedDate.Date == assignedDate.Value.Date);
+            }
+            return query;
+        }
     }
 }

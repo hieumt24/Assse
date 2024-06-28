@@ -48,6 +48,8 @@ namespace AssetManagement.Infrastructure.Repositories
                 .FirstOrDefaultAsync(asset => asset.CategoryId == categoryId);
         }
 
+        
+
         public async Task<string> GenerateAssetCodeAsync(Guid CategoryId)
         {
             // Get the category to access its prefix
