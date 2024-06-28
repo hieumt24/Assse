@@ -27,15 +27,13 @@ namespace AssetManagement.Application.Services
         private readonly IAssignmentRepositoriesAsync _assignmentRepository;
         private readonly IUserRepositoriesAsync _userRepository;
         private readonly IAssetRepositoriesAsync _assetRepository;
-        private readonly IAssetServiceAsync _assetService;
 
         public AssignmentServiceAsync(IAssignmentRepositoriesAsync assignmentRepositoriesAsync,
              IMapper mapper,
              IValidator<AddAssignmentRequestDto> addAssignmentValidator,
              IAssetRepositoriesAsync assetRepository,
              IUserRepositoriesAsync userRepository,
-             IUriService uriService,
-             IAssetServiceAsync assetService
+             IUriService uriService
             )
         {
             _mapper = mapper;
@@ -46,7 +44,6 @@ namespace AssetManagement.Application.Services
             _assetRepository = assetRepository;
             _userRepository = userRepository;
             _uriService = uriService;
-            _assetService = assetService;
         }
 
         public async Task<Response<AssignmentDto>> AddAssignmentAsync(AddAssignmentRequestDto request)
@@ -204,23 +201,22 @@ namespace AssetManagement.Application.Services
 
             if (request.NewState == EnumAssignmentState.Accepted)
             {
-                var assetResponse = await _assetService.GetAssetByIdAsync(assignment.AssetId);
+                var assetResponse = await _assetRepository.GetByIdAsync(assignment.AssetId);
 
-                if (!assetResponse.Succeeded || assetResponse.Data == null)
+                if (assetResponse == null)
                 {
                     return new Response<AssignmentDto>
                     {
                         Succeeded = false,
-                        Message = "Associated asset not found."
+                        Message = "Asset not found."
                     };
                 }
 
-                var asset = assetResponse.Data;
-                asset.State = AssetStateType.Available;
+                assetResponse.State = AssetStateType.Available;
 
                 try
                 {
-                    await _assetRepository.UpdateAsync(_mapper.Map<Asset>(asset));
+                    await _assetRepository.UpdateAsync(assetResponse);
                 }
                 catch (Exception ex)
                 {
