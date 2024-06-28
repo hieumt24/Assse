@@ -9,6 +9,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useLoading } from "@/context/LoadingContext";
 import { useAuth } from "@/hooks";
 import { firstTimeService } from "@/services";
 import { firstTimeLoginSchema } from "@/validations";
@@ -68,6 +69,8 @@ export const FirstTimeForm = () => {
     navigate("/auth/login");
     toast.success("You have been logged out");
   };
+
+  const { isLoading } = useLoading();
 
   return (
     <FullPageModal show={showModal}>
@@ -134,9 +137,9 @@ export const FirstTimeForm = () => {
               <Button
                 type="submit"
                 className="w-[76px] bg-red-500 hover:bg-white hover:text-red-500"
-                disabled={!form.formState.isValid}
+                disabled={!form.formState.isValid || isLoading}
               >
-                Save
+                {isLoading ? "Saving..." : "Save"}
               </Button>
               <Button
                 type="submit"

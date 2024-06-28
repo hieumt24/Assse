@@ -31,7 +31,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { z } from "zod";
 
 export const CreateUserForm = () => {
-  const { setIsLoading } = useLoading();
+  const { isLoading, setIsLoading } = useLoading();
   const { user } = useAuth();
   const form = useForm<z.infer<typeof createUserSchema>>({
     mode: "onBlur",
@@ -272,9 +272,9 @@ export const CreateUserForm = () => {
           <Button
             type="submit"
             className="w-[76px] bg-red-500 hover:bg-white hover:text-red-500"
-            disabled={!form.formState.isValid}
+            disabled={!form.formState.isValid || isLoading}
           >
-            Save
+            {isLoading ? "Saving..." : "Save"}
           </Button>
           <Button
             type="button"

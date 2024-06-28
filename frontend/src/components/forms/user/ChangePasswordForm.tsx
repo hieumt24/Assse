@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useLoading } from "@/context/LoadingContext";
 import { useAuth } from "@/hooks";
 import { firstTimeService } from "@/services";
 import { changePasswordSchema } from "@/validations";
@@ -50,6 +51,8 @@ export const ChangePasswordForm = (props: {
       toast.error(result.message);
     }
   };
+
+  const { isLoading } = useLoading();
 
   return (
     <FullPageModal show={open}>
@@ -115,9 +118,9 @@ export const ChangePasswordForm = (props: {
                   <Button
                     type="submit"
                     className="w-[76px] bg-red-500 hover:bg-white hover:text-red-500"
-                    disabled={!form.formState.isValid}
+                    disabled={!form.formState.isValid || isLoading}
                   >
-                    Save
+                    {isLoading ? "Saving..." : "Save"}
                   </Button>
                 </div>
               </div>

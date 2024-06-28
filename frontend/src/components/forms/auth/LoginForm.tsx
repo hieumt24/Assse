@@ -32,7 +32,7 @@ export const LoginForm = () => {
   });
 
   const { setIsAuthenticated } = useAuth();
-  const { setIsLoading } = useLoading();
+  const { isLoading, setIsLoading } = useLoading();
 
   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     try {
@@ -112,9 +112,9 @@ export const LoginForm = () => {
           <Button
             type="submit"
             className="bg-red-500 hover:bg-white hover:text-red-500"
-            disabled={!form.formState.isValid}
+            disabled={!form.formState.isValid || isLoading}
           >
-            Login
+            {isLoading ? "Logging in..." : "Login"}
           </Button>
         </div>
       </form>
