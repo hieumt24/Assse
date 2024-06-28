@@ -4,7 +4,6 @@ using AssetManagement.Application.Models.DTOs.Assignments.Reques;
 using AssetManagement.Application.Models.DTOs.Assignments.Request;
 using AssetManagement.Application.Models.DTOs.Assignments.Requests;
 using AssetManagement.Application.Models.DTOs.Assignments.Response;
-using AssetManagement.Application.Models.DTOs.ReturnRequests.Request;
 using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Enums;
 
@@ -20,7 +19,7 @@ namespace AssetManagement.Application.Interfaces.Services
 
         Task<Response<AssignmentDto>> DeleteAssignmentAsync(Guid assignmentId);
 
-        Task<Response<List<AssignmentResponseDto>>> GetAssignmentsOfUser(Guid userId);
+        Task<PagedResponse<List<AssignmentResponseDto>>> GetAssignmentsOfUser(PaginationFilter paginationFilter, Guid userId, string? search, EnumAssignmentState? assignmentState, DateTime? assignedDate, string? orderBy, bool? isDescending, string? route);
 
         Task<Response<AssignmentDto>> ChangeAssignmentStateAsync(ChangeStateAssignmentDto request);
 
