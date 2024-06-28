@@ -124,6 +124,7 @@ export const MyAssignment = () => {
         <div className="flex items-center justify-center gap-4">
           <Select
             onValueChange={(value) => {
+              pagination.pageIndex = 1;
               setAssignmentState(Number(value));
             }}
           >

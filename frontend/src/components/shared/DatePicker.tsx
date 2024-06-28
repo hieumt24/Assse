@@ -13,10 +13,11 @@ import { IoCalendar } from "react-icons/io5";
 interface DatePickerProps {
   formatDate?: string;
   setValue: Dispatch<SetStateAction<Date | null>>;
+  placeholder?: string;
 }
 
 export function DatePicker(props: DatePickerProps) {
-  const { formatDate, setValue } = props;
+  const { formatDate, setValue, placeholder } = props;
   const [date, setDate] = useState<Date>();
   setValue(date!);
 
@@ -33,7 +34,7 @@ export function DatePicker(props: DatePickerProps) {
           {date ? (
             format(date, formatDate ?? "dd/MM/yyyy")
           ) : (
-            <span>Assigned Date</span>
+            <span>{placeholder || "Select date"}</span>
           )}
           <IoCalendar size={20} />
         </Button>

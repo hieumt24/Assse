@@ -85,8 +85,16 @@ export const assetColumns = ({
               e.stopPropagation();
               handleOpenDisable(asset.id!);
             }}
+            disabled={asset.state === 3}
           >
-            <IoCloseCircleOutline size={20} />
+            {asset.state == 3 ? (
+              <IoCloseCircleOutline
+                size={20}
+                className="text-black opacity-25 hover:text-black"
+              />
+            ) : (
+              <IoCloseCircleOutline size={20} />
+            )}
           </button>
         </div>
       );

@@ -98,6 +98,7 @@ export const ManageAssignment = () => {
           <Select
             onValueChange={(value) => {
               setAssignmentState(Number(value));
+              pagination.pageIndex = 1;
             }}
           >
             <SelectTrigger className="w-32">
@@ -110,7 +111,7 @@ export const ManageAssignment = () => {
               <SelectItem value="3">Declined</SelectItem>
             </SelectContent>
           </Select>
-          <DatePicker setValue={setAssignedDate} />
+          <DatePicker setValue={setAssignedDate} placeholder="Assigned Date" />
         </div>
         <div className="flex justify-between gap-6">
           <SearchForm
