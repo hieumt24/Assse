@@ -33,6 +33,8 @@ namespace AssetManagement.Infrastructure.Repositories
             {
                 query = query.Where(x => x.AssignedDate.Date == assignedDate.Value.Date);
             }
+            // if state return request is complete not display in list assignment
+            query = query.Where(x => x.ReturnRequest == null || x.ReturnRequest.ReturnState != EnumReturnRequestState.Completed);
             return query;
         }
 

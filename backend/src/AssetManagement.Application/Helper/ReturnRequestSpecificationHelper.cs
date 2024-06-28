@@ -13,6 +13,11 @@ namespace AssetManagement.Application.Helper
         {
             Expression<Func<ReturnRequest, bool>> criteria = returnRequest => true;
             var spec = new ReturnRequestSpecification(criteria);
+            spec.AddInclude(x => x.AcceptedUser);
+            spec.AddInclude(x => x.RequestedUser);
+            spec.AddInclude(x => x.Assignment);
+         
+       
 
             if (!string.IsNullOrEmpty(orderBy))
             {
