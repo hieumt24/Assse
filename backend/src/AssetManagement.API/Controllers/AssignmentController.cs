@@ -1,9 +1,7 @@
 ﻿using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Models.DTOs.Assignments.Request;
 using AssetManagement.Application.Models.DTOs.Assignments.Requests;
-using AssetManagement.Application.Models.DTOs.ReturnRequests.Request;
 using AssetManagement.Application.Models.Filters;
-using AssetManagement.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AssetManagement.API.Controllers

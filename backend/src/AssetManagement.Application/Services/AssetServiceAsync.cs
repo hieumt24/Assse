@@ -22,18 +22,22 @@ namespace AssetManagement.Application.Services
         private readonly IUriService _uriService;
         private readonly IValidator<AddAssetRequestDto> _addAssetValidator;
         private readonly IValidator<EditAssetRequestDto> _editAssetValidator;
+        private readonly IAssignmentRepositoriesAsync _assignmentRepository;
 
         public AssetServiceAsync(IAssetRepositoriesAsync assetRepository,
              IMapper mapper,
               IUriService uriService,
              IValidator<AddAssetRequestDto> addAssetValidator,
-             IValidator<EditAssetRequestDto> editAssetValidator)
+             IValidator<EditAssetRequestDto> editAssetValidator,
+             IAssignmentRepositoriesAsync assignmentRepository
+            )
         {
             _mapper = mapper;
             _assetRepository = assetRepository;
             _uriService = uriService;
             _addAssetValidator = addAssetValidator;
             _editAssetValidator = editAssetValidator;
+            _assignmentRepository = assignmentRepository;
         }
 
         public async Task<Response<AssetDto>> AddAssetAsync(AddAssetRequestDto request)
@@ -67,6 +71,11 @@ namespace AssetManagement.Application.Services
 
         public async Task<Response<AssetDto>> DeleteAssetAsync(Guid assetId)
         {
+            var exsitingAssignment = _assignmentRepository.FindExitingAssignment(assetId);
+            if (exsitingAssignment != null)
+            {
+                return new Response<AssetDto> { Succeeded = true, Message = "This asset cannot be deleted because it is being assigned in assignment." };
+            }
             try
             {
                 var assset = await _assetRepository.DeleteAsync(assetId);

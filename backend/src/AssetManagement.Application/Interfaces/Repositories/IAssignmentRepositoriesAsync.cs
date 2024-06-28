@@ -13,5 +13,7 @@ namespace AssetManagement.Application.Interfaces.Repositories
         Task<Assignment> GetAssignemntByIdAsync(Guid assignmentId);
 
         Task<IQueryable<Assignment>> FilterAssignmentOfUserAsync(Guid userId, string? search, EnumAssignmentState? assignmentState, DateTime? assignedDate);
+
+        Task<Assignment> FindExitingAssignment(Guid assetId);
     }
 }

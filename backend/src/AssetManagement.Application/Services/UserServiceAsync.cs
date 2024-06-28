@@ -61,7 +61,7 @@ namespace AssetManagement.Application.Services
                 var user = await _userRepositoriesAsync.AddAsync(userDomain);
 
                 var userDto = _mapper.Map<UserDto>(user);
-
+                
                 return new Response<UserDto>();
             }
             catch (Exception ex)

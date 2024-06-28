@@ -49,6 +49,12 @@ namespace AssetManagement.Infrastructure.Repositories
                                          .Where(x => x.Id == assignmentId).FirstOrDefaultAsync();
         }
 
+        public async Task<Assignment> FindExitingAssignment(Guid assetId)
+        {
+            return await _dbContext.Set<Assignment>()
+                .FirstOrDefaultAsync(assigment => assigment.AssetId == assetId);
+        }
+
         public async Task<IQueryable<Assignment>> FilterAssignmentOfUserAsync(Guid userId, string? search, EnumAssignmentState? assignmentState, DateTime? assignedDate)
         {
             var query = _dbContext.Assignments.Include(x => x.Asset).Where(x => x.AssignedIdTo == userId);
