@@ -151,7 +151,7 @@ export function MyAssignmentTable<TData, TValue>({
           {isLoading ? (
             <LoadingSpinner />
           ) : (
-            <DetailInformation info={assignmentDetails!} variant="Asset" />
+            <DetailInformation info={assignmentDetails!} variant="Assignment" />
           )}
         </Dialog>
       </FullPageModal>

@@ -163,6 +163,7 @@ export const ManageAsset = () => {
         return [...prev, stateValue];
       }
     });
+    pagination.pageIndex = 1;
   };
 
   return (
@@ -218,6 +219,7 @@ export const ManageAsset = () => {
             <Select
               onValueChange={(value) => {
                 setSelectedCategory(value);
+                pagination.pageIndex = 1;
               }}
             >
               <SelectTrigger>

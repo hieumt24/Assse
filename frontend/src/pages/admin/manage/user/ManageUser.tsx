@@ -74,6 +74,7 @@ export const ManageUser = () => {
         <Select
           onValueChange={(value) => {
             setRoleType(parseInt(value));
+            pagination.pageIndex = 1;
           }}
         >
           <SelectTrigger className="w-32">

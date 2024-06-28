@@ -88,7 +88,7 @@ export const MyAssignment = () => {
       assignmentId: assignmentId,
       requestedBy: user.id,
       returnedDate: format(new Date(), "yyyy-MM-dd"),
-      adminLocation: user.location,
+      location: user.location,
     });
     if (res.success) {
       toast.success(res.message);
@@ -124,6 +124,7 @@ export const MyAssignment = () => {
         <div className="flex items-center justify-center gap-4">
           <Select
             onValueChange={(value) => {
+              pagination.pageIndex = 1;
               setAssignmentState(Number(value));
             }}
           >
