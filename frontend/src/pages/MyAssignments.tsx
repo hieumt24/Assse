@@ -2,7 +2,6 @@ import { DatePicker, GenericDialog, SearchForm } from "@/components";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { MyAssignmentTable } from "@/components/tables/assignment/MyAssignmentTable";
 import { myAssignmentColumns } from "@/components/tables/assignment/myAssignmentColumns";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -151,12 +150,6 @@ export const MyAssignment = () => {
               }));
             }}
           />
-          <Button
-            variant={"destructive"}
-            onClick={() => navigate("/assignments/create")}
-          >
-            <span className="capitalize">Create new assignment</span>
-          </Button>
         </div>
       </div>
 
