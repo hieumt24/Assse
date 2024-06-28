@@ -13,8 +13,12 @@ namespace AssetManagement.Application.Helper
             Expression<Func<Asset, bool>> criteria = asset => true;
             var spec = new AssetSpecification(criteria);
             spec.AddInclude(x => x.Category);
-            if (!string.IsNullOrEmpty(orderBy))
+            if (string.IsNullOrEmpty(orderBy))
             {
+                orderBy = "assetcode";
+                isDescending = false;
+            }
+            if (!string.IsNullOrEmpty(orderBy)) {
                 if (isDescending.HasValue && isDescending.Value)
                 {
                     spec.ApplyOrderByDescending(GetOrderByExpression(orderBy));
@@ -40,7 +44,7 @@ namespace AssetManagement.Application.Helper
                 "categoryname" => u => u.Category.CategoryName,
                 "createdon" => u => u.CreatedOn,
                 "lastmodifiedon" => u => u.LastModifiedOn,
-                "" => u => u.AssetCode
+                _ => u => u.AssetCode,
             };
         }
 
