@@ -182,7 +182,7 @@ export interface GetReturningRequestReq {
   isDescending?: boolean;
   returnState?: number;
   returnedDate?: string;
-  adminLocation?: number;
+  location?: number;
 }
 
 export interface CreateReturningRequestReq {
