@@ -81,6 +81,8 @@ namespace AssetManagement.Application.Services
                 newReturnRequest.CreatedOn = DateTime.Now;
                 newReturnRequest.CreatedBy = request.RequestedBy.ToString();
                 newReturnRequest.ReturnState = EnumReturnRequestState.WaitingForReturning;
+                existingAssignment.IsRequested = true;
+                await _assignmentRepository.UpdateAsync(existingAssignment);
                 var returnrequest = await _returnRequestRepository.AddAsync(newReturnRequest);
 
                 var assetDto = _mapper.Map<ReturnRequestDto>(returnrequest);

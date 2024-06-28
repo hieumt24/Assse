@@ -13,6 +13,7 @@ namespace AssetManagement.Domain.Entites
         public EnumLocation? Location { get; set; }
         public EnumAssignmentState State { get; set; } 
         public string Note { get; set; } = string.Empty;
+        public bool? IsRequested { get; set; } = false;
 
         //relationship 
         public User? AssignedBy { get; set; }
