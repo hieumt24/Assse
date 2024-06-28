@@ -69,8 +69,6 @@ namespace AssetManagement.Application.Services
                 return new Response<ReturnRequestDto> { Succeeded = false, Message = "Assignment not found." };
             }
 
-
-
             var existingUserRequested = await _userRepository.GetByIdAsync(request.RequestedBy);
             if (existingUserRequested == null)
             {
@@ -178,9 +176,6 @@ namespace AssetManagement.Application.Services
 
             if (request.NewState == EnumReturnRequestState.Completed)
             {
-
-
-
                 var assignment = await _assignmentRepository.GetByIdAsync(returnRequest.AssignmentId);
 
                 if (assignment == null)
@@ -194,8 +189,6 @@ namespace AssetManagement.Application.Services
                 var assetResponse = await _assetRepositoriesAsync.GetByIdAsync(assignment.AssetId);
 
                 assetResponse.State = AssetStateType.Available;
-
-                assignment.IsDeleted = true;
 
                 try
                 {
@@ -233,7 +226,5 @@ namespace AssetManagement.Application.Services
                 };
             }
         }
-
-
     }
 }
