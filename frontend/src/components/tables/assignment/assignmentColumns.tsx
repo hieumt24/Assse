@@ -72,7 +72,7 @@ export const assignmentColumns = ({
         case 2:
           return <p className="text-yellow-600">Waiting for acceptance</p>;
         case 3:
-          return <p className="text-red-600">Cancelled</p>;
+          return <p className="text-red-600">Declined</p>;
         default:
           return <p>{}</p>;
       }

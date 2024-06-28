@@ -82,6 +82,19 @@ export interface GetAssignemntReq {
   isDescending?: boolean;
 }
 
+export interface GetAssignemntByUserAssignedReq {
+  pagination: {
+    pageSize: number;
+    pageIndex: number;
+  };
+  assignmentState?: number;
+  assignedDate?: Date;
+  search?: string;
+  orderBy?: string;
+  isDescending?: boolean;
+  userId: string;
+}
+
 export interface GetUserReq {
   pagination: {
     pageSize: number;

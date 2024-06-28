@@ -125,6 +125,21 @@ export const ASSET_STATES = [
   },
 ];
 
+export const ASSIGNMENT_STATES = [
+  {
+    value: 1,
+    label: "Accepted",
+  },
+  {
+    value: 2,
+    label: "Waiting for acceptance",
+  },
+  {
+    value: 3,
+    label: "Declined",
+  },
+];
+
 export const RETURNING_REQUEST_STATES = [
   {
     value: 1,

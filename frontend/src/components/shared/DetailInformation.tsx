@@ -1,4 +1,4 @@
-import { LOCATIONS } from "@/constants";
+import { ASSET_STATES, ASSIGNMENT_STATES, LOCATIONS } from "@/constants";
 import { AssetRes, UserRes } from "@/models";
 import { format } from "date-fns";
 import { DialogContent } from "../ui/dialog";
@@ -44,15 +44,17 @@ export const DetailInformation = <T extends UserRes | AssetRes>({
   const formatLocation = (value: FormattableValue) =>
     LOCATIONS[Number(value) - 1]?.label || "Unknown";
 
-  const formatState = (value: FormattableValue) => {
-    const states: Record<number, string> = {
-      1: "Available",
-      2: "Not Available",
-      3: "Assigned",
-      4: "Waiting For Recycling",
-      5: "Recycled",
-    };
-    return states[Number(value)] || String(value);
+  const formatState = (value: FormattableValue): string => {
+    switch (variant) {
+      case "Assignment":
+        return (
+          ASSIGNMENT_STATES.find((state) => state.value === value)?.label || ""
+        );
+      case "Asset":
+        return ASSET_STATES.find((state) => state.value === value)?.label || "";
+      default:
+        return "";
+    }
   };
 
   const excludedKeys = [
