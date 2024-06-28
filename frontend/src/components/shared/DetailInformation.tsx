@@ -1,11 +1,11 @@
-import { LOCATIONS } from "@/constants";
+import { ASSET_STATES, ASSIGNMENT_STATES, LOCATIONS } from "@/constants";
 import { AssetRes, UserRes } from "@/models";
 import { format } from "date-fns";
 import { DialogContent } from "../ui/dialog";
 
 interface DetailInformationProps<T> {
   info: T;
-  variant: "User" | "Asset";
+  variant: "User" | "Asset" | "Assignment";
 }
 
 type FormattableValue = string | number | Date | null | undefined;
@@ -14,6 +14,7 @@ export const DetailInformation = <T extends UserRes | AssetRes>({
   info,
   variant,
 }: DetailInformationProps<T>) => {
+  console.log(info);
   const formatValue = (key: string, value: FormattableValue): string => {
     if (value == null) return "N/A";
 
@@ -21,6 +22,7 @@ export const DetailInformation = <T extends UserRes | AssetRes>({
       dateOfBirth: formatDate,
       joinedDate: formatDate,
       installedDate: formatDate,
+      assignedDate: formatDate,
       gender: formatGender,
       role: formatRole,
       location: formatLocation,
@@ -31,8 +33,7 @@ export const DetailInformation = <T extends UserRes | AssetRes>({
     return formatters[key] ? formatters[key](value) : String(value);
   };
 
-  const formatDate = (value: FormattableValue) =>
-    value instanceof Date ? format(value, "MM/dd/yyyy") : String(value);
+  const formatDate = (value: FormattableValue) => format(value!, "MM/dd/yyyy");
 
   const formatGender = (value: FormattableValue) =>
     value === 2 ? "Male" : value === 1 ? "Female" : "Other";
@@ -43,15 +44,17 @@ export const DetailInformation = <T extends UserRes | AssetRes>({
   const formatLocation = (value: FormattableValue) =>
     LOCATIONS[Number(value) - 1]?.label || "Unknown";
 
-  const formatState = (value: FormattableValue) => {
-    const states: Record<number, string> = {
-      1: "Available",
-      2: "Not Available",
-      3: "Assigned",
-      4: "Waiting For Recycling",
-      5: "Recycled",
-    };
-    return states[Number(value)] || String(value);
+  const formatState = (value: FormattableValue): string => {
+    switch (variant) {
+      case "Assignment":
+        return (
+          ASSIGNMENT_STATES.find((state) => state.value === value)?.label || ""
+        );
+      case "Asset":
+        return ASSET_STATES.find((state) => state.value === value)?.label || "";
+      default:
+        return "";
+    }
   };
 
   const excludedKeys = [
@@ -61,6 +64,7 @@ export const DetailInformation = <T extends UserRes | AssetRes>({
     "lastModifiedBy",
     "createdBy",
     "categoryId",
+    "isDeleted",
   ];
 
   const formatKey = (key: string) =>

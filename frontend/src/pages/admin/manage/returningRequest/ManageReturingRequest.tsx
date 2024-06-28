@@ -1,4 +1,4 @@
-import { GenericDialog, SearchForm } from "@/components";
+import { DatePicker, GenericDialog, SearchForm } from "@/components";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import {
   Select,
@@ -30,7 +30,7 @@ export const ManageReturningRequest = () => {
   const [orderBy, setOrderBy] = useState("");
   const [isDescending, setIsDescending] = useState(true);
   const [requestState, setRequestState] = useState(0);
-  const [returnedDate] = useState<Date>();
+  const [returnedDate, setReturnedDate] = useState<Date | null>(null);
   const { requests, loading, error, pageCount, fetchRequests, totalRecords } =
     useReturningRequests(
       pagination,
@@ -87,21 +87,25 @@ export const ManageReturningRequest = () => {
     <div className="m-16 flex flex-grow flex-col gap-8">
       <p className="text-2xl font-bold text-red-600">Request List</p>
       <div className="flex items-center justify-between">
-        <Select
-          onValueChange={(value) => {
-            setRequestState(parseInt(value));
-          }}
-        >
-          <SelectTrigger className="w-32">
-            <SelectValue placeholder="Type" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="0">All</SelectItem>
-            <SelectItem value="1">Completed</SelectItem>
-            <SelectItem value="2">Waiting</SelectItem>
-            {/* <SelectItem value="3">Cancelled</SelectItem> */}
-          </SelectContent>
-        </Select>
+        <div className="flex items-center justify-center gap-4">
+          <Select
+            onValueChange={(value) => {
+              setRequestState(parseInt(value));
+              pagination.pageIndex = 1;
+            }}
+          >
+            <SelectTrigger className="w-32">
+              <SelectValue placeholder="Type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="0">All</SelectItem>
+              <SelectItem value="1">Waiting</SelectItem>
+              <SelectItem value="2">Completed</SelectItem>
+              {/* <SelectItem value="3">Cancelled</SelectItem> */}
+            </SelectContent>
+          </Select>
+          <DatePicker setValue={setReturnedDate} placeholder="Returned Date" />
+        </div>
 
         <div className="flex justify-between gap-6">
           <SearchForm

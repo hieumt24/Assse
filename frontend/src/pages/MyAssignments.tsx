@@ -11,7 +11,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useLoading } from "@/context/LoadingContext";
-import { useAssignments, useAuth, usePagination } from "@/hooks";
+import { useAuth, usePagination } from "@/hooks";
+import { useMyAssignments } from "@/hooks/useMyAssignments";
 import { updateAssignmentStateService } from "@/services/admin/manageAssignmentService";
 import { createReturnRequest } from "@/services/admin/manageReturningRequestService";
 import { format } from "date-fns";
@@ -35,11 +36,11 @@ export const MyAssignment = () => {
     pageCount,
     totalRecords,
     fetchAssignments,
-  } = useAssignments(
+  } = useMyAssignments(
     pagination,
+    user.id,
     search,
     orderBy,
-    user.location,
     isDescending,
     assignmentState,
     assignedDate!,
@@ -88,7 +89,7 @@ export const MyAssignment = () => {
       assignmentId: assignmentId,
       requestedBy: user.id,
       returnedDate: format(new Date(), "yyyy-MM-dd"),
-      adminLocation: user.location,
+      location: user.location,
     });
     if (res.success) {
       toast.success(res.message);
@@ -124,6 +125,7 @@ export const MyAssignment = () => {
         <div className="flex items-center justify-center gap-4">
           <Select
             onValueChange={(value) => {
+              pagination.pageIndex = 1;
               setAssignmentState(Number(value));
             }}
           >

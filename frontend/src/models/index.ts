@@ -29,14 +29,14 @@ export interface FirstTimeLoginReq {
 
 export interface UserRes {
   id: string;
+  staffCode: string;
+  username: string;
   firstName: string;
   lastName: string;
   dateOfBirth: Date;
   joinedDate: Date;
   gender: number;
   role: number;
-  staffCode: string;
-  username: string;
   location?: number;
   createdOn: string;
 }
@@ -80,6 +80,19 @@ export interface GetAssignemntReq {
   orderBy?: string;
   adminLocation?: number;
   isDescending?: boolean;
+}
+
+export interface GetAssignemntByUserAssignedReq {
+  pagination: {
+    pageSize: number;
+    pageIndex: number;
+  };
+  assignmentState?: number;
+  assignedDate?: Date;
+  search?: string;
+  orderBy?: string;
+  isDescending?: boolean;
+  userId: string;
 }
 
 export interface GetUserReq {
@@ -182,14 +195,14 @@ export interface GetReturningRequestReq {
   isDescending?: boolean;
   returnState?: number;
   returnedDate?: string;
-  adminLocation?: number;
+  location?: number;
 }
 
 export interface CreateReturningRequestReq {
   assignmentId?: string;
   requestedBy?: string;
   returnedDate?: string;
-  adminLocation?: number;
+  location?: number;
 }
 
 export interface UpdateReturningRequestReq {
