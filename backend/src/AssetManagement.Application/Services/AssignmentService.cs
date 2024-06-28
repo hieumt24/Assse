@@ -3,6 +3,7 @@ using AssetManagement.Application.Filter;
 using AssetManagement.Application.Helper;
 using AssetManagement.Application.Interfaces.Repositories;
 using AssetManagement.Application.Interfaces.Services;
+using AssetManagement.Application.Models.DTOs.Assets;
 using AssetManagement.Application.Models.DTOs.Assignments;
 using AssetManagement.Application.Models.DTOs.Assignments.Reques;
 using AssetManagement.Application.Models.DTOs.Assignments.Request;
@@ -26,13 +27,15 @@ namespace AssetManagement.Application.Services
         private readonly IAssignmentRepositoriesAsync _assignmentRepository;
         private readonly IUserRepositoriesAsync _userRepository;
         private readonly IAssetRepositoriesAsync _assetRepository;
+        private readonly IAssetServiceAsync _assetService;
 
         public AssignmentServiceAsync(IAssignmentRepositoriesAsync assignmentRepositoriesAsync,
              IMapper mapper,
              IValidator<AddAssignmentRequestDto> addAssignmentValidator,
              IAssetRepositoriesAsync assetRepository,
              IUserRepositoriesAsync userRepository,
-             IUriService uriService
+             IUriService uriService,
+             IAssetServiceAsync assetService
             )
         {
             _mapper = mapper;
@@ -43,6 +46,7 @@ namespace AssetManagement.Application.Services
             _assetRepository = assetRepository;
             _userRepository = userRepository;
             _uriService = uriService;
+            _assetService = assetService;
         }
 
         public async Task<Response<AssignmentDto>> AddAssignmentAsync(AddAssignmentRequestDto request)
@@ -186,11 +190,48 @@ namespace AssetManagement.Application.Services
                     Message = "Assignment not found."
                 };
             }
+
             if (assignment.State == EnumAssignmentState.Accepted || assignment.State == EnumAssignmentState.Declined)
             {
-                return new Response<AssignmentDto> { Succeeded = false, Message = "Assignment state cannot be changed." };
+                return new Response<AssignmentDto>
+                {
+                    Succeeded = false,
+                    Message = "Assignment state cannot be changed."
+                };
             }
+
             assignment.State = request.NewState;
+
+            if (request.NewState == EnumAssignmentState.Accepted)
+            {
+                var assetResponse = await _assetService.GetAssetByIdAsync(assignment.AssetId);
+
+                if (!assetResponse.Succeeded || assetResponse.Data == null)
+                {
+                    return new Response<AssignmentDto>
+                    {
+                        Succeeded = false,
+                        Message = "Associated asset not found."
+                    };
+                }
+
+                var asset = assetResponse.Data;
+                asset.State = AssetStateType.Available;
+
+                try
+                {
+                    await _assetRepository.UpdateAsync(_mapper.Map<Asset>(asset));
+                }
+                catch (Exception ex)
+                {
+                    return new Response<AssignmentDto>
+                    {
+                        Succeeded = false,
+                        Message = "An error occurred while updating the asset state.",
+                        Errors = new List<string> { ex.Message }
+                    };
+                }
+            }
 
             try
             {
@@ -213,5 +254,6 @@ namespace AssetManagement.Application.Services
                 };
             }
         }
+
     }
 }
