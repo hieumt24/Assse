@@ -20,7 +20,5 @@ namespace AssetManagement.Domain.Entites
         public User? AssignedTo { get; set; }
         public Asset? Asset { get; set; }
         public ReturnRequest? ReturnRequest { get; set; }
-
-
     }
 }
