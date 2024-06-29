@@ -89,7 +89,7 @@ export const EditUserForm = () => {
       });
       if (res.success) {
         toast.success(res.message);
-        localStorage.setItem("orderBy", "lastmodifiedon");
+        localStorage.setItem("edited", "1");
       } else {
         toast.error(res.message);
       }
@@ -307,9 +307,9 @@ export const EditUserForm = () => {
             <Button
               type="submit"
               className="w-[76px] bg-red-500 hover:bg-white hover:text-red-500"
-              disabled={!form.formState.isValid}
+              disabled={!form.formState.isValid || isLoading}
             >
-              Save
+              {isLoading ? "Saving..." : "Save"}
             </Button>
             <Button
               type="button"

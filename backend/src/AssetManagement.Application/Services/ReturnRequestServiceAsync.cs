@@ -1,4 +1,4 @@
-﻿using AssetManagement.Application.Common;
+using AssetManagement.Application.Common;
 using AssetManagement.Application.Filter;
 using AssetManagement.Application.Helper;
 using AssetManagement.Application.Interfaces.Repositories;
@@ -25,6 +25,7 @@ namespace AssetManagement.Application.Services
         private readonly IUriService _uriService;
         private readonly IAssetRepositoriesAsync _assetRepository;
         private readonly IAssetServiceAsync _assetService;
+        private readonly IAssetRepositoriesAsync _assetRepositoriesAsync;
 
         public ReturnRequestServiceAsync(
             IReturnRequestRepositoriesAsync returnRequestRepository,
@@ -34,7 +35,8 @@ namespace AssetManagement.Application.Services
             IAssignmentRepositoriesAsync assignmentRepository,
             IUriService uriService,
             IAssetRepositoriesAsync assetRepository,
-            IAssetServiceAsync assetService
+            IAssetServiceAsync assetService,
+            IAssetRepositoriesAsync assetRepositoriesAsync
             )
         {
             _mapper = mapper;
@@ -45,6 +47,7 @@ namespace AssetManagement.Application.Services
             _uriService = uriService;
             _assetRepository = assetRepository;
             _assetService = assetService;
+            _assetRepositoriesAsync = assetRepositoriesAsync;
         }
 
         public async Task<Response<ReturnRequestDto>> AddReturnRequestAsync(AddReturnRequestDto request)
@@ -79,6 +82,8 @@ namespace AssetManagement.Application.Services
                 newReturnRequest.CreatedOn = DateTime.Now;
                 newReturnRequest.CreatedBy = request.RequestedBy.ToString();
                 newReturnRequest.ReturnState = EnumReturnRequestState.WaitingForReturning;
+                existingAssignment.IsRequested = true;
+                await _assignmentRepository.UpdateAsync(existingAssignment);
                 var returnrequest = await _returnRequestRepository.AddAsync(newReturnRequest);
 
                 var assetDto = _mapper.Map<ReturnRequestDto>(returnrequest);
@@ -162,12 +167,12 @@ namespace AssetManagement.Application.Services
                 return new Response<ReturnRequestDto>
                 {
                     Succeeded = false,
-                    Message = "Assignment not found."
+                    Message = "Return request not found."
                 };
             }
             if (returnRequest.ReturnState == EnumReturnRequestState.Completed)
             {
-                return new Response<ReturnRequestDto> { Succeeded = false, Message = "Assignment state cannot be changed." };
+                return new Response<ReturnRequestDto> { Succeeded = false, Message = "Return request state cannot be changed." };
             }
             returnRequest.ReturnState = request.NewState;
 
@@ -183,23 +188,14 @@ namespace AssetManagement.Application.Services
                         Message = "Assignment not found."
                     };
                 }
-                var assetResponse = await _assetService.GetAssetByIdAsync(assignment.AssetId);
-                if (!assetResponse.Succeeded || assetResponse.Data == null)
-                {
-                    return new Response<ReturnRequestDto>
-                    {
-                        Succeeded = false,
-                        Message = "Associated asset not found."
-                    };
-                }
+                var assetResponse = await _assetRepositoriesAsync.GetByIdAsync(assignment.AssetId);
 
-                var asset = assetResponse.Data;
-                asset.State = AssetStateType.Available;
+                assetResponse.State = AssetStateType.Available;
 
                 try
                 {
                     await _assignmentRepository.UpdateAsync(assignment);
-                    await _assetRepository.UpdateAsync(_mapper.Map<Asset>(asset));
+                    await _assetRepository.UpdateAsync(assetResponse);
                 }
                 catch (Exception ex)
                 {
@@ -220,7 +216,6 @@ namespace AssetManagement.Application.Services
                 {
                     Succeeded = true,
                     Message = "Return request state changed successfully.",
-                    Data = assignmentDto
                 };
             }
             catch (Exception ex)

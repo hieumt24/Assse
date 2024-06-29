@@ -1,6 +1,6 @@
 import { AssignmentRes } from "@/models";
 import { getAllAssignmentService } from "@/services/admin/manageAssignmentService";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export const useAssignments = (
   pagination: {
@@ -20,7 +20,8 @@ export const useAssignments = (
   const [pageCount, setPageCount] = useState<number>(0);
   const [totalRecords, setTotalRecords] = useState<number>(0);
 
-  const fetchAssignments = async () => {
+  // Function to fetch assignments
+  const fetchAssignments = useCallback(async () => {
     setLoading(true);
     try {
       const data = await getAllAssignmentService({
@@ -33,26 +34,85 @@ export const useAssignments = (
         assignedDate,
       });
 
-      setAssignments(data.data.data);
+      setAssignments(data.data.data || []);
       setPageCount(data.data.totalPages);
       setTotalRecords(data.data.totalRecords);
+      return data.data.data || [];
     } catch (error) {
+      console.error("Error in fetchAssignments:", error);
       setError(true);
+      return [];
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    fetchAssignments();
   }, [
     pagination,
     search,
     orderBy,
     isDescending,
     adminLocation,
-    assignedDate,
     assignmentState,
+    assignedDate,
+  ]);
+
+  useEffect(() => {
+    const fetchAndUpdateAssignments = async () => {
+      setLoading(true);
+      try {
+        const isAdded = localStorage.getItem("added");
+        const isEdited = localStorage.getItem("edited");
+
+        // Always fetch the latest data
+        const currentAssignments = await fetchAssignments();
+
+        if (isAdded || isEdited) {
+          const orderByField = isAdded
+            ? "createdOn"
+            : isEdited
+              ? "lastModifiedOn"
+              : orderBy;
+          const newAssignmentData = await getAllAssignmentService({
+            pagination,
+            search,
+            orderBy: orderByField,
+            isDescending: true, // Ensure we get the most recent assignment
+            adminLocation,
+            assignmentState,
+            assignedDate,
+          });
+
+          const newAssignment = newAssignmentData.data.data[0];
+          if (newAssignment) {
+            setAssignments([
+              newAssignment,
+              ...currentAssignments.filter(
+                (assignment: AssignmentRes) =>
+                  assignment.id !== newAssignment.id,
+              ),
+            ]);
+          }
+
+          localStorage.removeItem("added");
+          localStorage.removeItem("edited");
+        }
+      } catch (error) {
+        console.error("Error in fetchAndUpdateAssignments:", error);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAndUpdateAssignments();
+  }, [
+    pagination,
+    search,
+    orderBy,
+    isDescending,
+    adminLocation,
+    assignmentState,
+    assignedDate,
+    fetchAssignments,
   ]);
 
   return {

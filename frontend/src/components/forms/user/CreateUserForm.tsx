@@ -31,7 +31,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { z } from "zod";
 
 export const CreateUserForm = () => {
-  const { setIsLoading } = useLoading();
+  const { isLoading, setIsLoading } = useLoading();
   const { user } = useAuth();
   const form = useForm<z.infer<typeof createUserSchema>>({
     mode: "onBlur",
@@ -58,10 +58,11 @@ export const CreateUserForm = () => {
       role,
       location,
     });
+
     setIsLoading(false);
     if (res.success) {
       toast.success(res.message);
-      localStorage.setItem("orderBy", "createdon");
+      localStorage.setItem("added", "1");
       navigate("/users");
     } else {
       toast.error(res.message);
@@ -272,9 +273,9 @@ export const CreateUserForm = () => {
           <Button
             type="submit"
             className="w-[76px] bg-red-500 hover:bg-white hover:text-red-500"
-            disabled={!form.formState.isValid}
+            disabled={!form.formState.isValid || isLoading}
           >
-            Save
+            {isLoading ? "Saving..." : "Save"}
           </Button>
           <Button
             type="button"

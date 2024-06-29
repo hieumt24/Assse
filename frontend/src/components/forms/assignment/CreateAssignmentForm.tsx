@@ -114,6 +114,7 @@ export const CreateAssignmentForm = () => {
       });
       if (res.success) {
         toast.success(res.message);
+        localStorage.setItem("added", "1");
         navigate("/assignments");
       } else {
         toast.error(res.message);
@@ -161,7 +162,15 @@ export const CreateAssignmentForm = () => {
                         <div className="flex items-center text-lg font-bold text-red-600">
                           Select User
                         </div>
-                        <SearchForm setSearch={setUserSearchQuery} />
+                        <SearchForm
+                          setSearch={setUserSearchQuery}
+                          onSubmit={() => {
+                            onUsersPaginationChange((prev) => ({
+                              ...prev,
+                              pageIndex: 1,
+                            }));
+                          }}
+                        />
                       </div>
                       <div className="mt-8">
                         {loading ? (
@@ -244,7 +253,15 @@ export const CreateAssignmentForm = () => {
                         <div className="flex items-center text-lg font-bold text-red-600">
                           Select Asset
                         </div>
-                        <SearchForm setSearch={setAssetSearchQuery} />
+                        <SearchForm
+                          setSearch={setAssetSearchQuery}
+                          onSubmit={() => {
+                            onAssetsPaginationChange((prev) => ({
+                              ...prev,
+                              pageIndex: 1,
+                            }));
+                          }}
+                        />
                       </div>
                       <div className="mt-8">
                         {assetsLoading ? (
@@ -356,7 +373,7 @@ export const CreateAssignmentForm = () => {
             className="w-[76px] bg-red-500 hover:bg-white hover:text-red-500"
             disabled={!form.formState.isValid || isLoading}
           >
-            Save
+            {isLoading ? "Saving..." : "Save"}
           </Button>
           <Button
             type="button"

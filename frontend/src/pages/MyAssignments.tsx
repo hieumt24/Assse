@@ -2,7 +2,6 @@ import { DatePicker, GenericDialog, SearchForm } from "@/components";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { MyAssignmentTable } from "@/components/tables/assignment/MyAssignmentTable";
 import { myAssignmentColumns } from "@/components/tables/assignment/myAssignmentColumns";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -17,7 +16,6 @@ import { updateAssignmentStateService } from "@/services/admin/manageAssignmentS
 import { createReturnRequest } from "@/services/admin/manageReturningRequestService";
 import { format } from "date-fns";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export const MyAssignment = () => {
@@ -93,6 +91,7 @@ export const MyAssignment = () => {
     });
     if (res.success) {
       toast.success(res.message);
+      fetchAssignments();
     } else {
       toast.error(res.message);
     }
@@ -117,7 +116,6 @@ export const MyAssignment = () => {
     setIsLoading(false);
   };
 
-  const navigate = useNavigate();
   return (
     <div className="m-16 flex h-full flex-grow flex-col gap-8">
       <p className="text-2xl font-bold text-red-600">My Assignment</p>
@@ -151,12 +149,6 @@ export const MyAssignment = () => {
               }));
             }}
           />
-          <Button
-            variant={"destructive"}
-            onClick={() => navigate("/assignments/create")}
-          >
-            <span className="capitalize">Create new assignment</span>
-          </Button>
         </div>
       </div>
 

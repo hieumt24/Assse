@@ -86,7 +86,7 @@ export const EditAssetForm: React.FC = () => {
       });
       if (res.success) {
         toast.success("Asset created successfully!");
-        localStorage.setItem("orderBy", "lastmodifiedon");
+        localStorage.setItem("edited", "1");
         navigate("/assets");
       } else {
         toast.error(res.message);
@@ -256,9 +256,9 @@ export const EditAssetForm: React.FC = () => {
           <Button
             type="submit"
             className="w-[76px] bg-red-500 hover:bg-white hover:text-red-500"
-            disabled={!form.formState.isValid}
+            disabled={!form.formState.isValid || isLoading}
           >
-            Save
+            {isLoading ? "Saving..." : "Save"}
           </Button>
           <Button
             type="button"
