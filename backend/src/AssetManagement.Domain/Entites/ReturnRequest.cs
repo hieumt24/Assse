@@ -12,7 +12,6 @@ namespace AssetManagement.Domain.Entites
         public DateTime ReturnedDate { get; set; }
         public EnumLocation Location { get; set; }
         public EnumReturnRequestState ReturnState { get; set; }
-
         public User? RequestedUser { get; set; }
         public User? AcceptedUser { get; set; }
         public Assignment? Assignment { get; set; }

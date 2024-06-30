@@ -1,6 +1,7 @@
 import { z } from "zod";
 
-const containsLetters = /[a-zA-Z]/;
+const containsLetters =
+  /^(?=.*[a-zA-Z])[a-zA-Z0-9!@#$%^&*(),.?':{ }|<> ~`+=\-_ /\\[\] ]*$/;
 
 export const createCategorySchema = z.object({
   categoryName: z
