@@ -3,6 +3,7 @@ using AssetManagement.Application.Filter;
 using AssetManagement.Application.Helper;
 using AssetManagement.Application.Interfaces.Repositories;
 using AssetManagement.Application.Interfaces.Services;
+using AssetManagement.Application.Models.DTOs.Assignments;
 using AssetManagement.Application.Models.DTOs.ReturnRequests;
 using AssetManagement.Application.Models.DTOs.ReturnRequests.Reponses;
 using AssetManagement.Application.Models.DTOs.ReturnRequests.Request;
@@ -10,6 +11,7 @@ using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
 using AutoMapper;
+using Azure.Core;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -105,6 +107,19 @@ namespace AssetManagement.Application.Services
                 {
                     return new Response<string> { Succeeded = false, Message = "Return Request not found." };
                 }
+                ///
+                var existingAssignment = await _assignmentRepository.GetByIdAsync(returnRequest.AssignmentId);
+
+                if (existingAssignment == null)
+                {
+                    return new Response<string>
+                    {
+                        Succeeded = false,
+                        Message = "Assignment not found."
+                    };
+                }
+                existingAssignment.IsRequested = false;
+
                 if (returnRequest.ReturnState == EnumReturnRequestState.WaitingForReturning)
                 {
                     var cancelReturnRequest = await _returnRequestRepository.DeleteAsync(returnRequest.Id);
