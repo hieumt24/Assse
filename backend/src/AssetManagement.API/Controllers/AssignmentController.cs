@@ -75,5 +75,16 @@ namespace AssetManagement.API.Controllers
             }
             return BadRequest(result);
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAssignment(Guid assignmentId)
+        {
+            var result = await _assignmentServicesAsync.DeleteAssignmentAsync(assignmentId);
+            if (result.Succeeded)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
     }
 }

@@ -10,6 +10,6 @@ namespace AssetManagement.Domain.Enums
     {
         Accepted = 1,
         WaitingForAcceptance = 2,
-        Declined = 3
+        Declined = 3,
     }
 }

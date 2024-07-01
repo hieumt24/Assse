@@ -209,7 +209,6 @@ namespace AssetManagement.Application.Services
 
                 try
                 {
-                    await _assignmentRepository.UpdateAsync(assignment);
                     await _assetRepository.UpdateAsync(assetResponse);
                 }
                 catch (Exception ex)

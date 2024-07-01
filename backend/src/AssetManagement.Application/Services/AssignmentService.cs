@@ -15,6 +15,7 @@ using AssetManagement.Domain.Enums;
 using AutoMapper;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Abstractions;
 
 namespace AssetManagement.Application.Services
 {
@@ -94,11 +95,6 @@ namespace AssetManagement.Application.Services
             {
                 return new Response<AssignmentDto> { Succeeded = false, Errors = { ex.Message } };
             }
-        }
-
-        public Task<Response<AssignmentDto>> DeleteAssignmentAsync(Guid assignmentId)
-        {
-            throw new NotImplementedException();
         }
 
         public Task<Response<AssignmentDto>> EditAssignmentAsync(EditAssignmentRequestDto request)
@@ -251,5 +247,30 @@ namespace AssetManagement.Application.Services
             }
         }
 
+        public async Task<Response<AssignmentDto>> DeleteAssignmentAsync(Guid assignmentId)
+        {
+            var exsittingAssigment = await _assignmentRepositoriesAsync.GetAssignemntByIdAsync(assignmentId);
+            if (exsittingAssigment == null)
+            {
+                return new Response<AssignmentDto> { Succeeded = false, Message = "Assignment cannot be found." };
+            }
+            if (exsittingAssigment.State == EnumAssignmentState.Accepted)
+            {
+                return new Response<AssignmentDto> { Succeeded = false, Message = "Cannot delete assignment because this assignment has been approved." };
+            }
+
+            var assetResponse = await _assetRepository.GetByIdAsync(exsittingAssigment.AssetId);
+            if(assetResponse == null)
+            {
+                return new Response<AssignmentDto> { Succeeded = false, Message = "Cannot delete this assignment because can not found the asset of this assignment." };
+            }
+
+            assetResponse.State = AssetStateType.Available;
+            await _assignmentRepositoriesAsync.DeleteAsync(assignmentId); 
+
+            return new Response<AssignmentDto> { Succeeded = true, Message = "Assignment deleted successfully." };
+        }
+
+  
     }
 }
