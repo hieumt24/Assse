@@ -74,6 +74,7 @@ namespace AssetManagement.Infrastructure.Repositories
             {
                 query = query.Where(x => x.AssignedDate.Date == assignedDate.Value.Date);
             }
+            query = query.Where(x => x.ReturnRequest == null || x.ReturnRequest.ReturnState != EnumReturnRequestState.Completed);
             return query;
         }
     }
