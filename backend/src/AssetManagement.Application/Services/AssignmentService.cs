@@ -199,7 +199,7 @@ namespace AssetManagement.Application.Services
 
             assignment.State = request.NewState;
 
-            if (request.NewState == EnumAssignmentState.Accepted)
+            if (request.NewState == EnumAssignmentState.Declined)
             {
                 var assetResponse = await _assetRepository.GetByIdAsync(assignment.AssetId);
 
