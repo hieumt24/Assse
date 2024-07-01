@@ -24,12 +24,14 @@ namespace AssetManagement.Application.Services
         private readonly IValidator<EditUserRequestDto> _editUserValidator;
         private readonly PasswordHasher<User> _passwordHasher;
         private readonly IUriService _uriService;
+        private readonly IAssignmentRepositoriesAsync _assignmentRepositoriesAsync;
 
         public UserServiceAsync(IUserRepositoriesAsync userRepositoriesAsync,
             IMapper mapper,
             IValidator<AddUserRequestDto> addUserValidator,
             IValidator<EditUserRequestDto> editUserValidator,
-            IUriService uriService
+            IUriService uriService,
+            IAssignmentRepositoriesAsync assignmentRepositoriesAsync
         )
         {
             _mapper = mapper;
@@ -38,6 +40,7 @@ namespace AssetManagement.Application.Services
             _editUserValidator = editUserValidator;
             _passwordHasher = new PasswordHasher<User>();
             _uriService = uriService;
+            _assignmentRepositoriesAsync = assignmentRepositoriesAsync;
         }
 
         public async Task<Response<UserDto>> AddUserAsync(AddUserRequestDto request)
@@ -61,7 +64,7 @@ namespace AssetManagement.Application.Services
                 var user = await _userRepositoriesAsync.AddAsync(userDomain);
 
                 var userDto = _mapper.Map<UserDto>(user);
-                
+
                 return new Response<UserDto>();
             }
             catch (Exception ex)
@@ -158,6 +161,13 @@ namespace AssetManagement.Application.Services
                 if (user == null)
                 {
                     return new Response<UserDto> { Succeeded = false, Message = "User not found" };
+                }
+                //Check user have assignment
+
+                var assignments = await _assignmentRepositoriesAsync.GetAssignmentsByUserId(user.Id);
+                if (assignments.Any())
+                {
+                    return new Response<UserDto> { Succeeded = false, Message = "There are valid assignments belonging to this user. Please close all assignments before disabling user." };
                 }
 
                 var disableUser = await _userRepositoriesAsync.DeleteAsync(user.Id);
