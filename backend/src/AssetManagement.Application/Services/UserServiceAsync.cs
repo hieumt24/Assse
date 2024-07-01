@@ -164,7 +164,7 @@ namespace AssetManagement.Application.Services
                 }
                 //Check user have assignment
 
-                var assignments = await _assignmentRepositoriesAsync.GetAssignmentsByUserId(user.Id);
+                var assignments = await _assignmentRepositoriesAsync.FilterAssignmentOfUserAsync(user.Id, null, null, null);
                 if (assignments.Any())
                 {
                     return new Response<UserDto> { Succeeded = false, Message = "There are valid assignments belonging to this user. Please close all assignments before disabling user." };

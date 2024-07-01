@@ -33,7 +33,7 @@ export const returningRequestColumns = ({
       renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),
   },
   {
-    accessorKey: "requestedByUserName",
+    accessorKey: "requestedBy",
     header: ({ column }) =>
       renderHeader(
         column,
@@ -56,7 +56,7 @@ export const returningRequestColumns = ({
     },
   },
   {
-    accessorKey: "acceptedByUserName",
+    accessorKey: "acceptedBy",
     header: ({ column }) =>
       renderHeader(
         column,

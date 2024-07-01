@@ -41,7 +41,7 @@ namespace AssetManagement.Application.Helper
                 "assetcode" => u => u.Assignment.Asset.AssetCode,
                 "assetname" => u => u.Assignment.Asset.AssetName,
                 "requestedby" => u => u.RequestedUser.Username,
-                "assignedate" => u => u.Assignment.AssignedDate,
+                "assigneddate" => u => u.Assignment.AssignedDate,
                 "acceptedby" => u => u.AcceptedUser.Username,
                 "returneddate" => u => u.ReturnedDate,
                 "state" => u => u.ReturnState,
