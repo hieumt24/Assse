@@ -199,9 +199,7 @@ namespace AssetManagement.Application.Services
 
             assignment.State = request.NewState;
 
-            if (request.NewState == EnumAssignmentState.Declined)
-            {
-                var assetResponse = await _assetRepository.GetByIdAsync(assignment.AssetId);
+            var assetResponse = await _assetRepository.GetByIdAsync(assignment.AssetId);
 
                 if (assetResponse == null)
                 {
@@ -212,6 +210,8 @@ namespace AssetManagement.Application.Services
                     };
                 }
 
+            if (request.NewState == EnumAssignmentState.Declined)
+            {
                 assetResponse.State = AssetStateType.Available;
 
                 try
