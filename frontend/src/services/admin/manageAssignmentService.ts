@@ -10,6 +10,10 @@ export const getAllAssignmentService = (req: GetAssignemntReq) => {
     delete req.assignmentState;
   }
 
+  if (req.assignedDate === "") {
+    delete req.assignedDate;
+  }
+
   return axiosInstance
     .post("/assignments/filter-assignments", req)
     .then((res) => {
@@ -33,6 +37,9 @@ export const getAssignmentByUserAssignedService = (
 ) => {
   if (req.assignmentState === 0) {
     delete req.assignmentState;
+  }
+  if (req.assignedDate === "") {
+    delete req.assignedDate;
   }
 
   return axiosInstance

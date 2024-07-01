@@ -12,7 +12,7 @@ export const useMyAssignments = (
   orderBy?: string,
   isDescending?: boolean,
   assignmentState?: number,
-  assignedDate?: Date,
+  assignedDate?: string,
 ) => {
   const [assignments, setAssignments] = useState<AssignmentRes[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
