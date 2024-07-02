@@ -29,12 +29,12 @@ namespace AssetManagement.Application.Helper
             else
             {
                 spec.ApplyOrderByDescending(u => u.CreatedOn);
+                spec.ApplyOrderByDescending(u => u.AssignedDate);
+                spec.ApplyOrderByDescending(u => u.State);
+                spec.ApplyOrderByDescending(u => u.Asset.AssetCode);
             }
 
-            //Add a Specified Assigned Date subsort, Status, Asset Code
-            spec.ApplyOrderByDescending(u => u.AssignedDate);
-            spec.ApplyOrderByDescending(u => u.State);
-            spec.ApplyOrderByDescending(u => u.Asset.AssetCode);
+          
 
             spec.ApplyPaging(filter.PageSize * (filter.PageIndex - 1), filter.PageSize);
             return spec;

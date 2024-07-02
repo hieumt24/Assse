@@ -30,12 +30,12 @@ namespace AssetManagement.Application.Helper
             else
             {
                 spec.ApplyOrderBy(u => u.FirstName);
+                spec.ApplyOrderBy(u => u.StaffCode);
+                spec.ApplyOrderBy(u => u.Username);
+                spec.ApplyOrderBy(u => u.JoinedDate);
+                spec.ApplyOrderBy(u => u.Role);
             }
 
-            spec.ApplyOrderBy(u => u.StaffCode);
-            spec.ApplyOrderBy(u => u.Username);
-            spec.ApplyOrderBy(u => u.JoinedDate);
-            spec.ApplyOrderBy(u => u.Role);
             spec.ApplyPaging(pagination.PageSize * (pagination.PageIndex - 1), pagination.PageSize);
 
             return spec;
