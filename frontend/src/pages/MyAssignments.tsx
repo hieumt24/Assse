@@ -188,6 +188,7 @@ export const MyAssignment = () => {
             title="Are you sure?"
             desc="Do you want to create a returning request for this asset?"
             confirmText="Yes"
+            cancelText="No"
             open={openCreateRequest}
             setOpen={setOpenCreateRequest}
             onConfirm={handleCreateRequest}
@@ -196,7 +197,6 @@ export const MyAssignment = () => {
             title="Are you sure?"
             desc="Do you want to accept this assignment?"
             confirmText="Yes"
-            cancelText="No"
             open={openAccept}
             setOpen={setOpenAccept}
             onConfirm={handleAccept}
