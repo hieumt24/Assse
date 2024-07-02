@@ -9,12 +9,14 @@ using AssetManagement.Application.Models.DTOs.Assignments.Reques;
 using AssetManagement.Application.Models.DTOs.Assignments.Request;
 using AssetManagement.Application.Models.DTOs.Assignments.Requests;
 using AssetManagement.Application.Models.DTOs.Assignments.Response;
+using AssetManagement.Application.Models.DTOs.Category;
 using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
 using AutoMapper;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Abstractions;
 
 namespace AssetManagement.Application.Services
 {
@@ -24,6 +26,8 @@ namespace AssetManagement.Application.Services
         private readonly IAssignmentRepositoriesAsync _assignmentRepositoriesAsync;
         private readonly IUriService _uriService;
         private readonly IValidator<AddAssignmentRequestDto> _addAssignmentValidator;
+        private readonly IValidator<EditAssignmentRequestDto> _editAssignmentValidator;
+
         private readonly IAssignmentRepositoriesAsync _assignmentRepository;
         private readonly IUserRepositoriesAsync _userRepository;
         private readonly IAssetRepositoriesAsync _assetRepository;
@@ -31,6 +35,7 @@ namespace AssetManagement.Application.Services
         public AssignmentServiceAsync(IAssignmentRepositoriesAsync assignmentRepositoriesAsync,
              IMapper mapper,
              IValidator<AddAssignmentRequestDto> addAssignmentValidator,
+             IValidator<EditAssignmentRequestDto> editAssignmentValidator,
              IAssetRepositoriesAsync assetRepository,
              IUserRepositoriesAsync userRepository,
              IUriService uriService
@@ -44,6 +49,7 @@ namespace AssetManagement.Application.Services
             _assetRepository = assetRepository;
             _userRepository = userRepository;
             _uriService = uriService;
+            _editAssignmentValidator = editAssignmentValidator;
         }
 
         public async Task<Response<AssignmentDto>> AddAssignmentAsync(AddAssignmentRequestDto request)
@@ -96,14 +102,34 @@ namespace AssetManagement.Application.Services
             }
         }
 
-        public Task<Response<AssignmentDto>> DeleteAssignmentAsync(Guid assignmentId)
+        public async Task<Response<AssignmentDto>> EditAssignmentAsync(EditAssignmentRequestDto request, Guid assignmentId)
         {
-            throw new NotImplementedException();
-        }
+            var validationResult = await _editAssignmentValidator.ValidateAsync(request);
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return new Response<AssignmentDto>
+                {
+                    Succeeded = false,
+                    Errors = errors
+                };
+            }
 
-        public Task<Response<AssignmentDto>> EditAssignmentAsync(EditAssignmentRequestDto request)
-        {
-            throw new NotImplementedException();
+            var existingAssignment = await _assignmentRepositoriesAsync.GetByIdAsync(assignmentId);
+            if (existingAssignment == null)
+            {
+                return new Response<AssignmentDto> { Succeeded = false, Message = "Assignment not found." };
+            }
+            existingAssignment.AssetId = request.AssetId;
+            existingAssignment.AssignedIdTo = request.AssignedIdTo;
+            existingAssignment.AssignedIdBy = request.AssignedIdBy;
+            existingAssignment.AssignedDate = request.AssignedDate;
+            existingAssignment.Note = request.Note;
+
+            await _assignmentRepository.UpdateAsync(existingAssignment);
+            
+            var updateAssignment = _mapper.Map<AssignmentDto>(existingAssignment);
+            return new Response<AssignmentDto> { Succeeded = true, Message = "Update assignment successfully." };   
         }
 
         public async Task<PagedResponse<List<AssignmentResponseDto>>> GetAllAssignmentsAsync(PaginationFilter paginationFilter, string? search, EnumAssignmentState? assignmentState, DateTime? assignedDate, EnumLocation location, string? orderBy, bool? isDescending, string? route)
@@ -251,5 +277,30 @@ namespace AssetManagement.Application.Services
             }
         }
 
+        public async Task<Response<AssignmentDto>> DeleteAssignmentAsync(Guid assignmentId)
+        {
+            var exsittingAssigment = await _assignmentRepositoriesAsync.GetAssignemntByIdAsync(assignmentId);
+            if (exsittingAssigment == null)
+            {
+                return new Response<AssignmentDto> { Succeeded = false, Message = "Assignment cannot be found." };
+            }
+            if (exsittingAssigment.State == EnumAssignmentState.Accepted)
+            {
+                return new Response<AssignmentDto> { Succeeded = false, Message = "Cannot delete assignment because this assignment has been approved." };
+            }
+
+            var assetResponse = await _assetRepository.GetByIdAsync(exsittingAssigment.AssetId);
+            if(assetResponse == null)
+            {
+                return new Response<AssignmentDto> { Succeeded = false, Message = "Cannot delete this assignment because can not found the asset of this assignment." };
+            }
+
+            assetResponse.State = AssetStateType.Available;
+            await _assignmentRepositoriesAsync.DeleteAsync(assignmentId); 
+
+            return new Response<AssignmentDto> { Succeeded = true, Message = "Assignment deleted successfully." };
+        }
+
+  
     }
 }

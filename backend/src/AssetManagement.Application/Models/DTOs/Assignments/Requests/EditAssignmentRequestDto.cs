@@ -6,17 +6,9 @@ namespace AssetManagement.Application.Models.DTOs.Assignments.Reques
     public class EditAssignmentRequestDto
     {
         public Guid AssignedIdTo { get; set; }
-        public User? AssignedTo { get; set; }
         public Guid AssignedIdBy { get; set; }
-        public User? AssignedBy { get; set; }
-        public DateTime AssignedDate { get; set; }
         public Guid AssetId { get; set; }
-        public Asset? Asset { get; set; }
-        public Guid? ReturnRequestId { get; set; }
-        public ReturnRequest? ReturnRequest { get; set; }
-        public EnumLocation Location { get; set; }
-
-        public EnumAssignmentState State { get; set; }
-        public string Note { get; set; } = string.Empty;
+        public DateTime AssignedDate { get; set; }
+        public string Note { get; set; } = string.Empty; 
     }
 }

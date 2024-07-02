@@ -31,7 +31,7 @@ namespace AssetManagement.Application.Services
             IValidator<AddUserRequestDto> addUserValidator,
             IValidator<EditUserRequestDto> editUserValidator,
             IUriService uriService,
-            IAssignmentRepositoriesAsync assignmentRepositoriesAsync
+             IAssignmentRepositoriesAsync assignmentRepositoriesAsync
         )
         {
             _mapper = mapper;
@@ -182,6 +182,7 @@ namespace AssetManagement.Application.Services
                 return new Response<UserDto> { Succeeded = false, Errors = { ex.Message } };
             }
         }
+
 
         public async Task<Response<UserDto>> ResetPasswordAsync(Guid userId)
         {

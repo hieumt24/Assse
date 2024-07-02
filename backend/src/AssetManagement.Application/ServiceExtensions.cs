@@ -1,6 +1,7 @@
 using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Mappings;
 using AssetManagement.Application.Models.DTOs.Assets.Requests;
+using AssetManagement.Application.Models.DTOs.Assignments.Reques;
 using AssetManagement.Application.Models.DTOs.Assignments.Request;
 using AssetManagement.Application.Models.DTOs.Category.Requests;
 using AssetManagement.Application.Models.DTOs.ReturnRequests.Request;
@@ -38,6 +39,9 @@ namespace AssetManagement.Application
             //assignment
             service.AddScoped<IAssignmentServicesAsync, AssignmentServiceAsync>();
             service.AddScoped<IValidator<AddAssignmentRequestDto>, AddAssignmentRequestValidation>();
+            service.AddScoped<IValidator<EditAssignmentRequestDto>, EditAssignmentRequestValidation>();
+
+
 
             //return request
             service.AddScoped<IReturnRequestServiceAsync, ReturnRequestServiceAsync>();

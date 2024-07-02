@@ -15,7 +15,7 @@ namespace AssetManagement.Application.Interfaces.Services
 
         Task<Response<AssignmentResponseDto>> GetAssignmentByIdAsync(Guid assignmentId);
 
-        Task<Response<AssignmentDto>> EditAssignmentAsync(EditAssignmentRequestDto request);
+        Task<Response<AssignmentDto>> EditAssignmentAsync(EditAssignmentRequestDto request, Guid assignmentId);
 
         Task<Response<AssignmentDto>> DeleteAssignmentAsync(Guid assignmentId);
 
@@ -24,5 +24,6 @@ namespace AssetManagement.Application.Interfaces.Services
         Task<Response<AssignmentDto>> ChangeAssignmentStateAsync(ChangeStateAssignmentDto request);
 
         Task<PagedResponse<List<AssignmentResponseDto>>> GetAllAssignmentsAsync(PaginationFilter paginationFilter, string? search, EnumAssignmentState? assignmentState, DateTime? assignedDate, EnumLocation adminLocation, string? orderBy, bool? isDescending, string? route);
+       
     }
 }
