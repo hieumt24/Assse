@@ -14,6 +14,7 @@ using AssetManagement.Application.Models.DTOs.Users.Requests;
 using AssetManagement.Application.Models.DTOs.Users.Responses;
 using AssetManagement.Domain.Entites;
 using AutoMapper;
+using AssetManagement.Application.Models.DTOs.Assignments.Reques;
 
 namespace AssetManagement.Application.Mappings
 {
@@ -44,6 +45,7 @@ namespace AssetManagement.Application.Mappings
             //Assignment Mapping
             CreateMap<Assignment, AssignmentDto>().ReverseMap();
             CreateMap<AddAssignmentRequestDto, Assignment>().ReverseMap();
+            CreateMap<EditAssignmentRequestDto, AssignmentDto>().ReverseMap();
             CreateMap<Assignment, AssignmentResponseDto>()
                 .ForMember(dest => dest.AssetCode, opt => opt.MapFrom(src => src.Asset.AssetCode))
                 .ForMember(dest => dest.AssetName, opt => opt.MapFrom(opt => opt.Asset.AssetName))
@@ -59,9 +61,9 @@ namespace AssetManagement.Application.Mappings
             CreateMap<ReturnRequest, ReturnRequestResponseDto>()
                  .ForMember(dest => dest.AssetCode, opt => opt.MapFrom(src => src.Assignment.Asset.AssetCode))
                  .ForMember(dest => dest.AssetName, opt => opt.MapFrom(src => src.Assignment.Asset.AssetName))
-                 .ForMember(dest => dest.RequestedByUserName, opt => opt.MapFrom(src => src.RequestedUser.Username))
+                 .ForMember(dest => dest.RequestedBy, opt => opt.MapFrom(src => src.RequestedUser.Username))
                  .ForMember(dest => dest.AssignedDate, opt => opt.MapFrom(src => src.Assignment.AssignedDate))
-                 .ForMember(dest => dest.AcceptedByUserName, opt => opt.MapFrom(src => src.AcceptedUser.Username))
+                 .ForMember(dest => dest.AcceptedBy, opt => opt.MapFrom(src => src.AcceptedUser.Username))
                  .ForMember(dest => dest.ReturnedDate, opt => opt.MapFrom(src => src.ReturnedDate))
                  .ForMember(dest => dest.State, opt => opt.MapFrom(src => src.ReturnState))
                  .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Location))

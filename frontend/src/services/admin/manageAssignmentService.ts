@@ -10,6 +10,10 @@ export const getAllAssignmentService = (req: GetAssignemntReq) => {
     delete req.assignmentState;
   }
 
+  if (req.assignedDate === "") {
+    delete req.assignedDate;
+  }
+
   return axiosInstance
     .post("/assignments/filter-assignments", req)
     .then((res) => {
@@ -33,6 +37,9 @@ export const getAssignmentByUserAssignedService = (
 ) => {
   if (req.assignmentState === 0) {
     delete req.assignmentState;
+  }
+  if (req.assignedDate === "") {
+    delete req.assignedDate;
   }
 
   return axiosInstance
@@ -105,6 +112,25 @@ export const updateAssignmentStateService = (req: UpdateAssignmentStateReq) => {
       return {
         success: false,
         message: "Failed to update assignment state.",
+        data: err,
+      };
+    });
+};
+
+export const deleteAssignmentService = (id: string) => {
+  return axiosInstance
+    .delete(`/assignments/${id}`)
+    .then((res) => {
+      return {
+        success: true,
+        message: "Assignment deleted successfully!",
+        data: res.data,
+      };
+    })
+    .catch((err) => {
+      return {
+        success: false,
+        message: "Failed to delete assignment state.",
         data: err,
       };
     });

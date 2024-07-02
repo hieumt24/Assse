@@ -1,4 +1,4 @@
-﻿using AssetManagement.Application.Filter;
+using AssetManagement.Application.Filter;
 using AssetManagement.Application.Models.DTOs.Reports.Responses;
 using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Enums;

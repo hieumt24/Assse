@@ -96,6 +96,8 @@ export const ManageUser = () => {
                 pageIndex: 1,
               }));
             }}
+            placeholder="Search by staff code, username, name"
+            className="w-[300px]"
           />
           <Button
             variant={"destructive"}
