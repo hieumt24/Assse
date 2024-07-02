@@ -1,20 +1,21 @@
+using AssetManagement.Application.Extensions;
 using AssetManagement.Application.Filter;
 using AssetManagement.Domain.Common.Specifications;
 using AssetManagement.Domain.Entites;
+using AssetManagement.Domain.Enums;
 using AssetManagement.Domain.Specifications;
 using System.Linq.Expressions;
 
 namespace AssetManagement.Application.Helper
 {
-    public class AssignmentSpecificationHelper
+    public static class UserSpecificationHelper
     {
-        public static ISpecification<Assignment> AssignmentSpecificationWithAsset(PaginationFilter filter, string? orderBy, bool? isDescending)
+        public static ISpecification<User> CreateSpecification(PaginationFilter pagination, string? orderBy, bool? isDescending)
         {
-            Expression<Func<Assignment, bool>> criteria = assignment => true;
-            var spec = new AssignmentSpecification(criteria);
-            spec.Includes.Add(x => x.Asset);
-            spec.Includes.Add(x => x.AssignedBy);
-            spec.Includes.Add(x => x.AssignedTo);
+            Expression<Func<User, bool>> criteria = user => true;
+
+            var spec = new UserSpecification(criteria);
+
             if (!string.IsNullOrEmpty(orderBy))
             {
                 if (isDescending.HasValue && isDescending.Value)
@@ -28,30 +29,67 @@ namespace AssetManagement.Application.Helper
             }
             else
             {
-                spec.ApplyOrderByDescending(u => u.CreatedOn);
-                spec.ApplyOrderByDescending(u => u.AssignedDate);
-                spec.ApplyOrderByDescending(u => u.State);
-                spec.ApplyOrderByDescending(u => u.Asset.AssetCode);
+                spec.ApplyOrderBy(u => u.FirstName);
+                spec.ApplyOrderBy(u => u.StaffCode);
+                spec.ApplyOrderBy(u => u.Username);
+                spec.ApplyOrderBy(u => u.JoinedDate);
+                spec.ApplyOrderBy(u => u.Role);
             }
 
-            spec.ApplyPaging(filter.PageSize * (filter.PageIndex - 1), filter.PageSize);
+            spec.ApplyPaging(pagination.PageSize * (pagination.PageIndex - 1), pagination.PageSize);
+
             return spec;
         }
 
-        private static Expression<Func<Assignment, object>> GetOrderByExpression(string orderBy)
+        public static ISpecification<User> CreateSpecificationPagination(ISpecification<User> userQuery, PaginationFilter filter)
         {
-            return orderBy.ToLower() switch
+            var useragination = new UserSpecification(userQuery.Criteria);
+            useragination.ApplyPaging(filter.PageSize * (filter.PageIndex - 1), filter.PageSize);
+            return useragination;
+        }
+
+        private static Expression<Func<User, object>> GetOrderByExpression(string orderBy)
+        {
+            switch (orderBy.ToLower())
             {
-                "assetcode" => u => u.Asset.AssetCode,
-                "assetname" => u => u.Asset.AssetName,
-                "assignedto" => u => u.AssignedTo.Username,
-                "assignedby" => u => u.AssignedBy.Username,
-                "assigneddate" => u => u.AssignedDate,
-                "createdon" => u => u.CreatedOn,
-                "lastmodifiedon" => u => u.LastModifiedOn,
-                "state" => u => u.State,
-                _ => u => u.CreatedOn
-            };
+                case "firstname":
+                    return u => u.FirstName;
+
+                case "lastname":
+                    return u => u.LastName;
+
+                case "username":
+                    return u => u.Username;
+
+                case "role":
+                    return u => u.Role;
+
+                case "dateofbirth":
+                    return u => u.DateOfBirth;
+
+                case "joineddate":
+                    return u => u.JoinedDate;
+
+                case "gender":
+                    return u => u.Gender;
+
+                case "staffcode":
+                    return u => u.StaffCode;
+
+                case "lastmodifiedon":
+                    return u => u.LastModifiedOn;
+
+                case "createdon":
+                    return u => u.CreatedOn;
+
+                default:
+                    return u => u.FirstName;
+            }
+        }
+
+        public static ISpecification<User> GetUserByStaffCode(string staffCode)
+        {
+            return new UserSpecification(user => user.StaffCode == staffCode);
         }
     }
 }
