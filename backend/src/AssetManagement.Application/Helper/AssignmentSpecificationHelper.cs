@@ -33,9 +33,6 @@ namespace AssetManagement.Application.Helper
                 spec.ApplyOrderByDescending(u => u.State);
                 spec.ApplyOrderByDescending(u => u.Asset.AssetCode);
             }
-
-          
-
             spec.ApplyPaging(filter.PageSize * (filter.PageIndex - 1), filter.PageSize);
             return spec;
         }

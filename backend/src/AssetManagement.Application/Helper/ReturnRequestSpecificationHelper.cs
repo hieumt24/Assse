@@ -3,7 +3,6 @@ using AssetManagement.Domain.Common.Specifications;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Specifications;
 using System.Linq.Expressions;
-using System.Security.Cryptography.X509Certificates;
 
 namespace AssetManagement.Application.Helper
 {
