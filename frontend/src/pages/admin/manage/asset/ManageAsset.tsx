@@ -259,6 +259,8 @@ export const ManageAsset = () => {
                 pageIndex: 1,
               }));
             }}
+            placeholder="Search by asset code, asset name"
+            className="w-[300px]"
           />
           <Button
             variant={"destructive"}

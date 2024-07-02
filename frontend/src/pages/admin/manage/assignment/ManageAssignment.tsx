@@ -123,6 +123,8 @@ export const ManageAssignment = () => {
                 pageIndex: 1,
               }));
             }}
+            placeholder="Search by asset code, asset name, user assigned"
+            className="w-[350px]"
           />
           <Button
             variant={"destructive"}
