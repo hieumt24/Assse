@@ -56,6 +56,9 @@ namespace AssetManagement.Application.Helper
                 case "username":
                     return u => u.Username;
 
+                case "role":
+                    return u => u.Role;
+
                 case "dateofbirth":
                     return u => u.DateOfBirth;
 
@@ -64,10 +67,13 @@ namespace AssetManagement.Application.Helper
 
                 case "gender":
                     return u => u.Gender;
+
                 case "staffcode":
                     return u => u.StaffCode;
+
                 case "lastmodifiedon":
                     return u => u.LastModifiedOn;
+
                 case "createdon":
                     return u => u.CreatedOn;
 

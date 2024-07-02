@@ -16,8 +16,6 @@ namespace AssetManagement.Application.Helper
             spec.AddInclude(x => x.AcceptedUser);
             spec.AddInclude(x => x.RequestedUser);
             spec.AddInclude(x => x.Assignment);
-         
-       
 
             if (!string.IsNullOrEmpty(orderBy))
             {
@@ -29,6 +27,10 @@ namespace AssetManagement.Application.Helper
                 {
                     spec.ApplyOrderBy(GetOrderByExpression(orderBy));
                 }
+            }
+            else
+            {
+                spec.ApplyOrderBy(u => u.CreatedOn);
             }
             spec.ApplyPaging(pagination.PageSize * (pagination.PageIndex - 1), pagination.PageSize);
             return spec;
@@ -45,7 +47,7 @@ namespace AssetManagement.Application.Helper
                 "acceptedby" => u => u.AcceptedUser.Username,
                 "returneddate" => u => u.ReturnedDate,
                 "state" => u => u.ReturnState,
-                "" => u => u.Assignment.Asset.AssetCode
+                "" => u => u.CreatedOn
             };
         }
     }

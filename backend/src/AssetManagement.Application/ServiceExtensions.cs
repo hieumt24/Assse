@@ -47,8 +47,6 @@ namespace AssetManagement.Application
             service.AddScoped<IReturnRequestServiceAsync, ReturnRequestServiceAsync>();
             service.AddScoped<IValidator<AddReturnRequestDto>, AddReturnRequestValidator>();
 
-
-
             service.AddAutoMapper(typeof(GeneralProfile));
             service.AddScoped<IValidator<AddUserRequestDto>, AddUserRequestValidation>();
             service.AddScoped<IValidator<EditUserRequestDto>, EditUserRequestValidation>();
@@ -56,6 +54,7 @@ namespace AssetManagement.Application
             service.AddScoped<ITokenService, TokenService>();
             service.AddScoped<IAccountServicecs, AccountService>();
             service.AddScoped<IUserServiceAsync, UserServiceAsync>();
+            service.AddScoped<IReportServices, ReportService>();
             service.AddSingleton<IUriService>(options =>
             {
                 var accessor = options.GetRequiredService<IHttpContextAccessor>();
