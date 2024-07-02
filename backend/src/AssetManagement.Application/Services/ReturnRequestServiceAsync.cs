@@ -80,7 +80,6 @@ namespace AssetManagement.Application.Services
             try
             {
                 var newReturnRequest = _mapper.Map<ReturnRequest>(request);
-                newReturnRequest.ReturnedDate = DateTime.Now;
                 newReturnRequest.CreatedOn = DateTime.Now;
                 newReturnRequest.CreatedBy = request.RequestedBy.ToString();
                 newReturnRequest.ReturnState = EnumReturnRequestState.WaitingForReturninging;
@@ -205,6 +204,8 @@ namespace AssetManagement.Application.Services
                 }
                 var assetResponse = await _assetRepositoriesAsync.GetByIdAsync(assignment.AssetId);
 
+                returnRequest.ReturnedDate = DateTime.Now;
+                returnRequest.AcceptedBy = request.AcceptedBy;
                 assetResponse.State = AssetStateType.Available;
 
                 try

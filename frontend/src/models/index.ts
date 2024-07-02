@@ -208,4 +208,5 @@ export interface CreateReturningRequestReq {
 export interface UpdateReturningRequestReq {
   returnRequestId?: string;
   newState?: number;
+  acceptedBy?: string;
 }
