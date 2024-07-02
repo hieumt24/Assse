@@ -14,6 +14,7 @@ using AssetManagement.Application.Models.DTOs.Users.Requests;
 using AssetManagement.Application.Models.DTOs.Users.Responses;
 using AssetManagement.Domain.Entites;
 using AutoMapper;
+using AssetManagement.Application.Models.DTOs.Assignments.Reques;
 
 namespace AssetManagement.Application.Mappings
 {
@@ -44,6 +45,7 @@ namespace AssetManagement.Application.Mappings
             //Assignment Mapping
             CreateMap<Assignment, AssignmentDto>().ReverseMap();
             CreateMap<AddAssignmentRequestDto, Assignment>().ReverseMap();
+            CreateMap<EditAssignmentRequestDto, AssignmentDto>().ReverseMap();
             CreateMap<Assignment, AssignmentResponseDto>()
                 .ForMember(dest => dest.AssetCode, opt => opt.MapFrom(src => src.Asset.AssetCode))
                 .ForMember(dest => dest.AssetName, opt => opt.MapFrom(opt => opt.Asset.AssetName))
