@@ -1,6 +1,7 @@
 using AssetManagement.Application.Filter;
 using AssetManagement.Domain.Common.Specifications;
 using AssetManagement.Domain.Entites;
+using AssetManagement.Domain.Enums;
 using AssetManagement.Domain.Specifications;
 using System.Linq.Expressions;
 
@@ -18,7 +19,8 @@ namespace AssetManagement.Application.Helper
                 orderBy = "assetcode";
                 isDescending = false;
             }
-            if (!string.IsNullOrEmpty(orderBy)) {
+            if (!string.IsNullOrEmpty(orderBy))
+            {
                 if (isDescending.HasValue && isDescending.Value)
                 {
                     spec.ApplyOrderByDescending(GetOrderByExpression(orderBy));
@@ -52,6 +54,12 @@ namespace AssetManagement.Application.Helper
         {
             var spec = new AssetSpecification(asset => asset.AssetCode == assetCode && !asset.IsDeleted);
             spec.AddInclude(x => x.Category);
+            return spec;
+        }
+
+        public static ISpecification<Asset> GetAllAssets(EnumLocation location)
+        {
+            var spec = new AssetSpecification(asset => asset.AssetLocation == location);
             return spec;
         }
     }

@@ -20,6 +20,8 @@ import { z } from "zod";
 interface SearchFormProps {
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   onSubmit?: any;
+  placeholder?: string;
+  className?: string;
 }
 
 export const SearchForm = (props: SearchFormProps) => {
@@ -62,18 +64,18 @@ export const SearchForm = (props: SearchFormProps) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex rounded-lg border border-zinc-200 text-lg"
+        className={`flex justify-between rounded-lg border border-zinc-200 text-lg ${props.className}`}
       >
         {/* Search term */}
         <FormField
           control={form.control}
           name="searchTerm"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="w-full">
               <FormControl>
                 <Input
-                  className="border-none focus-visible:ring-0"
-                  placeholder="Search"
+                  className="border-none focus-visible:ring-0 w-full"
+                  placeholder={props.placeholder || "Search"}
                   {...field}
                   onBlur={(e) => {
                     const cleanedValue = removeExtraWhitespace(e.target.value);
@@ -86,7 +88,6 @@ export const SearchForm = (props: SearchFormProps) => {
             </FormItem>
           )}
         />
-
         <Button
           type="submit"
           variant={"outline"}

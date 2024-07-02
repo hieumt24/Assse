@@ -1,3 +1,4 @@
+import { SearchForm } from "@/components";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { AssetTable, UserTable } from "@/components/tables";
 import { assignmentAssetColumns } from "@/components/tables/asset/assignmentAssetColumns";
@@ -28,7 +29,6 @@ import { IoIosSearch } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { z } from "zod";
-import { SearchForm } from "../user";
 
 export const CreateAssignmentForm = () => {
   const form = useForm<z.infer<typeof createAssignmentSchema>>({
@@ -170,6 +170,8 @@ export const CreateAssignmentForm = () => {
                               pageIndex: 1,
                             }));
                           }}
+                          placeholder="Search by staff code, username, name"
+                          className="w-[300px]"
                         />
                       </div>
                       <div className="mt-8">
@@ -261,6 +263,8 @@ export const CreateAssignmentForm = () => {
                               pageIndex: 1,
                             }));
                           }}
+                          placeholder="Search by asset code, name"
+                          className="w-[300px]"
                         />
                       </div>
                       <div className="mt-8">
@@ -345,6 +349,7 @@ export const CreateAssignmentForm = () => {
                     } else {
                       field.onChange(e);
                     }
+                    console.log(value);
                   }}
                 />
               </FormControl>
@@ -361,7 +366,14 @@ export const CreateAssignmentForm = () => {
                 Note <span className="text-red-600">*</span>
               </FormLabel>
               <FormControl>
-                <Textarea placeholder="Enter note" {...field} />
+                <Textarea
+                  placeholder="Enter note"
+                  {...field}
+                  onBlur={(e) => {
+                    field.onChange(e.target.value.trim());
+                    field.onBlur();
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

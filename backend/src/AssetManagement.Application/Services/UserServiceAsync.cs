@@ -31,7 +31,7 @@ namespace AssetManagement.Application.Services
             IValidator<AddUserRequestDto> addUserValidator,
             IValidator<EditUserRequestDto> editUserValidator,
             IUriService uriService,
-             IAssignmentRepositoriesAsync assignmentRepositoriesAsync
+            IAssignmentRepositoriesAsync assignmentRepositoriesAsync
         )
         {
             _mapper = mapper;
@@ -164,7 +164,7 @@ namespace AssetManagement.Application.Services
                 }
                 //Check user have assignment
 
-                var assignments = await _assignmentRepositoriesAsync.FilterAssignmentOfUserAsync(user.Id, null, null, null, null);
+                var assignments = await _assignmentRepositoriesAsync.GetAssignmentsByUserId(user.Id);
                 if (assignments.Any())
                 {
                     return new Response<UserDto> { Succeeded = false, Message = "There are valid assignments belonging to this user. Please close all assignments before disabling user." };
@@ -182,7 +182,6 @@ namespace AssetManagement.Application.Services
                 return new Response<UserDto> { Succeeded = false, Errors = { ex.Message } };
             }
         }
-
 
         public async Task<Response<UserDto>> ResetPasswordAsync(Guid userId)
         {

@@ -104,6 +104,7 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpDelete]
+        [Route("{assignmentId}")]
         public async Task<IActionResult> DeleteAssignment(Guid assignmentId)
         {
             var result = await _assignmentServicesAsync.DeleteAssignmentAsync(assignmentId);

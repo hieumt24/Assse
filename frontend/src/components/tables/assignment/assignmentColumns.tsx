@@ -73,6 +73,8 @@ export const assignmentColumns = ({
           return <p className="text-yellow-600">Waiting for acceptance</p>;
         case 3:
           return <p className="text-red-600">Declined</p>;
+        case 4:
+          return <p className="text-yellow-600">Waiting for returning</p>;
         default:
           return <p>{}</p>;
       }
@@ -127,9 +129,9 @@ export const assignmentColumns = ({
               e.stopPropagation();
               handleOpenCreateRequest(assignment.id!);
             }}
-            disabled={assignment.state !== 1 || assignment.isRequested}
+            disabled={assignment.state !== 1}
           >
-            {assignment.state !== 1 || assignment.isRequested ? (
+            {assignment.state !== 1 ? (
               <IoReload
                 size={20}
                 className="text-black opacity-25 hover:text-black"
