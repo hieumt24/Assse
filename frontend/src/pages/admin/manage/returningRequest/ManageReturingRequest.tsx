@@ -119,7 +119,7 @@ export const ManageReturningRequest = () => {
                 pageIndex: 1,
               }));
             }}
-            placeholder="Search by asset code, asset name, username"
+            placeholder="Search by asset code, asset name, requested by"
             className="w-[350px]"
           />
         </div>
