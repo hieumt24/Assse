@@ -30,7 +30,7 @@ namespace AssetManagement.Application.Helper
             }
             else
             {
-                spec.ApplyOrderBy(u => u.CreatedOn);
+                spec.ApplyOrderByDescending(u => u.CreatedOn);
             }
             spec.ApplyPaging(pagination.PageSize * (pagination.PageIndex - 1), pagination.PageSize);
             return spec;
