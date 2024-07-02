@@ -26,6 +26,16 @@ namespace AssetManagement.Application.Helper
                     spec.ApplyOrderBy(GetOrderByExpression(orderBy));
                 }
             }
+            else
+            {
+                spec.ApplyOrderByDescending(u => u.CreatedOn);
+            }
+
+            //Add a Specified Assigned Date subsort, Status, Asset Code
+            spec.ApplyOrderByDescending(u => u.AssignedDate);
+            spec.ApplyOrderByDescending(u => u.State);
+            spec.ApplyOrderByDescending(u => u.Asset.AssetCode);
+
             spec.ApplyPaging(filter.PageSize * (filter.PageIndex - 1), filter.PageSize);
             return spec;
         }
@@ -42,7 +52,7 @@ namespace AssetManagement.Application.Helper
                 "createdon" => u => u.CreatedOn,
                 "lastmodifiedon" => u => u.LastModifiedOn,
                 "state" => u => u.State,
-                "" => u => u.Id
+                _ => u => u.CreatedOn
             };
         }
     }
