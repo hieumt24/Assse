@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { useLoading } from "@/context/LoadingContext";
 import { useAssignments, useAuth, usePagination } from "@/hooks";
+import { deleteAssignmentService } from "@/services/admin/manageAssignmentService";
 import { createReturnRequest } from "@/services/admin/manageReturningRequestService";
 import { format } from "date-fns";
 import { useState } from "react";
@@ -62,32 +63,35 @@ export const ManageAssignment = () => {
   };
 
   const handleDelete = async () => {
-    alert("Not implemented");
+    setIsLoading(true);
+    const res = await deleteAssignmentService(assignmentId);
+    if (res.success) {
+      toast.success(res.message);
+      fetchAssignments();
+    } else {
+      toast.error(res.message);
+    }
+    setOpenDelete(false);
+    setIsLoading(false);
     fetchAssignments();
   };
 
   const handleCreateRequest = async () => {
-    try {
-      setIsLoading(true);
-      const res = await createReturnRequest({
-        assignmentId: assignmentId,
-        requestedBy: user.id,
-        returnedDate: format(new Date(), "yyyy-MM-dd"),
-        location: user.location,
-      });
-      if (res.success) {
-        toast.success(res.message);
-        fetchAssignments();
-      } else {
-        toast.error(res.message);
-      }
-      setOpenCreateRequest(false);
-    } catch (err) {
-      console.log(err);
-      toast.error("Error when creating request.");
-    } finally {
-      setIsLoading(false);
+    setIsLoading(true);
+    const res = await createReturnRequest({
+      assignmentId: assignmentId,
+      requestedBy: user.id,
+      returnedDate: format(new Date(), "yyyy-MM-dd"),
+      location: user.location,
+    });
+    if (res.success) {
+      toast.success(res.message);
+      fetchAssignments();
+    } else {
+      toast.error(res.message);
     }
+    setOpenCreateRequest(false);
+    setIsLoading(false);
   };
 
   const navigate = useNavigate();
@@ -168,6 +172,7 @@ export const ManageAssignment = () => {
             title="Are you sure?"
             desc="Do you want to create a returning request for this asset?"
             confirmText="Yes"
+            cancelText="No"
             open={openCreateRequest}
             setOpen={setOpenCreateRequest}
             onConfirm={handleCreateRequest}

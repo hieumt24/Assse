@@ -196,6 +196,7 @@ export const MyAssignment = () => {
             title="Are you sure?"
             desc="Do you want to accept this assignment?"
             confirmText="Yes"
+            cancelText="No"
             open={openAccept}
             setOpen={setOpenAccept}
             onConfirm={handleAccept}

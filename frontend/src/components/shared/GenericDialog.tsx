@@ -16,6 +16,7 @@ interface GenericDialogProps {
   title: string;
   desc: string;
   confirmText: string;
+  cancelText?: string;
   onConfirm?: () => void;
   open?: boolean;
   setOpen?: React.Dispatch<SetStateAction<boolean>>;
@@ -37,6 +38,7 @@ export const GenericDialog = (props: GenericDialogProps) => {
     title,
     desc,
     confirmText,
+    cancelText,
     onConfirm,
     open,
     setOpen,
@@ -45,7 +47,6 @@ export const GenericDialog = (props: GenericDialogProps) => {
   } = props;
 
   const {isLoading} = useLoading();
-  console.log(isLoading);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -72,7 +73,7 @@ export const GenericDialog = (props: GenericDialogProps) => {
             {isLoading ? "Loading..." : confirmText}
           </Button>
           <DialogClose asChild>
-            <Button type="button">Cancel</Button>
+            <Button type="button">{cancelText || "Cancel"}</Button>
           </DialogClose>
         </div>
       </DialogContent>
