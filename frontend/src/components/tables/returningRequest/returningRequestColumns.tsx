@@ -86,7 +86,7 @@ export const returningRequestColumns = ({
       const state = row.original.state;
       switch (state) {
         case 1:
-          return <p className="text-yellow-600">Waiting for returning</p>;
+          return <p className="text-yellow-600">Waiting for returninging</p>;
         case 2:
           return <p className="text-green-600">Completed</p>;
 

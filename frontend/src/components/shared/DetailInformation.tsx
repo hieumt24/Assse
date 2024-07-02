@@ -65,7 +65,7 @@ export const DetailInformation = <T extends UserRes | AssetRes>({
     "lastModifiedBy",
     "createdBy",
     "categoryId",
-    "isDeleted",
+    "isDeleted"
   ];
 
   const formatKey = (key: string) =>

@@ -138,12 +138,16 @@ export const ASSIGNMENT_STATES = [
     value: 3,
     label: "Declined",
   },
+  {
+    value: 4,
+    label: "Waiting for returning"
+  }
 ];
 
 export const RETURNING_REQUEST_STATES = [
   {
     value: 1,
-    label: "Waiting for returning",
+    label: "Waiting for returninging",
   },
   {
     value: 2,
