@@ -86,7 +86,6 @@ export const MyAssignment = () => {
     const res = await createReturnRequest({
       assignmentId: assignmentId,
       requestedBy: user.id,
-      returnedDate: format(new Date(), "yyyy-MM-dd"),
       location: user.location,
     });
     if (res.success) {

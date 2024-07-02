@@ -34,7 +34,7 @@ namespace AssetManagement.Infrastructure.Repositories
             }
             if (returnedDate.HasValue)
             {
-                queryByAdmin = query.Where(x => x.ReturnedDate.Date == returnedDate.Value.Date);
+                queryByAdmin = query.Where(x => x.ReturnedDate.HasValue &&  EF.Functions.DateDiffDay(x.ReturnedDate.Value, returnedDate.Value) == 0);
             }
 
             return queryByAdmin;
