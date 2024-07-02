@@ -40,7 +40,12 @@ namespace AssetManagement.Infrastructure.Repositories
 
         public async Task<IQueryable<Assignment>> GetAssignmentsByUserId(Guid userId)
         {
-            return _dbContext.Assignments.Include(x => x.Asset).Where(x => x.AssignedIdTo == userId);
+            return _dbContext.Assignments
+                    .Include(x => x.Asset)
+                    .Where(x => x.AssignedIdTo == userId
+                        && (x.ReturnRequest == null || x.ReturnRequest.ReturnState != EnumReturnRequestState.Completed)
+                        && (x.State != EnumAssignmentState.Declined)
+                        && (x.AssignedDate <= DateTime.Now));
         }
 
         public async Task<Assignment> GetAssignemntByIdAsync(Guid assignmentId)
@@ -48,7 +53,8 @@ namespace AssetManagement.Infrastructure.Repositories
             return await _dbContext.Assignments.Include(x => x.Asset)
                                          .Include(x => x.AssignedTo)
                                          .Include(x => x.AssignedBy)
-                                         .Where(x => x.Id == assignmentId).FirstOrDefaultAsync();
+                                         .Where(x => x.Id == assignmentId)
+                                         .FirstOrDefaultAsync();
         }
 
         public async Task<Assignment> FindExitingAssignment(Guid assetId)
@@ -59,7 +65,12 @@ namespace AssetManagement.Infrastructure.Repositories
 
         public async Task<IQueryable<Assignment>> FilterAssignmentOfUserAsync(Guid userId, string? search, EnumAssignmentState? assignmentState, DateTime? assignedDate)
         {
-            var query = _dbContext.Assignments.Include(x => x.Asset).Where(x => x.AssignedIdTo == userId);
+            var query = _dbContext.Assignments
+                        .Include(x => x.Asset)
+                        .Where(x => x.AssignedIdTo == userId
+                                 && (x.ReturnRequest == null || x.ReturnRequest.ReturnState != EnumReturnRequestState.Completed)
+                                 && (x.State != EnumAssignmentState.Declined)
+                                 && (x.AssignedDate <= DateTime.Now));
             if (!string.IsNullOrEmpty(search))
             {
                 query = query.Where(x => x.Asset.AssetCode.ToLower().Contains(search.ToLower())
@@ -75,6 +86,7 @@ namespace AssetManagement.Infrastructure.Repositories
                 query = query.Where(x => x.AssignedDate.Date == assignedDate.Value.Date);
             }
             query = query.Where(x => x.ReturnRequest == null || x.ReturnRequest.ReturnState != EnumReturnRequestState.Completed);
+
             return query;
         }
     }

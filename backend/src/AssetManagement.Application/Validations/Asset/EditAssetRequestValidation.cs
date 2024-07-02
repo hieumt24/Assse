@@ -21,8 +21,8 @@ namespace AssetManagement.Application.Validations.Asset
                 .Matches(@"[a-zA-Z]").WithMessage("The specification must contain letters");
 
             RuleFor(x => x.State)
-               .NotEmpty().WithMessage("Please enter Location")
-               .Must(asset => asset == AssetStateType.Available || asset == AssetStateType.NotAvailable || asset == AssetStateType.WaitingForRecycling || asset == AssetStateType.Recycled).WithMessage("Invalid State, can only choose available or not available or waiting for recycling or recycled");
+               .NotEmpty().WithMessage("Please enter State")
+               .Must(asset => asset == AssetStateType.Available || asset == AssetStateType.NotAvailable || asset == AssetStateType.WaitingForRecycling || asset == AssetStateType.Recycled || asset == AssetStateType.Assigned).WithMessage("Invalid State.");
 
             RuleFor(x => x.InstalledDate)
               .NotEmpty().WithMessage("Installed Date cannot be blank")

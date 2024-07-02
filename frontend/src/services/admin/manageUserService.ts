@@ -91,6 +91,6 @@ export const disableUserService = (id: string) => {
       };
     })
     .catch((err) => {
-      return { success: false, message: "Failed to disable user.", data: err };
+      return { success: false, message: err.response.data.message, data: err };
     });
 };

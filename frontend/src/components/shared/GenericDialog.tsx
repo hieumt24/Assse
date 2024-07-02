@@ -9,12 +9,14 @@ import {
 } from "@/components/ui/dialog";
 import { SetStateAction } from "react";
 import { Button } from "../ui/button";
+import { useLoading } from "@/context/LoadingContext";
 
 interface GenericDialogProps {
   trigger?: string;
   title: string;
   desc: string;
   confirmText: string;
+  cancelText?: string;
   onConfirm?: () => void;
   open?: boolean;
   setOpen?: React.Dispatch<SetStateAction<boolean>>;
@@ -36,6 +38,7 @@ export const GenericDialog = (props: GenericDialogProps) => {
     title,
     desc,
     confirmText,
+    cancelText,
     onConfirm,
     open,
     setOpen,
@@ -43,11 +46,13 @@ export const GenericDialog = (props: GenericDialogProps) => {
     classButton,
   } = props;
 
+  const {isLoading} = useLoading();
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       {trigger && (
         <DialogTrigger className="w-full">
-          <Button type="button" variant={variant} className={classButton}>
+          <Button type="button" variant={variant} className={classButton} >
             {trigger}
           </Button>
         </DialogTrigger>
@@ -64,11 +69,11 @@ export const GenericDialog = (props: GenericDialogProps) => {
           </DialogDescription>
         </DialogHeader>
         <div className="mt-4 flex w-full justify-center gap-4">
-          <Button type="button" variant="destructive" onClick={onConfirm}>
-            {confirmText}
+          <Button type="button" variant="destructive" onClick={onConfirm} disabled={isLoading}>
+            {isLoading ? "Loading..." : confirmText}
           </Button>
           <DialogClose asChild>
-            <Button type="button">Cancel</Button>
+            <Button type="button">{cancelText || "Cancel"}</Button>
           </DialogClose>
         </div>
       </DialogContent>
