@@ -147,7 +147,7 @@ export const ASSIGNMENT_STATES = [
 export const RETURNING_REQUEST_STATES = [
   {
     value: 1,
-    label: "Waiting for returninging",
+    label: "Waiting for returning",
   },
   {
     value: 2,
