@@ -128,7 +128,7 @@ export const ManageAssignment = () => {
               }));
             }}
             placeholder="Search by asset code, asset name, user assigned"
-            className="w-[350px]"
+            className="w-[352px]"
           />
           <Button
             variant={"destructive"}
