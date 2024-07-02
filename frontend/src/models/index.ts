@@ -201,11 +201,11 @@ export interface GetReturningRequestReq {
 export interface CreateReturningRequestReq {
   assignmentId?: string;
   requestedBy?: string;
-  returnedDate?: string;
   location?: number;
 }
 
 export interface UpdateReturningRequestReq {
   returnRequestId?: string;
   newState?: number;
+  acceptedBy?: string;
 }
