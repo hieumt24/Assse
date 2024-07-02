@@ -40,7 +40,9 @@ namespace AssetManagement.Infrastructure.Repositories
 
         public async Task<IQueryable<Assignment>> GetAssignmentsByUserId(Guid userId)
         {
-            return _dbContext.Assignments.Include(x => x.Asset).Where(x => x.AssignedIdTo == userId);
+            return _dbContext.Assignments
+                    .Include(x => x.Asset)
+                    .Where(x => x.AssignedIdTo == userId);
         }
 
         public async Task<Assignment> GetAssignemntByIdAsync(Guid assignmentId)
@@ -48,7 +50,10 @@ namespace AssetManagement.Infrastructure.Repositories
             return await _dbContext.Assignments.Include(x => x.Asset)
                                          .Include(x => x.AssignedTo)
                                          .Include(x => x.AssignedBy)
-                                         .Where(x => x.Id == assignmentId).FirstOrDefaultAsync();
+                                         .Where(x => x.Id == assignmentId)
+                                         .Where(x => x.ReturnRequest == null || x.ReturnRequest.ReturnState != EnumReturnRequestState.Completed)
+                                         .Where(x => x.State != EnumAssignmentState.Declined)
+                                         .FirstOrDefaultAsync();
         }
 
         public async Task<Assignment> FindExitingAssignment(Guid assetId)
