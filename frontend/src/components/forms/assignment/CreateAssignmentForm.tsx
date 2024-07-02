@@ -23,7 +23,7 @@ import { createAssignmentService } from "@/services/admin/manageAssignmentServic
 import { createAssignmentSchema } from "@/validations/assignmentSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoIosSearch } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
@@ -127,6 +127,14 @@ export const CreateAssignmentForm = () => {
       setIsLoading(false);
     }
   };
+
+  useEffect(()=>{
+    setUserSearchQuery("");
+  }, [openChooseUser]);
+
+  useEffect(()=>{
+    setAssetSearchQuery("");
+  }, [openChooseAsset]);
 
   return (
     <Form {...form}>
