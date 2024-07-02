@@ -6,18 +6,13 @@ export const createAssignmentSchema = z.object({
   assetId: z.string().min(1, "Asset is required."),
   assignedDate: z
     .string()
-    .refine(
-      (dateString) => {
-        return dateString.length > 0;
-      },
-      { message: "Assigned Date is required." },
-    )
+    .min(1, "Please select a valid date.")
     .refine(
       (dateString) => {
         const parsedDate = new Date(dateString);
         return isValid(parsedDate);
       },
-      { message: "Invalid Assigned Date. Please enter a valid date." },
+      { message: "Please select a valid date." },
     )
     .refine(
       (dateString) => {

@@ -349,6 +349,7 @@ export const CreateAssignmentForm = () => {
                     } else {
                       field.onChange(e);
                     }
+                    console.log(value);
                   }}
                 />
               </FormControl>
