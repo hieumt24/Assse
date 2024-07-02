@@ -83,9 +83,8 @@ namespace AssetManagement.Application.Services
                 newReturnRequest.ReturnedDate = DateTime.Now;
                 newReturnRequest.CreatedOn = DateTime.Now;
                 newReturnRequest.CreatedBy = request.RequestedBy.ToString();
-                newReturnRequest.ReturnState = EnumReturnRequestState.WaitingForReturning;
-                existingAssignment.IsRequested = true;
-                existingAssignment.State = EnumAssignmentState.WaitingForAcceptance;
+                newReturnRequest.ReturnState = EnumReturnRequestState.WaitingForReturninging;
+                existingAssignment.State = EnumAssignmentState.WaitingForReturning;
                 await _assignmentRepository.UpdateAsync(existingAssignment);
                 var returnrequest = await _returnRequestRepository.AddAsync(newReturnRequest);
 
@@ -119,15 +118,15 @@ namespace AssetManagement.Application.Services
                         Message = "Assignment not found."
                     };
                 }
-                existingAssignment.IsRequested = false;
 
-                if (returnRequest.ReturnState == EnumReturnRequestState.WaitingForReturning)
+                if (returnRequest.ReturnState == EnumReturnRequestState.WaitingForReturninging)
                 {
                     var cancelReturnRequest = await _returnRequestRepository.DeleteAsync(returnRequest.Id);
                     if (cancelReturnRequest == null)
                     {
                         return new Response<string> { Succeeded = false, Message = "Cancel Return Request failed." };
                     }
+                    existingAssignment.State = EnumAssignmentState.Accepted;
                 }
                 return new Response<string> { Succeeded = true, Message = "Cancel Return Request Successfully." };
             }

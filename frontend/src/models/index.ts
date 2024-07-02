@@ -68,7 +68,6 @@ export interface AssignmentRes {
   assignedDate?: Date;
   location?: number;
   state?: number;
-  isRequested?: boolean;
 }
 export interface GetAssignemntReq {
   pagination: {

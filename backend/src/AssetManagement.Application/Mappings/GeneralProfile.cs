@@ -51,7 +51,6 @@ namespace AssetManagement.Application.Mappings
                 .ForMember(dest => dest.AssetName, opt => opt.MapFrom(opt => opt.Asset.AssetName))
                 .ForMember(dest => dest.AssignedTo, opt => opt.MapFrom(opt => opt.AssignedTo.Username))
                 .ForMember(dest => dest.AssignedBy, opt => opt.MapFrom(opt => opt.AssignedBy.Username))
-                .ForMember(dest => dest.IsRequested, opt => opt.MapFrom(opt => opt.IsRequested))
                 .ReverseMap()
                 ;
 
