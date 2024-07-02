@@ -148,6 +148,8 @@ export const MyAssignment = () => {
                 pageIndex: 1,
               }));
             }}
+            placeholder="Search by asset code, asset name"
+            className="w-[300px]"
           />
         </div>
       </div>
@@ -194,6 +196,7 @@ export const MyAssignment = () => {
             title="Are you sure?"
             desc="Do you want to accept this assignment?"
             confirmText="Yes"
+            cancelText="No"
             open={openAccept}
             setOpen={setOpenAccept}
             onConfirm={handleAccept}

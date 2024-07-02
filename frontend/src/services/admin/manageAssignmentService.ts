@@ -116,3 +116,22 @@ export const updateAssignmentStateService = (req: UpdateAssignmentStateReq) => {
       };
     });
 };
+
+export const deleteAssignmentService = (id: string) => {
+  return axiosInstance
+    .delete(`/assignments/${id}`)
+    .then((res) => {
+      return {
+        success: true,
+        message: "Assignment deleted successfully!",
+        data: res.data,
+      };
+    })
+    .catch((err) => {
+      return {
+        success: false,
+        message: "Failed to delete assignment state.",
+        data: err,
+      };
+    });
+};
