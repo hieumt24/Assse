@@ -20,6 +20,7 @@ export const createAssetSchema = z.object({
   specification: z
     .string()
     .trim()
+    .min(1, { message: "Specification must not be blank" })
     .min(2, { message: "Specification must be at least 2 characters long." })
     .max(100, {
       message: "Specification must be no longer than 100 characters.",
