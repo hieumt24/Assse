@@ -2,7 +2,7 @@
 {
     public enum EnumReturnRequestState
     {
-        WaitingForReturninging = 1,
+        WaitingForReturning = 1,
         Completed = 2,
     }
 }

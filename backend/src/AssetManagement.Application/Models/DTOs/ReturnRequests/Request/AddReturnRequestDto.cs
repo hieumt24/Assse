@@ -7,7 +7,6 @@ namespace AssetManagement.Application.Models.DTOs.ReturnRequests.Request
     {
         public Guid AssignmentId { get; set; }
         public Guid RequestedBy { get; set; }
-        public DateTime ReturnedDate { get; set; }
         public EnumLocation Location { get; set; }
     }
 }

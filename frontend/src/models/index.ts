@@ -201,7 +201,6 @@ export interface GetReturningRequestReq {
 export interface CreateReturningRequestReq {
   assignmentId?: string;
   requestedBy?: string;
-  returnedDate?: string;
   location?: number;
 }
 

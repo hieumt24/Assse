@@ -82,7 +82,7 @@ namespace AssetManagement.Application.Services
                 var newReturnRequest = _mapper.Map<ReturnRequest>(request);
                 newReturnRequest.CreatedOn = DateTime.Now;
                 newReturnRequest.CreatedBy = request.RequestedBy.ToString();
-                newReturnRequest.ReturnState = EnumReturnRequestState.WaitingForReturninging;
+                newReturnRequest.ReturnState = EnumReturnRequestState.WaitingForReturning;
                 existingAssignment.State = EnumAssignmentState.WaitingForReturning;
                 await _assignmentRepository.UpdateAsync(existingAssignment);
                 var returnrequest = await _returnRequestRepository.AddAsync(newReturnRequest);
@@ -118,7 +118,7 @@ namespace AssetManagement.Application.Services
                     };
                 }
 
-                if (returnRequest.ReturnState == EnumReturnRequestState.WaitingForReturninging)
+                if (returnRequest.ReturnState == EnumReturnRequestState.WaitingForReturning)
                 {
                     var cancelReturnRequest = await _returnRequestRepository.DeleteAsync(returnRequest.Id);
                     if (cancelReturnRequest == null)
@@ -126,6 +126,7 @@ namespace AssetManagement.Application.Services
                         return new Response<string> { Succeeded = false, Message = "Cancel Return Request failed." };
                     }
                     existingAssignment.State = EnumAssignmentState.Accepted;
+                    await _assignmentRepository.UpdateAsync(existingAssignment);
                 }
                 return new Response<string> { Succeeded = true, Message = "Cancel Return Request Successfully." };
             }
