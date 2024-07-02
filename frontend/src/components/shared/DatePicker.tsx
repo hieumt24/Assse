@@ -25,7 +25,7 @@ export function DatePicker(props: Readonly<DatePickerProps>) {
 
     if (selectedDate) {
       const nextDay = new Date(selectedDate);
-      nextDay.setDate(nextDay.getDate() + 1);
+      nextDay.setDate(nextDay.getDate());
       setValue(nextDay);
     } else {
       setValue(null);

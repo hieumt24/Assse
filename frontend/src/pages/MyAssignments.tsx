@@ -41,7 +41,7 @@ export const MyAssignment = () => {
     orderBy,
     isDescending,
     assignmentState,
-    assignedDate!,
+    assignedDate ? format(assignedDate, "yyyy-MM-dd") : "",
   );
 
   const { setIsLoading } = useLoading();
