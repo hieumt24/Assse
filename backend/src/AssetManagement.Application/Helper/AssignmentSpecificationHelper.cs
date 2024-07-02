@@ -29,9 +29,6 @@ namespace AssetManagement.Application.Helper
             else
             {
                 spec.ApplyOrderByDescending(GetOrderByExpression("createdon"));
-                spec.ApplyOrderByDescending(GetOrderByExpression("assigneddate"));
-                spec.ApplyOrderByDescending(GetOrderByExpression("state"));
-                spec.ApplyOrderByDescending(GetOrderByExpression("assetcode"));
             }
             spec.ApplyPaging(filter.PageSize * (filter.PageIndex - 1), filter.PageSize);
             return spec;

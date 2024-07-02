@@ -56,7 +56,7 @@ namespace AssetManagement.Application.Helper
                 case "dateofbirth":
                     return u => u.DateOfBirth;
 
-                case "joineddate":
+                case "joinedDate":
                     return u => u.JoinedDate;
 
                 case "gender":
