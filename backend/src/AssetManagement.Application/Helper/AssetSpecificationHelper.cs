@@ -30,6 +30,9 @@ namespace AssetManagement.Application.Helper
                     spec.ApplyOrderBy(GetOrderByExpression(orderBy));
                 }
             }
+            spec.ApplyOrderBy(u => u.AssetName);
+            spec.ApplyOrderBy(u => u.Category.CategoryName);
+            spec.ApplyOrderBy(u => u.State);
             spec.ApplyPaging(pagination.PageSize * (pagination.PageIndex - 1), pagination.PageSize);
             return spec;
         }
