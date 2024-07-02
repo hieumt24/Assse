@@ -70,6 +70,8 @@ export const ManageReturningRequest = () => {
     const res = await updateReturnRequest({
       returnRequestId: requestId,
       newState: 2,
+      acceptedBy: user.id
+
     });
     if (res.success) {
       toast.success(res.message);
