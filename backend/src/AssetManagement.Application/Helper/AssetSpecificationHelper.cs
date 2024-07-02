@@ -17,9 +17,6 @@ namespace AssetManagement.Application.Helper
             if (string.IsNullOrEmpty(orderBy))
             {
                 spec.ApplyOrderBy(u => u.AssetCode);
-                spec.ApplyOrderBy(u => u.AssetName);
-                spec.ApplyOrderBy(u => u.Category.CategoryName);
-                spec.ApplyOrderBy(u => u.State);
             }
             if (!string.IsNullOrEmpty(orderBy))
             {
@@ -32,7 +29,7 @@ namespace AssetManagement.Application.Helper
                     spec.ApplyOrderBy(GetOrderByExpression(orderBy));
                 }
             }
-      
+
             spec.ApplyPaging(pagination.PageSize * (pagination.PageIndex - 1), pagination.PageSize);
             return spec;
         }
