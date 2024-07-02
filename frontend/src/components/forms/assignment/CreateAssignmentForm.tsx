@@ -30,7 +30,6 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { z } from "zod";
 
-
 export const CreateAssignmentForm = () => {
   const form = useForm<z.infer<typeof createAssignmentSchema>>({
     mode: "onBlur",
@@ -366,7 +365,14 @@ export const CreateAssignmentForm = () => {
                 Note <span className="text-red-600">*</span>
               </FormLabel>
               <FormControl>
-                <Textarea placeholder="Enter note" {...field} />
+                <Textarea
+                  placeholder="Enter note"
+                  {...field}
+                  onBlur={(e) => {
+                    field.onChange(e.target.value.trim());
+                    field.onBlur();
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
