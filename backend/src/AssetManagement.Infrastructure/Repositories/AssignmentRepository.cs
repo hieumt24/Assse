@@ -42,7 +42,10 @@ namespace AssetManagement.Infrastructure.Repositories
         {
             return _dbContext.Assignments
                     .Include(x => x.Asset)
-                    .Where(x => x.AssignedIdTo == userId);
+                    .Where(x => x.AssignedIdTo == userId
+                        && (x.ReturnRequest == null || x.ReturnRequest.ReturnState != EnumReturnRequestState.Completed)
+                        && (x.State != EnumAssignmentState.Declined)
+                        && (x.AssignedDate <= DateTime.Now));
         }
 
         public async Task<Assignment> GetAssignemntByIdAsync(Guid assignmentId)
@@ -51,8 +54,6 @@ namespace AssetManagement.Infrastructure.Repositories
                                          .Include(x => x.AssignedTo)
                                          .Include(x => x.AssignedBy)
                                          .Where(x => x.Id == assignmentId)
-                                         .Where(x => x.ReturnRequest == null || x.ReturnRequest.ReturnState != EnumReturnRequestState.Completed)
-                                         .Where(x => x.State != EnumAssignmentState.Declined)
                                          .FirstOrDefaultAsync();
         }
 
@@ -66,9 +67,10 @@ namespace AssetManagement.Infrastructure.Repositories
         {
             var query = _dbContext.Assignments
                         .Include(x => x.Asset)
-                        .Where(x => x.AssignedIdTo == userId)
-                        .Where(x => x.ReturnRequest == null || x.ReturnRequest.ReturnState != EnumReturnRequestState.Completed)
-                        .Where(x => x.State != EnumAssignmentState.Declined);
+                        .Where(x => x.AssignedIdTo == userId
+                                 && (x.ReturnRequest == null || x.ReturnRequest.ReturnState != EnumReturnRequestState.Completed)
+                                 && (x.State != EnumAssignmentState.Declined)
+                                 && (x.AssignedDate <= DateTime.Now));
             if (!string.IsNullOrEmpty(search))
             {
                 query = query.Where(x => x.Asset.AssetCode.ToLower().Contains(search.ToLower())
