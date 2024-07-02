@@ -142,15 +142,19 @@ namespace AssetManagement.Application.Services
             throw new NotImplementedException();
         }
 
-        public async Task<PagedResponse<List<ReturnRequestResponseDto>>> GetAllReturnRequestAsync(PaginationFilter pagination, string? search, EnumReturnRequestState? state, DateTime? returnedDate, EnumLocation location, string? orderBy, bool? isDescending, string? route)
+        public async Task<PagedResponse<List<ReturnRequestResponseDto>>> GetAllReturnRequestAsync(PaginationFilter pagination, string? search, EnumReturnRequestState? state, DateTime? returnedDateFrom, DateTime? returnedDateTo, EnumLocation location, string? orderBy, bool? isDescending, string? route)
         {
+            if (returnedDateFrom > returnedDateTo)
+            {
+                return new PagedResponse<List<ReturnRequestResponseDto>> { Succeeded = false, Message = "Returned Date From need before Returned Date To" };
+            }
             try
             {
                 if (pagination == null)
                 {
                     pagination = new PaginationFilter();
                 }
-                var filterReturnRequest = await _returnRequestRepository.FilterReturnRequestAsync(location, search, state, returnedDate);
+                var filterReturnRequest = await _returnRequestRepository.FilterReturnRequestAsync(location, search, state, returnedDateFrom, returnedDateTo);
 
                 var totalRecords = await filterReturnRequest.CountAsync();
 
@@ -206,10 +210,13 @@ namespace AssetManagement.Application.Services
                 }
                 var assetResponse = await _assetRepositoriesAsync.GetByIdAsync(assignment.AssetId);
 
+                returnRequest.AcceptedBy = request.AcceptedBy;
                 assetResponse.State = AssetStateType.Available;
+                assignment.State = EnumAssignmentState.Returned;
 
                 try
                 {
+                    await _assignmentRepository.UpdateAsync(assignment);
                     await _assetRepository.UpdateAsync(assetResponse);
                 }
                 catch (Exception ex)

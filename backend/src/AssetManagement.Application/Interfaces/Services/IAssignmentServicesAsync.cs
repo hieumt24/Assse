@@ -19,11 +19,13 @@ namespace AssetManagement.Application.Interfaces.Services
 
         Task<Response<AssignmentDto>> DeleteAssignmentAsync(Guid assignmentId);
 
-        Task<PagedResponse<List<AssignmentResponseDto>>> GetAssignmentsOfUser(PaginationFilter paginationFilter, Guid userId, string? search, EnumAssignmentState? assignmentState, DateTime? assignedDate, string? orderBy, bool? isDescending, string? route);
+        Task<PagedResponse<List<AssignmentResponseDto>>> GetAssignmentsOfUser(PaginationFilter paginationFilter, Guid userId, string? search, EnumAssignmentState? assignmentState, DateTime? dateFrom, DateTime? dateTo, string? orderBy, bool? isDescending, string? route);
+
+        Task<PagedResponse<List<AssignmentResponseDto>>> GetAssetAssign(PaginationFilter paginationFilter, Guid assetId, string? search, EnumAssignmentState? assignmentState, DateTime? dateFrom, DateTime? dateTo, string? orderBy, bool? isDescending, string? route);
 
         Task<Response<AssignmentDto>> ChangeAssignmentStateAsync(ChangeStateAssignmentDto request);
 
-        Task<PagedResponse<List<AssignmentResponseDto>>> GetAllAssignmentsAsync(PaginationFilter paginationFilter, string? search, EnumAssignmentState? assignmentState, DateTime? assignedDate, EnumLocation adminLocation, string? orderBy, bool? isDescending, string? route);
+        Task<PagedResponse<List<AssignmentResponseDto>>> GetAllAssignmentsAsync(PaginationFilter paginationFilter, string? search, EnumAssignmentState? assignmentState, DateTime? dateFrom, DateTime? dateTo, EnumLocation adminLocation, string? orderBy, bool? isDescending, string? route);
        
     }
 }

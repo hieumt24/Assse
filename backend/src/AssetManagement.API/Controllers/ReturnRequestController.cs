@@ -34,7 +34,7 @@ namespace AssetManagement.API.Controllers
         public async Task<IActionResult> GetAll([FromBody] ReturnRequestFilter returnRequestFilter)
         {
             string route = Request.Path.Value;
-            var result = await _returnRequestServicesAsync.GetAllReturnRequestAsync(returnRequestFilter.pagination, returnRequestFilter.search, returnRequestFilter.returnState, returnRequestFilter.returnedDate, returnRequestFilter.location, returnRequestFilter.orderBy, returnRequestFilter.isDescending, route);
+            var result = await _returnRequestServicesAsync.GetAllReturnRequestAsync(returnRequestFilter.pagination, returnRequestFilter.search, returnRequestFilter.returnState, returnRequestFilter.returnedDateFrom, returnRequestFilter.returnedDateTo, returnRequestFilter.location, returnRequestFilter.orderBy, returnRequestFilter.isDescending, route);
             if (result != null)
             {
                 return Ok(result);

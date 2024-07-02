@@ -6,5 +6,6 @@ namespace AssetManagement.Application.Models.DTOs.ReturnRequests.Request
     {
         public Guid ReturnRequestId { get; set; }
         public EnumReturnRequestState NewState { get; set; }
+        public Guid AcceptedBy { get; set; }
     }
 }

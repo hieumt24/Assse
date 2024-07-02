@@ -34,7 +34,7 @@ namespace AssetManagement.API.Controllers
         public async Task<IActionResult> FilterAssignment([FromBody] AssignmentFilter filter)
         {
             string route = Request.Path.Value;
-            var response = await _assignmentServicesAsync.GetAllAssignmentsAsync(filter.pagination, filter.search, filter.assignmentState, filter.assignedDate, filter.adminLocation, filter.orderBy, filter.isDescending, route);
+            var response = await _assignmentServicesAsync.GetAllAssignmentsAsync(filter.pagination, filter.search, filter.assignmentState, filter.dateFrom, filter.dateTo, filter.adminLocation, filter.orderBy, filter.isDescending, route);
             if (!response.Succeeded)
             {
                 return BadRequest(response);
@@ -47,7 +47,21 @@ namespace AssetManagement.API.Controllers
         public async Task<IActionResult> GetAssignmentsForUser([FromBody] FilterAssignmentForUser filterAssignmentForUser)
         {
             string route = Request.Path.Value;
-            var result = await _assignmentServicesAsync.GetAssignmentsOfUser(filterAssignmentForUser.pagination, filterAssignmentForUser.userId, filterAssignmentForUser.search, filterAssignmentForUser.assignmentState, filterAssignmentForUser.assignedDate, filterAssignmentForUser.orderBy, filterAssignmentForUser.isDescending, route);
+            var result = await _assignmentServicesAsync.GetAssignmentsOfUser(filterAssignmentForUser.pagination, filterAssignmentForUser.userId, filterAssignmentForUser.search, filterAssignmentForUser.assignmentState, filterAssignmentForUser.dateFrom, filterAssignmentForUser.dateTo, filterAssignmentForUser.orderBy, filterAssignmentForUser.isDescending, route);
+            if (result.Succeeded)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+
+        [HttpPost]
+        [Route("filter-asset-assigned-history")]
+        public async Task<IActionResult> GetAssetAssignHistory([FromBody] FilterAssetAssignHistory filterAssignmentForUser)
+        {
+            string route = Request.Path.Value;
+            var result = await _assignmentServicesAsync.GetAssetAssign(filterAssignmentForUser.pagination, filterAssignmentForUser.assetId, filterAssignmentForUser.search, filterAssignmentForUser.assignmentState, filterAssignmentForUser.dateFrom, filterAssignmentForUser.dateTo, filterAssignmentForUser.orderBy, filterAssignmentForUser.isDescending, route);
             if (result.Succeeded)
             {
                 return Ok(result);
