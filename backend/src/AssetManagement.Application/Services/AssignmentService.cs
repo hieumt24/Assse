@@ -9,6 +9,7 @@ using AssetManagement.Application.Models.DTOs.Assignments.Reques;
 using AssetManagement.Application.Models.DTOs.Assignments.Request;
 using AssetManagement.Application.Models.DTOs.Assignments.Requests;
 using AssetManagement.Application.Models.DTOs.Assignments.Response;
+using AssetManagement.Application.Models.DTOs.Category;
 using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
@@ -25,6 +26,8 @@ namespace AssetManagement.Application.Services
         private readonly IAssignmentRepositoriesAsync _assignmentRepositoriesAsync;
         private readonly IUriService _uriService;
         private readonly IValidator<AddAssignmentRequestDto> _addAssignmentValidator;
+        private readonly IValidator<EditAssignmentRequestDto> _editAssignmentValidator;
+
         private readonly IAssignmentRepositoriesAsync _assignmentRepository;
         private readonly IUserRepositoriesAsync _userRepository;
         private readonly IAssetRepositoriesAsync _assetRepository;
@@ -32,6 +35,7 @@ namespace AssetManagement.Application.Services
         public AssignmentServiceAsync(IAssignmentRepositoriesAsync assignmentRepositoriesAsync,
              IMapper mapper,
              IValidator<AddAssignmentRequestDto> addAssignmentValidator,
+             IValidator<EditAssignmentRequestDto> editAssignmentValidator,
              IAssetRepositoriesAsync assetRepository,
              IUserRepositoriesAsync userRepository,
              IUriService uriService
@@ -45,6 +49,7 @@ namespace AssetManagement.Application.Services
             _assetRepository = assetRepository;
             _userRepository = userRepository;
             _uriService = uriService;
+            _editAssignmentValidator = editAssignmentValidator;
         }
 
         public async Task<Response<AssignmentDto>> AddAssignmentAsync(AddAssignmentRequestDto request)
@@ -97,9 +102,34 @@ namespace AssetManagement.Application.Services
             }
         }
 
-        public Task<Response<AssignmentDto>> EditAssignmentAsync(EditAssignmentRequestDto request)
+        public async Task<Response<AssignmentDto>> EditAssignmentAsync(EditAssignmentRequestDto request, Guid assignmentId)
         {
-            throw new NotImplementedException();
+            var validationResult = await _editAssignmentValidator.ValidateAsync(request);
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                return new Response<AssignmentDto>
+                {
+                    Succeeded = false,
+                    Errors = errors
+                };
+            }
+
+            var existingAssignment = await _assignmentRepositoriesAsync.GetByIdAsync(assignmentId);
+            if (existingAssignment == null)
+            {
+                return new Response<AssignmentDto> { Succeeded = false, Message = "Assignment not found." };
+            }
+            existingAssignment.AssetId = request.AssetId;
+            existingAssignment.AssignedIdTo = request.AssignedIdTo;
+            existingAssignment.AssignedIdBy = request.AssignedIdBy;
+            existingAssignment.AssignedDate = request.AssignedDate;
+            existingAssignment.Note = request.Note;
+
+            await _assignmentRepository.UpdateAsync(existingAssignment);
+            
+            var updateAssignment = _mapper.Map<AssignmentDto>(existingAssignment);
+            return new Response<AssignmentDto> { Succeeded = true, Message = "Update assignment successfully." };   
         }
 
         public async Task<PagedResponse<List<AssignmentResponseDto>>> GetAllAssignmentsAsync(PaginationFilter paginationFilter, string? search, EnumAssignmentState? assignmentState, DateTime? assignedDate, EnumLocation location, string? orderBy, bool? isDescending, string? route)

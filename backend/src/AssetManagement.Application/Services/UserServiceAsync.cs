@@ -24,12 +24,14 @@ namespace AssetManagement.Application.Services
         private readonly IValidator<EditUserRequestDto> _editUserValidator;
         private readonly PasswordHasher<User> _passwordHasher;
         private readonly IUriService _uriService;
+        private readonly IAssignmentRepositoriesAsync _assignmentRepositoriesAsync;
 
         public UserServiceAsync(IUserRepositoriesAsync userRepositoriesAsync,
             IMapper mapper,
             IValidator<AddUserRequestDto> addUserValidator,
             IValidator<EditUserRequestDto> editUserValidator,
-            IUriService uriService
+            IUriService uriService,
+             IAssignmentRepositoriesAsync assignmentRepositoriesAsync
         )
         {
             _mapper = mapper;
@@ -38,6 +40,7 @@ namespace AssetManagement.Application.Services
             _editUserValidator = editUserValidator;
             _passwordHasher = new PasswordHasher<User>();
             _uriService = uriService;
+            _assignmentRepositoriesAsync = assignmentRepositoriesAsync;
         }
 
         public async Task<Response<UserDto>> AddUserAsync(AddUserRequestDto request)
@@ -161,14 +164,11 @@ namespace AssetManagement.Application.Services
                 }
                 //Check user have assignment
 
-                var assignments = await _assignmentRepositoriesAsync.GetAssignmentsByUserId(user.Id);
+                var assignments = await _assignmentRepositoriesAsync.FilterAssignmentOfUserAsync(user.Id, null, null, null);
                 if (assignments.Any())
                 {
                     return new Response<UserDto> { Succeeded = false, Message = "There are valid assignments belonging to this user. Please close all assignments before disabling user." };
                 }
-
-                var userAssigments = _assignmentRepositories.GetAssignmentsByUserId(userId);
-                
 
                 var disableUser = await _userRepositoriesAsync.DeleteAsync(user.Id);
                 if (disableUser == null)
@@ -182,6 +182,7 @@ namespace AssetManagement.Application.Services
                 return new Response<UserDto> { Succeeded = false, Errors = { ex.Message } };
             }
         }
+
 
         public async Task<Response<UserDto>> ResetPasswordAsync(Guid userId)
         {

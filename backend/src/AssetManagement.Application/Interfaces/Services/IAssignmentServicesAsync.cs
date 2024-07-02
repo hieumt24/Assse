@@ -15,7 +15,7 @@ namespace AssetManagement.Application.Interfaces.Services
 
         Task<Response<AssignmentResponseDto>> GetAssignmentByIdAsync(Guid assignmentId);
 
-        Task<Response<AssignmentDto>> EditAssignmentAsync(EditAssignmentRequestDto request);
+        Task<Response<AssignmentDto>> EditAssignmentAsync(EditAssignmentRequestDto request, Guid assignmentId);
 
         Task<Response<AssignmentDto>> DeleteAssignmentAsync(Guid assignmentId);
 

@@ -1,4 +1,5 @@
 ﻿using AssetManagement.Application.Interfaces.Services;
+using AssetManagement.Application.Models.DTOs.Assignments.Reques;
 using AssetManagement.Application.Models.DTOs.Assignments.Request;
 using AssetManagement.Application.Models.DTOs.Assignments.Requests;
 using AssetManagement.Application.Models.Filters;
@@ -55,7 +56,7 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GerAssignmentById(Guid assignmentId)
+        public async Task<IActionResult> GetAssignmentById(Guid assignmentId)
         {
             var result = await _assignmentServicesAsync.GetAssignmentByIdAsync(assignmentId);
             if (result.Succeeded)
@@ -69,6 +70,18 @@ namespace AssetManagement.API.Controllers
         public async Task<IActionResult> ChangeAssignmentStatus(ChangeStateAssignmentDto request)
         {
             var result = await _assignmentServicesAsync.ChangeAssignmentStateAsync(request);
+            if (result.Succeeded)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpPut]
+        [Route("edit-assignment/{assignmentId:guid}")]
+        public async Task<IActionResult> EditAssignment([FromBody] EditAssignmentRequestDto request, Guid assignmentId)
+        {
+            var result = await _assignmentServicesAsync.EditAssignmentAsync(request, assignmentId);
             if (result.Succeeded)
             {
                 return Ok(result);
