@@ -7,8 +7,8 @@ import { IoCloseCircleOutline, IoReload } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 
 interface AssignmentColumnsProps {
-  handleOpenCreateRequest: (id: string) => void;
-  handleOpenDelete: (id: string) => void;
+  handleOpenCreateRequest?: (id: string) => void;
+  handleOpenDelete?: (id: string) => void;
   setOrderBy: React.Dispatch<React.SetStateAction<string>>;
   setIsDescending: React.Dispatch<React.SetStateAction<boolean>>;
   isDescending: boolean;
@@ -110,7 +110,7 @@ export const assignmentColumns = ({
             className="text-red-500 hover:text-red-700"
             onClick={(e) => {
               e.stopPropagation();
-              handleOpenDelete(assignment.id!);
+              handleOpenDelete && handleOpenDelete(assignment.id!);
             }}
             disabled={assignment.state === 1}
           >
@@ -127,7 +127,7 @@ export const assignmentColumns = ({
             className="text-green-500 hover:text-green-700"
             onClick={(e) => {
               e.stopPropagation();
-              handleOpenCreateRequest(assignment.id!);
+              handleOpenCreateRequest && handleOpenCreateRequest(assignment.id!);
             }}
             disabled={assignment.state !== 1}
           >

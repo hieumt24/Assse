@@ -27,7 +27,7 @@ export const getAllAssignmentService = (req: GetAssignemntReq) => {
     .catch((err) => {
       return {
         success: false,
-        message: "Failed to fetch assignments.",
+        message: err.response?.data.message || "Failed to fetch assignments.",
         data: err,
       };
     });
@@ -57,7 +57,7 @@ export const getAssignmentByUserAssignedService = (
     .catch((err) => {
       return {
         success: false,
-        message: "Failed to fetch assignments.",
+        message: err.response?.data.message || "Failed to fetch assignments.",
         data: err,
       };
     });
@@ -76,7 +76,7 @@ export const getAssignmentByIdService = (id: string) => {
     .catch((err) => {
       return {
         success: false,
-        message: "Failed to fetch assignment.",
+        message: err.response?.data.message || "Failed to fetch assignment.",
         data: err,
       };
     });
@@ -95,7 +95,7 @@ export const createAssignmentService = (req: CreateAssignmentReq) => {
     .catch((err) => {
       return {
         success: false,
-        message: "Failed to create assignment.",
+        message: err.response?.data.message || "Failed to create assignment.",
         data: err,
       };
     });
@@ -114,7 +114,7 @@ export const updateAssignmentStateService = (req: UpdateAssignmentStateReq) => {
     .catch((err) => {
       return {
         success: false,
-        message: "Failed to update assignment state.",
+        message: err.response?.data.message || "Failed to update assignment state.",
         data: err,
       };
     });
@@ -133,7 +133,7 @@ export const deleteAssignmentService = (id: string) => {
     .catch((err) => {
       return {
         success: false,
-        message: "Failed to delete assignment state.",
+        message: err.response?.data.message || "Failed to delete assignment state.",
         data: err,
       };
     });

@@ -12,7 +12,11 @@ export const createUserService = (req: CreateUserReq) => {
       };
     })
     .catch((err) => {
-      return { success: false, message: "Failed to create user.", data: err };
+      return {
+        success: false,
+        message: err.response?.data.message || "Failed to create user.",
+        data: err,
+      };
     });
 };
 
@@ -31,7 +35,11 @@ export const getAllUserService = (req: GetUserReq) => {
       };
     })
     .catch((err) => {
-      return { success: false, message: "Failed to fetch users.", data: err };
+      return {
+        success: false,
+        message: err.response?.data.message || "Failed to fetch users.",
+        data: err,
+      };
     });
 };
 
@@ -46,7 +54,11 @@ export const getUserByIdService = (id: string) => {
       };
     })
     .catch((err) => {
-      return { success: false, message: "Failed to fetch user.", data: err };
+      return {
+        success: false,
+        message: err.response?.data.message || "Failed to fetch user.",
+        data: err,
+      };
     });
 };
 
@@ -61,7 +73,11 @@ export const getUserByStaffCodeService = (staffCode: string | undefined) => {
       };
     })
     .catch((err) => {
-      return { success: false, message: "Failed to fetch user.", data: err };
+      return {
+        success: false,
+        message: err.response?.data.message || "Failed to fetch user.",
+        data: err,
+      };
     });
 };
 
@@ -76,7 +92,11 @@ export const updateUserService = (req: UpdateUserReq) => {
       };
     })
     .catch((err) => {
-      return { success: false, message: "Failed to update user.", data: err };
+      return {
+        success: false,
+        message: err.response?.data.message || "Failed to update user.",
+        data: err,
+      };
     });
 };
 
@@ -91,20 +111,29 @@ export const disableUserService = (id: string) => {
       };
     })
     .catch((err) => {
-      return { success: false, message: err.response.data.message, data: err };
+      return {
+        success: false,
+        message: err.response.data.message || "Failed to disable user.",
+        data: err,
+      };
     });
 };
 
-export const resetPasswordService = (id:string) => {
-  return axiosInstance.post(`/users/resetPassword/${id}`)
-  .then((res) => {
-    return {
-      success: true,
-      message: "User disabled successfully!",
-      data: res.data,
-    };
-  })
-  .catch((err) => {
-    return { success: false, message: err.response.data.message, data: err };
-  });
-}
+export const resetPasswordService = (id: string) => {
+  return axiosInstance
+    .post(`/users/resetPassword/${id}`)
+    .then((res) => {
+      return {
+        success: true,
+        message: "Password reset successfully!",
+        data: res.data,
+      };
+    })
+    .catch((err) => {
+      return {
+        success: false,
+        message: err.response.data.message || "Failed to reset password.",
+        data: err,
+      };
+    });
+};

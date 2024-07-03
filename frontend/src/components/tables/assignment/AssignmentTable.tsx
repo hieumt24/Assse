@@ -35,6 +35,8 @@ interface AssignmentTableProps<TData, TValue> {
   >;
   pageCount?: number;
   totalRecords: number;
+  withIndex?: boolean;
+  onRowClick?: any;
 }
 
 export function AssignmentTable<TData, TValue>({
@@ -44,6 +46,8 @@ export function AssignmentTable<TData, TValue>({
   onPaginationChange,
   pageCount,
   totalRecords,
+  withIndex=true,
+  onRowClick
 }: Readonly<AssignmentTableProps<TData, TValue>>) {
   const table = useReactTable({
     data,
@@ -92,7 +96,7 @@ export function AssignmentTable<TData, TValue>({
           <TableHeader className="bg-zinc-200 font-bold">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                <TableHead className="text-center">No.</TableHead>
+                {withIndex && <TableHead className="text-center">No.</TableHead>}
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
@@ -115,9 +119,9 @@ export function AssignmentTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className="hover:cursor-pointer"
-                  onClick={async () => handleOpenDetails(row.getValue("id"))}
+                  onClick={onRowClick ? onRowClick() : async () => handleOpenDetails(row.getValue("id"))}
                 >
-                  <TableCell className="text-center">{index + 1}</TableCell>
+                  {withIndex && <TableCell className="text-center">{index + 1}</TableCell>}
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
