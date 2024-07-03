@@ -42,7 +42,7 @@ export const ManageAssignment = () => {
     fetchAssignments,
   } = useAssignments(
     pagination,
-    search,
+    search.trim(),
     orderBy,
     user.location,
     isDescending,
@@ -97,7 +97,7 @@ export const ManageAssignment = () => {
 
   const navigate = useNavigate();
   return (
-    <div className="m-16 flex flex-grow flex-col gap-8">
+    <div className="m-16 flex flex-shrink-0 flex-col gap-8">
       <div className="flex items-center justify-between">
         <p className="text-2xl font-bold text-red-600">Assignment List</p>
         <Button
@@ -116,7 +116,7 @@ export const ManageAssignment = () => {
               pagination.pageIndex = 1;
             }}
           >
-            <SelectTrigger className="w-24">
+            <SelectTrigger className="min-w-24">
               <SelectValue placeholder="State" />
             </SelectTrigger>
             <SelectContent>
@@ -124,6 +124,7 @@ export const ManageAssignment = () => {
               <SelectItem value="1">Accepted</SelectItem>
               <SelectItem value="2">Waiting for acceptance</SelectItem>
               <SelectItem value="3">Declined</SelectItem>
+              <SelectItem value="4">Waiting for returning</SelectItem>
             </SelectContent>
           </Select>
           <div className="flex items-center">
@@ -189,8 +190,8 @@ export const ManageAssignment = () => {
           />
           <GenericDialog
             title="Are you sure?"
-            desc="Do you want to delete this assignment"
-            confirmText="Yes"
+            desc="Do you want to delete this assignment?"
+            confirmText="Delete"
             onConfirm={handleDelete}
             open={openDelete}
             setOpen={setOpenDelete}

@@ -77,7 +77,7 @@ export const DetailInformation = <T extends UserRes | AssetRes>({
         <h2 className="bg-red-600 p-6 text-xl font-semibold text-white">
           Detailed {variant} Information
         </h2>
-        <div className="p-6">
+        <div className="px-6 py-4">
           <table className="w-full">
             <tbody>
               {Object.entries(info)
@@ -87,10 +87,10 @@ export const DetailInformation = <T extends UserRes | AssetRes>({
                     key={key}
                     className="border-b border-gray-200 last:border-b-0"
                   >
-                    <td className="py-3 pr-4 font-medium text-gray-600">
+                    <td className="py-2 pr-4 font-medium text-gray-600 w-[160px]">
                       {formatKey(key)}
                     </td>
-                    <td className="py-3 text-gray-800">
+                    <td className="py-2 text-gray-800">
                       {formatValue(key, value)}
                     </td>
                   </tr>

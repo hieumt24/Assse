@@ -34,7 +34,7 @@ export const ManageUser = () => {
     useUsers(
       pagination,
       user.location,
-      search,
+      search.trim(),
       roleType,
       orderBy,
       isDescending,
