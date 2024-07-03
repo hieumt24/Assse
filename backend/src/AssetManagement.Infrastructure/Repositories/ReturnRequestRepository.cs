@@ -33,11 +33,16 @@ namespace AssetManagement.Infrastructure.Repositories
             {
                 queryByAdmin = query.Where(x => x.ReturnState == returnState);
             }
-            if (returnedDateFrom.HasValue && returnedDateTo.HasValue) 
+            if (returnedDateFrom.HasValue && returnedDateTo.HasValue)
             {
-                queryByAdmin = query.Where(x => x.ReturnedDate.HasValue &&  EF.Functions.DateDiffDay(x.ReturnedDate.Value, returnedDate.Value) == 0);
+                var fromDate = returnedDateFrom.Value.Date;
+                var toDate = returnedDateTo.Value.Date;
+
+                queryByAdmin = queryByAdmin.Where(x => x.ReturnedDate.HasValue &&
+                                                       x.ReturnedDate.Value.Date >= fromDate &&
+                                                       x.ReturnedDate.Value.Date <= toDate);
             }
-            
+
 
             return queryByAdmin;
         }
@@ -47,7 +52,7 @@ namespace AssetManagement.Infrastructure.Repositories
             var returnRequestIncludeWithAssignment = _dbContext.ReturnRequests.Include(x => x.Assignment);
             var returnRequest = await returnRequestIncludeWithAssignment.FirstOrDefaultAsync(x => x.Id == returnRequestId);
             return returnRequest;
-            
+
         }
     }
 }

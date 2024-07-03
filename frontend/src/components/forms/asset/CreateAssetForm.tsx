@@ -157,7 +157,6 @@ export const CreateAssetForm: React.FC = () => {
                     field.onChange(cleanedValue);
                     field.onBlur();
                   }}
-                  autoFocus
                 />
               </FormControl>
               <FormMessage>{form.formState.errors.name?.message}</FormMessage>
