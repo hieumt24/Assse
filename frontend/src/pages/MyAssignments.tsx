@@ -134,7 +134,7 @@ export const MyAssignment = () => {
             <SelectContent>
               <SelectItem value="0">All States</SelectItem>
               <SelectItem value="1">Accepted</SelectItem>
-              <SelectItem value="2">Waiting</SelectItem>
+              <SelectItem value="2">Waiting for acceptance</SelectItem>
               <SelectItem value="3">Declined</SelectItem>
             </SelectContent>
           </Select>
