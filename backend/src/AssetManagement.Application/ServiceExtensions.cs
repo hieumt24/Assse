@@ -41,8 +41,6 @@ namespace AssetManagement.Application
             service.AddScoped<IValidator<AddAssignmentRequestDto>, AddAssignmentRequestValidation>();
             service.AddScoped<IValidator<EditAssignmentRequestDto>, EditAssignmentRequestValidation>();
 
-
-
             //return request
             service.AddScoped<IReturnRequestServiceAsync, ReturnRequestServiceAsync>();
             service.AddScoped<IValidator<AddReturnRequestDto>, AddReturnRequestValidator>();
