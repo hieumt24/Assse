@@ -30,13 +30,15 @@ export const ManageReturningRequest = () => {
   const [orderBy, setOrderBy] = useState("");
   const [isDescending, setIsDescending] = useState(true);
   const [requestState, setRequestState] = useState(0);
-  const [returnedDate, setReturnedDate] = useState<Date | null>(null);
+  const [returnedDateFrom, setReturnedDateFrom] = useState<Date | null>(null);
+  const [returnedDateTo, setReturnedDateTo] = useState<Date | null>(null);
   const { requests, loading, error, pageCount, fetchRequests, totalRecords } =
     useReturningRequests(
       pagination,
       user.location,
       requestState,
-      returnedDate ? format(returnedDate, "yyyy-MM-dd") : "",
+      returnedDateFrom ? format(returnedDateFrom, "yyyy-MM-dd") : "",
+      returnedDateTo ? format(returnedDateTo, "yyyy-MM-dd") : "",
       search,
       orderBy,
       isDescending,
@@ -107,7 +109,28 @@ export const ManageReturningRequest = () => {
               {/* <SelectItem value="3">Cancelled</SelectItem> */}
             </SelectContent>
           </Select>
-          <DatePicker setValue={setReturnedDate} placeholder="Returned Date" />
+          <div className="flex items-center">
+            From:&nbsp;
+            <DatePicker
+              setValue={setReturnedDateFrom}
+              placeholder="Returned Date"
+              onChange={() => {
+                pagination.pageIndex = 1;
+              }}
+              className="w-[150px]"
+            />
+          </div>
+          <div className="flex items-center">
+            To:&nbsp;
+            <DatePicker
+              setValue={setReturnedDateTo}
+              placeholder="Returned Date"
+              onChange={() => {
+                pagination.pageIndex = 1;
+              }}
+              className="w-[150px]"
+            />
+          </div>
         </div>
 
         <div className="flex justify-between gap-6">

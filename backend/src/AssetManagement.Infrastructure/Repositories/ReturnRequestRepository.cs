@@ -4,6 +4,7 @@ using AssetManagement.Domain.Enums;
 using AssetManagement.Infrastructure.Common;
 using AssetManagement.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AssetManagement.Infrastructure.Repositories
 {
@@ -13,7 +14,7 @@ namespace AssetManagement.Infrastructure.Repositories
         {
         }
 
-        public async Task<IQueryable<ReturnRequest>> FilterReturnRequestAsync(EnumLocation adminLocation, string? search, EnumReturnRequestState? returnState, DateTime? returnedDate)
+        public async Task<IQueryable<ReturnRequest>> FilterReturnRequestAsync(EnumLocation adminLocation, string? search, EnumReturnRequestState? returnState, DateTime? returnedDateFrom, DateTime? returnedDateTo)
         {
             var query = _dbContext.ReturnRequests
                 .Include(x => x.AcceptedUser)
@@ -32,10 +33,16 @@ namespace AssetManagement.Infrastructure.Repositories
             {
                 queryByAdmin = query.Where(x => x.ReturnState == returnState);
             }
-            if (returnedDate.HasValue)
+            if (returnedDateFrom.HasValue && returnedDateTo.HasValue)
             {
-                queryByAdmin = query.Where(x => x.ReturnedDate.HasValue &&  EF.Functions.DateDiffDay(x.ReturnedDate.Value, returnedDate.Value) == 0);
+                var fromDate = returnedDateFrom.Value.Date;
+                var toDate = returnedDateTo.Value.Date;
+
+                queryByAdmin = queryByAdmin.Where(x => x.ReturnedDate.HasValue &&
+                                                       x.ReturnedDate.Value.Date >= fromDate &&
+                                                       x.ReturnedDate.Value.Date <= toDate);
             }
+
 
             return queryByAdmin;
         }
@@ -45,7 +52,7 @@ namespace AssetManagement.Infrastructure.Repositories
             var returnRequestIncludeWithAssignment = _dbContext.ReturnRequests.Include(x => x.Assignment);
             var returnRequest = await returnRequestIncludeWithAssignment.FirstOrDefaultAsync(x => x.Id == returnRequestId);
             return returnRequest;
-            
+
         }
     }
 }

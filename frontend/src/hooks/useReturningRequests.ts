@@ -9,7 +9,8 @@ export const useReturningRequests = (
   },
   location?: number,
   returnState?: number,
-  returnedDate?: string,
+  returnedDateFrom?: string,
+  returnedDateTo?: string,
   search?: string,
   orderBy?: string,
   isDescending?: boolean,
@@ -31,7 +32,8 @@ export const useReturningRequests = (
         orderBy: orderByLocalStorage ?? orderBy,
         isDescending,
         returnState,
-        returnedDate,
+        returnedDateFrom,
+        returnedDateTo,
         location,
       });
 
@@ -48,7 +50,7 @@ export const useReturningRequests = (
 
   useEffect(() => {
     fetchRequests();
-  }, [pagination, search, returnState, returnedDate, orderBy, isDescending]);
+  }, [pagination, search, returnState, returnedDateFrom, returnedDateTo, orderBy, isDescending]);
 
   return {
     requests,
