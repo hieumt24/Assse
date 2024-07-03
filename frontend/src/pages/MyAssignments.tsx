@@ -128,14 +128,14 @@ export const MyAssignment = () => {
               setAssignmentState(Number(value));
             }}
           >
-            <SelectTrigger className="w-24">
+            <SelectTrigger className="min-w-24">
               <SelectValue placeholder="State" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="0">All States</SelectItem>
               <SelectItem value="1">Accepted</SelectItem>
               <SelectItem value="2">Waiting for acceptance</SelectItem>
-              <SelectItem value="3">Declined</SelectItem>
+              <SelectItem value="4">Waiting for returning</SelectItem>
             </SelectContent>
           </Select>
           <div className="flex items-center">
