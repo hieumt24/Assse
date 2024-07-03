@@ -1,11 +1,12 @@
 import axiosInstance from "@/api/axiosInstance";
 import {
   CreateAssignmentReq,
-  GetAssignemntByUserAssignedReq,
-  GetAssignemntReq,
+  GetAssignmentByUserAssignedReq,
+  GetAssignmentReq,
   UpdateAssignmentStateReq,
+  EditAssignmentReq,
 } from "@/models";
-export const getAllAssignmentService = (req: GetAssignemntReq) => {
+export const getAllAssignmentService = (req: GetAssignmentReq) => {
   if (req.assignmentState === 0) {
     delete req.assignmentState;
   }
@@ -33,7 +34,7 @@ export const getAllAssignmentService = (req: GetAssignemntReq) => {
 };
 
 export const getAssignmentByUserAssignedService = (
-  req: GetAssignemntByUserAssignedReq,
+  req: GetAssignmentByUserAssignedReq,
 ) => {
   if (req.assignmentState === 0) {
     delete req.assignmentState;
@@ -131,6 +132,25 @@ export const deleteAssignmentService = (id: string) => {
       return {
         success: false,
         message: "Failed to delete assignment state.",
+        data: err,
+      };
+    });
+};
+
+export const editAssignmentService = (id: string, req: EditAssignmentReq) => {
+  return axiosInstance
+    .put(`/assignments/edit-assignment/${id}`, req)
+    .then((res) => {
+      return {
+        success: true,
+        message: "Assignment edited successfully!",
+        data: res.data,
+      };
+    })
+    .catch((err) => {
+      return {
+        success: false,
+        message: "Failed to edit assignment.",
         data: err,
       };
     });

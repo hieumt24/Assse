@@ -69,7 +69,7 @@ export interface AssignmentRes {
   location?: number;
   state?: number;
 }
-export interface GetAssignemntReq {
+export interface GetAssignmentReq {
   pagination: {
     pageSize: number;
     pageIndex: number;
@@ -82,7 +82,7 @@ export interface GetAssignemntReq {
   isDescending?: boolean;
 }
 
-export interface GetAssignemntByUserAssignedReq {
+export interface GetAssignmentByUserAssignedReq {
   pagination: {
     pageSize: number;
     pageIndex: number;
@@ -150,7 +150,7 @@ export interface UpdateAssetReq {
 export interface AssetRes {
   id?: string;
   assetCode?: string;
-  assestName?: string;
+  assetName?: string;
   specification?: string;
   installedDate?: Date;
   state?: number;
@@ -166,6 +166,14 @@ export interface CreateAssignmentReq {
   note: string;
   location: number;
   state: number;
+}
+
+export interface EditAssignmentReq {
+  assignedIdTo: string;
+  assignedIdBy: string;
+  assetId: string;
+  assignedDate: string;
+  note: string;
 }
 
 export interface UpdateAssignmentStateReq {

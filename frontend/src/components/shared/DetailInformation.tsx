@@ -33,7 +33,6 @@ export const DetailInformation = <T extends UserRes | AssetRes>({
     return formatters[key] ? formatters[key](value) : String(value);
   };
 
-
   const formatDate = (value: FormattableValue) => format(value!, "MM/dd/yyyy");
 
   const formatGender = (value: FormattableValue) =>
@@ -60,12 +59,15 @@ export const DetailInformation = <T extends UserRes | AssetRes>({
 
   const excludedKeys = [
     "id",
+    "assetId",
+    "assignedToId",
+    "assignedById",
     "createdOn",
     "lastModifiedOn",
     "lastModifiedBy",
     "createdBy",
     "categoryId",
-    "isDeleted"
+    "isDeleted",
   ];
 
   const formatKey = (key: string) =>

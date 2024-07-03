@@ -6,7 +6,7 @@ import {
   UpdateAssetReq,
 } from "@/models";
 
-export const getAllAssestService = (req: GetAssetReq) => {
+export const getAllAssetService = (req: GetAssetReq) => {
   if (req.categoryId === "all") {
     delete req.categoryId;
   }

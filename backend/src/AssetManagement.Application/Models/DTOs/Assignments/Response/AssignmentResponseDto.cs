@@ -7,6 +7,10 @@ namespace AssetManagement.Application.Models.DTOs.Assignments.Response
     public class AssignmentResponseDto
     {
         public Guid Id { get; set; }
+
+        public Guid AssetId { get; set; }
+        public Guid AssignedToId { get; set; }
+        public Guid AssignedById { get; set; }
         public string? AssetCode { get; set; }
         public string? AssetName { get; set; }
         public string? AssignedTo { get; set; }

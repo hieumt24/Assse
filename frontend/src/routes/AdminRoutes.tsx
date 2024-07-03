@@ -1,3 +1,4 @@
+import { EditAssignmentForm } from "@/components";
 import { CreateAsset, CreateUser, ManageUser } from "@/pages";
 import { MyAssignment } from "@/pages/MyAssignments";
 import { EditAsset } from "@/pages/admin/manage/asset/EditAsset";
@@ -49,6 +50,10 @@ export const AdminRoutes = () => {
     {
       path: "/assignments/create",
       element: <CreateAssignment />,
+    },
+    {
+      path: "/assignments/edit/:assignmentId",
+      element: <EditAssignmentForm />,
     },
     {
       path: "/returning-request",
