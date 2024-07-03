@@ -122,7 +122,7 @@ export const ManageAssignment = () => {
             <SelectContent>
               <SelectItem value="0">All states</SelectItem>
               <SelectItem value="1">Accepted</SelectItem>
-              <SelectItem value="2">Waiting</SelectItem>
+              <SelectItem value="2">Waiting for acceptance</SelectItem>
               <SelectItem value="3">Declined</SelectItem>
             </SelectContent>
           </Select>
