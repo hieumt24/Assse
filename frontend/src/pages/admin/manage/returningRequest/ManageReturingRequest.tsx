@@ -39,7 +39,7 @@ export const ManageReturningRequest = () => {
       requestState,
       returnedDateFrom ? format(returnedDateFrom, "yyyy-MM-dd") : "",
       returnedDateTo ? format(returnedDateTo, "yyyy-MM-dd") : "",
-      search,
+      search.trim(),
       orderBy,
       isDescending,
     );

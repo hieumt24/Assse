@@ -51,7 +51,7 @@ export const ManageAsset = () => {
     useAssets(
       pagination,
       user.location,
-      search,
+      search.trim(),
       orderBy,
       isDescending,
       assetStateType,

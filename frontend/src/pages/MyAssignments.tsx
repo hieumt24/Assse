@@ -38,7 +38,7 @@ export const MyAssignment = () => {
   } = useMyAssignments(
     pagination,
     user.id,
-    search,
+    search.trim(),
     orderBy,
     isDescending,
     assignmentState,
@@ -201,7 +201,7 @@ export const MyAssignment = () => {
           <GenericDialog
             title="Are you sure?"
             desc="Do you want to decline this assignment"
-            confirmText="Yes"
+            confirmText="Decline"
             onConfirm={handleDecline}
             open={openDecline}
             setOpen={setOpenDecline}
