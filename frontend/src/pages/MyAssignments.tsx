@@ -130,7 +130,7 @@ export const MyAssignment = () => {
               <SelectValue placeholder="State" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="0">All</SelectItem>
+              <SelectItem value="0">All States</SelectItem>
               <SelectItem value="1">Accepted</SelectItem>
               <SelectItem value="2">Waiting</SelectItem>
               <SelectItem value="3">Declined</SelectItem>

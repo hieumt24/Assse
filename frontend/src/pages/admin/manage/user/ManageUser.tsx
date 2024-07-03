@@ -81,7 +81,7 @@ export const ManageUser = () => {
             <SelectValue placeholder="Role" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="0">All</SelectItem>
+            <SelectItem value="0">All roles</SelectItem>
             <SelectItem value="1">Admin</SelectItem>
             <SelectItem value="2">Staff</SelectItem>
           </SelectContent>
