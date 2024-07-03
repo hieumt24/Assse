@@ -1,3 +1,4 @@
+using AssetManagement.API.Middlewares;
 using AssetManagement.Application.Interfaces;
 using AssetManagement.Application.Services;
 using AssetManagement.Domain.Common.Settings;
@@ -22,6 +23,8 @@ namespace AssetManagement.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddHttpContextAccessor();
+            builder.Services.AddScoped<ErrorHandlingMiddleware>();
+            builder.Services.AddTransient<ResponseTimeMiddleware>();
 
             //Add Connection To DataBase
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -77,7 +80,10 @@ namespace AssetManagement.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.UseMiddleware<ErrorHandlingMiddleware>();
+            app.UseMiddleware<RequestResponseLoggingMiddleware>();
+            app.UseMiddleware<ResponseTimeMiddleware>();
+            app.UseMiddleware<CustomAuthenticationMiddleware>();
             app.UseCors("AllowAllOrigins");
 
             app.UseHttpsRedirection();
