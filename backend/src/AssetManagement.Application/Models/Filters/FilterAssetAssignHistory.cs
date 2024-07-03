@@ -4,10 +4,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AssetManagement.Application.Models.Filters
 {
-    public class FilterAssignmentForUser
+    public class FilterAssetAssignHistory
     {
+        
         public PaginationFilter pagination { get; set; }
-        public Guid userId { get; set; }
+        public Guid assetId { get; set; }  
         public string? search { get; set; }
         public EnumAssignmentState? assignmentState { get; set; }
 
@@ -19,5 +20,6 @@ namespace AssetManagement.Application.Models.Filters
 
         public string? orderBy { get; set; }
         public bool? isDescending { get; set; } = false;
+        
     }
 }

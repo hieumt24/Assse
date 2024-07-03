@@ -11,7 +11,10 @@ namespace AssetManagement.Application.Models.Filters
         public EnumAssignmentState? assignmentState { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime? assignedDate { get; set; }
+        public DateTime? dateFrom { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime? dateTo { get; set; }
 
         public EnumLocation adminLocation { get; set; }
         public string? orderBy { get; set; }

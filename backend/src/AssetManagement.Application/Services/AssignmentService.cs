@@ -129,8 +129,16 @@ namespace AssetManagement.Application.Services
             return new Response<AssignmentDto> { Succeeded = true, Message = "Update assignment successfully." };
         }
 
-        public async Task<PagedResponse<List<AssignmentResponseDto>>> GetAllAssignmentsAsync(PaginationFilter paginationFilter, string? search, EnumAssignmentState? assignmentState, DateTime? assignedDate, EnumLocation location, string? orderBy, bool? isDescending, string? route)
+        public async Task<PagedResponse<List<AssignmentResponseDto>>> GetAllAssignmentsAsync(PaginationFilter paginationFilter, string? search, EnumAssignmentState? assignmentState, DateTime? dateFrom, DateTime? dateTo, EnumLocation location, string? orderBy, bool? isDescending, string? route)
         {
+            if (dateFrom > dateTo)
+            {
+                return new PagedResponse<List<AssignmentResponseDto>>
+                {
+                    Succeeded = false,
+                    Message = "Date from must be before date to"
+                };
+            }
             try
             {
                 if (paginationFilter == null)
@@ -138,7 +146,7 @@ namespace AssetManagement.Application.Services
                     paginationFilter = new PaginationFilter();
                 }
 
-                var filterAsset = await _assignmentRepositoriesAsync.FilterAssignmentAsync(location, search, assignmentState, assignedDate);
+                var filterAsset = await _assignmentRepositoriesAsync.FilterAssignmentAsync(location, search, assignmentState, dateFrom, dateTo);
 
                 var totalRecords = filterAsset.Count();
 
@@ -169,8 +177,17 @@ namespace AssetManagement.Application.Services
             return new Response<AssignmentResponseDto> { Succeeded = true, Data = assignmentDto };
         }
 
-        public async Task<PagedResponse<List<AssignmentResponseDto>>> GetAssignmentsOfUser(PaginationFilter paginationFilter, Guid userId, string? search, EnumAssignmentState? assignmentState, DateTime? assignedDate, string? orderBy, bool? isDescending, string? route)
+        public async Task<PagedResponse<List<AssignmentResponseDto>>> GetAssignmentsOfUser(PaginationFilter paginationFilter, Guid userId, string? search, EnumAssignmentState? assignmentState, DateTime? dateFrom, DateTime? dateTo, string? orderBy, bool? isDescending, string? route)
         {
+            if (dateFrom > dateTo)
+            {
+                return new PagedResponse<List<AssignmentResponseDto>>
+                {
+                    Succeeded = false,
+                    Message = "Date from must be before date to"
+                };
+            }
+
             try
             {
                 if (paginationFilter == null)
@@ -178,7 +195,7 @@ namespace AssetManagement.Application.Services
                     paginationFilter = new PaginationFilter();
                 }
 
-                var filterAsset = await _assignmentRepositoriesAsync.FilterAssignmentOfUserAsync(userId, search, assignmentState, assignedDate);
+                var filterAsset = await _assignmentRepositoriesAsync.FilterAssignmentOfUserAsync(userId, search, assignmentState, dateFrom, dateTo);
 
                 var totalRecords = filterAsset.Count();
 
@@ -197,6 +214,48 @@ namespace AssetManagement.Application.Services
                 return new PagedResponse<List<AssignmentResponseDto>> { Succeeded = false, Errors = { ex.Message } };
             }
         }
+
+
+
+        public async Task<PagedResponse<List<AssignmentResponseDto>>> GetAssetAssign(PaginationFilter paginationFilter, Guid assetId, string? search, EnumAssignmentState? assignmentState, DateTime? dateFrom, DateTime? dateTo, string? orderBy, bool? isDescending, string? route)
+        {
+            if (dateFrom > dateTo)
+            {
+                return new PagedResponse<List<AssignmentResponseDto>>
+                {
+                    Succeeded = false,
+                    Message = "Date from must be before date to"
+                };
+            }
+
+            try
+            {
+                if (paginationFilter == null)
+                {
+                    paginationFilter = new PaginationFilter();
+                }
+
+                var filterAsset = await _assignmentRepositoriesAsync.FilterAssignmentByAssetIdAsync(assetId, search, assignmentState, dateFrom, dateTo);
+
+                var totalRecords = filterAsset.Count();
+
+                var specAssignment = AssignmentSpecificationHelper.AssignmentSpecificationWithAsset(paginationFilter, orderBy, isDescending);
+
+                var assignments = await SpecificationEvaluator<Assignment>.GetQuery(filterAsset, specAssignment).ToListAsync();
+
+                var responseAssignmentDtos = _mapper.Map<List<AssignmentResponseDto>>(assignments);
+
+                var pagedResponse = PaginationHelper.CreatePagedReponse(responseAssignmentDtos, paginationFilter, totalRecords, _uriService, route);
+
+                return pagedResponse;
+            }
+            catch (Exception ex)
+            {
+                return new PagedResponse<List<AssignmentResponseDto>> { Succeeded = false, Errors = { ex.Message } };
+            }
+        }
+
+
 
         public async Task<Response<AssignmentDto>> ChangeAssignmentStateAsync(ChangeStateAssignmentDto request)
         {
@@ -222,7 +281,9 @@ namespace AssetManagement.Application.Services
 
             assignment.State = request.NewState;
 
-            var assetResponse = await _assetRepository.GetByIdAsync(assignment.AssetId);
+            if (request.NewState == EnumAssignmentState.Accepted)
+            {
+                var assetResponse = await _assetRepository.GetByIdAsync(assignment.AssetId);
 
             if (assetResponse == null)
             {
@@ -233,8 +294,6 @@ namespace AssetManagement.Application.Services
                 };
             }
 
-            if (request.NewState == EnumAssignmentState.Declined)
-            {
                 assetResponse.State = AssetStateType.Available;
 
                 try

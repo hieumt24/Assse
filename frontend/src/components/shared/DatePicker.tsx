@@ -14,10 +14,12 @@ interface DatePickerProps {
   formatDate?: string;
   setValue: Dispatch<SetStateAction<Date | null>>;
   placeholder?: string;
+  onChange?: any;
+  className?: string;
 }
 
 export function DatePicker(props: Readonly<DatePickerProps>) {
-  const { formatDate, setValue, placeholder } = props;
+  const { formatDate, setValue, placeholder, onChange, className } = props;
   const [date, setDate] = useState<Date>();
 
   const handleDateSelect = (selectedDate: Date | undefined) => {
@@ -30,12 +32,14 @@ export function DatePicker(props: Readonly<DatePickerProps>) {
     } else {
       setValue(null);
     }
+    onChange();
   };
 
   const handleClear = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation(); // Prevent the Popover from opening
     setDate(undefined);
     setValue(null);
+    onChange();
   };
 
   return (
@@ -46,6 +50,7 @@ export function DatePicker(props: Readonly<DatePickerProps>) {
           className={cn(
             "w-48 items-center justify-between font-normal",
             !date && "text-muted-foreground",
+            className
           )}
         >
           {date ? (
