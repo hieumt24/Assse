@@ -150,6 +150,7 @@ export const ManageReturningRequest = () => {
             title="Are you sure?"
             desc="Do you want to cancel this request?"
             confirmText="Yes"
+            cancelText="No"
             open={openCancel}
             setOpen={setOpenCancel}
             onConfirm={handleCancel}
@@ -158,6 +159,7 @@ export const ManageReturningRequest = () => {
             title="Are you sure?"
             desc="Do you want to mark this returning as 'Completed'?"
             confirmText="Yes"
+            cancelText="No"
             open={openComplete}
             setOpen={setOpenComplete}
             onConfirm={handleComplete}

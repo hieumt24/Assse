@@ -109,7 +109,7 @@ export const ManageAssignment = () => {
               <SelectValue placeholder="State" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="0">All</SelectItem>
+              <SelectItem value="0">All states</SelectItem>
               <SelectItem value="1">Accepted</SelectItem>
               <SelectItem value="2">Waiting</SelectItem>
               <SelectItem value="3">Declined</SelectItem>

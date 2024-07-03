@@ -94,3 +94,17 @@ export const disableUserService = (id: string) => {
       return { success: false, message: err.response.data.message, data: err };
     });
 };
+
+export const resetPasswordService = (id:string) => {
+  return axiosInstance.post(`/users/resetPassword`)
+  .then((res) => {
+    return {
+      success: true,
+      message: "User disabled successfully!",
+      data: res.data,
+    };
+  })
+  .catch((err) => {
+    return { success: false, message: err.response.data.message, data: err };
+  });
+}

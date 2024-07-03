@@ -98,7 +98,7 @@ namespace AssetManagement.API.Controllers
             return BadRequest(response);
         }
 
-        [HttpPost("resetPassword")]
+        [HttpPost("resetPassword/{userId}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ResetPassword(Guid userId)
         {
