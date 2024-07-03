@@ -24,7 +24,8 @@ export const MyAssignment = () => {
   const [orderBy, setOrderBy] = useState("");
   const [isDescending, setIsDescending] = useState(true);
   const [assignmentState, setAssignmentState] = useState(0);
-  const [assignedDate, setAssignedDate] = useState<Date | null>(null);
+  const [assignedDateFrom, setAssignedDateFrom] = useState<Date | null>(null);
+  const [assignedDateTo, setAssignedDateTo] = useState<Date | null>(null);
   const { user } = useAuth();
 
   const {
@@ -41,7 +42,8 @@ export const MyAssignment = () => {
     orderBy,
     isDescending,
     assignmentState,
-    assignedDate ? format(assignedDate, "yyyy-MM-dd") : "",
+    assignedDateFrom ? format(assignedDateFrom, "yyyy-MM-dd") : "",
+    assignedDateTo ? format(assignedDateTo, "yyyy-MM-dd") : "",
   );
 
   const { setIsLoading } = useLoading();
@@ -119,14 +121,14 @@ export const MyAssignment = () => {
     <div className="m-16 flex h-full flex-grow flex-col gap-8">
       <p className="text-2xl font-bold text-red-600">My Assignment</p>
       <div className="flex items-center justify-between">
-        <div className="flex items-center justify-center gap-4">
+        <div className="flex items-center justify-center gap-2">
           <Select
             onValueChange={(value) => {
               pagination.pageIndex = 1;
               setAssignmentState(Number(value));
             }}
           >
-            <SelectTrigger className="w-32">
+            <SelectTrigger className="w-24">
               <SelectValue placeholder="State" />
             </SelectTrigger>
             <SelectContent>
@@ -136,7 +138,28 @@ export const MyAssignment = () => {
               <SelectItem value="3">Declined</SelectItem>
             </SelectContent>
           </Select>
-          <DatePicker setValue={setAssignedDate} />
+          <div className="flex items-center">
+            From:&nbsp;
+            <DatePicker
+              setValue={setAssignedDateFrom}
+              placeholder="Assigned Date"
+              onChange={() => {
+                pagination.pageIndex = 1;
+              }}
+              className="w-[150px]"
+            />
+          </div>
+          <div className="flex items-center">
+            To:&nbsp;
+            <DatePicker
+              setValue={setAssignedDateTo}
+              placeholder="Assigned Date"
+              onChange={() => {
+                pagination.pageIndex = 1;
+              }}
+              className="w-[150px]"
+            />
+          </div>
         </div>
         <div className="flex justify-between gap-6">
           <SearchForm

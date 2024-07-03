@@ -10,8 +10,9 @@ export const getAllAssignmentService = (req: GetAssignemntReq) => {
     delete req.assignmentState;
   }
 
-  if (req.assignedDate === "") {
-    delete req.assignedDate;
+  if (req.dateFrom === "" || req.dateTo === "") {
+    delete req.dateFrom;
+    delete req.dateTo;
   }
 
   return axiosInstance
@@ -38,8 +39,10 @@ export const getAssignmentByUserAssignedService = (
   if (req.assignmentState === 0) {
     delete req.assignmentState;
   }
-  if (req.assignedDate === "") {
-    delete req.assignedDate;
+  
+  if (req.dateFrom === "" || req.dateTo === "") {
+    delete req.dateFrom;
+    delete req.dateTo;
   }
 
   return axiosInstance

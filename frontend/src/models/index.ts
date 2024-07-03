@@ -75,7 +75,8 @@ export interface GetAssignemntReq {
     pageIndex: number;
   };
   assignmentState?: number;
-  assignedDate?: string;
+  dateFrom?: string;
+  dateTo?: string;
   search?: string;
   orderBy?: string;
   adminLocation?: number;
@@ -88,7 +89,8 @@ export interface GetAssignemntByUserAssignedReq {
     pageIndex: number;
   };
   assignmentState?: number;
-  assignedDate?: string;
+  dateFrom?: string;
+  dateTo?: string;
   search?: string;
   orderBy?: string;
   isDescending?: boolean;
@@ -194,7 +196,8 @@ export interface GetReturningRequestReq {
   orderBy?: string;
   isDescending?: boolean;
   returnState?: number;
-  returnedDate?: string;
+  returnedDateFrom?: string;
+  returnedDateTo?: string;
   location?: number;
 }
 

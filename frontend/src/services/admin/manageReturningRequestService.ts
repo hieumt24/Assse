@@ -10,10 +10,11 @@ export const getReturningRequest = (req: GetReturningRequestReq) => {
     delete req.returnState;
   }
 
-  if (req.returnedDate === "") {
-    delete req.returnedDate;
+  if (req.returnedDateFrom === "" || req.returnedDateTo === "") {
+    delete req.returnedDateFrom;
+    delete req.returnedDateTo;
   }
-
+  
   return axiosInstance
     .post("/returnRequests/filter-return-requests", req)
     .then((res) => {

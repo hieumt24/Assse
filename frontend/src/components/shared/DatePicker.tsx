@@ -15,10 +15,11 @@ interface DatePickerProps {
   setValue: Dispatch<SetStateAction<Date | null>>;
   placeholder?: string;
   onChange?: any;
+  className?: string;
 }
 
 export function DatePicker(props: Readonly<DatePickerProps>) {
-  const { formatDate, setValue, placeholder, onChange } = props;
+  const { formatDate, setValue, placeholder, onChange, className } = props;
   const [date, setDate] = useState<Date>();
 
   const handleDateSelect = (selectedDate: Date | undefined) => {
@@ -49,6 +50,7 @@ export function DatePicker(props: Readonly<DatePickerProps>) {
           className={cn(
             "w-48 items-center justify-between font-normal",
             !date && "text-muted-foreground",
+            className
           )}
         >
           {date ? (
