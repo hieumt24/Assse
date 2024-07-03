@@ -10,7 +10,9 @@ namespace AssetManagement.Application.Models.Filters
         public EnumReturnRequestState? returnState { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime? returnedDate { get; set; }
+        public DateTime? returnedDateFrom { get; set; }
+
+        public DateTime? returnedDateTo {  get; set; }
 
         public string? search { get; set; }
         public string? orderBy { get; set; }
