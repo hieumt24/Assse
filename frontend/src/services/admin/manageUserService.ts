@@ -96,7 +96,7 @@ export const disableUserService = (id: string) => {
 };
 
 export const resetPasswordService = (id:string) => {
-  return axiosInstance.post(`/users/resetPassword`)
+  return axiosInstance.post(`/users/resetPassword/${id}`)
   .then((res) => {
     return {
       success: true,
