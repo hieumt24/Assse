@@ -1,4 +1,6 @@
-﻿using AssetManagement.Application.Interfaces.Services;
+﻿using AssetManagement.Application.Filter;
+using AssetManagement.Application.Interfaces.Services;
+using AssetManagement.Application.Models.Filters;
 using AssetManagement.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,10 +17,11 @@ namespace AssetManagement.API.Controllers
             _reportServices = reportServices;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetReport(EnumLocation location)
+        [HttpPost]
+        public async Task<IActionResult> GetReport([FromBody] ReportFIlter reportFIlter)
         {
-            var result = await _reportServices.GetReportAsync(location);
+            string route = Request.Path.Value;
+            var result = await _reportServices.GetReportAsync(reportFIlter.Location, reportFIlter.Pagination, reportFIlter.OrderBy, reportFIlter.IsDescending, route);
             if (result != null)
             {
                 return Ok(result);
