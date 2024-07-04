@@ -66,11 +66,10 @@ export function AssignmentTable<TData, TValue>({
     try {
       setIsLoading(true);
       const result = await getAssignmentByIdService(id);
-      console.log(result.data);
       if (result.success) {
         setAssignmentDetails(result.data.data);
       } else {
-        toast.error(result.data.message);
+        toast.error(result.message);
       }
     } catch (error) {
       console.log(error);
