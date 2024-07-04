@@ -111,6 +111,8 @@ namespace AssetManagement.Application.Services
                     row++;
                 }
 
+
+
                 // Adjust column widths
                 worksheet.Columns().AdjustToContents();
 
@@ -149,6 +151,7 @@ namespace AssetManagement.Application.Services
 
                     reportResponseDtos.Add(report);
                 }
+                var sortedReportResponseDtos = reportResponseDtos.OrderBy(r => r.CategoryName).ToList();
                 return new Response<List<ReportResponseDto>> { Data = reportResponseDtos, Succeeded = true };
             }
             catch (Exception ex)

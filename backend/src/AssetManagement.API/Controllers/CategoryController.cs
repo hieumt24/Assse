@@ -34,7 +34,7 @@ namespace AssetManagement.API.Controllers
             {
                 return Ok(result);
             }
-            return NotFound(result);
+            return BadRequest(result);
         }
 
         [HttpPut]
@@ -56,7 +56,7 @@ namespace AssetManagement.API.Controllers
             {
                 return Ok(result);
             }
-            return NotFound(result);
+            return BadRequest(result);
         }
 
         [HttpGet]
