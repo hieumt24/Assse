@@ -190,10 +190,12 @@ export const ManageAsset = () => {
                 <label htmlFor={`state-checkbox-select-all`}>Select All</label>
               </div>
               {ASSET_STATES.map((state) => (
-                <div className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm font-normal text-zinc-900 transition-all hover:bg-zinc-100">
+                <div
+                  key={state.value}
+                  className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm font-normal text-zinc-900 transition-all hover:bg-zinc-100"
+                >
                   <Checkbox
                     value={state.value.toString()}
-                    key={state.value}
                     id={`state-checkbox-${state.value}`}
                     onCheckedChange={() => {
                       handleCheckboxChange(state.value);
@@ -229,7 +231,7 @@ export const ManageAsset = () => {
                 />
                 <div className="max-h-[100px] overflow-y-scroll">
                   <SelectItem key={0} value="all">
-                    All
+                    All categories
                   </SelectItem>
                   {filteredCategories?.map((category) => (
                     <SelectItem key={category.id} value={category.id}>

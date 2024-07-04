@@ -93,7 +93,7 @@ export const assignmentColumns = ({
             className="text-blue-500 hover:text-blue-700"
             onClick={(e) => {
               e.stopPropagation();
-              navigate(`edit/${assignment.id}`);
+              navigate(`/assignments/edit/${assignment.id}`);
             }}
             disabled={assignment.state !== 2}
           >

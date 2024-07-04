@@ -79,6 +79,9 @@ namespace AssetManagement.Application.Services
 
             try
             {
+                if (existingAssignment.State != EnumAssignmentState.Accepted) {
+                     return new Response<ReturnRequestDto> { Succeeded = false, Message = "Cannot create a return request with this assignment." };
+                }
                 var newReturnRequest = _mapper.Map<ReturnRequest>(request);
                 newReturnRequest.CreatedOn = DateTime.Now;
                 newReturnRequest.CreatedBy = request.RequestedBy.ToString();

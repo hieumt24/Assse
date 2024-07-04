@@ -97,7 +97,7 @@ export const ManageAssignment = () => {
 
   const navigate = useNavigate();
   return (
-    <div className="m-16 flex flex-shrink-0 flex-col gap-8">
+    <div className="m-16 flex flex-grow flex-col gap-8">
       <div className="flex items-center justify-between">
         <p className="text-2xl font-bold text-red-600">Assignment List</p>
         <Button

@@ -9,7 +9,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ASSET_STATES, LOCATIONS } from "@/constants";
 import { useLoading } from "@/context/LoadingContext";
+import { usePagination } from "@/hooks";
 import { AssetRes, AssignmentRes, PaginationState } from "@/models";
 import { getAssetByAssetCodeService, getAssignmentByAssetService } from "@/services";
 import {
@@ -18,12 +20,10 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { format } from "date-fns";
 import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "react-toastify";
 import Pagination from "../Pagination";
-import { format } from "date-fns";
-import { ASSET_STATES, LOCATIONS } from "@/constants";
-import { usePagination } from "@/hooks";
 import { AssignmentTable } from "../assignment/AssignmentTable";
 import { assetAssignmentColumns } from "../assignment/assetAssignmentColumns";
 
@@ -79,25 +79,23 @@ export function AssetTable<TData, TValue>({
     const result = await getAssetByAssetCodeService(assetCode);
     if (result.success) {
       setAssetDetails(result.data);
+      const result1 = await getAssignmentByAssetService({
+        pagination: assignmentsPagination,
+        assetId: result.data.id,
+        orderBy,
+        isDescending
+      })
+      if (result1.success) {
+        setAssignments(result1.data.data || []);
+        setAssignmentsPageCount(result1.data.totalPages);
+        setAssignmentsTotalRecords(result1.data.totalRecords);
+      } else {
+        toast.error(result1.message);
+      }
     } else {
       toast.error(result.message);
     }
-
-    const result1 = await getAssignmentByAssetService({
-      pagination: assignmentsPagination,
-      assetId: assetDetails?.id || "",
-      orderBy,
-      isDescending
-    })
-    if (result1.success) {
-      setAssignments(result1.data.data || []);
-      setAssignmentsPageCount(result1.data.totalPages);
-      setAssignmentsTotalRecords(result1.data.totalRecords);
-    } else {
-      toast.error(result1.message);
-    }
     setIsLoading(false);
-    console.log(result1)
   };
 
   const { isLoading, setIsLoading } = useLoading();
@@ -107,7 +105,7 @@ export function AssetTable<TData, TValue>({
       ...prev,
       pageIndex: pageIndex,
     }));
-  };
+  }; 
 
   return (
     <div>
@@ -219,7 +217,7 @@ export function AssetTable<TData, TValue>({
                         </td>
                         <td className="py-2 text-gray-800">
                           {assetDetails?.installedDate
-                            ? format(assetDetails?.installedDate, "MM/dd/yyyy")
+                            ? format(assetDetails?.installedDate, "dd/MM/yyyy")
                             : ""}
                         </td>
                       </tr>

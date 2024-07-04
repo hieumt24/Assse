@@ -22,7 +22,7 @@ namespace AssetManagement.API.Controllers
         public async Task<IActionResult> AddAssignment([FromBody] AddAssignmentRequestDto request)
         {
             var result = await _assignmentServicesAsync.AddAssignmentAsync(request);
-            if (result != null)
+            if (result.Succeeded)
             {
                 return Ok(result);
             }

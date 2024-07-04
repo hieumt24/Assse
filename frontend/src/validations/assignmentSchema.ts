@@ -29,3 +29,25 @@ export const createAssignmentSchema = z.object({
     .max(256, "Note must not be longer than 256 characters.")
     .regex(/[a-zA-Z]/, "Note must contain letters."),
 });
+
+export const updateAssignmentSchema = z.object({
+  userId: z.string().min(1, "User is required."),
+  assetId: z.string().min(1, "Asset is required."),
+  assignedDate: z
+    .string()
+    .min(1, "Please select a valid date.")
+    .refine(
+      (dateString) => {
+        const parsedDate = new Date(dateString);
+        return isValid(parsedDate);
+      },
+      { message: "Please select a valid date." },
+    ),
+  note: z
+    .string()
+    .trim()
+    .min(1, "Note must not be blank.")
+    .min(2, "Note must be at least 2 characters long.")
+    .max(256, "Note must not be longer than 256 characters.")
+    .regex(/[a-zA-Z]/, "Note must contain letters."),
+});

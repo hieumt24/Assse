@@ -76,8 +76,15 @@ export const assetColumns = ({
               e.stopPropagation();
               navigate(`edit/${asset.assetCode}`);
             }}
+            disabled={asset.state === 3}
           >
-            <FiEdit2 size={18} />
+            {asset.state == 3 ? (
+              <FiEdit2 size={18} 
+                className="text-black opacity-25 hover:text-black"
+              />
+            ) : (
+              <FiEdit2 size={18} />
+            )}
           </button>
           <button
             className="text-red-500 hover:text-red-700"
