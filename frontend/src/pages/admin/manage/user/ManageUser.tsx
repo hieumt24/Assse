@@ -17,7 +17,7 @@ import {
 import { useLoading } from "@/context/LoadingContext";
 import { useAuth, useUsers } from "@/hooks";
 import { usePagination } from "@/hooks/usePagination";
-import { disableUserService } from "@/services";
+import { checkHasAssignmentService, disableUserService } from "@/services";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -39,13 +39,20 @@ export const ManageUser = () => {
       orderBy,
       isDescending,
     );
+  const [openDisable, setOpenDisable] = useState(false);
+  const [openCannotDisable, setOpenCannotDisable] = useState(false);
 
   const navigate = useNavigate();
   const { setIsLoading } = useLoading();
   const [userIdToDisable, setUserIdToDisable] = useState<string>("");
-  const handleOpenDisable = (id: string) => {
-    setUserIdToDisable(id);
-    setOpenDisable(true);
+  const handleOpenDisable = async (id: string) => {
+    const result = await checkHasAssignmentService(id);
+    if (result.success) {
+      setUserIdToDisable(id);
+      setOpenDisable(true);
+    } else {
+      setOpenCannotDisable(true);
+    }
   };
 
   const handleDisable = async () => {
@@ -66,7 +73,7 @@ export const ManageUser = () => {
       setIsLoading(false);
     }
   };
-  const [openDisable, setOpenDisable] = useState(false);
+
   return (
     <div className="m-16 flex flex-grow flex-col gap-8">
       <p className="text-2xl font-bold text-red-600">User List</p>
@@ -96,7 +103,7 @@ export const ManageUser = () => {
                 pageIndex: 1,
               }));
             }}
-            placeholder="Search by staff code, username, name"
+            placeholder="Staff code, username, full name"
             className="w-[300px]"
           />
           <Button
@@ -129,11 +136,18 @@ export const ManageUser = () => {
           />
           <GenericDialog
             title="Are you sure?"
-            desc="Do you want to disable this user"
+            desc="Do you want to disable this user?"
             confirmText="Yes"
+            cancelText="Cancel"
             open={openDisable}
             setOpen={setOpenDisable}
             onConfirm={handleDisable}
+          />
+          <GenericDialog
+            title="Cannot disable user"
+            desc="There are valid assignments belong to this user. Please close all assignments before disabling user."
+            open={openCannotDisable}
+            setOpen={setOpenCannotDisable}
           />
         </>
       )}

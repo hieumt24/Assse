@@ -178,7 +178,7 @@ export const CreateAssignmentForm = () => {
                               pageIndex: 1,
                             }));
                           }}
-                          placeholder="Search by staff code, username, name"
+                          placeholder="Staff code, username, full name"
                           className="w-[300px]"
                         />
                       </div>
@@ -271,7 +271,7 @@ export const CreateAssignmentForm = () => {
                               pageIndex: 1,
                             }));
                           }}
-                          placeholder="Search by asset code, name"
+                          placeholder="Asset code, asset name"
                           className="w-[300px]"
                         />
                       </div>

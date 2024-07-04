@@ -93,13 +93,13 @@ namespace AssetManagement.Infrastructure.Repositories
 
         public IQueryable<User> Query(EnumLocation adminLocation)
         {
-            return _dbContext.Users.Where(x => x.Location == adminLocation);
+            return _dbContext.Users.Where(x => x.Location == adminLocation && !x.IsDeleted);
         }
 
         public async Task<IQueryable<User>> FilterUserAsync(EnumLocation adminLocation, string? search, RoleType? roleType)
         {
             //check adminlocatin
-            var query = _dbContext.Users.Where(x => x.Location == adminLocation);
+            var query = _dbContext.Users.Where(x => x.Location == adminLocation && !x.IsDeleted);
 
             //search
             if (!string.IsNullOrEmpty(search))

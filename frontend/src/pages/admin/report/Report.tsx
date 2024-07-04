@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 
 import { useAuth, useReport } from "@/hooks";
 import { usePagination } from "@/hooks/usePagination";
+import { exportReportService } from "@/services";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 export const Report = () => {
   const { user } = useAuth();
@@ -22,7 +22,6 @@ export const Report = () => {
     isDescending,
   });
 
-  const navigate = useNavigate();
 
   return (
     <div className="m-16 flex flex-grow flex-col gap-8">
@@ -36,12 +35,12 @@ export const Report = () => {
               pageIndex: 1,
             }));
           }}
-          placeholder="Search by category"
+          placeholder="Category"
           className="w-[300px]"
         />
         <Button
           variant={"destructive"}
-          onClick={() => navigate("/users/create")}
+          onClick={() => exportReportService(user.location)}
         >
           <span className="capitalize">Export</span>
         </Button>

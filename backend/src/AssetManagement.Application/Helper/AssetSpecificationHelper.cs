@@ -59,7 +59,7 @@ namespace AssetManagement.Application.Helper
 
         public static ISpecification<Asset> GetAllAssets(EnumLocation location)
         {
-            var spec = new AssetSpecification(asset => asset.AssetLocation == location);
+            var spec = new AssetSpecification(asset => asset.AssetLocation == location && !asset.IsDeleted);
             return spec;
         }
     }

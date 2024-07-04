@@ -273,7 +273,7 @@ namespace AssetManagement.Application.Services
                 return new Response<AssignmentDto>
                 {
                     Succeeded = false,
-                    Message = "Assignment not found."
+                    Message = "The assignment no longer exists."
                 };
             }
 

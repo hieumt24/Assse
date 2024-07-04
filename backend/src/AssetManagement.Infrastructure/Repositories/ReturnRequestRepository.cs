@@ -21,7 +21,7 @@ namespace AssetManagement.Infrastructure.Repositories
                 .Include(x => x.RequestedUser)
                 .Include(x => x.Assignment)
                 .ThenInclude(a => a.Asset);
-            var queryByAdmin = query.Where(x => x.Location == adminLocation);
+            var queryByAdmin = query.Where(x => x.Location == adminLocation && !x.IsDeleted);
             if (!string.IsNullOrEmpty(search))
             {
                 queryByAdmin = query.Where(x => x.Assignment.Asset.AssetCode.ToLower().Contains(search.ToLower())
@@ -43,16 +43,14 @@ namespace AssetManagement.Infrastructure.Repositories
                                                        x.ReturnedDate.Value.Date <= toDate);
             }
 
-
             return queryByAdmin;
         }
 
         public async Task<ReturnRequest> GetReturnRequestByIdWithAssignmentAsync(Guid returnRequestId)
         {
             var returnRequestIncludeWithAssignment = _dbContext.ReturnRequests.Include(x => x.Assignment);
-            var returnRequest = await returnRequestIncludeWithAssignment.FirstOrDefaultAsync(x => x.Id == returnRequestId);
+            var returnRequest = await returnRequestIncludeWithAssignment.FirstOrDefaultAsync(x => x.Id == returnRequestId && !x.IsDeleted);
             return returnRequest;
-
         }
     }
 }

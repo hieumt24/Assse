@@ -10,12 +10,13 @@ namespace AssetManagement.Application.Interfaces.Repositories
 
         Task<IQueryable<Assignment>> GetAssignmentsByUserId(Guid userId);
 
+        Task<IQueryable<Assignment>> GetAssignmentsByAssetId(Guid assetId);
+
         Task<Assignment> GetAssignemntByIdAsync(Guid assignmentId);
 
         Task<IQueryable<Assignment>> FilterAssignmentOfUserAsync(Guid userId, string? search, EnumAssignmentState? assignmentState, DateTime? dateFrom, DateTime? dateTo);
-            
+
         Task<IQueryable<Assignment>> FilterAssignmentByAssetIdAsync(Guid assetId, string? search, EnumAssignmentState? assignmentState, DateTime? dateFrom, DateTime? dateTo);
-            
 
         Task<Assignment> FindExitingAssignment(Guid assetId);
     }

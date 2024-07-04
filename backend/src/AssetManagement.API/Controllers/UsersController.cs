@@ -122,5 +122,18 @@ namespace AssetManagement.API.Controllers
             }
             return Ok(response);
         }
+
+        [HttpPost]
+        [Route("isValidDisableUser/{userId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> IsValidDisableUser(Guid userId)
+        {
+            var response = await _userService.IsValidDisableUser(userId);
+            if (response.Succeeded)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
     }
 }

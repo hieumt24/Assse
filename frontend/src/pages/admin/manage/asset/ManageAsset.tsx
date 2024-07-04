@@ -253,7 +253,7 @@ export const ManageAsset = () => {
                 pageIndex: 1,
               }));
             }}
-            placeholder="Search by asset code, asset name"
+            placeholder="Asset code, asset name"
             className="w-[300px]"
           />
           <Button
@@ -290,6 +290,7 @@ export const ManageAsset = () => {
             title="Are you sure"
             desc="Do you want to delete this asset"
             confirmText="Yes"
+            cancelText="Cancel"
             onConfirm={handleDelete}
           />
         </>
