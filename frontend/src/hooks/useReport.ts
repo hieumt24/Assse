@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 export const useReport = ({
   pagination,
   search,
-  adminLocation,
+  location,
   orderBy,
   isDescending,
 }: GetReportReq) => {
@@ -21,7 +21,7 @@ export const useReport = ({
       const data = await getReportService({
         pagination,
         search,
-        adminLocation,
+        location,
         orderBy,
         isDescending,
       });
@@ -37,11 +37,11 @@ export const useReport = ({
     } finally {
       setLoading(false);
     }
-  }, [pagination, search, adminLocation, orderBy, isDescending]);
+  }, [pagination, search, location, orderBy, isDescending]);
 
   useEffect(() => {
     fetchReport();
-  }, [pagination, search, adminLocation, orderBy, isDescending, fetchReport]);
+  }, [pagination, search, location, orderBy, isDescending, fetchReport]);
 
   return {
     report,
