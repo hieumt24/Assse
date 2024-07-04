@@ -103,7 +103,7 @@ export const ManageUser = () => {
                 pageIndex: 1,
               }));
             }}
-            placeholder="Search by staff code, username, name"
+            placeholder="Staff code, username, full name"
             className="w-[300px]"
           />
           <Button
