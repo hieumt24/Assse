@@ -152,7 +152,8 @@ namespace AssetManagement.Application.Services
                     reportResponseDtos.Add(report);
                 }
                 var sortedReportResponseDtos = reportResponseDtos.OrderBy(r => r.CategoryName).ToList();
-                return new Response<List<ReportResponseDto>> { Data = reportResponseDtos, Succeeded = true };
+
+                return new Response<List<ReportResponseDto>> { Data = sortedReportResponseDtos, Succeeded = true };
             }
             catch (Exception ex)
             {
