@@ -27,15 +27,6 @@ namespace AssetManagement.Infrastructure.Contexts
         {
             base.OnModelCreating(modelBuilder);
 
-            // Global query filter
-            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-            {
-                if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
-                {
-                    modelBuilder.Entity(entityType.ClrType).HasQueryFilter(CreateIsDeletedFilter(entityType.ClrType));
-                }
-            }
-
             modelBuilder.Entity<User>()
                 .Property(p => p.StaffCode)
                 .HasComputedColumnSql("CONCAT('SD', RIGHT('0000' + CAST(StaffCodeId AS VARCHAR(4)), 4))");
@@ -50,10 +41,6 @@ namespace AssetManagement.Infrastructure.Contexts
                 .WithMany(u => u.AssignmentsReceived)
                 .HasForeignKey(a => a.AssignedIdTo)
                 .OnDelete(DeleteBehavior.Restrict);
-
-
-
-
 
             modelBuilder.Entity<Assignment>()
                 .HasOne(a => a.AssignedBy)
@@ -92,6 +79,7 @@ namespace AssetManagement.Infrastructure.Contexts
             // Seed data and other configurations
             SeedData(modelBuilder);
         }
+
         private void SeedData(ModelBuilder modelBuilder)
         {
             var adminHN = new User
@@ -141,14 +129,6 @@ namespace AssetManagement.Infrastructure.Contexts
                 new Category { CategoryName = "Monitor", Prefix = "MO" },
                 new Category { CategoryName = "Desk", Prefix = "DE" }
             );
-        }
-
-        private static LambdaExpression CreateIsDeletedFilter(Type entityType)
-        {
-            var param = Expression.Parameter(entityType, "e");
-            var prop = Expression.Property(param, "IsDeleted");
-            var condition = Expression.Equal(prop, Expression.Constant(false));
-            return Expression.Lambda(condition, param);
         }
     }
 }

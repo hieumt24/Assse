@@ -8,7 +8,9 @@ namespace AssetManagement.Infrastructure.Repositories
 {
     public class CategoryRepository : BaseRepositoryAsync<Category>, ICategoryRepositoriesAsync
     {
-        public CategoryRepository(ApplicationDbContext dbContext) : base(dbContext) {  }
+        public CategoryRepository(ApplicationDbContext dbContext) : base(dbContext)
+        {
+        }
 
         public async Task<bool> IsCategoryNameDuplicateAsync(string categoryName)
         {

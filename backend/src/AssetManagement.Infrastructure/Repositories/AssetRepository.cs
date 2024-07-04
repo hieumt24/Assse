@@ -17,7 +17,7 @@ namespace AssetManagement.Infrastructure.Repositories
         {
             //check asset by adminLocation
 
-            var query = _dbContext.Assets.Where(x => x.AssetLocation == adminLocation);
+            var query = _dbContext.Assets.Where(x => x.AssetLocation == adminLocation && !x.IsDeleted);
             if (!string.IsNullOrEmpty(search))
             {
                 query = query.Where(x => x.AssetName.ToLower().Contains(search.ToLower()) || x.AssetCode.ToLower().Contains(search.ToLower()));
@@ -62,7 +62,7 @@ namespace AssetManagement.Infrastructure.Repositories
 
             // Get the last asset code for this category
             var lastAssetCode = await _dbContext.Assets
-                .Where(a => a.CategoryId == CategoryId && a.AssetCode.StartsWith(prefix))
+                .Where(a => a.CategoryId == CategoryId && a.AssetCode.StartsWith(prefix) && !a.IsDeleted)
                 .OrderByDescending(a => a.AssetCode)
                 .Select(a => a.AssetCode)
                 .FirstOrDefaultAsync();
