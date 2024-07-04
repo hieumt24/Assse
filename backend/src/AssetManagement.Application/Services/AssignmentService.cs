@@ -118,6 +118,15 @@ namespace AssetManagement.Application.Services
             {
                 return new Response<AssignmentDto> { Succeeded = false, Message = "Assignment not found." };
             }
+            if (existingAssignment.AssetId != request.AssetId)
+            {
+                var existingAsset = await _assetRepository.GetByIdAsync(existingAssignment.AssetId);
+                var newAsset = await _assetRepository.GetByIdAsync(request.AssetId);
+
+                existingAsset.State = AssetStateType.Available;
+                newAsset.State = AssetStateType.Assigned;
+
+            }
             existingAssignment.AssetId = request.AssetId;
             existingAssignment.AssignedIdTo = request.AssignedIdTo;
             existingAssignment.AssignedIdBy = request.AssignedIdBy;
