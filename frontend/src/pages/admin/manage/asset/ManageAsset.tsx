@@ -1,5 +1,4 @@
 import { GenericDialog, SearchForm } from "@/components";
-import { FullPageModal } from "@/components/FullPageModal";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { assetColumns } from "@/components/tables/asset/assetColumns";
 import { Button } from "@/components/ui/button";
@@ -9,13 +8,6 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import {
   Select,
