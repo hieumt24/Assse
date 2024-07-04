@@ -6,6 +6,8 @@ using AssetManagement.Application.Models.DTOs.Reports.Responses;
 using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Enums;
 using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Drawing.Charts;
+using Microsoft.AspNetCore.Routing;
 
 namespace AssetManagement.Application.Services
 {
@@ -27,7 +29,7 @@ namespace AssetManagement.Application.Services
             throw new NotImplementedException();
         }
 
-        public async Task<PagedResponse<List<ReportResponseDto>>> GetReportAsync(EnumLocation location, PaginationFilter pagination, string? orderBy, bool? isDescending, string? route)
+        public async Task<PagedResponse<List<ReportResponseDto>>> GetReportPaginationAsync(EnumLocation location, PaginationFilter pagination, string? orderBy, bool? isDescending, string? route)
         {
             try
             {
@@ -96,7 +98,7 @@ namespace AssetManagement.Application.Services
                     worksheet.Cell(row, 3).Value = report.Assigned;
                     worksheet.Cell(row, 4).Value = report.Available;
                     worksheet.Cell(row, 5).Value = report.NotAvailable;
-                    worksheet.Cell(row, 6).Value = report.Waitingforrecycling;
+                    worksheet.Cell(row, 6).Value = report.WaitingForRecycling;
                     worksheet.Cell(row, 7).Value = report.Recycled;
 
                     for (int col = 1; col <= 7; col++)
@@ -117,6 +119,41 @@ namespace AssetManagement.Application.Services
                     workbook.SaveAs(stream);
                     return stream.ToArray();
                 }
+            }
+        }
+
+        public async Task<Response<List<ReportResponseDto>>> GetReportAsync(EnumLocation location)
+        {
+            try
+            {
+                var reportResponseDtos = new List<ReportResponseDto>();
+
+                var categories = await _categoryRepositoriesAsync.ListAllAsync();
+
+                var asset = AssetSpecificationHelper.GetAllAssets(location);
+                var totalAssets = await _assetRepositoriesAsync.ListAsync(asset);
+
+                foreach (var category in categories)
+                {
+                    var report = new ReportResponseDto
+                    {
+                        CategoryId = category.Id,
+                        CategoryName = category.CategoryName,
+                        Total = totalAssets.Count(x => x.CategoryId == category.Id),
+                        Assigned = totalAssets.Count(x => x.CategoryId == category.Id && x.State == AssetStateType.Assigned),
+                        Available = totalAssets.Count(x => x.CategoryId == category.Id && x.State == AssetStateType.Available),
+                        NotAvailable = totalAssets.Count(x => x.CategoryId == category.Id && x.State == AssetStateType.NotAvailable),
+                        WaitingForRecycling = totalAssets.Count(x => x.CategoryId == category.Id && x.State == AssetStateType.WaitingForRecycling),
+                        Recycled = totalAssets.Count(x => x.CategoryId == category.Id && x.State == AssetStateType.Recycled)
+                    };
+
+                    reportResponseDtos.Add(report);
+                }
+                return new Response<List<ReportResponseDto>> { Data = reportResponseDtos, Succeeded = true };
+            }
+            catch (Exception ex)
+            {
+                return new PagedResponse<List<ReportResponseDto>> { Errors = { ex.Message } };
             }
         }
     }
