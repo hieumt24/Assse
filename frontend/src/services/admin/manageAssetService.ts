@@ -3,6 +3,7 @@ import {
   CreateAssetReq,
   CreateCategoryReq,
   GetAssetReq,
+  GetAssignmentByAssetReq,
   UpdateAssetReq,
 } from "@/models";
 
@@ -23,7 +24,11 @@ export const getAllAssestService = (req: GetAssetReq) => {
       };
     })
     .catch((err) => {
-      return { success: false, message: "Failed to fetch assets.", data: err };
+      return {
+        success: false,
+        message: err.response?.data.message || "Failed to fetch assets.",
+        data: err,
+      };
     });
 };
 
@@ -38,7 +43,11 @@ export const getAssetByIdService = (id: string) => {
       };
     })
     .catch((err) => {
-      return { success: false, message: "Failed to fetch asset.", data: err };
+      return {
+        success: false,
+        message: err.response?.data.message || "Failed to fetch asset.",
+        data: err,
+      };
     });
 };
 
@@ -53,7 +62,11 @@ export const deleteAssetByIdService = (id: string) => {
       };
     })
     .catch((err) => {
-      return { success: false, message: "Failed to delete asset.", data: err };
+      return {
+        success: false,
+        message: err.response?.data.message || "Failed to delete asset.",
+        data: err,
+      };
     });
 };
 
@@ -70,7 +83,7 @@ export const getAllCategoryService = () => {
     .catch((err) => {
       return {
         success: false,
-        message: "Failed to fetch categories.",
+        message: err.response?.data.message || "Failed to fetch categories.",
         data: err,
       };
     });
@@ -90,7 +103,7 @@ export const createCategoryService = (req: CreateCategoryReq) => {
       console.log(err.response?.data);
       return {
         success: false,
-        message: err.response?.data.message,
+        message: err.response?.data.message || "Failed to create category.",
         data: err.response,
       };
     });
@@ -110,7 +123,7 @@ export const createAssetService = (req: CreateAssetReq) => {
       console.log(err.response?.data);
       return {
         success: false,
-        message: err.response?.data.message,
+        message: err.response?.data.message || "Failed to create asset.",
         data: err.response,
       };
     });
@@ -130,7 +143,7 @@ export const updateAssetService = (id: string, req: UpdateAssetReq) => {
       console.log(err.response?.data);
       return {
         success: false,
-        message: err.response?.data.message,
+        message: err.response?.data.message || "Failed to update asset.",
         data: err.response,
       };
     });
@@ -150,7 +163,26 @@ export const getAssetByAssetCodeService = (staffCode: string) => {
       console.log(err.response?.data);
       return {
         success: false,
-        message: err.response?.data.message,
+        message: err.response?.data.message || "Failed to fetch assets.",
+        data: err.response,
+      };
+    });
+};
+
+export const getAssignmentByAssetService = (req: GetAssignmentByAssetReq) => {
+  return axiosInstance
+    .post(`/assignments/filter-asset-assigned-history/`, req)
+    .then((res) => {
+      return {
+        success: true,
+        message: "Assignments fetched successfully!",
+        data: res.data,
+      };
+    })
+    .catch((err) => {
+      return {
+        success: false,
+        message: err.response?.data.message || "Failed to fetch assignments.",
         data: err.response,
       };
     });

@@ -1,5 +1,4 @@
-import { SearchForm } from "@/components";
-import { FullPageModal } from "@/components/FullPageModal";
+import { GenericDialog, SearchForm } from "@/components";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { assetColumns } from "@/components/tables/asset/assetColumns";
 import { Button } from "@/components/ui/button";
@@ -9,13 +8,6 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -51,7 +43,7 @@ export const ManageAsset = () => {
     useAssets(
       pagination,
       user.location,
-      search,
+      search.trim(),
       orderBy,
       isDescending,
       assetStateType,
@@ -290,31 +282,14 @@ export const ManageAsset = () => {
             pageCount={pageCount}
             totalRecords={totalRecords}
           />
-          <FullPageModal show={openDisable}>
-            <Dialog open={openDisable} onOpenChange={setOpenDisable}>
-              <DialogContent onClick={(e) => e.stopPropagation()}>
-                <DialogHeader>
-                  <DialogTitle className="text-center text-2xl font-bold text-red-600">
-                    Are you sure?
-                  </DialogTitle>
-                  <DialogDescription className="text-center text-lg">
-                    Do you want to delete this asset
-                  </DialogDescription>
-                  <div className="flex items-center justify-center gap-4">
-                    <Button variant={"destructive"} onClick={handleDelete}>
-                      Yes
-                    </Button>
-                    <Button
-                      variant="outline"
-                      onClick={() => setOpenDisable(false)}
-                    >
-                      Cancel
-                    </Button>
-                  </div>
-                </DialogHeader>
-              </DialogContent>
-            </Dialog>
-          </FullPageModal>
+          <GenericDialog
+            open={openDisable}
+            setOpen={setOpenDisable}
+            title="Are you sure"
+            desc="Do you want to delete this asset"
+            confirmText="Yes"
+            onConfirm={handleDelete}
+          />
         </>
       )}
     </div>
