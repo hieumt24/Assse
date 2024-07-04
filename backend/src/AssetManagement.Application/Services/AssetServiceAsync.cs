@@ -197,5 +197,27 @@ namespace AssetManagement.Application.Services
                 return new Response<AssetDto> { Succeeded = false, Errors = { ex.Message } };
             }
         }
+
+        public async Task<Response<bool>> IsValidDeleteAsset(Guid assetId)
+        {
+            try
+            {
+                var exsitingAsset = await _assetRepository.GetByIdAsync(assetId);
+                if (exsitingAsset == null)
+                {
+                    return new Response<bool> { Succeeded = false, Message = "Asset not found" };
+                }
+                var assignment = await _assignmentRepository.GetAssignmentsByAssetId(exsitingAsset.Id);
+                if (assignment.Any())
+                {
+                    return new Response<bool> { Succeeded = false, Message = "There are valid assignments belonging to this user. Please close all assignments before disabling user." };
+                }
+                return new Response<bool> { Succeeded = true };
+            }
+            catch (Exception ex)
+            {
+                return new Response<bool> { Succeeded = false, Errors = { ex.Message } };
+            }
+        }
     }
 }
