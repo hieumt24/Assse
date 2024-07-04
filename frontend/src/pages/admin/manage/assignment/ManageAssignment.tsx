@@ -192,6 +192,7 @@ export const ManageAssignment = () => {
             title="Are you sure?"
             desc="Do you want to delete this assignment?"
             confirmText="Delete"
+            cancelText="Cancel"
             onConfirm={handleDelete}
             open={openDelete}
             setOpen={setOpenDelete}

@@ -73,6 +73,7 @@ export const Header = () => {
             title="Are you sure?"
             desc="Do you want to logout?"
             confirmText="Log out"
+            cancelText="Cancel"
             onConfirm={handleLogout}
             open={openLogout}
             setOpen={setOpenLogout}

@@ -7,15 +7,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useLoading } from "@/context/LoadingContext";
 import { SetStateAction } from "react";
 import { Button } from "../ui/button";
-import { useLoading } from "@/context/LoadingContext";
 
 interface GenericDialogProps {
   trigger?: string;
   title: string;
   desc: string;
-  confirmText: string;
+  confirmText?: string;
   cancelText?: string;
   onConfirm?: () => void;
   open?: boolean;
@@ -69,12 +69,12 @@ export const GenericDialog = (props: GenericDialogProps) => {
           </DialogDescription>
         </DialogHeader>
         <div className="mt-4 flex w-full justify-center gap-4">
-          <Button type="button" variant="destructive" onClick={onConfirm} disabled={isLoading}>
-            {isLoading ? "Loading..." : confirmText}
-          </Button>
-          <DialogClose asChild>
+          {confirmText && (<Button type="button" variant="destructive" onClick={onConfirm} disabled={isLoading}>
+            {isLoading ? "Loading..." : confirmText || "OK"}
+          </Button>)}
+          {cancelText && (<DialogClose asChild>
             <Button type="button">{cancelText || "Cancel"}</Button>
-          </DialogClose>
+          </DialogClose>)}
         </div>
       </DialogContent>
     </Dialog>

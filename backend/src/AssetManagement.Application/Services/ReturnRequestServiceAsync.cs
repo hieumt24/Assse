@@ -68,7 +68,7 @@ namespace AssetManagement.Application.Services
             var existingAssignment = await _assignmentRepository.GetByIdAsync(request.AssignmentId);
             if (existingAssignment == null)
             {
-                return new Response<ReturnRequestDto> { Succeeded = false, Message = "Assignment not found." };
+                return new Response<ReturnRequestDto> { Succeeded = false, Message = "The assignment no longer exists." };
             }
 
             var existingUserRequested = await _userRepository.GetByIdAsync(request.RequestedBy);
