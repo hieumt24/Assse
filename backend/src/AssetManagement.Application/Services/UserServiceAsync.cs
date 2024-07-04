@@ -10,6 +10,7 @@ using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
 using AutoMapper;
+using DocumentFormat.OpenXml.Spreadsheet;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -224,6 +225,28 @@ namespace AssetManagement.Application.Services
             catch (Exception ex)
             {
                 return new Response<UserResponseDto> { Succeeded = false, Errors = { ex.Message } };
+            }
+        }
+
+        public async Task<Response<bool>> IsValidDisableUser(Guid userId)
+        {
+            try
+            {
+                var exsitedUser = await _userRepositoriesAsync.GetByIdAsync(userId);
+                if (exsitedUser == null)
+                {
+                    return new Response<bool> { Succeeded = false, Message = "User not found" };
+                }
+                var assignments = await _assignmentRepositoriesAsync.GetAssignmentsByUserId(exsitedUser.Id);
+                if (assignments.Any())
+                {
+                    return new Response<bool> { Succeeded = false, Message = "There are valid assignments belonging to this user. Please close all assignments before disabling user." };
+                }
+                return new Response<bool> { Succeeded = true };
+            }
+            catch (Exception ex)
+            {
+                return new Response<bool> { Succeeded = false, Errors = { ex.Message } };
             }
         }
     }

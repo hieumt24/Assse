@@ -22,5 +22,7 @@ namespace AssetManagement.Application.Interfaces.Services
         Task<Response<UserDto>> ResetPasswordAsync(Guid userId);
 
         Task<Response<UserResponseDto>> GetUserByStaffCodeAsync(string staffCode);
+
+        Task<Response<bool>> IsValidDisableUser(Guid userId);
     }
 }
