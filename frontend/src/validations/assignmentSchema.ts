@@ -42,13 +42,6 @@ export const updateAssignmentSchema = z.object({
         return isValid(parsedDate);
       },
       { message: "Please select a valid date." },
-    )
-    .refine(
-      (dateString) => {
-        const parsedDate = new Date(dateString);
-        return !isBefore(parsedDate, startOfDay(new Date()));
-      },
-      { message: "Assigned Date can only be today or in the future." },
     ),
   note: z
     .string()

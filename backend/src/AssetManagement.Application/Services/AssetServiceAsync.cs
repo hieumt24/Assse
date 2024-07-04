@@ -54,6 +54,7 @@ namespace AssetManagement.Application.Services
                 newAsset.AssetCode = await _assetRepository.GenerateAssetCodeAsync(newAsset.CategoryId);
                 newAsset.CreatedBy = request.AdminId;
                 newAsset.CreatedOn = DateTime.Now;
+                newAsset.LastModifiedOn = DateTime.Now;
 
                 newAsset.Specification = string.Join(" ", request.Specification.Split(' ', StringSplitOptions.RemoveEmptyEntries));
 

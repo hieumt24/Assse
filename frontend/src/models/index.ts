@@ -45,11 +45,11 @@ export interface AssetRes {
   id?: string;
   assetCode?: string;
   assetName?: string;
+  categoryName?: string;
   specification?: string;
   installedDate?: Date;
   state?: number;
   assetLocation?: number;
-  categoryName?: string;
 }
 
 export interface CategoryRes {
@@ -149,6 +149,16 @@ export interface UpdateAssetReq {
   state: number;
 }
 
+export interface GetAssignmentByAssetReq {
+  pagination: {
+    pageSize: number;
+    pageIndex: number;
+  };
+  assetId: string;
+  orderBy?: string;
+  isDescending?: boolean;
+}
+
 export interface AssetRes {
   id?: string;
   assetCode?: string;
@@ -219,4 +229,27 @@ export interface UpdateReturningRequestReq {
   returnRequestId?: string;
   newState?: number;
   acceptedBy?: string;
+}
+
+// Report reponse
+export interface ReportRes {
+  categoryId?: string;
+  categoryName?: string;
+  total?: number;
+  assigned?: number;
+  available?: number;
+  notAvailable?: number;
+  waitingForRecycling?: number;
+  recycled?: number;
+}
+
+export interface GetReportReq {
+  pagination: {
+    pageSize: number;
+    pageIndex: number;
+  };
+  search?: string;
+  orderBy?: string;
+  location?: number;
+  isDescending?: boolean;
 }

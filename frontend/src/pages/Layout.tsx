@@ -15,10 +15,10 @@ export const Layout = () => {
       </div>
     );
   return (
-    <div className="flex h-full flex-col items-start">
+    <div className="flex h-full flex-col items-start w-full">
       <FirstTimeForm />
       <Header />
-      <div className="flex w-full flex-grow">
+      <div className="flex flex-grow w-full">
         <Sidebar />
         {user.role === "Admin" ? <AdminRoutes /> : <StaffRoutes />}
       </div>

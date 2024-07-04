@@ -7,7 +7,7 @@ export const Sidebar = () => {
   const { user } = useAuth();
 
   return (
-    <div className="flex flex-col items-center bg-transparent p-6 text-white shadow-md">
+    <div className="flex flex-col items-center bg-transparent p-6 text-white shadow-md w-[300px]">
       {/* Logo */}
       <Link
         to="/"

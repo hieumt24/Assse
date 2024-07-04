@@ -27,7 +27,7 @@ export const getReturningRequest = (req: GetReturningRequestReq) => {
     .catch((err) => {
       return {
         success: false,
-        message: "Failed to fetch requests.",
+        message: err.response?.data.message || "Failed to fetch requests.",
         data: err,
       };
     });
@@ -46,7 +46,7 @@ export const createReturnRequest = (req: CreateReturningRequestReq) => {
     .catch((err) => {
       return {
         success: false,
-        message: "Failed to create request.",
+        message: err.response?.data.message || "Failed to create request.",
         data: err,
       };
     });
@@ -65,7 +65,7 @@ export const updateReturnRequest = (req: UpdateReturningRequestReq) => {
     .catch((err) => {
       return {
         success: false,
-        message: "Failed to update request.",
+        message: err.response?.data.message || "Failed to update request.",
         data: err,
       };
     });
@@ -84,7 +84,7 @@ export const cancelReturnRequest = (id: string) => {
     .catch((err) => {
       return {
         success: false,
-        message: "Failed to cancel request.",
+        message: err.response?.data.message || "Failed to cancel request.",
         data: err,
       };
     });

@@ -18,20 +18,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { useLoading } from "@/context/LoadingContext";
 import { useAuth, usePagination, useUsers } from "@/hooks";
 import { useAssets } from "@/hooks/useAssets";
-import { AssetRes, AssignmentRes, UserRes } from "@/models";
+import { AssetRes, UserRes } from "@/models";
+import { getAssetByIdService, getUserByIdService } from "@/services";
 import {
-  createAssignmentService,
   editAssignmentService,
-  getAllAssignmentService,
   getAssignmentByIdService,
-  updateAssignmentStateService,
 } from "@/services/admin/manageAssignmentService";
-import {
-  createAssignmentSchema,
-  updateAssignmentSchema,
-} from "@/validations/assignmentSchema";
+import { updateAssignmentSchema } from "@/validations/assignmentSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format } from "date-fns";
+import { format, isBefore, isEqual, startOfDay } from "date-fns";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoIosSearch } from "react-icons/io";
@@ -40,9 +35,9 @@ import { toast } from "react-toastify";
 import { z } from "zod";
 
 export const EditAssignmentForm = () => {
-  const form = useForm<z.infer<typeof createAssignmentSchema>>({
+  const form = useForm<z.infer<typeof updateAssignmentSchema>>({
     mode: "onBlur",
-    resolver: zodResolver(createAssignmentSchema),
+    resolver: zodResolver(updateAssignmentSchema),
     defaultValues: {
       userId: "",
       assetId: "",
@@ -80,9 +75,9 @@ export const EditAssignmentForm = () => {
   const [selectedAsset, setSelectedAsset] = useState<AssetRes>();
   const [assetStateType] = useState<number[]>([1]);
   const [selectedCategory] = useState<string>("all");
-
+  const [prevAssignedDate, setPrevAssignedDate] = useState();
+  const [isValidDate, setIsValidDate] = useState(false);
   const { assignmentId } = useParams();
-  const [assignment, setAssignment] = useState<AssignmentRes>();
 
   usersPagination.pageSize = 5;
   const { users, loading, pageCount, totalRecords } = useUsers(
@@ -113,36 +108,36 @@ export const EditAssignmentForm = () => {
   const navigate = useNavigate();
 
   const fetchAssignment = async () => {
-    try {
-      setIsLoading(true);
-      const res = await getAssignmentByIdService(
-        assignmentId ? assignmentId : "",
-      );
-      const details = res.data.data;
-      console.log(details);
-      if (res.success) {
-        setAssignment(res.data);
-        setSelectedUser(details.assignedToId);
-        setSelectedAsset(details.assetId);
-
-        form.reset({
-          userId: details.userId,
-          assetId: details.assetId,
-          assignedDate: format(new Date(details.assignedDate), "yyyy-MM-dd"),
-          note: details.note,
-        });
+    setIsLoading(true);
+    const res = await getAssignmentByIdService(
+      assignmentId ? assignmentId : "",
+    );
+    const details = res.data.data;
+    if (res.success) {
+      form.reset({
+        userId: details.assignedToId,
+        assetId: details.assetId,
+        assignedDate: format(new Date(details.assignedDate), "yyyy-MM-dd"),
+        note: details.note,
+      });
+      setPrevAssignedDate(details.assignedDate);
+      const result1 = await getUserByIdService(details.assignedToId);
+      if (result1.success) {
+        setSelectedUser(result1.data);
       } else {
-        toast.error(res.message);
+        toast.error(result1.message);
       }
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-      toast.error("Error fetching assignment");
+      const result2 = await getAssetByIdService(details.assetId);
+      if (result2.success) {
+        setSelectedAsset(result2.data);
+      } else {
+        toast.error(result2.message);
+      }
+    } else {
+      toast.error(res.message);
     }
+    setIsLoading(false);
   };
-
-  console.log(selectedUser);
-  console.log(selectedAsset);
 
   useEffect(() => {
     if (assignmentId) {
@@ -153,32 +148,45 @@ export const EditAssignmentForm = () => {
   const handleSubmitForm = async (
     values: z.infer<typeof updateAssignmentSchema>,
   ) => {
-    try {
-      setIsLoading(true);
-      const res = await editAssignmentService(
-        assignmentId ? assignmentId : "",
-        {
-          assignedIdTo: values.userId,
-          assignedIdBy: user.id,
-          assetId: values.assetId,
-          assignedDate: format(new Date(values.assignedDate), "yyyy-MM-dd"),
-          note: values.note,
-        },
-      );
-      if (res.success) {
-        toast.success("Assignment updated successfully!");
-        localStorage.setItem("edited", "1");
-        navigate("/assignments");
-      } else {
-        toast.error(res.message);
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error("Error updating assignment");
-    } finally {
-      setIsLoading(false);
+    setIsLoading(true);
+    const res = await editAssignmentService(assignmentId ? assignmentId : "", {
+      assignedIdTo: values.userId,
+      assignedIdBy: user.id,
+      assetId: values.assetId,
+      assignedDate: format(new Date(values.assignedDate), "yyyy-MM-dd"),
+      note: values.note,
+    });
+    if (res.success) {
+      toast.success("Assignment updated successfully!");
+      localStorage.setItem("edited", "1");
+      navigate("/assignments");
+    } else {
+      toast.error(res.message);
     }
+    setIsLoading(false);
   };
+
+  useEffect(() => {
+    const assignedDate = new Date(form.watch("assignedDate"));
+    if (
+      prevAssignedDate &&
+      isEqual(startOfDay(assignedDate), startOfDay(prevAssignedDate))
+    ) {
+      setIsValidDate(true);
+    } else {
+      if (!isBefore(assignedDate, startOfDay(new Date()))) {
+        console.log(1);
+        
+        setIsValidDate(true);
+      } else {
+        console.log(2);
+        
+        setIsValidDate(false);
+      }
+    }
+  }, [form.watch("assignedDate"), prevAssignedDate]);
+
+  if (isLoading) return <LoadingSpinner />;
 
   return (
     <Form {...form}>
@@ -293,7 +301,7 @@ export const EditAssignmentForm = () => {
                   <DialogTrigger className="flex min-h-10 w-full items-center justify-between rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors">
                     <span className="w-full text-left text-zinc-500">
                       {form.getValues("assetId") !== ""
-                        ? `${selectedAsset?.assetCode} ${selectedAsset?.assetName}`
+                        ? `${selectedAsset?.assetCode} - ${selectedAsset?.assetName}`
                         : "Select asset"}
                     </span>
                     <Input type="hidden" {...field} />
@@ -399,7 +407,20 @@ export const EditAssignmentForm = () => {
                     } else {
                       field.onChange(e);
                     }
-                    console.log(value);
+                  }}
+                  onBlur={() => {
+                    if (!isValidDate) {
+                      console.log(0);
+                      
+                      form.setError("assignedDate", {
+                        message:
+                          "Assigned Date can only be today or in the future.",
+                      });
+                    } else {
+                      console.log("00")
+                      form.clearErrors("assignedDate");
+                    }
+                    // field.onBlur();
                   }}
                 />
               </FormControl>
@@ -433,7 +454,7 @@ export const EditAssignmentForm = () => {
           <Button
             type="submit"
             className="w-[76px] bg-red-500 hover:bg-white hover:text-red-500"
-            disabled={!form.formState.isValid || isLoading}
+            disabled={!form.formState.isValid || isLoading || !isValidDate}
           >
             {isLoading ? "Saving..." : "Save"}
           </Button>

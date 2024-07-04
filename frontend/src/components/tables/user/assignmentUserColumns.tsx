@@ -39,6 +39,11 @@ export const assignmentUserColumns = ({
       renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),
   },
   {
+    accessorKey: "username",
+    header: ({ column }) =>
+      renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),
+  },
+  {
     accessorKey: "fullName",
     header: ({ column }) =>
       renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),

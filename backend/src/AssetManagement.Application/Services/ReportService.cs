@@ -13,11 +13,13 @@ namespace AssetManagement.Application.Services
     {
         private readonly ICategoryRepositoriesAsync _categoryRepositoriesAsync;
         private readonly IAssetRepositoriesAsync _assetRepositoriesAsync;
+        private readonly IUriService _uriService;
 
-        public ReportService(ICategoryRepositoriesAsync categoryRepositoriesAsync, IAssetRepositoriesAsync assetRepositoriesAsync)
+        public ReportService(ICategoryRepositoriesAsync categoryRepositoriesAsync, IAssetRepositoriesAsync assetRepositoriesAsync, IUriService uriService)
         {
             _categoryRepositoriesAsync = categoryRepositoriesAsync;
             _assetRepositoriesAsync = assetRepositoriesAsync;
+            _uriService = uriService;
         }
 
         public Task<PagedResponse<ReportResponseDto>> FilterReportAsync(PaginationFilter pagination, EnumLocation location, string? orderBy, bool? isDescending, string? route)
@@ -25,33 +27,43 @@ namespace AssetManagement.Application.Services
             throw new NotImplementedException();
         }
 
-        public async Task<Response<IEnumerable<ReportResponseDto>>> GetReportAsync(EnumLocation location)
+        public async Task<PagedResponse<List<ReportResponseDto>>> GetReportAsync(EnumLocation location, PaginationFilter pagination, string? orderBy, bool? isDescending, string? route)
         {
-            var reportResponseDtos = new List<ReportResponseDto>();
-
-            var categories = await _categoryRepositoriesAsync.ListAllAsync();
-
-            var asset = AssetSpecificationHelper.GetAllAssets(location);
-            var totalAssets = await _assetRepositoriesAsync.ListAsync(asset);
-
-            foreach (var category in categories)
+            try
             {
-                var report = new ReportResponseDto
+                var reportResponseDtos = new List<ReportResponseDto>();
+
+                var categories = await _categoryRepositoriesAsync.ListAllAsync();
+
+                var asset = AssetSpecificationHelper.GetAllAssets(location);
+                var totalAssets = await _assetRepositoriesAsync.ListAsync(asset);
+
+                foreach (var category in categories)
                 {
-                    CategoryId = category.Id,
-                    CategoryName = category.CategoryName,
-                    Total = totalAssets.Count(x => x.CategoryId == category.Id),
-                    Assigned = totalAssets.Count(x => x.CategoryId == category.Id && x.State == AssetStateType.Assigned),
-                    Available = totalAssets.Count(x => x.CategoryId == category.Id && x.State == AssetStateType.Available),
-                    NotAvailable = totalAssets.Count(x => x.CategoryId == category.Id && x.State == AssetStateType.NotAvailable),
-                    Waitingforrecycling = totalAssets.Count(x => x.CategoryId == category.Id && x.State == AssetStateType.WaitingForRecycling),
-                    Recycled = totalAssets.Count(x => x.CategoryId == category.Id && x.State == AssetStateType.Recycled)
-                };
+                    var report = new ReportResponseDto
+                    {
+                        CategoryId = category.Id,
+                        CategoryName = category.CategoryName,
+                        Total = totalAssets.Count(x => x.CategoryId == category.Id),
+                        Assigned = totalAssets.Count(x => x.CategoryId == category.Id && x.State == AssetStateType.Assigned),
+                        Available = totalAssets.Count(x => x.CategoryId == category.Id && x.State == AssetStateType.Available),
+                        NotAvailable = totalAssets.Count(x => x.CategoryId == category.Id && x.State == AssetStateType.NotAvailable),
+                        WaitingForRecycling = totalAssets.Count(x => x.CategoryId == category.Id && x.State == AssetStateType.WaitingForRecycling),
+                        Recycled = totalAssets.Count(x => x.CategoryId == category.Id && x.State == AssetStateType.Recycled)
+                    };
 
-                reportResponseDtos.Add(report);
+                    reportResponseDtos.Add(report);
+                }
+                var reportResponses = ReportHelper.ApplySorting(reportResponseDtos, orderBy, isDescending);
+                var totalRecord = reportResponses.Count();
+
+                var pagedResponse = PaginationHelper.CreatePagedReponse(reportResponses, pagination, totalRecord, _uriService, route);
+                return pagedResponse;
             }
-
-            return new Response<IEnumerable<ReportResponseDto>> { Data = reportResponseDtos, Succeeded = true };
+            catch (Exception ex)
+            {
+                return new PagedResponse<List<ReportResponseDto>> { Errors = { ex.Message } };
+            }
         }
 
         public async Task<byte[]> ExportReportToExcelAsync(EnumLocation location)

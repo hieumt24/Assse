@@ -1,7 +1,6 @@
 import { FullPageModal } from "@/components/FullPageModal";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { DetailInformation } from "@/components/shared/DetailInformation";
-import { Dialog } from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -10,18 +9,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ASSET_STATES, LOCATIONS } from "@/constants";
 import { useLoading } from "@/context/LoadingContext";
-import { AssetRes, PaginationState } from "@/models";
-import { getAssetByAssetCodeService } from "@/services";
+import { usePagination } from "@/hooks";
+import { AssetRes, AssignmentRes, PaginationState } from "@/models";
+import { getAssetByAssetCodeService, getAssignmentByAssetService } from "@/services";
 import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { format } from "date-fns";
 import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "react-toastify";
 import Pagination from "../Pagination";
+import { AssignmentTable } from "../assignment/AssignmentTable";
+import { assetAssignmentColumns } from "../assignment/assetAssignmentColumns";
 
 interface AssetTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -60,24 +64,38 @@ export function AssetTable<TData, TValue>({
 
   const [openDetails, setOpenDetails] = useState(false);
   const [assetDetails, setAssetDetails] = useState<AssetRes>();
+  const { onPaginationChange: assignmentsOnPaginationChange, pagination: assignmentsPagination } = usePagination();
+  const [orderBy, setOrderBy] = useState("");
+  const [isDescending, setIsDescending] = useState(true);
+  const [assignments, setAssignments] = useState<Array<AssignmentRes>>([]);
+  const [assignmentsPageCount, setAssignmentsPageCount] = useState<number>(0);
+  const [assignmentsTotalRecords, setAssignmentsTotalRecords] = useState<number>(0);
+
+  assignmentsPagination.pageSize = 3;
 
   const handleOpenDetails = async (assetCode: string) => {
     setOpenDetails(true);
-    try {
-      setIsLoading(true);
-      const result = await getAssetByAssetCodeService(assetCode);
-      console.log(result.data);
-      if (result.success) {
-        setAssetDetails(result.data);
+    setIsLoading(true);
+    const result = await getAssetByAssetCodeService(assetCode);
+    if (result.success) {
+      setAssetDetails(result.data);
+      const result1 = await getAssignmentByAssetService({
+        pagination: assignmentsPagination,
+        assetId: result.data.id,
+        orderBy,
+        isDescending
+      })
+      if (result1.success) {
+        setAssignments(result1.data.data || []);
+        setAssignmentsPageCount(result1.data.totalPages);
+        setAssignmentsTotalRecords(result1.data.totalRecords);
       } else {
-        toast.error(result.message);
+        toast.error(result1.message);
       }
-    } catch (error) {
-      console.log(error);
-      toast.error("Error fetching asset details");
-    } finally {
-      setIsLoading(false);
+    } else {
+      toast.error(result.message);
     }
+    setIsLoading(false);
   };
 
   const { isLoading, setIsLoading } = useLoading();
@@ -87,7 +105,7 @@ export function AssetTable<TData, TValue>({
       ...prev,
       pageIndex: pageIndex,
     }));
-  };
+  }; 
 
   return (
     <div>
@@ -161,7 +179,101 @@ export function AssetTable<TData, TValue>({
           {isLoading ? (
             <LoadingSpinner />
           ) : (
-            <DetailInformation info={assetDetails!} variant="Asset" />
+            <DialogContent className="max-w-lg border-none p-0" title={"white"}>
+              <div className="overflow-hidden rounded-lg bg-white shadow-lg">
+                <h2 className="bg-red-600 p-6 text-xl font-semibold text-white">
+                  Detailed Asset Information
+                </h2>
+                <div className="px-6 py-4">
+                  <table className="w-full">
+                    <tbody>
+                      <tr className="border-b border-gray-200 last:border-b-0">
+                        <td className="w-[160px] py-2 pr-4 font-medium text-gray-600">
+                          Asset Code
+                        </td>
+                        <td className="py-2 text-gray-800">
+                          {assetDetails?.assetCode}
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200 last:border-b-0">
+                        <td className="w-[160px] py-2 pr-4 font-medium text-gray-600">
+                          Asset Name
+                        </td>
+                        <td className="py-2 text-gray-800">
+                          {assetDetails?.assetName}
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200 last:border-b-0">
+                        <td className="w-[160px] py-2 pr-4 font-medium text-gray-600">
+                          Specification
+                        </td>
+                        <td className="py-2 text-gray-800">
+                          {assetDetails?.specification}
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200 last:border-b-0">
+                        <td className="w-[160px] py-2 pr-4 font-medium text-gray-600">
+                          Installed Date
+                        </td>
+                        <td className="py-2 text-gray-800">
+                          {assetDetails?.installedDate
+                            ? format(assetDetails?.installedDate, "dd/MM/yyyy")
+                            : ""}
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200 last:border-b-0">
+                        <td className="w-[160px] py-2 pr-4 font-medium text-gray-600">
+                          State
+                        </td>
+                        <td className="py-2 text-gray-800">
+                          {ASSET_STATES.find(
+                            (state) => state.value === assetDetails?.state,
+                          )?.label || ""}
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200 last:border-b-0">
+                        <td className="w-[160px] py-2 pr-4 font-medium text-gray-600">
+                          Asset Location
+                        </td>
+                        <td className="py-2 text-gray-800">
+                          {LOCATIONS.find(
+                            (location) =>
+                              location.value === assetDetails?.assetLocation,
+                          )?.label || ""}
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-200 last:border-b-0">
+                        <td className="w-[160px] py-2 pr-4 font-medium text-gray-600">
+                          Category Name
+                        </td>
+                        <td className="py-2 text-gray-800">
+                          {assetDetails?.categoryName}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colSpan={2} className="pt-2">
+                        <AssignmentTable
+                          columns={assetAssignmentColumns({
+                            setOrderBy,
+                            setIsDescending,
+                            isDescending,
+                            orderBy,
+                          })}
+                          data={assignments!}
+                          pagination={assignmentsPagination}
+                          onPaginationChange={assignmentsOnPaginationChange}
+                          pageCount={assignmentsPageCount}
+                          totalRecords={assignmentsTotalRecords}
+                          withIndex={false}
+                          onRowClick={()=>{}}
+                        />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </DialogContent>
           )}
         </Dialog>
       </FullPageModal>

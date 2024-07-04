@@ -39,7 +39,7 @@ export const ManageReturningRequest = () => {
       requestState,
       returnedDateFrom ? format(returnedDateFrom, "yyyy-MM-dd") : "",
       returnedDateTo ? format(returnedDateTo, "yyyy-MM-dd") : "",
-      search,
+      search.trim(),
       orderBy,
       isDescending,
     );
@@ -99,7 +99,7 @@ export const ManageReturningRequest = () => {
               pagination.pageIndex = 1;
             }}
           >
-            <SelectTrigger className="w-32">
+            <SelectTrigger className="min-w-24">
               <SelectValue placeholder="State" />
             </SelectTrigger>
             <SelectContent>
