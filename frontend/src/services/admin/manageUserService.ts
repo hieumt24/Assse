@@ -100,6 +100,23 @@ export const updateUserService = (req: UpdateUserReq) => {
     });
 };
 
+export const checkHasAssignmentService = (id: string) => {
+  return axiosInstance.get(`/users/isValidDisableUser/${id}`).then((res) => {
+    return {
+      success: res.data.succeeded,
+      message: res.data.message,
+      data: res.data.data,
+    };
+  })
+  .catch((err) => {
+    return {
+      success: false,
+      message: err.response.data.message || "Failed to check if user has assignment.",
+      data: err,
+    };
+  });
+}
+
 export const disableUserService = (id: string) => {
   return axiosInstance
     .delete(`/users/disable/${id}`)

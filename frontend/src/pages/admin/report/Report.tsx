@@ -35,7 +35,7 @@ export const Report = () => {
               pageIndex: 1,
             }));
           }}
-          placeholder="Search by category"
+          placeholder="Category"
           className="w-[300px]"
         />
         <Button

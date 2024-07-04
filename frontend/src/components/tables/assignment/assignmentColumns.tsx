@@ -112,9 +112,9 @@ export const assignmentColumns = ({
               e.stopPropagation();
               handleOpenDelete && handleOpenDelete(assignment.id!);
             }}
-            disabled={assignment.state === 1}
+            disabled={assignment.state === 1 || assignment.state === 4}
           >
-            {assignment.state === 1 ? (
+            {assignment.state === 1 || assignment.state === 4 ? (
               <IoCloseCircleOutline
                 size={20}
                 className="text-black opacity-25 hover:text-black"
