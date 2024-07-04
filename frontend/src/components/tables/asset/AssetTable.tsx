@@ -217,7 +217,7 @@ export function AssetTable<TData, TValue>({
                         </td>
                         <td className="py-2 text-gray-800">
                           {assetDetails?.installedDate
-                            ? format(assetDetails?.installedDate, "MM/dd/yyyy")
+                            ? format(assetDetails?.installedDate, "dd/MM/yyyy")
                             : ""}
                         </td>
                       </tr>
