@@ -208,6 +208,8 @@ namespace AssetManagement.Application.Services
 
                 var filterAsset = await _assignmentRepositoriesAsync.FilterAssignmentOfUserAsync(userId, search, assignmentState, dateFrom, dateTo);
 
+                filterAsset = filterAsset.Where(a => a.State != EnumAssignmentState.Returned);
+
                 var totalRecords = filterAsset.Count();
 
                 var specAssignment = AssignmentSpecificationHelper.AssignmentSpecificationWithAsset(paginationFilter, orderBy, isDescending);

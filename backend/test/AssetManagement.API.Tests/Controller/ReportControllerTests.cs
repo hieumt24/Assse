@@ -29,7 +29,7 @@ namespace AssetManagement.API.Tests.Controller
             {
                 Location = EnumLocation.HaNoi,
                 Pagination = new PaginationFilter(),
-                OrderBy = "CategoryName",
+                OrderBy = "",
                 IsDescending = false
             };
 
@@ -37,7 +37,8 @@ namespace AssetManagement.API.Tests.Controller
             {
                 Data = new List<ReportResponseDto>
                 {
-                    new ReportResponseDto { CategoryId = Guid.NewGuid(), CategoryName = "Category1", Total = 10, Assigned = 5, Available = 3, NotAvailable = 1, WaitingForRecycling = 1, Recycled = 0 }
+                    new ReportResponseDto { CategoryId = Guid.NewGuid(), CategoryName = "Category1", Total = 10, Assigned = 5, Available = 3, NotAvailable = 1, WaitingForRecycling = 1, Recycled = 0 },
+                    new ReportResponseDto { CategoryId = Guid.NewGuid(), CategoryName = "Category2", Total = 10, Assigned = 5, Available = 3, NotAvailable = 1, WaitingForRecycling = 1, Recycled = 0 }
                 }
             };
 
