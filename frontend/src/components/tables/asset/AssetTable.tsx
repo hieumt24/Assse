@@ -9,7 +9,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ASSET_STATES, LOCATIONS } from "@/constants";
 import { useLoading } from "@/context/LoadingContext";
+import { usePagination } from "@/hooks";
 import { AssetRes, AssignmentRes, PaginationState } from "@/models";
 import { getAssetByAssetCodeService, getAssignmentByAssetService } from "@/services";
 import {
@@ -18,12 +20,10 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { format } from "date-fns";
+import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "react-toastify";
 import Pagination from "../Pagination";
-import { format } from "date-fns";
-import { ASSET_STATES, LOCATIONS } from "@/constants";
-import { usePagination } from "@/hooks";
 import { AssignmentTable } from "../assignment/AssignmentTable";
 import { assetAssignmentColumns } from "../assignment/assetAssignmentColumns";
 
