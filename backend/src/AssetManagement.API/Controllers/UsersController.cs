@@ -122,5 +122,17 @@ namespace AssetManagement.API.Controllers
             }
             return Ok(response);
         }
+
+        [HttpGet]
+        [Route("isValidDisableUser/{userId}")]
+        public async Task<IActionResult> IsValidDisableUser(Guid userId)
+        {
+            var response = await _userService.IsValidDisableUser(userId);
+            if (response.Succeeded)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
     }
 }
