@@ -242,6 +242,6 @@ export interface GetReportReq {
   };
   search?: string;
   orderBy?: string;
-  adminLocation?: number;
+  location?: number;
   isDescending?: boolean;
 }
