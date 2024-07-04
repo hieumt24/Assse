@@ -60,6 +60,7 @@ namespace AssetManagement.Application.Services
                 userDomain.PasswordHash = _passwordHasher.HashPassword(userDomain, _userRepositoriesAsync.GeneratePassword(userDomain.Username, userDomain.DateOfBirth));
                 userDomain.IsDeleted = false;
                 userDomain.CreatedOn = DateTime.Now;
+                userDomain.LastModifiedOn = DateTime.Now;
 
                 var user = await _userRepositoriesAsync.AddAsync(userDomain);
 

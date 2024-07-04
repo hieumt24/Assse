@@ -85,6 +85,7 @@ namespace AssetManagement.Application.Services
                 var newAssignment = _mapper.Map<Assignment>(request);
                 newAssignment.CreatedOn = DateTime.Now;
                 newAssignment.CreatedBy = request.AssignedIdBy.ToString();
+                newAssignment.LastModifiedOn = DateTime.Now;
                 newAssignment.Note = request.Note.Trim();
                 var asignment = await _assignmentRepository.AddAsync(newAssignment);
                 existingAsset.State = AssetStateType.Assigned;
@@ -215,8 +216,6 @@ namespace AssetManagement.Application.Services
             }
         }
 
-
-
         public async Task<PagedResponse<List<AssignmentResponseDto>>> GetAssetAssign(PaginationFilter paginationFilter, Guid assetId, string? search, EnumAssignmentState? assignmentState, DateTime? dateFrom, DateTime? dateTo, string? orderBy, bool? isDescending, string? route)
         {
             if (dateFrom > dateTo)
@@ -255,8 +254,6 @@ namespace AssetManagement.Application.Services
             }
         }
 
-
-
         public async Task<Response<AssignmentDto>> ChangeAssignmentStateAsync(ChangeStateAssignmentDto request)
         {
             var assignment = await _assignmentRepository.GetByIdAsync(request.AssignmentId);
@@ -285,14 +282,14 @@ namespace AssetManagement.Application.Services
             {
                 var assetResponse = await _assetRepository.GetByIdAsync(assignment.AssetId);
 
-            if (assetResponse == null)
-            {
-                return new Response<AssignmentDto>
+                if (assetResponse == null)
                 {
-                    Succeeded = false,
-                    Message = "Asset not found."
-                };
-            }
+                    return new Response<AssignmentDto>
+                    {
+                        Succeeded = false,
+                        Message = "Asset not found."
+                    };
+                }
 
                 assetResponse.State = AssetStateType.Available;
 
