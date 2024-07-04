@@ -63,7 +63,7 @@ namespace AssetManagement.Infrastructure.Repositories
                 .FirstOrDefaultAsync(assigment => assigment.AssetId == assetId);
         }
 
-        public async Task<IQueryable<Assignment>> FilterAssignmentOfUserAsync(Guid userId, string? search, EnumAssignmentState? assignmentState, DateTime?dateFrom, DateTime? dateTo)
+        public async Task<IQueryable<Assignment>> FilterAssignmentOfUserAsync(Guid userId, string? search, EnumAssignmentState? assignmentState, DateTime? dateFrom, DateTime? dateTo)
         {
             var query = _dbContext.Assignments
                         .Include(x => x.Asset)
@@ -114,6 +114,13 @@ namespace AssetManagement.Infrastructure.Repositories
             query = query.Where(x => x.ReturnRequest == null || x.ReturnRequest.ReturnState != EnumReturnRequestState.Completed);
 
             return query;
+        }
+
+        public async Task<IQueryable<Assignment>> GetAssignmentsByAssetId(Guid assetId)
+        {
+            return _dbContext.Assignments
+                  .Include(x => x.Asset)
+                  .Where(x => x.AssetId == assetId);
         }
     }
 }
