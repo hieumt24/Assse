@@ -67,8 +67,9 @@ export function UserTable<TData, TValue>({
     try {
       setIsLoading(true);
       const result = await getUserByIdService(id);
+      console.log(result);
       if (result.success) {
-        setUserDetails(result.data.data);
+        setUserDetails(result.data);
       } else {
         toast.error(result.message);
       }
