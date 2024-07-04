@@ -1,4 +1,4 @@
-import { CreateAsset, CreateUser, ManageUser } from "@/pages";
+import { CreateAsset, CreateUser, ManageUser, Report } from "@/pages";
 import { MyAssignment } from "@/pages/MyAssignments";
 import { EditAsset } from "@/pages/admin/manage/asset/EditAsset";
 import { ManageAsset } from "@/pages/admin/manage/asset/ManageAsset";
@@ -55,8 +55,8 @@ export const AdminRoutes = () => {
       element: <ManageReturningRequest />,
     },
     {
-      path: "*",
-      element: <Navigate to="/notfound" />,
+      path: "/reports",
+      element: <Report />,
     },
   ]);
   return elements;
