@@ -18,7 +18,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Pagination from "../Pagination";
 import { format } from "date-fns";
@@ -79,25 +79,23 @@ export function AssetTable<TData, TValue>({
     const result = await getAssetByAssetCodeService(assetCode);
     if (result.success) {
       setAssetDetails(result.data);
+      const result1 = await getAssignmentByAssetService({
+        pagination: assignmentsPagination,
+        assetId: result.data.id,
+        orderBy,
+        isDescending
+      })
+      if (result1.success) {
+        setAssignments(result1.data.data || []);
+        setAssignmentsPageCount(result1.data.totalPages);
+        setAssignmentsTotalRecords(result1.data.totalRecords);
+      } else {
+        toast.error(result1.message);
+      }
     } else {
       toast.error(result.message);
     }
-
-    const result1 = await getAssignmentByAssetService({
-      pagination: assignmentsPagination,
-      assetId: assetDetails?.id || "",
-      orderBy,
-      isDescending
-    })
-    if (result1.success) {
-      setAssignments(result1.data.data || []);
-      setAssignmentsPageCount(result1.data.totalPages);
-      setAssignmentsTotalRecords(result1.data.totalRecords);
-    } else {
-      toast.error(result1.message);
-    }
     setIsLoading(false);
-    console.log(result1)
   };
 
   const { isLoading, setIsLoading } = useLoading();
@@ -107,7 +105,7 @@ export function AssetTable<TData, TValue>({
       ...prev,
       pageIndex: pageIndex,
     }));
-  };
+  }; 
 
   return (
     <div>

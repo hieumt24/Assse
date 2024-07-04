@@ -1,5 +1,5 @@
 import { AssetRes } from "@/models";
-import { getAllAssestService } from "@/services/";
+import { getAllAssetService } from "@/services/";
 import { useCallback, useEffect, useState } from "react";
 
 export const useAssets = (
@@ -24,7 +24,7 @@ export const useAssets = (
   const fetchAssets = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await getAllAssestService({
+      const data = await getAllAssetService({
         pagination,
         search,
         orderBy,
@@ -71,7 +71,7 @@ export const useAssets = (
             : isEdited
               ? "lastModifiedOn"
               : orderBy;
-          const newAssetData = await getAllAssestService({
+          const newAssetData = await getAllAssetService({
             pagination,
             search,
             orderBy: orderByField,

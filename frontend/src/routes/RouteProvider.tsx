@@ -19,7 +19,7 @@ export const RouteProvider: React.FC = () => {
         }
       />
       <Route path="/notfound" element={<NotFound />} />
-      <Route path="/Forbidden" element={<Forbidden />} />
+      <Route path="/forbidden" element={<Forbidden />} />
     </Routes>
   );
 };

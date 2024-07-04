@@ -231,7 +231,7 @@ export const ManageAsset = () => {
                 />
                 <div className="max-h-[100px] overflow-y-scroll">
                   <SelectItem key={0} value="all">
-                    All
+                    All categories
                   </SelectItem>
                   {filteredCategories?.map((category) => (
                     <SelectItem key={category.id} value={category.id}>

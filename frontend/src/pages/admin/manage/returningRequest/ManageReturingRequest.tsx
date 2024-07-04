@@ -99,7 +99,7 @@ export const ManageReturningRequest = () => {
               pagination.pageIndex = 1;
             }}
           >
-            <SelectTrigger className="w-32">
+            <SelectTrigger className="min-w-24">
               <SelectValue placeholder="State" />
             </SelectTrigger>
             <SelectContent>

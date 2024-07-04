@@ -170,8 +170,8 @@ export const MyAssignment = () => {
                 pageIndex: 1,
               }));
             }}
-            placeholder="Search by asset code, asset name"
-            className="w-[300px]"
+            placeholder="Search by asset code, asset name, assigned by"
+            className="w-[350px]"
           />
         </div>
       </div>

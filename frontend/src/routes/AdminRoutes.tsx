@@ -3,6 +3,7 @@ import { MyAssignment } from "@/pages/MyAssignments";
 import { EditAsset } from "@/pages/admin/manage/asset/EditAsset";
 import { ManageAsset } from "@/pages/admin/manage/asset/ManageAsset";
 import { CreateAssignment } from "@/pages/admin/manage/assignment/CreateAssignment";
+import { EditAssignment } from "@/pages/admin/manage/assignment/EditAssignment";
 import { ManageAssignment } from "@/pages/admin/manage/assignment/ManageAssignment";
 import { ManageReturningRequest } from "@/pages/admin/manage/returningRequest/ManageReturingRequest";
 import { EditUser } from "@/pages/admin/manage/user/EditUser";
@@ -49,6 +50,10 @@ export const AdminRoutes = () => {
     {
       path: "/assignments/create",
       element: <CreateAssignment />,
+    },
+    {
+      path: "/assignments/edit/:assignmentId",
+      element: <EditAssignment />,
     },
     {
       path: "/returning-request",
