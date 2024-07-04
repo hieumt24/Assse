@@ -290,6 +290,7 @@ export const ManageAsset = () => {
             title="Are you sure"
             desc="Do you want to delete this asset"
             confirmText="Yes"
+            cancelText="Cancel"
             onConfirm={handleDelete}
           />
         </>
