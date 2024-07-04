@@ -219,7 +219,7 @@ export const MyAssignment = () => {
           <GenericDialog
             title="Are you sure?"
             desc="Do you want to accept this assignment?"
-            confirmText="Yes"
+            confirmText="Accept"
             cancelText="Cancel"
             open={openAccept}
             setOpen={setOpenAccept}

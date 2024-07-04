@@ -303,6 +303,7 @@ export const EditUserForm = () => {
           )}
         />
         <div className="flex justify-between">
+          <div>
           <GenericDialog
             trigger="Reset password"
             title="Reset password"
@@ -311,6 +312,7 @@ export const EditUserForm = () => {
             cancelText="Cancel"
             onConfirm={handleReset}
           />
+          </div>
           <div className="flex justify-center gap-4">
             <Button
               type="submit"

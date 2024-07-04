@@ -14,7 +14,6 @@ export const DetailInformation = <T extends UserRes | AssetRes>({
   info,
   variant,
 }: DetailInformationProps<T>) => {
-  console.log(info);
   const formatValue = (key: string, value: FormattableValue): string => {
     if (value == null) return "N/A";
 
@@ -80,6 +79,7 @@ export const DetailInformation = <T extends UserRes | AssetRes>({
           Detailed {variant} Information
         </h2>
         <div className="px-6 py-4">
+          {info ? 
           <table className="w-full">
             <tbody>
               {Object.entries(info)
@@ -98,7 +98,7 @@ export const DetailInformation = <T extends UserRes | AssetRes>({
                   </tr>
                 ))}
             </tbody>
-          </table>
+          </table> : <div>No information available</div>}
         </div>
       </div>
     </DialogContent>
