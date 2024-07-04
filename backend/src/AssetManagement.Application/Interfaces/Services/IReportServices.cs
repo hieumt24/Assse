@@ -10,5 +10,7 @@ namespace AssetManagement.Application.Interfaces.Services
         Task<PagedResponse<ReportResponseDto>> FilterReportAsync(PaginationFilter pagination, EnumLocation location, string? orderBy, bool? isDescending, string? route);
 
         Task<Response<IEnumerable<ReportResponseDto>>> GetReportAsync(EnumLocation location);
+
+        Task<byte[]> ExportReportToExcelAsync(EnumLocation location);
     }
 }

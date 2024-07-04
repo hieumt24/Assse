@@ -25,5 +25,13 @@ namespace AssetManagement.API.Controllers
             }
             return BadRequest(result);
         }
+
+        [HttpGet]
+        [Route("export")]
+        public async Task<IActionResult> ExportReportToExcel([FromQuery] EnumLocation location)
+        {
+            var fileContents = await _reportServices.ExportReportToExcelAsync(location);
+            return File(fileContents, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Report.xlsx");
+        }
     }
 }
