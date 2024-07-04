@@ -69,10 +69,12 @@ export const myAssignmentColumns = ({
           return <p className="text-yellow-600">Waiting for acceptance</p>;
         case 3:
           return <p className="text-red-600">Declined</p>;
-          case 4:
-            return <p className="text-yellow-600">Waiting for returning</p>;
+        case 4:
+          return <p className="text-yellow-600">Waiting for returning</p>;
+        case 5:
+          return <p className="text-blue-600">Returned</p>;
         default:
-          return <p>{}</p>;
+          return <p>Not found state</p>;
       }
     },
   },

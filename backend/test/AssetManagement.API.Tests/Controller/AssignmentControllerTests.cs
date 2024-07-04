@@ -248,7 +248,7 @@ namespace AssetManagement.API.Tests.Controller
             };
             var expectedResponse = new PagedResponse<List<AssignmentResponseDto>>
             {
-                Succeeded = false
+                Succeeded = true
             };
             _assignmentServiceMock.Setup(x => x.GetAssetAssign(It.IsAny<PaginationFilter>(), It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<EnumAssignmentState?>(), It.IsAny<DateTime?>(), It.IsAny<DateTime?>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<string>()))
                 .ReturnsAsync(expectedResponse);

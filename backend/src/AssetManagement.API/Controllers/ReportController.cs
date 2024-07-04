@@ -1,5 +1,4 @@
-﻿using AssetManagement.Application.Filter;
-using AssetManagement.Application.Interfaces.Services;
+﻿using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Models.Filters;
 using AssetManagement.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
