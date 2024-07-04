@@ -132,6 +132,7 @@ namespace AssetManagement.Application.Services
             existingAssignment.AssignedIdBy = request.AssignedIdBy;
             existingAssignment.AssignedDate = request.AssignedDate;
             existingAssignment.Note = request.Note;
+            existingAssignment.LastModifiedOn = DateTime.Now;
 
             await _assignmentRepository.UpdateAsync(existingAssignment);
 
