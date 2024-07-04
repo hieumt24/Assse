@@ -21,7 +21,7 @@ namespace AssetManagement.Application.Helper
                 "assigned" => isDescending.HasValue && isDescending.Value ? reports.OrderByDescending(x => x.Assigned).ToList() : reports.OrderBy(x => x.Assigned).ToList(),
                 "available" => isDescending.HasValue && isDescending.Value ? reports.OrderByDescending(x => x.Available).ToList() : reports.OrderBy(x => x.Available).ToList(),
                 "notavailable" => isDescending.HasValue && isDescending.Value ? reports.OrderByDescending(x => x.NotAvailable).ToList() : reports.OrderBy(x => x.NotAvailable).ToList(),
-                "waitingforrecycling" => isDescending.HasValue && isDescending.Value ? reports.OrderByDescending(x => x.Waitingforrecycling).ToList() : reports.OrderBy(x => x.Waitingforrecycling).ToList(),
+                "waitingforrecycling" => isDescending.HasValue && isDescending.Value ? reports.OrderByDescending(x => x.WaitingForRecycling).ToList() : reports.OrderBy(x => x.WaitingForRecycling).ToList(),
                 "recycled" => isDescending.HasValue && isDescending.Value ? reports.OrderByDescending(x => x.Recycled).ToList() : reports.OrderBy(x => x.Recycled).ToList(),
                 _ => reports.OrderBy(x => x.CategoryName).ToList(),
             };
