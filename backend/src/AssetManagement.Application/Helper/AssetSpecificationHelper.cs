@@ -16,8 +16,7 @@ namespace AssetManagement.Application.Helper
             spec.AddInclude(x => x.Category);
             if (string.IsNullOrEmpty(orderBy))
             {
-                orderBy = "assetcode";
-                isDescending = false;
+                spec.ApplyOrderBy(u => u.AssetCode);
             }
             if (!string.IsNullOrEmpty(orderBy))
             {
@@ -30,6 +29,7 @@ namespace AssetManagement.Application.Helper
                     spec.ApplyOrderBy(GetOrderByExpression(orderBy));
                 }
             }
+
             spec.ApplyPaging(pagination.PageSize * (pagination.PageIndex - 1), pagination.PageSize);
             return spec;
         }

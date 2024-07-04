@@ -3,20 +3,17 @@ using AssetManagement.Application.Filter;
 using AssetManagement.Application.Helper;
 using AssetManagement.Application.Interfaces.Repositories;
 using AssetManagement.Application.Interfaces.Services;
-using AssetManagement.Application.Models.DTOs.Assets;
 using AssetManagement.Application.Models.DTOs.Assignments;
 using AssetManagement.Application.Models.DTOs.Assignments.Reques;
 using AssetManagement.Application.Models.DTOs.Assignments.Request;
 using AssetManagement.Application.Models.DTOs.Assignments.Requests;
 using AssetManagement.Application.Models.DTOs.Assignments.Response;
-using AssetManagement.Application.Models.DTOs.Category;
 using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
 using AutoMapper;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Abstractions;
 
 namespace AssetManagement.Application.Services
 {
@@ -136,9 +133,9 @@ namespace AssetManagement.Application.Services
             existingAssignment.Note = request.Note;
 
             await _assignmentRepository.UpdateAsync(existingAssignment);
-            
+
             var updateAssignment = _mapper.Map<AssignmentDto>(existingAssignment);
-            return new Response<AssignmentDto> { Succeeded = true, Message = "Update assignment successfully." };   
+            return new Response<AssignmentDto> { Succeeded = true, Message = "Update assignment successfully." };
         }
 
         public async Task<PagedResponse<List<AssignmentResponseDto>>> GetAllAssignmentsAsync(PaginationFilter paginationFilter, string? search, EnumAssignmentState? assignmentState, DateTime? dateFrom, DateTime? dateTo, EnumLocation location, string? orderBy, bool? isDescending, string? route)
@@ -297,14 +294,14 @@ namespace AssetManagement.Application.Services
             {
                 var assetResponse = await _assetRepository.GetByIdAsync(assignment.AssetId);
 
-                if (assetResponse == null)
+            if (assetResponse == null)
+            {
+                return new Response<AssignmentDto>
                 {
-                    return new Response<AssignmentDto>
-                    {
-                        Succeeded = false,
-                        Message = "Asset not found."
-                    };
-                }
+                    Succeeded = false,
+                    Message = "Asset not found."
+                };
+            }
 
                 assetResponse.State = AssetStateType.Available;
 
@@ -358,17 +355,15 @@ namespace AssetManagement.Application.Services
             }
 
             var assetResponse = await _assetRepository.GetByIdAsync(exsittingAssigment.AssetId);
-            if(assetResponse == null)
+            if (assetResponse == null)
             {
                 return new Response<AssignmentDto> { Succeeded = false, Message = "Cannot delete this assignment because can not found the asset of this assignment." };
             }
 
             assetResponse.State = AssetStateType.Available;
-            await _assignmentRepositoriesAsync.DeleteAsync(assignmentId); 
+            await _assignmentRepositoriesAsync.DeleteAsync(assignmentId);
 
             return new Response<AssignmentDto> { Succeeded = true, Message = "Assignment deleted successfully." };
         }
-
-  
     }
 }

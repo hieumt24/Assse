@@ -30,13 +30,15 @@ export const ManageReturningRequest = () => {
   const [orderBy, setOrderBy] = useState("");
   const [isDescending, setIsDescending] = useState(true);
   const [requestState, setRequestState] = useState(0);
-  const [returnedDate, setReturnedDate] = useState<Date | null>(null);
+  const [returnedDateFrom, setReturnedDateFrom] = useState<Date | null>(null);
+  const [returnedDateTo, setReturnedDateTo] = useState<Date | null>(null);
   const { requests, loading, error, pageCount, fetchRequests, totalRecords } =
     useReturningRequests(
       pagination,
       user.location,
       requestState,
-      returnedDate ? format(returnedDate, "yyyy-MM-dd") : "",
+      returnedDateFrom ? format(returnedDateFrom, "yyyy-MM-dd") : "",
+      returnedDateTo ? format(returnedDateTo, "yyyy-MM-dd") : "",
       search,
       orderBy,
       isDescending,
@@ -70,6 +72,8 @@ export const ManageReturningRequest = () => {
     const res = await updateReturnRequest({
       returnRequestId: requestId,
       newState: 2,
+      acceptedBy: user.id
+
     });
     if (res.success) {
       toast.success(res.message);
@@ -99,13 +103,34 @@ export const ManageReturningRequest = () => {
               <SelectValue placeholder="State" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="0">All</SelectItem>
-              <SelectItem value="1">Waiting</SelectItem>
+              <SelectItem value="0">All States</SelectItem>
+              <SelectItem value="1">Waiting for returning</SelectItem>
               <SelectItem value="2">Completed</SelectItem>
               {/* <SelectItem value="3">Cancelled</SelectItem> */}
             </SelectContent>
           </Select>
-          <DatePicker setValue={setReturnedDate} placeholder="Returned Date" />
+          <div className="flex items-center">
+            From:&nbsp;
+            <DatePicker
+              setValue={setReturnedDateFrom}
+              placeholder="Returned Date"
+              onChange={() => {
+                pagination.pageIndex = 1;
+              }}
+              className="w-[150px]"
+            />
+          </div>
+          <div className="flex items-center">
+            To:&nbsp;
+            <DatePicker
+              setValue={setReturnedDateTo}
+              placeholder="Returned Date"
+              onChange={() => {
+                pagination.pageIndex = 1;
+              }}
+              className="w-[150px]"
+            />
+          </div>
         </div>
 
         <div className="flex justify-between gap-6">
@@ -117,7 +142,7 @@ export const ManageReturningRequest = () => {
                 pageIndex: 1,
               }));
             }}
-            placeholder="Search by asset code, asset name, username"
+            placeholder="Search by asset code, asset name, requested by"
             className="w-[350px]"
           />
         </div>
@@ -148,6 +173,7 @@ export const ManageReturningRequest = () => {
             title="Are you sure?"
             desc="Do you want to cancel this request?"
             confirmText="Yes"
+            cancelText="No"
             open={openCancel}
             setOpen={setOpenCancel}
             onConfirm={handleCancel}
@@ -156,6 +182,7 @@ export const ManageReturningRequest = () => {
             title="Are you sure?"
             desc="Do you want to mark this returning as 'Completed'?"
             confirmText="Yes"
+            cancelText="No"
             open={openComplete}
             setOpen={setOpenComplete}
             onConfirm={handleComplete}

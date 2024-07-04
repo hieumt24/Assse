@@ -80,11 +80,10 @@ namespace AssetManagement.Application.Services
             try
             {
                 var newReturnRequest = _mapper.Map<ReturnRequest>(request);
-                newReturnRequest.ReturnedDate = DateTime.Now;
                 newReturnRequest.CreatedOn = DateTime.Now;
                 newReturnRequest.CreatedBy = request.RequestedBy.ToString();
-                newReturnRequest.ReturnState = EnumReturnRequestState.WaitingForReturninging;
-                existingAssignment.State = EnumAssignmentState.WaitingForReturn;
+                newReturnRequest.ReturnState = EnumReturnRequestState.WaitingForReturning;
+                existingAssignment.State = EnumAssignmentState.WaitingForReturning;
                 await _assignmentRepository.UpdateAsync(existingAssignment);
                 var returnrequest = await _returnRequestRepository.AddAsync(newReturnRequest);
 
@@ -119,7 +118,7 @@ namespace AssetManagement.Application.Services
                     };
                 }
 
-                if (returnRequest.ReturnState == EnumReturnRequestState.WaitingForReturninging)
+                if (returnRequest.ReturnState == EnumReturnRequestState.WaitingForReturning)
                 {
                     var cancelReturnRequest = await _returnRequestRepository.DeleteAsync(returnRequest.Id);
                     if (cancelReturnRequest == null)
@@ -127,6 +126,7 @@ namespace AssetManagement.Application.Services
                         return new Response<string> { Succeeded = false, Message = "Cancel Return Request failed." };
                     }
                     existingAssignment.State = EnumAssignmentState.Accepted;
+                    await _assignmentRepository.UpdateAsync(existingAssignment);
                 }
                 return new Response<string> { Succeeded = true, Message = "Cancel Return Request Successfully." };
             }
@@ -209,6 +209,7 @@ namespace AssetManagement.Application.Services
                 }
                 var assetResponse = await _assetRepositoriesAsync.GetByIdAsync(assignment.AssetId);
 
+                returnRequest.ReturnedDate = DateTime.Now;
                 returnRequest.AcceptedBy = request.AcceptedBy;
                 assetResponse.State = AssetStateType.Available;
                 assignment.State = EnumAssignmentState.Returned;

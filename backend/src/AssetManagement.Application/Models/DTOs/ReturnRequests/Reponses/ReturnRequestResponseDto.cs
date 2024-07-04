@@ -11,7 +11,7 @@ namespace AssetManagement.Application.Models.DTOs.ReturnRequests.Reponses
         public DateTime? AssignedDate { get; set; }
         public string? AcceptedBy { get; set; }
         public DateTime? ReturnedDate { get; set; }
-        public EnumAssignmentState? State { get; set; }
+        public EnumReturnRequestState? State { get; set; }
         public EnumLocation Location { get; set; }
     }
 }

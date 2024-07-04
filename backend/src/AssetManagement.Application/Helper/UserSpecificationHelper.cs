@@ -1,8 +1,6 @@
-using AssetManagement.Application.Extensions;
 using AssetManagement.Application.Filter;
 using AssetManagement.Domain.Common.Specifications;
 using AssetManagement.Domain.Entites;
-using AssetManagement.Domain.Enums;
 using AssetManagement.Domain.Specifications;
 using System.Linq.Expressions;
 
@@ -29,24 +27,20 @@ namespace AssetManagement.Application.Helper
             }
             else
             {
-                spec.ApplyOrderBy(u => u.FirstName);
+                spec.ApplyOrderBy(GetOrderByExpression("fullname"));
             }
             spec.ApplyPaging(pagination.PageSize * (pagination.PageIndex - 1), pagination.PageSize);
 
             return spec;
         }
 
-        public static ISpecification<User> CreateSpecificationPagination(ISpecification<User> userQuery, PaginationFilter filter)
-        {
-            var useragination = new UserSpecification(userQuery.Criteria);
-            useragination.ApplyPaging(filter.PageSize * (filter.PageIndex - 1), filter.PageSize);
-            return useragination;
-        }
-
         private static Expression<Func<User, object>> GetOrderByExpression(string orderBy)
         {
             switch (orderBy.ToLower())
             {
+                case "fullname":
+                    return u => u.FirstName + " " + u.LastName;
+
                 case "firstname":
                     return u => u.FirstName;
 
@@ -62,7 +56,7 @@ namespace AssetManagement.Application.Helper
                 case "dateofbirth":
                     return u => u.DateOfBirth;
 
-                case "joineddate":
+                case "joinedDate":
                     return u => u.JoinedDate;
 
                 case "gender":

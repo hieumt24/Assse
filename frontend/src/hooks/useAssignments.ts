@@ -12,7 +12,8 @@ export const useAssignments = (
   adminLocation?: number,
   isDescending?: boolean,
   assignmentState?: number,
-  assignedDate?: string,
+  dateFrom?: string,
+  dateTo?: string
 ) => {
   const [assignments, setAssignments] = useState<AssignmentRes[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -31,7 +32,8 @@ export const useAssignments = (
         isDescending,
         adminLocation,
         assignmentState,
-        assignedDate,
+        dateFrom,
+        dateTo
       });
 
       setAssignments(data.data.data || []);
@@ -52,7 +54,8 @@ export const useAssignments = (
     isDescending,
     adminLocation,
     assignmentState,
-    assignedDate,
+    dateFrom,
+    dateTo
   ]);
 
   useEffect(() => {
@@ -78,7 +81,8 @@ export const useAssignments = (
             isDescending: true, // Ensure we get the most recent assignment
             adminLocation,
             assignmentState,
-            assignedDate,
+            dateFrom,
+            dateTo
           });
 
           const newAssignment = newAssignmentData.data.data[0];
@@ -111,7 +115,8 @@ export const useAssignments = (
     isDescending,
     adminLocation,
     assignmentState,
-    assignedDate,
+    dateFrom,
+    dateTo,
     fetchAssignments,
   ]);
 

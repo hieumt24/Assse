@@ -29,7 +29,8 @@ export const ManageAssignment = () => {
   const [orderBy, setOrderBy] = useState("");
   const [isDescending, setIsDescending] = useState(true);
   const [assignmentState, setAssignmentState] = useState(0);
-  const [assignedDate, setAssignedDate] = useState<Date | null>(null);
+  const [assignedDateFrom, setAssignedDateFrom] = useState<Date | null>(null);
+  const [assignedDateTo, setAssignedDateTo] = useState<Date | null>(null);
   const { user } = useAuth();
 
   const {
@@ -46,7 +47,8 @@ export const ManageAssignment = () => {
     user.location,
     isDescending,
     assignmentState,
-    assignedDate ? format(assignedDate, "yyyy-MM-dd") : "",
+    assignedDateFrom ? format(assignedDateFrom, "yyyy-MM-dd") : "",
+    assignedDateTo ? format(assignedDateTo, "yyyy-MM-dd") : "",
   );
 
   const { setIsLoading } = useLoading();
@@ -81,7 +83,6 @@ export const ManageAssignment = () => {
     const res = await createReturnRequest({
       assignmentId: assignmentId,
       requestedBy: user.id,
-      returnedDate: format(new Date(), "yyyy-MM-dd"),
       location: user.location,
     });
     if (res.success) {
@@ -97,28 +98,60 @@ export const ManageAssignment = () => {
   const navigate = useNavigate();
   return (
     <div className="m-16 flex flex-grow flex-col gap-8">
-      <p className="text-2xl font-bold text-red-600">Assignment List</p>
       <div className="flex items-center justify-between">
-        <div className="flex items-center justify-center gap-4">
+        <p className="text-2xl font-bold text-red-600">Assignment List</p>
+        <Button
+          variant={"destructive"}
+          onClick={() => navigate("/assignments/create")}
+        >
+          <span className="capitalize">Create new assignment</span>
+        </Button>
+      </div>
+
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center justify-center gap-2">
           <Select
             onValueChange={(value) => {
               setAssignmentState(Number(value));
               pagination.pageIndex = 1;
             }}
           >
-            <SelectTrigger className="w-32">
+            <SelectTrigger className="w-24">
               <SelectValue placeholder="State" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="0">All</SelectItem>
+              <SelectItem value="0">All states</SelectItem>
               <SelectItem value="1">Accepted</SelectItem>
-              <SelectItem value="2">Waiting</SelectItem>
+              <SelectItem value="2">Waiting for acceptance</SelectItem>
               <SelectItem value="3">Declined</SelectItem>
             </SelectContent>
           </Select>
-          <DatePicker setValue={setAssignedDate} placeholder="Assigned Date" />
+          <div className="flex items-center">
+            From:&nbsp;
+            <DatePicker
+              setValue={setAssignedDateFrom}
+              placeholder="Assigned Date"
+              onChange={() => {
+                pagination.pageIndex = 1;
+                //if (assignedDateTo != null && assignedDateFrom != null && assignedDateFrom > assignedDateTo) setAssignedDateFrom(null);
+              }}
+              className="w-[150px]"
+            />
+          </div>
+          <div className="flex items-center">
+            To:&nbsp;
+            <DatePicker
+              setValue={setAssignedDateTo}
+              placeholder="Assigned Date"
+              onChange={() => {
+                pagination.pageIndex = 1;
+                //if (assignedDateTo != null && assignedDateFrom != null && assignedDateFrom > assignedDateTo) setAssignedDateTo(null);
+              }}
+              className="w-[150px]"
+            />
+          </div>
         </div>
-        <div className="flex justify-between gap-6">
+        <div className="flex justify-between gap-4">
           <SearchForm
             setSearch={setSearch}
             onSubmit={() => {
@@ -128,14 +161,8 @@ export const ManageAssignment = () => {
               }));
             }}
             placeholder="Search by asset code, asset name, user assigned"
-            className="w-[350px]"
+            className="w-[352px]"
           />
-          <Button
-            variant={"destructive"}
-            onClick={() => navigate("/assignments/create")}
-          >
-            <span className="capitalize">Create new assignment</span>
-          </Button>
         </div>
       </div>
 

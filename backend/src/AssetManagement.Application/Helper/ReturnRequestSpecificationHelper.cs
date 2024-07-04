@@ -3,7 +3,6 @@ using AssetManagement.Domain.Common.Specifications;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Specifications;
 using System.Linq.Expressions;
-using System.Security.Cryptography.X509Certificates;
 
 namespace AssetManagement.Application.Helper
 {
@@ -30,7 +29,7 @@ namespace AssetManagement.Application.Helper
             }
             else
             {
-                spec.ApplyOrderBy(u => u.CreatedOn);
+                spec.ApplyOrderByDescending(u => u.CreatedOn);
             }
             spec.ApplyPaging(pagination.PageSize * (pagination.PageIndex - 1), pagination.PageSize);
             return spec;

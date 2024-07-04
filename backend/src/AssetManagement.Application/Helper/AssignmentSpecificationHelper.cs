@@ -1,4 +1,4 @@
-﻿using AssetManagement.Application.Filter;
+using AssetManagement.Application.Filter;
 using AssetManagement.Domain.Common.Specifications;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Specifications;
@@ -26,6 +26,10 @@ namespace AssetManagement.Application.Helper
                     spec.ApplyOrderBy(GetOrderByExpression(orderBy));
                 }
             }
+            else
+            {
+                spec.ApplyOrderByDescending(GetOrderByExpression("createdon"));
+            }
             spec.ApplyPaging(filter.PageSize * (filter.PageIndex - 1), filter.PageSize);
             return spec;
         }
@@ -42,7 +46,7 @@ namespace AssetManagement.Application.Helper
                 "createdon" => u => u.CreatedOn,
                 "lastmodifiedon" => u => u.LastModifiedOn,
                 "state" => u => u.State,
-                "" => u => u.Id
+                _ => u => u.CreatedOn
             };
         }
     }

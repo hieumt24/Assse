@@ -12,7 +12,8 @@ export const useMyAssignments = (
   orderBy?: string,
   isDescending?: boolean,
   assignmentState?: number,
-  assignedDate?: string,
+  dateFrom?: string,
+  dateTo?: string
 ) => {
   const [assignments, setAssignments] = useState<AssignmentRes[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -30,11 +31,12 @@ export const useMyAssignments = (
         orderBy,
         isDescending,
         assignmentState,
-        assignedDate,
+        dateFrom,
+        dateTo,
         userId,
       });
 
-      setAssignments(data.data.data);
+      setAssignments(data.data.data || []);
       setPageCount(data.data.totalPages);
       setTotalRecords(data.data.totalRecords);
     } catch (error) {
@@ -52,7 +54,8 @@ export const useMyAssignments = (
     orderBy,
     isDescending,
     userId,
-    assignedDate,
+    dateFrom,
+    dateTo,
     assignmentState,
   ]);
 

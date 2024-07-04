@@ -5,7 +5,7 @@
         Accepted = 1,
         WaitingForAcceptance = 2,
         Declined = 3,
-        WaitingForReturn = 4, 
+        WaitingForReturning = 4, 
         Returned = 5,
     }
 }
