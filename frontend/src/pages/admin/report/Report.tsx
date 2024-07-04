@@ -17,7 +17,7 @@ export const Report = () => {
   const { report, loading, error, pageCount, totalRecords } = useReport({
     pagination,
     search,
-    adminLocation: user.location,
+    location: user.location,
     orderBy,
     isDescending,
   });
