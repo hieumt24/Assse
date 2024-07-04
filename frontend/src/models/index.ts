@@ -230,3 +230,26 @@ export interface UpdateReturningRequestReq {
   newState?: number;
   acceptedBy?: string;
 }
+
+// Report reponse
+export interface ReportRes {
+  categoryId?: string;
+  categoryName?: string;
+  total?: number;
+  assigned?: number;
+  available?: number;
+  notAvailable?: number;
+  waitingForRecycling?: number;
+  recycled?: number;
+}
+
+export interface GetReportReq {
+  pagination: {
+    pageSize: number;
+    pageIndex: number;
+  };
+  search?: string;
+  orderBy?: string;
+  adminLocation?: number;
+  isDescending?: boolean;
+}
