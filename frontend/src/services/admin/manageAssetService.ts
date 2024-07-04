@@ -39,7 +39,7 @@ export const getAssetByIdService = (id: string) => {
       return {
         success: true,
         message: "Asset fetched successfully!",
-        data: res.data,
+        data: res.data.data,
       };
     })
     .catch((err) => {

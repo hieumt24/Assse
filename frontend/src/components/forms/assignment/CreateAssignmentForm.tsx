@@ -251,7 +251,7 @@ export const CreateAssignmentForm = () => {
                   <DialogTrigger className="flex min-h-10 w-full items-center justify-between rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors">
                     <span className="w-full text-left text-zinc-500">
                       {form.getValues("assetId") !== ""
-                        ? `${selectedAsset?.assetCode} ${selectedAsset?.assetName}`
+                        ? `${selectedAsset?.assetCode} - ${selectedAsset?.assetName}`
                         : "Select asset"}
                     </span>
                     <Input type="hidden" {...field} />

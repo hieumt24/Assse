@@ -50,7 +50,7 @@ export const getUserByIdService = (id: string) => {
       return {
         success: true,
         message: "User fetched successfully!",
-        data: res.data,
+        data: res.data.data,
       };
     })
     .catch((err) => {
