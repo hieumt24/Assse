@@ -1,6 +1,5 @@
 import { FullPageModal } from "@/components/FullPageModal";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { DetailInformation } from "@/components/shared/DetailInformation";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
   Table,
@@ -26,7 +25,6 @@ import { format } from "date-fns";
 import { ASSET_STATES, LOCATIONS } from "@/constants";
 import { usePagination } from "@/hooks";
 import { AssignmentTable } from "../assignment/AssignmentTable";
-import { assignmentColumns } from "@/components";
 import { assetAssignmentColumns } from "../assignment/assetAssignmentColumns";
 
 interface AssetTableProps<TData, TValue> {
