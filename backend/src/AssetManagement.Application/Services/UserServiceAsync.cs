@@ -170,7 +170,7 @@ namespace AssetManagement.Application.Services
                 {
                     return new Response<UserDto> { Succeeded = false, Message = "There are valid assignments belonging to this user. Please close all assignments before disabling user." };
                 }
-
+                user.LastModifiedOn = DateTime.Now;
                 var disableUser = await _userRepositoriesAsync.DeleteAsync(user.Id);
                 if (disableUser == null)
                 {
