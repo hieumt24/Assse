@@ -84,7 +84,7 @@ namespace AssetManagement.Application.Services
                     worksheet.Cell(1, i + 1).Value = headers[i];
                     worksheet.Cell(1, i + 1).Style.Font.Bold = true;
                     worksheet.Cell(1, i + 1).Style.Font.FontColor = XLColor.White;
-                    worksheet.Cell(1, i + 1).Style.Fill.BackgroundColor = XLColor.Green;
+                    worksheet.Cell(1, i + 1).Style.Fill.BackgroundColor = XLColor.RoyalBlue;
                     worksheet.Cell(1, i + 1).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                     worksheet.Cell(1, i + 1).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
                 }
@@ -105,7 +105,7 @@ namespace AssetManagement.Application.Services
                     {
                         worksheet.Cell(row, col).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                         worksheet.Cell(row, col).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-                        worksheet.Cell(row, col).Style.Fill.BackgroundColor = (row % 2 == 0) ? XLColor.Gray : XLColor.White;
+                        worksheet.Cell(row, col).Style.Fill.BackgroundColor = (row % 2 == 0) ? XLColor.LightGray : XLColor.White;
                     }
 
                     row++;

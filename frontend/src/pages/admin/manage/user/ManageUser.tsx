@@ -39,6 +39,8 @@ export const ManageUser = () => {
       orderBy,
       isDescending,
     );
+  const [openDisable, setOpenDisable] = useState(false);
+  //const [openCannotDisable, setOpenCannotDisable] = useState(false);
 
   const navigate = useNavigate();
   const { setIsLoading } = useLoading();
@@ -66,7 +68,7 @@ export const ManageUser = () => {
       setIsLoading(false);
     }
   };
-  const [openDisable, setOpenDisable] = useState(false);
+
   return (
     <div className="m-16 flex flex-grow flex-col gap-8">
       <p className="text-2xl font-bold text-red-600">User List</p>
@@ -129,8 +131,9 @@ export const ManageUser = () => {
           />
           <GenericDialog
             title="Are you sure?"
-            desc="Do you want to disable this user"
+            desc="Do you want to disable this user?"
             confirmText="Yes"
+            cancelText="Cancel"
             open={openDisable}
             setOpen={setOpenDisable}
             onConfirm={handleDisable}

@@ -22,7 +22,7 @@ import { GENDERS, ROLES } from "@/constants";
 import { useLoading } from "@/context/LoadingContext";
 import { useAuth } from "@/hooks";
 import { UserRes } from "@/models";
-import { getUserByStaffCodeService, updateUserService } from "@/services";
+import { getUserByStaffCodeService, resetPasswordService, updateUserService } from "@/services";
 import { updateUserSchema } from "@/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
@@ -50,8 +50,15 @@ export const EditUserForm = () => {
     },
   });
 
-  const handleReset = () => {
-    console.log("reset");
+  const handleReset = async () => {
+    setIsLoading(true);
+    const result = await resetPasswordService(userDetails?.id!);
+    if (result.success) {
+      toast.success(result.message);
+    } else {
+      toast.error(result.message);
+    }
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -301,6 +308,7 @@ export const EditUserForm = () => {
             title="Reset password"
             desc="Are you sure to reset password of this account?"
             confirmText="Reset"
+            cancelText="Cancel"
             onConfirm={handleReset}
           />
           <div className="flex justify-center gap-4">
