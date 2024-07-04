@@ -40,7 +40,7 @@ export const ManageUser = () => {
       isDescending,
     );
   const [openDisable, setOpenDisable] = useState(false);
-  const [openCannotDisable, setOpenCannotDisable] = useState(false);
+  //const [openCannotDisable, setOpenCannotDisable] = useState(false);
 
   const navigate = useNavigate();
   const { setIsLoading } = useLoading();
