@@ -47,7 +47,7 @@ namespace AssetManagement.Application.Services
                         Assigned = totalAssets.Count(x => x.CategoryId == category.Id && x.State == AssetStateType.Assigned),
                         Available = totalAssets.Count(x => x.CategoryId == category.Id && x.State == AssetStateType.Available),
                         NotAvailable = totalAssets.Count(x => x.CategoryId == category.Id && x.State == AssetStateType.NotAvailable),
-                        Waitingforrecycling = totalAssets.Count(x => x.CategoryId == category.Id && x.State == AssetStateType.WaitingForRecycling),
+                        WaitingForRecycling = totalAssets.Count(x => x.CategoryId == category.Id && x.State == AssetStateType.WaitingForRecycling),
                         Recycled = totalAssets.Count(x => x.CategoryId == category.Id && x.State == AssetStateType.Recycled)
                     };
 
