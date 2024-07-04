@@ -68,7 +68,6 @@ export const userColumns = ({
       const navigate = useNavigate();
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const { user } = useAuth();
-      if (user.id === userInfo.id) return;
       return (
         <div className="flex gap-4">
           <button
@@ -77,8 +76,15 @@ export const userColumns = ({
               e.stopPropagation();
               navigate(`edit/${userInfo.staffCode}`);
             }}
+            disabled={user.id === userInfo.id}
           >
-            <FiEdit2 size={18} />
+            {user.id === userInfo.id ? (
+              <FiEdit2 size={18} 
+                className="text-black opacity-25 hover:text-black"
+              />
+            ) : (
+              <FiEdit2 size={18} />
+            )}
           </button>
           <button
             className="text-red-500 hover:text-red-700"
@@ -86,8 +92,16 @@ export const userColumns = ({
               e.stopPropagation();
               handleOpenDisable(userInfo.id);
             }}
+            disabled={userInfo.role === 1}
           >
-            <IoCloseCircleOutline size={20} />
+            {userInfo.role === 1 || user.id === userInfo.id ? (
+              <IoCloseCircleOutline
+                size={20}
+                className="text-black opacity-25 hover:text-black"
+              />
+            ) : (
+              <IoCloseCircleOutline size={20} />
+            )}
           </button>
         </div>
       );

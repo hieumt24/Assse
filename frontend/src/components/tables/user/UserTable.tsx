@@ -60,9 +60,10 @@ export function UserTable<TData, TValue>({
   });
 
   const [openDetails, setOpenDetails] = useState(false);
-  const [userDetails, setUserDetails] = useState<UserRes>();
+  const [userDetails, setUserDetails] = useState<UserRes | null>(null);
 
   const handleOpenDetails = async (id: string) => {
+    console.log(userDetails);
     setOpenDetails(true);
     try {
       setIsLoading(true);
@@ -161,7 +162,7 @@ export function UserTable<TData, TValue>({
         <Dialog open={openDetails} onOpenChange={setOpenDetails}>
           {isLoading ? (
             <LoadingSpinner />
-          ) : (
+          ) : userDetails ? <div>User not found</div> : (
             <DetailInformation info={userDetails!} variant="User" />
           )}
         </Dialog>
