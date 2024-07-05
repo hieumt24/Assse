@@ -17,7 +17,7 @@ namespace AssetManagement.Infrastructure.Repositories
         public async Task<User> FindByUsernameAsync(string username)
         {
             var user = await _dbContext.Users
-           .Where(u => u.Username.ToLower() == username.ToLower())
+           .Where(u => u.Username.ToLower() == username.ToLower() && !u.IsDeleted)
            .FirstOrDefaultAsync();
 
             if (user != null && user.Username.Equals(username, StringComparison.Ordinal))
