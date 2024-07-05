@@ -1,5 +1,5 @@
-import { GenericDialog } from "@/components";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { GenericDialog } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -119,8 +119,19 @@ export const EditUserForm = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="w-1/3 space-y-5 rounded-2xl bg-white p-6 shadow-md"
       >
+        <div className="flex justify-between">
         <h1 className="text-2xl font-bold text-red-600">Edit User</h1>
-
+        <div>
+          <GenericDialog
+            trigger="Reset password"
+            title="Reset password"
+            desc="Are you sure to reset password of this account?"
+            confirmText="Reset"
+            cancelText="Cancel"
+            onConfirm={handleReset}
+          />
+          </div>
+        </div>
         <FormField
           name="staffCode"
           render={() => (
@@ -302,18 +313,7 @@ export const EditUserForm = () => {
             </FormItem>
           )}
         />
-        <div className="flex justify-between">
-          <div>
-          <GenericDialog
-            trigger="Reset password"
-            title="Reset password"
-            desc="Are you sure to reset password of this account?"
-            confirmText="Reset"
-            cancelText="Cancel"
-            onConfirm={handleReset}
-          />
-          </div>
-          <div className="flex justify-center gap-4">
+        <div className="flex justify-end gap-4">
             <Button
               type="submit"
               className="w-[76px] bg-red-500 hover:bg-white hover:text-red-500"
@@ -330,7 +330,6 @@ export const EditUserForm = () => {
             >
               Cancel
             </Button>
-          </div>
         </div>
       </form>
     </Form>

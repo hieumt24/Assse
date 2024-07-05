@@ -118,6 +118,9 @@ namespace AssetManagement.Application.Services
             {
                 return new Response<AssignmentDto> { Succeeded = false, Message = "Assignment not found." };
             }
+            if (existingAssignment.State != EnumAssignmentState.WaitingForAcceptance) {
+                return new Response<AssignmentDto> { Succeeded = false, Message = "Assignment can no longer be edited." };
+            }
             if (existingAssignment.AssetId != request.AssetId)
             {
                 var existingAsset = await _assetRepository.GetByIdAsync(existingAssignment.AssetId);
