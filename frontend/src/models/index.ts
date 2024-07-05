@@ -175,7 +175,7 @@ export interface CreateAssignmentReq {
   assignedIdBy: string;
   assetId: string;
   assignedDate: string;
-  note: string;
+  note?: string;
   location: number;
   state: number;
 }
@@ -185,7 +185,7 @@ export interface EditAssignmentReq {
   assignedIdBy: string;
   assetId: string;
   assignedDate: string;
-  note: string;
+  note?: string;
 }
 
 export interface UpdateAssignmentStateReq {
