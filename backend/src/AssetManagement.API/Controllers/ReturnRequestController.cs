@@ -22,7 +22,7 @@ namespace AssetManagement.API.Controllers
         public async Task<IActionResult> Create([FromBody] AddReturnRequestDto request)
         {
             var result = await _returnRequestServicesAsync.AddReturnRequestAsync(request);
-            if (result != null)
+            if (result.Succeeded)
             {
                 return Ok(result);
             }
@@ -35,7 +35,7 @@ namespace AssetManagement.API.Controllers
         {
             string route = Request.Path.Value;
             var result = await _returnRequestServicesAsync.GetAllReturnRequestAsync(returnRequestFilter.pagination, returnRequestFilter.search, returnRequestFilter.returnState, returnRequestFilter.returnedDateFrom, returnRequestFilter.returnedDateTo, returnRequestFilter.location, returnRequestFilter.orderBy, returnRequestFilter.isDescending, route);
-            if (result != null)
+            if (result.Succeeded)
             {
                 return Ok(result);
             }
@@ -46,7 +46,7 @@ namespace AssetManagement.API.Controllers
         public async Task<IActionResult> CancelReturnRequest(Guid returnRequestId)
         {
             var result = await _returnRequestServicesAsync.CancelReturnRequestAsync(returnRequestId);
-            if (result != null)
+            if (result.Succeeded)
             {
                 return Ok(result);
             }
