@@ -1,6 +1,7 @@
 ﻿using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Models.Filters;
 using AssetManagement.Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AssetManagement.API.Controllers
@@ -17,6 +18,7 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetReport([FromBody] ReportFIlter reportFIlter)
         {
             string route = Request.Path.Value;
@@ -30,6 +32,7 @@ namespace AssetManagement.API.Controllers
 
         [HttpGet]
         [Route("export")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ExportReportToExcel([FromQuery] EnumLocation location)
         {
             var fileContents = await _reportServices.ExportReportToExcelAsync(location);
