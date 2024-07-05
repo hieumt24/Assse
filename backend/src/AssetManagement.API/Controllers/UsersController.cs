@@ -123,8 +123,9 @@ namespace AssetManagement.API.Controllers
             return Ok(response);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("isValidDisableUser/{userId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> IsValidDisableUser(Guid userId)
         {
             var response = await _userService.IsValidDisableUser(userId);

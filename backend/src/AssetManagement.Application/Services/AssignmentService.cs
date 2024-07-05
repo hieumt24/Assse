@@ -132,6 +132,7 @@ namespace AssetManagement.Application.Services
             existingAssignment.AssignedIdBy = request.AssignedIdBy;
             existingAssignment.AssignedDate = request.AssignedDate;
             existingAssignment.Note = request.Note;
+            existingAssignment.LastModifiedOn = DateTime.Now;
 
             await _assignmentRepository.UpdateAsync(existingAssignment);
 
@@ -206,6 +207,8 @@ namespace AssetManagement.Application.Services
                 }
 
                 var filterAsset = await _assignmentRepositoriesAsync.FilterAssignmentOfUserAsync(userId, search, assignmentState, dateFrom, dateTo);
+
+                filterAsset = filterAsset.Where(a => a.State != EnumAssignmentState.Returned);
 
                 var totalRecords = filterAsset.Count();
 

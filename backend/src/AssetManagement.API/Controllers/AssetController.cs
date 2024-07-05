@@ -94,5 +94,18 @@ namespace AssetManagement.API.Controllers
             }
             return Ok(response);
         }
+
+        [HttpPost]
+        [Route("isValidDeleteAsset/{assetId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> IsValidDeleteAsset(Guid assetId)
+        {
+            var response = await _assetService.IsValidDeleteAsset(assetId);
+            if (!response.Succeeded)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
     }
 }

@@ -29,34 +29,6 @@ namespace AssetManagement.API.Tests.Controller
             };
         }
 
-        //[Fact]
-        //public async Task GetAllAsset_ReturnsOkResult_WhenAssetsAreFetchedSuccessfully()
-        //{
-        //    // Arrange
-        //    var assetFilter = new AssetFilter();
-        //    var expectedResponse = new Response<List<AssetDto>>
-        //    {
-        //        Succeeded = true,
-        //        Data = new List<AssetDto>()
-        //    };
-        //    _assetServiceMock.Setup(x => x.GetAllAseets(
-        //        It.IsAny<PaginationFilter>(),
-        //        It.IsAny<string>(),
-        //        It.IsAny<Guid?>(),
-        //        It.IsAny<ICollection<AssetStateType>>(),
-        //        It.IsAny<EnumLocation>(),
-        //        It.IsAny<string>(),
-        //        It.IsAny<bool?>(),
-        //        It.IsAny<string>()
-        //    )).ReturnsAsync(expectedResponse);
-        //    // Act
-        //    var result = await _assetController.GetAllAsset(assetFilter);
-
-        //    // Assert
-        //    var okResult = Assert.IsType<OkObjectResult>(result);
-        //    var returnValue = Assert.IsType<Response<List<AssetDto>>>(okResult.Value);
-        //    Assert.True(returnValue.Succeeded);
-        //}
 
         [Fact]
         public async Task GetAllAsset_ReturnsOkResult_WhenServiceSucceeds()

@@ -59,9 +59,9 @@ namespace AssetManagement.Infrastructure.Common
             return await ApplySpecification(spec).FirstOrDefaultAsync();
         }
 
-        public  virtual async Task<T> GetByIdAsync(Guid id)
+        public virtual async Task<T> GetByIdAsync(Guid id)
         {
-            var entity = await _dbContext.Set<T>().FindAsync(id);
+            var entity = await _dbContext.Set<T>().FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
             if (entity == null)
             {
                 return null;
@@ -71,7 +71,7 @@ namespace AssetManagement.Infrastructure.Common
 
         public async Task<List<T>> ListAllAsync()
         {
-            return await _dbContext.Set<T>().ToListAsync();
+            return await _dbContext.Set<T>().Where(x => !x.IsDeleted).ToListAsync();
         }
 
         public async Task<IList<T>> ListAsync(ISpecification<T> spec)

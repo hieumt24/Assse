@@ -9,6 +9,7 @@ using AssetManagement.Application.Models.DTOs.Assignments.Response;
 using AssetManagement.Application.Models.Filters;
 using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Enums;
+using DocumentFormat.OpenXml.Drawing.Charts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -229,6 +230,7 @@ namespace AssetManagement.API.Tests.Controller
             Assert.False(returnValue.Succeeded);
         }
 
+        // object instance null 
         [Fact]
         public async Task GetAssetAssignHistory_ReturnsOkResult_WhenAssignmentsAreFetchedSuccessfully()
         {
@@ -236,18 +238,19 @@ namespace AssetManagement.API.Tests.Controller
             var filterAssetAssignHistory = new FilterAssetAssignHistory
             {
                 pagination = new PaginationFilter(),
+                assetId = Guid.NewGuid(),
                 search = "",
                 assignmentState = EnumAssignmentState.WaitingForAcceptance,
                 dateFrom = new DateTime(2024, 1, 1),
                 dateTo = new DateTime(2025, 1, 1),
-                orderBy = "assetid",
-                isDescending = true
+                orderBy = "assetcode",
+                isDescending = true,
             };
             var expectedResponse = new PagedResponse<List<AssignmentResponseDto>>
             {
-                Succeeded = false
+                Succeeded = true
             };
-            _assignmentServiceMock.Setup(x => x.GetAssignmentsOfUser(It.IsAny<PaginationFilter>(), It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<EnumAssignmentState?>(), It.IsAny<DateTime?>(), It.IsAny<DateTime?>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<string>()))
+            _assignmentServiceMock.Setup(x => x.GetAssetAssign(It.IsAny<PaginationFilter>(), It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<EnumAssignmentState?>(), It.IsAny<DateTime?>(), It.IsAny<DateTime?>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<string>()))
                 .ReturnsAsync(expectedResponse);
 
             // Act
@@ -259,68 +262,59 @@ namespace AssetManagement.API.Tests.Controller
             Assert.True(returnValue.Succeeded);
         }
 
-        //[Fact]
-        //public async Task GetAssetAssignHistory_ReturnsBadRequestResult_WhenServiceResponseFails()
-        //{
-        //    // Arrange
-        //    var filterAssetAssignHistory = new FilterAssetAssignHistory();
-        //    var expectedResponse = new Response<List<AssignmentDto>>
-        //    {
-        //        Succeeded = false
-        //    };
-        //    _assignmentServiceMock.Setup(x => x.GetAssetAssign(It.IsAny<Pagination>(), It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime?>(), It.IsAny<DateTime?>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<string>()))
-        //        .ReturnsAsync(expectedResponse);
+        [Fact]
+        public async Task GetAssetAssignHistory_ReturnsBadRequestResult_WhenServiceResponseFails()
+        {
+            // Arrange
+            var filterAssetAssignHistory = new FilterAssetAssignHistory
+            {
+                pagination = new PaginationFilter(),
+                assetId = Guid.NewGuid(),
+                search = "",
+                assignmentState = EnumAssignmentState.WaitingForAcceptance,
+                dateFrom = new DateTime(2024, 1, 1),
+                dateTo = new DateTime(2025, 1, 1),
+                orderBy = "assetid",
+                isDescending = true,
+            };
+            var expectedResponse = new PagedResponse<List<AssignmentResponseDto>>
+            {
+                Succeeded = false
+            };
+            _assignmentServiceMock.Setup(x => x.GetAssetAssign(It.IsAny<PaginationFilter>(), It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<EnumAssignmentState?>(), It.IsAny<DateTime?>(), It.IsAny<DateTime?>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<string>()))
+                .ReturnsAsync(expectedResponse);
 
-        //    // Act
-        //    var result = await _assignmentController.GetAssetAssignHistory(filterAssetAssignHistory);
+            // Act
+            var result = await _assignmentController.GetAssetAssignHistory(filterAssetAssignHistory);
 
-        //    // Assert
-        //    var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-        //    var returnValue = Assert.IsType<Response<List<AssignmentDto>>>(badRequestResult.Value);
-        //    Assert.False(returnValue.Succeeded);
-        //}
+            // Assert
+            var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+            var returnValue = Assert.IsType<PagedResponse<List<AssignmentResponseDto>>>(badRequestResult.Value);
+            Assert.False(returnValue.Succeeded);
+        }
 
-        //[Fact]
-        //public async Task GetAssignmentById_ReturnsOkResult_WhenAssignmentIsFound()
-        //{
-        //    // Arrange
-        //    var assignmentId = Guid.NewGuid();
-        //    var expectedResponse = new Response<AssignmentDto>
-        //    {
-        //        Succeeded = true
-        //    };
-        //    _assignmentServiceMock.Setup(x => x.GetAssignmentByIdAsync(It.IsAny<Guid>()))
-        //        .ReturnsAsync(expectedResponse);
+        [Fact]
+        public async Task GetAssignmentById_ReturnsOkResult_WhenAssignmentIsFound()
+        {
+            // Arrange
+            var assignmentId = Guid.NewGuid();
+            var expectedResponse = new PagedResponse<AssignmentResponseDto>
+            {
+                Succeeded = true
+            };
+            _assignmentServiceMock.Setup(x => x.GetAssignmentByIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(expectedResponse);
 
-        //    // Act
-        //    var result = await _assignmentController.GetAssignmentById(assignmentId);
+            // Act
+            var result = await _assignmentController.GetAssignmentById(assignmentId);
 
-        //    // Assert
-        //    var okResult = Assert.IsType<OkObjectResult>(result);
-        //    var returnValue = Assert.IsType<Response<AssignmentDto>>(okResult.Value);
-        //    Assert.True(returnValue.Succeeded);
-        //}
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var returnValue = Assert.IsType<PagedResponse<AssignmentResponseDto>>(okResult.Value);
+            Assert.True(returnValue.Succeeded);
+        }
 
-        //[Fact]
-        //public async Task GetAssignmentById_ReturnsBadRequestResult_WhenAssignmentIsNotFound()
-        //{
-        //    // Arrange
-        //    var assignmentId = Guid.NewGuid();
-        //    var expectedResponse = new Response<AssignmentDto>
-        //    {
-        //        Succeeded = false
-        //    };
-        //    _assignmentServiceMock.Setup(x => x.GetAssignmentByIdAsync(It.IsAny<Guid>()))
-        //        .ReturnsAsync(expectedResponse);
-
-        //    // Act
-        //    var result = await _assignmentController.GetAssignmentById(assignmentId);
-
-        //    // Assert
-        //    var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-        //    var returnValue = Assert.IsType<Response<AssignmentDto>>(badRequestResult.Value);
-        //    Assert.False(returnValue.Succeeded);
-        //}
+         
 
         [Fact]
         public async Task ChangeAssignmentStatus_ReturnsOkResult_WhenStatusIsChangedSuccessfully()

@@ -16,7 +16,7 @@ namespace AssetManagement.Infrastructure.Repositories
         public async Task<IQueryable<Assignment>> FilterAssignmentAsync(EnumLocation location, string? search, EnumAssignmentState? assignmentState, DateTime? dateFrom, DateTime? dateTo)
         {
             var includeAssignment = _dbContext.Assignments.Include(x => x.Asset).Include(x => x.AssignedBy).Include(x => x.AssignedTo);
-            var query = includeAssignment.Where(x => x.Location == location).AsQueryable();
+            var query = includeAssignment.Where(x => x.Location == location && !x.IsDeleted).AsQueryable();
 
             if (!string.IsNullOrEmpty(search))
             {
@@ -42,7 +42,8 @@ namespace AssetManagement.Infrastructure.Repositories
         {
             return _dbContext.Assignments
                     .Include(x => x.Asset)
-                    .Where(x => x.AssignedIdTo == userId
+                    .Where(x => !x.IsDeleted
+                        && x.AssignedIdTo == userId
                         && (x.ReturnRequest == null || x.ReturnRequest.ReturnState != EnumReturnRequestState.Completed)
                         && (x.State != EnumAssignmentState.Declined)
                         && (x.AssignedDate <= DateTime.Now));
@@ -53,24 +54,25 @@ namespace AssetManagement.Infrastructure.Repositories
             return await _dbContext.Assignments.Include(x => x.Asset)
                                          .Include(x => x.AssignedTo)
                                          .Include(x => x.AssignedBy)
-                                         .Where(x => x.Id == assignmentId)
+                                         .Where(x => x.Id == assignmentId && !x.IsDeleted)
                                          .FirstOrDefaultAsync();
         }
 
         public async Task<Assignment> FindExitingAssignment(Guid assetId)
         {
             return await _dbContext.Set<Assignment>()
-                .FirstOrDefaultAsync(assigment => assigment.AssetId == assetId);
+                .FirstOrDefaultAsync(assigment => assigment.AssetId == assetId && !assigment.IsDeleted);
         }
 
-        public async Task<IQueryable<Assignment>> FilterAssignmentOfUserAsync(Guid userId, string? search, EnumAssignmentState? assignmentState, DateTime?dateFrom, DateTime? dateTo)
+        public async Task<IQueryable<Assignment>> FilterAssignmentOfUserAsync(Guid userId, string? search, EnumAssignmentState? assignmentState, DateTime? dateFrom, DateTime? dateTo)
         {
             var query = _dbContext.Assignments
                         .Include(x => x.Asset)
                         .Where(x => x.AssignedIdTo == userId
                                  && (x.ReturnRequest == null || x.ReturnRequest.ReturnState != EnumReturnRequestState.Completed)
                                  && (x.State != EnumAssignmentState.Declined)
-                                 && (x.AssignedDate <= DateTime.Now));
+                                 && (x.AssignedDate <= DateTime.Now)
+                                 && !x.IsDeleted);
             if (!string.IsNullOrEmpty(search))
             {
                 query = query.Where(x => x.Asset.AssetCode.ToLower().Contains(search.ToLower())
@@ -94,6 +96,7 @@ namespace AssetManagement.Infrastructure.Repositories
         {
             var query = _dbContext.Assignments
                         .Include(x => x.Asset)
+                        .Where(x => !x.IsDeleted)
                         .Where(x => x.AssetId == assetId)
                         .Where(x => x.ReturnRequest == null || x.ReturnRequest.ReturnState != EnumReturnRequestState.Completed)
                         .Where(x => x.State != EnumAssignmentState.Declined);
@@ -114,6 +117,13 @@ namespace AssetManagement.Infrastructure.Repositories
             query = query.Where(x => x.ReturnRequest == null || x.ReturnRequest.ReturnState != EnumReturnRequestState.Completed);
 
             return query;
+        }
+
+        public async Task<IQueryable<Assignment>> GetAssignmentsByAssetId(Guid assetId)
+        {
+            return _dbContext.Assignments
+                  .Include(x => x.Asset)
+                  .Where(x => x.AssetId == assetId && !x.IsDeleted);
         }
     }
 }
