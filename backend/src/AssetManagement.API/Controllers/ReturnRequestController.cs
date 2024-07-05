@@ -58,7 +58,6 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpPut]
-        [Authorize(Roles = "Admin,Staff")]
         public async Task<IActionResult> ChangeReturnRequestStatus(ChangeStateReturnRequestDto request)
         {
             var result = await _returnRequestServicesAsync.ChangeAssignmentStateAsync(request);
