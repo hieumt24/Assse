@@ -100,8 +100,8 @@ export const updateUserService = (req: UpdateUserReq) => {
     });
 };
 
-export const checkHasAssignmentService = (id: string) => {
-  return axiosInstance.get(`/users/isValidDisableUser/${id}`).then((res) => {
+export const checkUserHasAssignmentService = (id: string) => {
+  return axiosInstance.post(`/users/isValidDisableUser/${id}`).then((res) => {
     return {
       success: res.data.succeeded,
       message: res.data.message,

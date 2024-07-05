@@ -31,8 +31,7 @@ namespace AssetManagement.Application.Validations.Assignment
                 .GreaterThanOrEqualTo(new DateTime(2000, 1, 1)).WithMessage("Please select valid Assigned Date ");
 
             RuleFor(x => x.Note)
-                .NotEmpty().WithMessage("Note cannot be blank.")
-                .Length(2, 255).WithMessage("Note should be 2 - 255 characters.");
+                .Length(0, 256).WithMessage("Note must not be longer than 256 characters.");
         } 
     }
 }

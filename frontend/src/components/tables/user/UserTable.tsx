@@ -162,7 +162,7 @@ export function UserTable<TData, TValue>({
         <Dialog open={openDetails} onOpenChange={setOpenDetails}>
           {isLoading ? (
             <LoadingSpinner />
-          ) : userDetails ? <div>User not found</div> : (
+          ) : (
             <DetailInformation info={userDetails!} variant="User" />
           )}
         </Dialog>

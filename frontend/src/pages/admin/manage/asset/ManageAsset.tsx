@@ -22,7 +22,11 @@ import { useAuth, usePagination } from "@/hooks";
 import { useAssets } from "@/hooks/useAssets";
 import useClickOutside from "@/hooks/useClickOutside";
 import { CategoryRes } from "@/models";
-import { deleteAssetByIdService, getAllCategoryService } from "@/services";
+import {
+  checkAssetHasAssignmentService,
+  deleteAssetByIdService,
+  getAllCategoryService,
+} from "@/services";
 import { CaretSortIcon } from "@radix-ui/react-icons";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -114,11 +118,19 @@ export const ManageAsset = () => {
     };
   }, []);
 
+  const [openDisable, setOpenDisable] = useState(false);
+  const [openCannotDisable, setOpenCannotDisable] = useState(false);
+
   const { setIsLoading } = useLoading();
   const [assetIdToDelete, setAssetIdToDelete] = useState<string>("");
-  const handleOpenDisable = (id: string) => {
-    setAssetIdToDelete(id);
-    setOpenDisable(true);
+  const handleOpenDisable = async (id: string) => {
+    const result = await checkAssetHasAssignmentService(id);
+    if (result.success) {
+      setAssetIdToDelete(id);
+      setOpenDisable(true);
+    } else {
+      setOpenCannotDisable(true);
+    }
   };
 
   const handleDelete = async () => {
@@ -139,7 +151,7 @@ export const ManageAsset = () => {
       setIsLoading(false);
     }
   };
-  const [openDisable, setOpenDisable] = useState(false);
+
   const stateListRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(
@@ -292,6 +304,12 @@ export const ManageAsset = () => {
             confirmText="Yes"
             cancelText="Cancel"
             onConfirm={handleDelete}
+          />
+          <GenericDialog
+            title="Cannot delete asset"
+            desc="Cannot delete the asset because it belongs to one or more historical assignments. If the asset is not able to be used anymore, please update its state in Edit Asset page."
+            open={openCannotDisable}
+            setOpen={setOpenCannotDisable}
           />
         </>
       )}
