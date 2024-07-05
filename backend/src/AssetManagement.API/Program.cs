@@ -86,7 +86,7 @@ namespace AssetManagement.API
             app.UseMiddleware<RequestResponseLoggingMiddleware>();
             app.UseMiddleware<ResponseTimeMiddleware>();
             app.UseMiddleware<CustomAuthenticationMiddleware>();
-            app.UseMiddleware<TokenValidationMiddleware>();
+            //app.UseMiddleware<TokenValidationMiddleware>();
 
             app.UseCors("AllowAllOrigins");
 

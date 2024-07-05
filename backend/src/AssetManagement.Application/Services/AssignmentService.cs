@@ -208,7 +208,7 @@ namespace AssetManagement.Application.Services
 
                 var filterAsset = await _assignmentRepositoriesAsync.FilterAssignmentOfUserAsync(userId, search, assignmentState, dateFrom, dateTo);
 
-                filterAsset = filterAsset.Where(a => a.State != EnumAssignmentState.Returned);
+                //filterAsset = filterAsset.Where(a => a.State != EnumAssignmentState.Returned);
 
                 var totalRecords = filterAsset.Count();
 
@@ -290,7 +290,7 @@ namespace AssetManagement.Application.Services
 
             assignment.State = request.NewState;
 
-            if (request.NewState == EnumAssignmentState.Accepted)
+            if (request.NewState == EnumAssignmentState.Declined)
             {
                 var assetResponse = await _assetRepository.GetByIdAsync(assignment.AssetId);
 
