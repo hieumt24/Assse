@@ -3,6 +3,7 @@ using AssetManagement.Application.Models.DTOs.Assignments.Requests;
 using AssetManagement.Application.Models.DTOs.ReturnRequests.Request;
 using AssetManagement.Application.Models.Filters;
 using AssetManagement.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AssetManagement.API.Controllers
@@ -19,6 +20,7 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Staff")]
         public async Task<IActionResult> Create([FromBody] AddReturnRequestDto request)
         {
             var result = await _returnRequestServicesAsync.AddReturnRequestAsync(request);
@@ -31,6 +33,7 @@ namespace AssetManagement.API.Controllers
 
         [HttpPost]
         [Route("filter-return-requests")]
+        [Authorize(Roles = "Admin,Staff")]
         public async Task<IActionResult> GetAll([FromBody] ReturnRequestFilter returnRequestFilter)
         {
             string route = Request.Path.Value;
@@ -43,6 +46,7 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "Admin,Staff")]
         public async Task<IActionResult> CancelReturnRequest(Guid returnRequestId)
         {
             var result = await _returnRequestServicesAsync.CancelReturnRequestAsync(returnRequestId);
@@ -54,6 +58,7 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin,Staff")]
         public async Task<IActionResult> ChangeReturnRequestStatus(ChangeStateReturnRequestDto request)
         {
             var result = await _returnRequestServicesAsync.ChangeAssignmentStateAsync(request);
