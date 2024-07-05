@@ -72,6 +72,7 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetAssetById(Guid id)
         {
             var result = await _assetService.GetAssetByIdAsync(id);
