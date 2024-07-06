@@ -118,6 +118,9 @@ namespace AssetManagement.Application.Services
             {
                 return new Response<AssignmentDto> { Succeeded = false, Message = "Assignment not found." };
             }
+            if (existingAssignment.State != EnumAssignmentState.WaitingForAcceptance) {
+                return new Response<AssignmentDto> { Succeeded = false, Message = "Assignment can no longer be edited." };
+            }
             if (existingAssignment.AssetId != request.AssetId)
             {
                 var existingAsset = await _assetRepository.GetByIdAsync(existingAssignment.AssetId);
@@ -208,7 +211,7 @@ namespace AssetManagement.Application.Services
 
                 var filterAsset = await _assignmentRepositoriesAsync.FilterAssignmentOfUserAsync(userId, search, assignmentState, dateFrom, dateTo);
 
-                filterAsset = filterAsset.Where(a => a.State != EnumAssignmentState.Returned);
+                //filterAsset = filterAsset.Where(a => a.State != EnumAssignmentState.Returned);
 
                 var totalRecords = filterAsset.Count();
 
@@ -290,7 +293,7 @@ namespace AssetManagement.Application.Services
 
             assignment.State = request.NewState;
 
-            if (request.NewState == EnumAssignmentState.Accepted)
+            if (request.NewState == EnumAssignmentState.Declined)
             {
                 var assetResponse = await _assetRepository.GetByIdAsync(assignment.AssetId);
 

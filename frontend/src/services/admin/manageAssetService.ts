@@ -187,3 +187,20 @@ export const getAssignmentByAssetService = (req: GetAssignmentByAssetReq) => {
       };
     });
 };
+
+export const checkAssetHasAssignmentService = (id: string) => {
+  return axiosInstance.post(`/assets/isValidDisableAsset/${id}`).then((res) => {
+    return {
+      success: res.data.succeeded,
+      message: res.data.message,
+      data: res.data.data,
+    };
+  })
+  .catch((err) => {
+    return {
+      success: false,
+      message: err.response.data.message || "Failed to check if asset has assignment.",
+      data: err,
+    };
+  });
+}

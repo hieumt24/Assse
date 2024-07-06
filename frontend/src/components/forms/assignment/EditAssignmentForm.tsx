@@ -434,7 +434,7 @@ export const EditAssignmentForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-md">
-                Note <span className="text-red-600">*</span>
+                Note
               </FormLabel>
               <FormControl>
                 <Textarea
