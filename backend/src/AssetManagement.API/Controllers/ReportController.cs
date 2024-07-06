@@ -21,7 +21,7 @@ namespace AssetManagement.API.Controllers
         {
             string route = Request.Path.Value;
             var result = await _reportServices.GetReportPaginationAsync(reportFIlter.Location, reportFIlter.Pagination, reportFIlter.OrderBy, reportFIlter.IsDescending, route);
-            if (result != null)
+            if (result.Succeeded)
             {
                 return Ok(result);
             }

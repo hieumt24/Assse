@@ -1,5 +1,6 @@
 ﻿using AssetManagement.Domain.Common.Models;
 using AssetManagement.Domain.Enums;
+using Microsoft.Identity.Client;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -48,6 +49,8 @@ namespace AssetManagement.Domain.Entites
 
         [Required]
         public bool IsFirstTimeLogin { get; set; } = true;
+
+        public Token? Token { get; set; }
 
         public virtual ICollection<Assignment>? AssignmentsReceived { get; set; }
         public virtual ICollection<Assignment>? AssignmentsCreated { get; set; }

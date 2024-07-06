@@ -35,6 +35,12 @@ namespace AssetManagement.Infrastructure.Contexts
                 .HasIndex(u => u.Username)
                 .IsUnique();
 
+            modelBuilder.Entity<Token>()
+                .HasOne(t => t.User)
+                .WithOne(u => u.Token)
+                .HasForeignKey<Token>(u => u.UserId);
+                
+
             // 1-n category-asset
             modelBuilder.Entity<Assignment>()
                 .HasOne(a => a.AssignedTo)
@@ -121,14 +127,14 @@ namespace AssetManagement.Infrastructure.Contexts
             adminDN.CreatedOn = DateTime.Now;
             adminDN.CreatedBy = "System";
 
-            modelBuilder.Entity<User>().HasData(adminHN, adminHCM, adminDN);
+            //modelBuilder.Entity<User>().HasData(adminHN, adminHCM, adminDN);
             modelBuilder.Entity<User>().Property(u => u.StaffCodeId).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
 
-            modelBuilder.Entity<Category>().HasData(
-                new Category { CategoryName = "Laptop", Prefix = "LA" },
-                new Category { CategoryName = "Monitor", Prefix = "MO" },
-                new Category { CategoryName = "Desk", Prefix = "DE" }
-            );
+            //modelBuilder.Entity<Category>().HasData(
+            //    new Category { CategoryName = "Laptop", Prefix = "LA" },
+            //    new Category { CategoryName = "Monitor", Prefix = "MO" },
+            //    new Category { CategoryName = "Desk", Prefix = "DE" }
+            //);
         }
     }
 }
