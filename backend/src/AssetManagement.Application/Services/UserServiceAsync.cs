@@ -26,13 +26,17 @@ namespace AssetManagement.Application.Services
         private readonly PasswordHasher<User> _passwordHasher;
         private readonly IUriService _uriService;
         private readonly IAssignmentRepositoriesAsync _assignmentRepositoriesAsync;
+        private readonly ITokenRepositoriesAsync _tokenRepositoriesAsync;
+        private readonly IBlackListTokensRepositoriesAsync _blackListTokensRepositoriesAsync;
 
         public UserServiceAsync(IUserRepositoriesAsync userRepositoriesAsync,
             IMapper mapper,
             IValidator<AddUserRequestDto> addUserValidator,
             IValidator<EditUserRequestDto> editUserValidator,
             IUriService uriService,
-            IAssignmentRepositoriesAsync assignmentRepositoriesAsync
+            IAssignmentRepositoriesAsync assignmentRepositoriesAsync,
+            ITokenRepositoriesAsync tokenRepositoriesAsync,
+            IBlackListTokensRepositoriesAsync blackListTokensRepositoriesAsync
         )
         {
             _mapper = mapper;
@@ -42,6 +46,8 @@ namespace AssetManagement.Application.Services
             _passwordHasher = new PasswordHasher<User>();
             _uriService = uriService;
             _assignmentRepositoriesAsync = assignmentRepositoriesAsync;
+            _tokenRepositoriesAsync = tokenRepositoriesAsync;
+            _blackListTokensRepositoriesAsync = blackListTokensRepositoriesAsync;
         }
 
         public async Task<Response<UserDto>> AddUserAsync(AddUserRequestDto request)
@@ -177,6 +183,17 @@ namespace AssetManagement.Application.Services
                 {
                     return new Response<UserDto> { Succeeded = false, Message = "Disable user failed" };
                 }
+
+                var token = await _tokenRepositoriesAsync.FindByUserIdAsync(disableUser.Id);
+                if (token != null)
+                {
+                    await _blackListTokensRepositoriesAsync.AddAsync(new BlackListToken
+                    {
+                        Token = token.Value,
+                        CreatedOn = DateTime.Now
+                    });
+                }
+
                 return new Response<UserDto> { Succeeded = true, Message = "Disable user successfully" };
             }
             catch (Exception ex)

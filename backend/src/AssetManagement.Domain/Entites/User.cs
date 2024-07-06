@@ -21,13 +21,13 @@ namespace AssetManagement.Domain.Entites
         public DateTime DateOfBirth { get; set; }
 
         [Required]
-        public DateTime JoinedDate { get; set; } 
+        public DateTime JoinedDate { get; set; }
 
         [Required]
-        public GenderEnum Gender { get; set; } 
+        public GenderEnum Gender { get; set; }
 
         [Required]
-        public RoleType Role { get; set; } 
+        public RoleType Role { get; set; }
 
         [Required]
         [RegularExpression(@"^SD\d{4}$", ErrorMessage = "StaffCode must be in the format SDxxxx where xxxx are digits.")]
@@ -49,6 +49,7 @@ namespace AssetManagement.Domain.Entites
         [Required]
         public bool IsFirstTimeLogin { get; set; } = true;
 
+        public Token? Token { get; set; }
         public virtual ICollection<Assignment>? AssignmentsReceived { get; set; }
         public virtual ICollection<Assignment>? AssignmentsCreated { get; set; }
         public virtual ICollection<ReturnRequest>? ReturnRequestsAccepted { get; set; }
