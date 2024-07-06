@@ -1,5 +1,6 @@
 ﻿using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Models.DTOs.Category.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AssetManagement.API.Controllers
@@ -16,6 +17,7 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddCategory([FromBody] AddCategoryRequestDto request)
         {
             var result = await _categoryService.AddCategoryAsync(request);
@@ -27,6 +29,7 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetCategoryById(Guid id)
         {
             var result = await _categoryService.GetCategoryByIdAsync(id);
@@ -38,6 +41,7 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditCategory([FromBody] UpdateCategoryRequestDto request)
         {
             var result = await _categoryService.EditCategoryAsync(request);
@@ -49,6 +53,7 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteCategory(Guid id)
         {
             var result = await _categoryService.DeleteCategoryAsync(id);
@@ -60,6 +65,7 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllCategories()
         {
             var result = await _categoryService.GetAllCategoriesAsync();

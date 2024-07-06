@@ -80,10 +80,14 @@ namespace AssetManagement.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            //middleware
             app.UseMiddleware<ErrorHandlingMiddleware>();
             app.UseMiddleware<RequestResponseLoggingMiddleware>();
             app.UseMiddleware<ResponseTimeMiddleware>();
             app.UseMiddleware<CustomAuthenticationMiddleware>();
+            //app.UseMiddleware<TokenValidationMiddleware>();
+
             app.UseCors("AllowAllOrigins");
 
             app.UseHttpsRedirection();

@@ -24,7 +24,7 @@ export const assignmentUserColumns = ({
     cell: ({ row }) => {
       return (
         <Input
-          className="w-4"
+          className="w-4 shadow-none"
           type="radio"
           checked={selectedId === row.original.id}
           name={"assignment-user-select"}

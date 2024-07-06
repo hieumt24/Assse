@@ -3,6 +3,7 @@ using AssetManagement.Application.Models.DTOs.Assignments.Requests;
 using AssetManagement.Application.Models.DTOs.ReturnRequests.Request;
 using AssetManagement.Application.Models.Filters;
 using AssetManagement.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AssetManagement.API.Controllers

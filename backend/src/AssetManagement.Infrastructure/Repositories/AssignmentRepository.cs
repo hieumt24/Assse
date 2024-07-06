@@ -96,15 +96,14 @@ namespace AssetManagement.Infrastructure.Repositories
         {
             var query = _dbContext.Assignments
                         .Include(x => x.Asset)
-                        .Where(x => !x.IsDeleted)
-                        .Where(x => x.AssetId == assetId)
-                        .Where(x => x.ReturnRequest == null || x.ReturnRequest.ReturnState != EnumReturnRequestState.Completed)
-                        .Where(x => x.State != EnumAssignmentState.Declined);
+                        .Where(x => !x.IsDeleted
+                            && x.AssetId == assetId
+                            && x.State != EnumAssignmentState.Declined);
             if (!string.IsNullOrEmpty(search))
             {
                 query = query.Where(x => x.Asset.AssetCode.ToLower().Contains(search.ToLower())
-                                                       || x.Asset.AssetName.ToLower().Contains(search.ToLower())
-                                                       || x.AssignedTo.Username.ToLower().Contains(search.ToLower()));
+                                        || x.Asset.AssetName.ToLower().Contains(search.ToLower())
+                                        || x.AssignedTo.Username.ToLower().Contains(search.ToLower()));
             }
             if (assignmentState.HasValue)
             {
@@ -114,7 +113,7 @@ namespace AssetManagement.Infrastructure.Repositories
             {
                 query = query.Where(p => p.AssignedDate.Date >= dateFrom && p.AssignedDate.Date <= dateTo);
             }
-            query = query.Where(x => x.ReturnRequest == null || x.ReturnRequest.ReturnState != EnumReturnRequestState.Completed);
+            
 
             return query;
         }

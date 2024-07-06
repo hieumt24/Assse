@@ -3,6 +3,7 @@ using AssetManagement.Application.Models.DTOs.Assignments.Reques;
 using AssetManagement.Application.Models.DTOs.Assignments.Request;
 using AssetManagement.Application.Models.DTOs.Assignments.Requests;
 using AssetManagement.Application.Models.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AssetManagement.API.Controllers
@@ -19,6 +20,7 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddAssignment([FromBody] AddAssignmentRequestDto request)
         {
             var result = await _assignmentServicesAsync.AddAssignmentAsync(request);
@@ -31,6 +33,7 @@ namespace AssetManagement.API.Controllers
 
         [HttpPost]
         [Route("filter-assignments")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> FilterAssignment([FromBody] AssignmentFilter filter)
         {
             string route = Request.Path.Value;
@@ -44,6 +47,7 @@ namespace AssetManagement.API.Controllers
 
         [HttpPost]
         [Route("filter-user-assigned")]
+        [Authorize(Roles = "Admin,Staff")]
         public async Task<IActionResult> GetAssignmentsForUser([FromBody] FilterAssignmentForUser filterAssignmentForUser)
         {
             string route = Request.Path.Value;
@@ -55,9 +59,9 @@ namespace AssetManagement.API.Controllers
             return BadRequest(result);
         }
 
-
         [HttpPost]
         [Route("filter-asset-assigned-history")]
+        [Authorize(Roles = "Admin,Staff")]
         public async Task<IActionResult> GetAssetAssignHistory([FromBody] FilterAssetAssignHistory filterAssignmentForUser)
         {
             string route = Request.Path.Value;
@@ -70,6 +74,7 @@ namespace AssetManagement.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Staff")]
         public async Task<IActionResult> GetAssignmentById(Guid assignmentId)
         {
             var result = await _assignmentServicesAsync.GetAssignmentByIdAsync(assignmentId);
@@ -88,11 +93,12 @@ namespace AssetManagement.API.Controllers
             {
                 return Ok(result);
             }
-            return BadRequest(result);
+            return NotFound(result);
         }
 
         [HttpPut]
         [Route("edit-assignment/{assignmentId:guid}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditAssignment([FromBody] EditAssignmentRequestDto request, Guid assignmentId)
         {
             var result = await _assignmentServicesAsync.EditAssignmentAsync(request, assignmentId);
@@ -105,6 +111,7 @@ namespace AssetManagement.API.Controllers
 
         [HttpDelete]
         [Route("{assignmentId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteAssignment(Guid assignmentId)
         {
             var result = await _assignmentServicesAsync.DeleteAssignmentAsync(assignmentId);

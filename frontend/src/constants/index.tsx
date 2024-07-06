@@ -141,6 +141,10 @@ export const ASSIGNMENT_STATES = [
   {
     value: 4,
     label: "Waiting for returning"
+  },
+  {
+    value: 5,
+    label: "Returned"
   }
 ];
 

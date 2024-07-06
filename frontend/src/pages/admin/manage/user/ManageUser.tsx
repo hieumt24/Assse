@@ -17,7 +17,7 @@ import {
 import { useLoading } from "@/context/LoadingContext";
 import { useAuth, useUsers } from "@/hooks";
 import { usePagination } from "@/hooks/usePagination";
-import { checkHasAssignmentService, disableUserService } from "@/services";
+import { checkUserHasAssignmentService, disableUserService } from "@/services";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -46,7 +46,7 @@ export const ManageUser = () => {
   const { setIsLoading } = useLoading();
   const [userIdToDisable, setUserIdToDisable] = useState<string>("");
   const handleOpenDisable = async (id: string) => {
-    const result = await checkHasAssignmentService(id);
+    const result = await checkUserHasAssignmentService(id);
     if (result.success) {
       setUserIdToDisable(id);
       setOpenDisable(true);

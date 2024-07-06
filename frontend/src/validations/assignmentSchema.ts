@@ -21,13 +21,14 @@ export const createAssignmentSchema = z.object({
       },
       { message: "Assigned Date can only be today or in the future." },
     ),
-  note: z
-    .string()
-    .trim()
-    .min(1, "Note must not be blank.")
-    .min(2, "Note must be at least 2 characters long.")
-    .max(256, "Note must not be longer than 256 characters.")
-    .regex(/[a-zA-Z]/, "Note must contain letters."),
+  note: z.preprocess(
+    (val) => (val === "" ? undefined : val),
+    z
+      .string()
+      .trim()
+      .max(256, "Note must not be longer than 256 characters.")
+      .optional(),
+  ),
 });
 
 export const updateAssignmentSchema = z.object({
@@ -43,11 +44,12 @@ export const updateAssignmentSchema = z.object({
       },
       { message: "Please select a valid date." },
     ),
-  note: z
-    .string()
-    .trim()
-    .min(1, "Note must not be blank.")
-    .min(2, "Note must be at least 2 characters long.")
-    .max(256, "Note must not be longer than 256 characters.")
-    .regex(/[a-zA-Z]/, "Note must contain letters."),
+  note: z.preprocess(
+    (val) => (val === "" ? undefined : val),
+    z
+      .string()
+      .trim()
+      .max(256, "Note must not be longer than 256 characters.")
+      .optional(),
+  ),
 });
