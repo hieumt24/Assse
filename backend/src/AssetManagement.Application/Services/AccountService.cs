@@ -15,12 +15,14 @@ namespace AssetManagement.Application.Services
         private readonly ITokenService _tokenService;
         private readonly IValidator<ChangePasswordRequest> _changePasswordValidator;
         private readonly PasswordHasher<User> _passwordHasher = new PasswordHasher<User>();
+        private readonly ITokenRepositoriesAsync _tokenRepositoriesAsync;
 
-        public AccountService(IUserRepositoriesAsync userRepositoriesAsync, ITokenService tokenService, IValidator<ChangePasswordRequest> changePasswordValidator)
+        public AccountService(IUserRepositoriesAsync userRepositoriesAsync, ITokenService tokenService, IValidator<ChangePasswordRequest> changePasswordValidator, ITokenRepositoriesAsync tokenRepositoriesAsync)
         {
             _changePasswordValidator = changePasswordValidator;
             _userRepositoriesAsync = userRepositoriesAsync;
             _tokenService = tokenService;
+            _tokenRepositoriesAsync = tokenRepositoriesAsync;
         }
 
         public async Task<Response<string>> ChangePasswordAsync(ChangePasswordRequest request)
@@ -99,6 +101,21 @@ namespace AssetManagement.Application.Services
                         Token = token
                     }
                 };
+            }
+            var exsitingToken = await _tokenRepositoriesAsync.FindByUserIdAsync(user.Id);
+            if (exsitingToken != null)
+            {
+                exsitingToken.Value = token;
+                exsitingToken.CreatedOn = DateTime.Now;
+                await _tokenRepositoriesAsync.UpdateAsync(exsitingToken);
+            }
+            else
+            {
+                await _tokenRepositoriesAsync.AddAsync(new Token
+                {
+                    UserId = user.Id,
+                    Value = token
+                });
             }
             return new Response<AuthenticationResponse>
             {

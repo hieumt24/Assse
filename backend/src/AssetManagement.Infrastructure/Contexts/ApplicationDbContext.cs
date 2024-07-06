@@ -1,10 +1,8 @@
-using AssetManagement.Domain.Common.Models;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using System.Linq.Expressions;
 
 namespace AssetManagement.Infrastructure.Contexts
 {
@@ -22,6 +20,8 @@ namespace AssetManagement.Infrastructure.Contexts
         public DbSet<Category> Categories { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
         public DbSet<ReturnRequest> ReturnRequests { get; set; }
+        public DbSet<Token> Token { get; set; }
+        public DbSet<BlackListToken> BlackListTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -34,6 +34,12 @@ namespace AssetManagement.Infrastructure.Contexts
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Username)
                 .IsUnique();
+
+            //1-1 token
+            modelBuilder.Entity<Token>()
+                .HasOne(t => t.User)
+                .WithOne(u => u.Token)
+                .HasForeignKey<Token>(t => t.UserId);
 
             // 1-n category-asset
             modelBuilder.Entity<Assignment>()
@@ -121,14 +127,14 @@ namespace AssetManagement.Infrastructure.Contexts
             adminDN.CreatedOn = DateTime.Now;
             adminDN.CreatedBy = "System";
 
-            modelBuilder.Entity<User>().HasData(adminHN, adminHCM, adminDN);
+            //modelBuilder.Entity<User>().HasData(adminHN, adminHCM, adminDN);
             modelBuilder.Entity<User>().Property(u => u.StaffCodeId).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
 
-            modelBuilder.Entity<Category>().HasData(
-                new Category { CategoryName = "Laptop", Prefix = "LA" },
-                new Category { CategoryName = "Monitor", Prefix = "MO" },
-                new Category { CategoryName = "Desk", Prefix = "DE" }
-            );
+            //modelBuilder.Entity<Category>().HasData(
+            //    new Category { CategoryName = "Laptop", Prefix = "LA" },
+            //    new Category { CategoryName = "Monitor", Prefix = "MO" },
+            //    new Category { CategoryName = "Desk", Prefix = "DE" }
+            //);
         }
     }
 }
