@@ -59,8 +59,8 @@ namespace AssetManagement.Application.Services
                     reportResponseDtos = reportResponseDtos.Where(r =>
                         r.CategoryName.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
                 }
-                var reportResponses = ReportHelper.ApplySorting(reportResponseDtos, orderBy, isDescending);
-                var totalRecord = reportResponses.Count();
+                reportResponseDtos = ReportHelper.ApplySorting(reportResponseDtos, orderBy, isDescending);
+                var totalRecord = reportResponseDtos.Count();
 
                 var pagedReports = reportResponseDtos
                        .Skip((pagination.PageIndex - 1) * pagination.PageSize)
