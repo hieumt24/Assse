@@ -42,7 +42,7 @@ namespace AssetManagement.API.Tests.Controller
                 }
             };
 
-            _mockReportServices.Setup(service => service.GetReportPaginationAsync(reportFilter.Location, reportFilter.Pagination, reportFilter.OrderBy, reportFilter.IsDescending, It.IsAny<string>()))
+            _mockReportServices.Setup(service => service.GetReportPaginationAsync(reportFilter.Location, reportFilter.Pagination, reportFilter.search, reportFilter.OrderBy, reportFilter.IsDescending, It.IsAny<string>()))
                                .ReturnsAsync(reportData);
 
             // Act
@@ -66,7 +66,7 @@ namespace AssetManagement.API.Tests.Controller
                 IsDescending = false
             };
 
-            _mockReportServices.Setup(service => service.GetReportPaginationAsync(reportFilter.Location, reportFilter.Pagination, reportFilter.OrderBy, reportFilter.IsDescending, It.IsAny<string>()))
+            _mockReportServices.Setup(service => service.GetReportPaginationAsync(reportFilter.Location, reportFilter.Pagination, reportFilter.search, reportFilter.OrderBy, reportFilter.IsDescending, It.IsAny<string>()))
                                .ReturnsAsync((PagedResponse<List<ReportResponseDto>>)null);
 
             // Act

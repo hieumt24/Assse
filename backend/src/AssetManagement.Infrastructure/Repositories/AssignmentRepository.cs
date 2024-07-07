@@ -1,9 +1,11 @@
-﻿using AssetManagement.Application.Interfaces.Repositories;
+﻿using AssetManagement.Application.Filter;
+using AssetManagement.Application.Interfaces.Repositories;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
 using AssetManagement.Infrastructure.Common;
 using AssetManagement.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace AssetManagement.Infrastructure.Repositories
 {
@@ -113,7 +115,6 @@ namespace AssetManagement.Infrastructure.Repositories
             {
                 query = query.Where(p => p.AssignedDate.Date >= dateFrom && p.AssignedDate.Date <= dateTo);
             }
-            
 
             return query;
         }
@@ -123,6 +124,92 @@ namespace AssetManagement.Infrastructure.Repositories
             return _dbContext.Assignments
                   .Include(x => x.Asset)
                   .Where(x => x.AssetId == assetId && !x.IsDeleted);
+        }
+
+        public async Task<(IEnumerable<Assignment> Data, int TotalRecords)> GetAllMatchingAssignmentAsync(EnumLocation location, string? search, EnumAssignmentState? assignmentState, DateTime? dateFrom, DateTime? dateTo, string? orderBy, bool? isDescending, PaginationFilter pagination)
+        {
+            string searchPhraseLower = search?.ToLower() ?? string.Empty;
+
+            var baseQuery = _dbContext.Assignments
+                .Include(x => x.Asset)
+                .Include(x => x.AssignedBy)
+                .Include(x => x.AssignedTo)
+                .Where(x => x.Location == location && !x.IsDeleted);
+
+            var searchQuery = baseQuery.Where(x => x.Asset.AssetCode.ToLower().Contains(searchPhraseLower)
+                                                               || x.Asset.AssetName.ToLower().Contains(searchPhraseLower)
+                                                               || x.AssignedBy.Username.ToLower().Contains(searchPhraseLower)
+                                                               || x.AssignedTo.Username.ToLower().Contains(searchPhraseLower));
+            if (assignmentState.HasValue)
+            {
+                searchQuery = searchQuery.Where(x => x.State == assignmentState);
+            }
+            if (dateFrom.HasValue && dateTo.HasValue)
+            {
+                searchQuery = searchQuery.Where(p => p.AssignedDate.Date >= dateFrom && p.AssignedDate.Date <= dateTo);
+            }
+
+            searchQuery = searchQuery.Where(x => x.ReturnRequest == null || x.ReturnRequest.ReturnState != EnumReturnRequestState.Completed);
+
+            var totalRecords = await searchQuery.CountAsync();
+
+            if (!string.IsNullOrEmpty(orderBy))
+            {
+                // create on -> Assigned Date -> State -> Asset Code -> Asset Name -> Assigned To -> Assigned By
+                var columnsSelector = new Dictionary<string, Expression<Func<Assignment, object>>>
+                {
+                    { "createdon", x => x.CreatedOn },
+                    { "assigneddate", x => x.AssignedDate },
+                    { "state", x => x.State },
+                    { "assetcode", x => x.Asset.AssetCode },
+                    { "assetname", x => x.Asset.AssetName },
+                    { "assignedto", x => x.AssignedTo.Username },
+                    { "assignedby", x => x.AssignedBy.Username }
+                };
+
+                if (columnsSelector.ContainsKey(orderBy.ToLower()))
+                {
+                    if (isDescending.HasValue && isDescending.Value)
+                    {
+                        searchQuery = searchQuery.OrderByDescending(columnsSelector[orderBy.ToLower()])
+                            .ThenByDescending(x => x.CreatedOn)
+                            .ThenByDescending(x => x.AssignedDate)
+                            .ThenByDescending(x => x.State)
+                            .ThenByDescending(x => x.Asset.AssetCode)
+                            .ThenByDescending(x => x.Asset.AssetName)
+                            .ThenByDescending(x => x.AssignedTo.Username)
+                            .ThenByDescending(x => x.AssignedBy.Username);
+                    }
+                    else
+                    {
+                        searchQuery = searchQuery.OrderBy(columnsSelector[orderBy.ToLower()])
+                            .ThenBy(x => x.CreatedOn)
+                            .ThenBy(x => x.AssignedDate)
+                            .ThenBy(x => x.State)
+                            .ThenBy(x => x.Asset.AssetCode)
+                            .ThenBy(x => x.Asset.AssetName)
+                            .ThenBy(x => x.AssignedTo.Username)
+                            .ThenBy(x => x.AssignedBy.Username);
+                    }
+                }
+            }
+            else
+            {
+                searchQuery = searchQuery.OrderBy(x => x.AssignedDate)
+                    //.ThenBy(x => x.AssignedDate)
+                    .ThenBy(x => x.State)
+                    .ThenBy(x => x.Asset.AssetCode)
+                    .ThenBy(x => x.Asset.AssetName)
+                    .ThenBy(x => x.AssignedTo.Username)
+                    .ThenBy(x => x.AssignedBy.Username);
+            }
+
+            var assignments = await searchQuery
+                .Skip((pagination.PageIndex - 1) * pagination.PageSize)
+                .Take(pagination.PageSize)
+                .ToListAsync();
+
+            return (Data: assignments, TotalRecords: totalRecords);
         }
     }
 }

@@ -120,17 +120,19 @@ namespace AssetManagement.Application.Services
                 {
                     pagination = new PaginationFilter();
                 }
-                var filterAsset = await _assetRepository.FilterAsset(adminLocation, search, categoryId, assetStateType);
+                //var filterAsset = await _assetRepository.FilterAsset(adminLocation, search, categoryId, assetStateType);
 
-                var totalRecords = await filterAsset.CountAsync();
-                var specAsset = AssetSpecificationHelper.AssetSpecificationWithCategory(pagination, orderBy, isDescending);
+                //var totalRecords = await filterAsset.CountAsync();
+                //var specAsset = AssetSpecificationHelper.AssetSpecificationWithCategory(pagination, orderBy, isDescending);
 
-                var assets = await SpecificationEvaluator<Asset>.GetQuery(filterAsset, specAsset).ToListAsync();
+                //var assets = await SpecificationEvaluator<Asset>.GetQuery(filterAsset, specAsset).ToListAsync();
+
+                var assets = await _assetRepository.GetAllMatchingAssetAsync(adminLocation, search, categoryId, assetStateType, orderBy, isDescending, pagination);
 
                 //Map to asset reponse
-                var responseAssetDtos = _mapper.Map<List<AssetResponseDto>>(assets);
+                var responseAssetDtos = _mapper.Map<List<AssetResponseDto>>(assets.Data);
 
-                var pagedResponse = PaginationHelper.CreatePagedReponse(responseAssetDtos, pagination, totalRecords, _uriService, route);
+                var pagedResponse = PaginationHelper.CreatePagedReponse(responseAssetDtos, pagination, assets.TotalRecords, _uriService, route);
                 return pagedResponse;
             }
             catch (Exception ex)

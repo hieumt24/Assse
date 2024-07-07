@@ -118,7 +118,8 @@ namespace AssetManagement.Application.Services
             {
                 return new Response<AssignmentDto> { Succeeded = false, Message = "Assignment not found." };
             }
-            if (existingAssignment.State != EnumAssignmentState.WaitingForAcceptance) {
+            if (existingAssignment.State != EnumAssignmentState.WaitingForAcceptance)
+            {
                 return new Response<AssignmentDto> { Succeeded = false, Message = "Assignment can no longer be edited." };
             }
             if (existingAssignment.AssetId != request.AssetId)
@@ -128,7 +129,6 @@ namespace AssetManagement.Application.Services
 
                 existingAsset.State = AssetStateType.Available;
                 newAsset.State = AssetStateType.Assigned;
-
             }
             existingAssignment.AssetId = request.AssetId;
             existingAssignment.AssignedIdTo = request.AssignedIdTo;
@@ -160,17 +160,18 @@ namespace AssetManagement.Application.Services
                     paginationFilter = new PaginationFilter();
                 }
 
-                var filterAsset = await _assignmentRepositoriesAsync.FilterAssignmentAsync(location, search, assignmentState, dateFrom, dateTo);
+                //var filterAsset = await _assignmentRepositoriesAsync.FilterAssignmentAsync(location, search, assignmentState, dateFrom, dateTo);
 
-                var totalRecords = filterAsset.Count();
+                //var totalRecords = filterAsset.Count();
 
-                var specAssignment = AssignmentSpecificationHelper.AssignmentSpecificationWithAsset(paginationFilter, orderBy, isDescending);
+                //var specAssignment = AssignmentSpecificationHelper.AssignmentSpecificationWithAsset(paginationFilter, orderBy, isDescending);
 
-                var assignments = await SpecificationEvaluator<Assignment>.GetQuery(filterAsset, specAssignment).ToListAsync();
+                //var assignments = await SpecificationEvaluator<Assignment>.GetQuery(filterAsset, specAssignment).ToListAsync();
+                var assignments = await _assignmentRepositoriesAsync.GetAllMatchingAssignmentAsync(location, search, assignmentState, dateFrom, dateTo, orderBy, isDescending, paginationFilter);
 
-                var responseAssignmentDtos = _mapper.Map<List<AssignmentResponseDto>>(assignments);
+                var responseAssignmentDtos = _mapper.Map<List<AssignmentResponseDto>>(assignments.Data);
 
-                var pagedResponse = PaginationHelper.CreatePagedReponse(responseAssignmentDtos, paginationFilter, totalRecords, _uriService, route);
+                var pagedResponse = PaginationHelper.CreatePagedReponse(responseAssignmentDtos, paginationFilter, assignments.TotalRecords, _uriService, route);
 
                 return pagedResponse;
             }
