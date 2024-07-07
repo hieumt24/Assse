@@ -83,10 +83,8 @@ namespace AssetManagement.API
 
             app.UseCors("AllowAllOrigins");
             //middleware
-            //app.UseMiddleware<ErrorHandlingMiddleware>();
-            //app.UseMiddleware<RequestResponseLoggingMiddleware>();
-            //app.UseMiddleware<ResponseTimeMiddleware>();
-            //app.UseMiddleware<CustomAuthenticationMiddleware>();
+            app.UseMiddleware<RequestResponseLoggingMiddleware>();
+            app.UseMiddleware<ResponseTimeMiddleware>();
             app.UseMiddleware<TokenValidationMiddleware>();
             app.UseHttpsRedirection();
 
