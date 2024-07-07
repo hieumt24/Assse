@@ -218,6 +218,16 @@ namespace AssetManagement.Application.Services
 
                 await _userRepositoriesAsync.UpdateAsync(existingUser);
 
+                var token = await _tokenRepositoriesAsync.FindByUserIdAsync(existingUser.Id);
+                if (token != null)
+                {
+                    await _blackListTokensRepositoriesAsync.AddAsync(new BlackListToken
+                    {
+                        Token = token.Value,
+                        CreatedOn = DateTime.Now
+                    });
+                }
+
                 var updatedUserDto = _mapper.Map<UserDto>(existingUser);
                 return new Response<UserDto> { Succeeded = true, Message = "Reset password successfully" };
             }
