@@ -22,7 +22,7 @@ namespace AssetManagement.API.Controllers
         public async Task<IActionResult> GetReport([FromBody] ReportFIlter reportFIlter)
         {
             string route = Request.Path.Value;
-            var result = await _reportServices.GetReportPaginationAsync(reportFIlter.Location, reportFIlter.Pagination, reportFIlter.OrderBy, reportFIlter.IsDescending, route);
+            var result = await _reportServices.GetReportPaginationAsync(reportFIlter.Location, reportFIlter.Pagination, reportFIlter.search, reportFIlter.OrderBy, reportFIlter.IsDescending, route);
             if (result != null)
             {
                 return Ok(result);

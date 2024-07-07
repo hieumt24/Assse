@@ -1,10 +1,11 @@
+using AssetManagement.Application.Filter;
 using AssetManagement.Application.Interfaces.Repositories;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
 using AssetManagement.Infrastructure.Common;
 using AssetManagement.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using System.Linq.Expressions;
 
 namespace AssetManagement.Infrastructure.Repositories
 {
@@ -135,6 +136,114 @@ namespace AssetManagement.Infrastructure.Repositories
 
             await _dbContext.SaveChangesAsync();
             return existingUser;
+        }
+
+        public async Task<(IEnumerable<User> Data, int TotalRecords)> GetAllMatchingUserAsync(EnumLocation admimLocation, string? search, RoleType? roleType, string? orderBy, bool? isDescending, PaginationFilter pagination)
+        {
+            string searchPhraseLower = search?.ToLower() ?? string.Empty;
+
+            var baseQuery = _dbContext.Users
+                .Where(x => x.Location == admimLocation && !x.IsDeleted);
+
+            var searchQuery = baseQuery.Where(x => x.FirstName.ToLower().Contains(searchPhraseLower)
+                                                                        || x.LastName.ToLower().Contains(searchPhraseLower)
+                                                                        || x.Username.ToLower().Contains(searchPhraseLower)
+                                                                        || (x.FirstName.ToLower() + " " + x.LastName.ToLower()).Contains(searchPhraseLower)
+                                                                        || x.StaffCode.ToLower().Contains(searchPhraseLower)
+                                                                        );
+
+            if (roleType.HasValue)
+            {
+                searchQuery = searchQuery.Where(x => x.Role == roleType);
+            }
+
+            var totalRecords = await searchQuery.CountAsync();
+
+            if (!string.IsNullOrEmpty(orderBy))
+            {
+                var columnsSelector = new Dictionary<string, Expression<Func<User, object>>>
+                {
+                    { "fullname", x => x.FirstName + " " + x.LastName },
+                    { "staffcode", x => x.StaffCode },
+                    { "username", x => x.Username },
+                    { "joineddate", x => x.JoinedDate },
+                    { "role", x => x.Role }
+                };
+
+                if (columnsSelector.ContainsKey(orderBy.ToLower()))
+                {
+                    if (isDescending.HasValue && isDescending.Value)
+                    {
+                        searchQuery = searchQuery.OrderByDescending(columnsSelector[orderBy.ToLower()])
+                            .ThenByDescending(x => x.FirstName + " " + x.LastName)
+                            .ThenByDescending(x => x.StaffCode)
+                            .ThenByDescending(x => x.Username)
+                            .ThenByDescending(x => x.JoinedDate)
+                            .ThenByDescending(x => x.Role);
+                    }
+                    else
+                    {
+                        searchQuery = searchQuery.OrderBy(columnsSelector[orderBy.ToLower()])
+                            .ThenBy(x => x.FirstName + " " + x.LastName)
+                            .ThenBy(x => x.StaffCode)
+                            .ThenBy(x => x.Username)
+                            .ThenBy(x => x.JoinedDate)
+                            .ThenBy(x => x.Role);
+                    }
+                }
+            }
+            else
+            {
+                searchQuery = searchQuery.OrderBy(x => x.FirstName + " " + x.LastName)
+                    .ThenBy(x => x.StaffCode)
+                    .ThenBy(x => x.Username)
+                    .ThenBy(x => x.JoinedDate)
+                    .ThenBy(x => x.Role);
+            }
+
+            var users = await searchQuery
+                .Skip((pagination.PageIndex - 1) * pagination.PageSize)
+                .Take(pagination.PageSize)
+                .ToListAsync();
+
+            return (Data: users, TotalRecords: totalRecords);
+        }
+
+        private IOrderedQueryable<User> ApplySorting(IQueryable<User> query, string? orderBy, bool? isDescending)
+        {
+            var columnsSelector = new Dictionary<string, Expression<Func<User, object>>>
+        {
+            { "fullname", x => x.FirstName + " " + x.LastName },
+            { "staffcode", x => x.StaffCode },
+            { "username", x => x.Username },
+            { "joineddate", x => x.JoinedDate },
+            { "role", x => x.Role }
+        };
+
+            IOrderedQueryable<User> orderedQuery;
+
+            if (!string.IsNullOrEmpty(orderBy) && columnsSelector.ContainsKey(orderBy.ToLower()))
+            {
+                if (isDescending ?? false)
+                {
+                    orderedQuery = query.OrderByDescending(columnsSelector[orderBy.ToLower()]);
+                }
+                else
+                {
+                    orderedQuery = query.OrderBy(columnsSelector[orderBy.ToLower()]);
+                }
+            }
+            else
+            {
+                orderedQuery = query.OrderBy(x => x.FirstName + " " + x.LastName);
+            }
+
+            return orderedQuery
+                .ThenBy(x => x.FirstName + " " + x.LastName)
+                .ThenBy(x => x.StaffCode)
+                .ThenBy(x => x.Username)
+                .ThenBy(x => x.JoinedDate)
+                .ThenBy(x => x.Role);
         }
     }
 }
