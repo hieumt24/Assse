@@ -23,7 +23,6 @@ namespace AssetManagement.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddHttpContextAccessor();
-            builder.Services.AddScoped<ErrorHandlingMiddleware>();
             builder.Services.AddTransient<ResponseTimeMiddleware>();
 
             //Add Connection To DataBase
