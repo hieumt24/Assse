@@ -20,6 +20,7 @@ import {
 } from "@/services/admin/manageReturningRequestService";
 import { format } from "date-fns";
 import { useState } from "react";
+import { DateRange } from "react-day-picker";
 import { toast } from "react-toastify";
 
 export const ManageReturningRequest = () => {
@@ -30,15 +31,14 @@ export const ManageReturningRequest = () => {
   const [orderBy, setOrderBy] = useState("");
   const [isDescending, setIsDescending] = useState(true);
   const [requestState, setRequestState] = useState(0);
-  const [returnedDateFrom, setReturnedDateFrom] = useState<Date | null>(null);
-  const [returnedDateTo, setReturnedDateTo] = useState<Date | null>(null);
+  const [returnedDate, setReturnedDate] = useState<DateRange | null>(null);
   const { requests, loading, error, pageCount, fetchRequests, totalRecords } =
     useReturningRequests(
       pagination,
       user.location,
       requestState,
-      returnedDateFrom ? format(returnedDateFrom, "yyyy-MM-dd") : "",
-      returnedDateTo ? format(returnedDateTo, "yyyy-MM-dd") : "",
+      returnedDate?.from ? format(returnedDate?.from, "yyyy-MM-dd") : "",
+      returnedDate?.to ? format(returnedDate?.to, "yyyy-MM-dd") : "",
       search.trim(),
       orderBy,
       isDescending,
@@ -110,25 +110,11 @@ export const ManageReturningRequest = () => {
             </SelectContent>
           </Select>
           <div className="flex items-center">
-            From:&nbsp;
             <DatePicker
-              setValue={setReturnedDateFrom}
+              mode="range"
+              setValue={setReturnedDate}
               placeholder="Returned Date"
-              onChange={() => {
-                pagination.pageIndex = 1;
-              }}
-              className="w-[150px]"
-            />
-          </div>
-          <div className="flex items-center">
-            To:&nbsp;
-            <DatePicker
-              setValue={setReturnedDateTo}
-              placeholder="Returned Date"
-              onChange={() => {
-                pagination.pageIndex = 1;
-              }}
-              className="w-[150px]"
+              className="min-w-[150px]"
             />
           </div>
         </div>

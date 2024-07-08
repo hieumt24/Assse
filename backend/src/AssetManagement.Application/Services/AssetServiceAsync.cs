@@ -97,14 +97,33 @@ namespace AssetManagement.Application.Services
         {
             try
             {
-                var asset = await _assetRepository.GetByIdAsync(assetId);
-                if (asset == null)
+                var exsittingAsset = AssetSpecificationHelper.GetAssetById(assetId);
+                if (exsittingAsset == null)
                 {
-                    return new Response<AssetDto> { Succeeded = false, Message = "Category not found." };
+                    return new Response<AssetDto>("Asset not found");
                 }
+                var asset = await _assetRepository.FirstOrDefaultAsync(exsittingAsset);
+                var assetDto = _mapper.Map<AssetDto>(asset);
+                return new Response<AssetDto> { Succeeded = true, Data = assetDto };
+            }
+            catch (Exception ex)
+            {
+                return new Response<AssetDto> { Succeeded = false, Errors = { ex.Message } };
+            }
+        }
 
-                var categoryDto = _mapper.Map<AssetDto>(asset);
-                return new Response<AssetDto> { Succeeded = true, Data = categoryDto };
+        public async Task<Response<AssetDto>> GetAssetByAssetCode(string assetCode)
+        {
+            try
+            {
+                var exsittingAsset = AssetSpecificationHelper.GetAssetByAssetCode(assetCode);
+                if (exsittingAsset == null)
+                {
+                    return new Response<AssetDto>("Asset not found");
+                }
+                var asset = await _assetRepository.FirstOrDefaultAsync(exsittingAsset);
+                var assetDto = _mapper.Map<AssetDto>(asset);
+                return new Response<AssetDto> { Succeeded = true, Data = assetDto };
             }
             catch (Exception ex)
             {
@@ -174,25 +193,6 @@ namespace AssetManagement.Application.Services
                 //Map to Dto
                 var assetEditDto = _mapper.Map<AssetDto>(exsitingAsset);
                 return new Response<AssetDto> { Succeeded = true, Data = assetEditDto };
-            }
-            catch (Exception ex)
-            {
-                return new Response<AssetDto> { Succeeded = false, Errors = { ex.Message } };
-            }
-        }
-
-        public async Task<Response<AssetDto>> GetAssetByAssetCode(string assetCode)
-        {
-            try
-            {
-                var exsittingAsset = AssetSpecificationHelper.GetAssetByAssetCode(assetCode);
-                if (exsittingAsset == null)
-                {
-                    return new Response<AssetDto>("User not found");
-                }
-                var asset = await _assetRepository.FirstOrDefaultAsync(exsittingAsset);
-                var userDto = _mapper.Map<AssetDto>(asset);
-                return new Response<AssetDto> { Succeeded = true, Data = userDto };
             }
             catch (Exception ex)
             {

@@ -23,6 +23,7 @@ export const useReturningRequests = (
 
   const fetchRequests = async () => {
     // Check if localStorage have item
+    if (!returnedDateTo && returnedDateFrom) return;
     const orderByLocalStorage = localStorage.getItem("orderBy");
     setLoading(true);
     try {

@@ -10,6 +10,8 @@ export const Login = () => {
   if (isAuthenticated) {
     return <Navigate to="/" />;
   }
+  
+
   return (
     <div className="flex h-screen flex-col items-center justify-center">
       {isLoading ? <LoadingSpinner /> : <LoginForm />}
