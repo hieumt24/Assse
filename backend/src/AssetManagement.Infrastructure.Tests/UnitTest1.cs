@@ -1,4 +1,4 @@
-namespace AssetManagement.Application.Tests
+namespace AssetManagement.Infrastructure.Tests
 {
     public class UnitTest1
     {

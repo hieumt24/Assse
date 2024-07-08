@@ -1,5 +1,6 @@
 ﻿using AssetManagement.Domain.Common.Models;
 using AssetManagement.Domain.Enums;
+using Microsoft.Identity.Client;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

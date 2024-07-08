@@ -8,7 +8,7 @@
 //namespace AssetManagement.Infrastructure.Migrations
 //{
 //    /// <inheritdoc />
-//    public partial class addnewtokenblacklisttoken : Migration
+//    public partial class addentitytoken : Migration
 //    {
 //        /// <inheritdoc />
 //        protected override void Up(MigrationBuilder migrationBuilder)
@@ -44,11 +44,12 @@
 //                keyValue: new Guid("c2939d12-3e22-4003-a1af-eadda06bd90e"));
 
 //            migrationBuilder.CreateTable(
-//                name: "BlackListTokens",
+//                name: "Token",
 //                columns: table => new
 //                {
 //                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-//                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
+//                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+//                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true),
 //                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
 //                    CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
 //                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -57,46 +58,25 @@
 //                },
 //                constraints: table =>
 //                {
-//                    table.PrimaryKey("PK_BlackListTokens", x => x.Id);
+//                    table.PrimaryKey("PK_Token", x => x.Id);
+//                    table.ForeignKey(
+//                        name: "FK_Token_Users_UserId",
+//                        column: x => x.UserId,
+//                        principalTable: "Users",
+//                        principalColumn: "Id",
+//                        onDelete: ReferentialAction.Cascade);
 //                });
 
-//            //migrationBuilder.CreateTable(
-//            //    name: "Token",
-//            //    columns: table => new
-//            //    {
-//            //        Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-//            //        UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-//            //        Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
-//            //        CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-//            //        CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-//            //        LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-//            //        LastModifiedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-//            //        IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-//            //    },
-//            //    constraints: table =>
-//            //    {
-//            //        table.PrimaryKey("PK_Token", x => x.Id);
-//            //        table.ForeignKey(
-//            //            name: "FK_Token_Users_UserId",
-//            //            column: x => x.UserId,
-//            //            principalTable: "Users",
-//            //            principalColumn: "Id",
-//            //            onDelete: ReferentialAction.Cascade);
-//            //    });
-
-//            //migrationBuilder.CreateIndex(
-//            //    name: "IX_Token_UserId",
-//            //    table: "Token",
-//            //    column: "UserId",
-//            //    unique: true);
+//            migrationBuilder.CreateIndex(
+//                name: "IX_Token_UserId",
+//                table: "Token",
+//                column: "UserId",
+//                unique: true);
 //        }
 
 //        /// <inheritdoc />
 //        protected override void Down(MigrationBuilder migrationBuilder)
 //        {
-//            migrationBuilder.DropTable(
-//                name: "BlackListTokens");
-
 //            migrationBuilder.DropTable(
 //                name: "Token");
 

@@ -28,8 +28,8 @@ namespace AssetManagement.Application
     {
         public static void ConfigureServices(IServiceCollection service, IConfiguration configuration)
         {
-            service.AddScoped<IAssetServiceAsync, AssetServiceAsync>();
-            service.AddScoped<ICategoryServiceAsync, CategoryServiceAsync>();
+            service.AddScoped<IAssetServiceAsync, AssetService>();
+            service.AddScoped<ICategoryServiceAsync, CategoryService>();
 
             service.AddScoped<IValidator<AddCategoryRequestDto>, AddCategoryRequestValidation>();
             service.AddScoped<IValidator<AddAssetRequestDto>, AddAssetRequestValidation>();
@@ -42,7 +42,7 @@ namespace AssetManagement.Application
             service.AddScoped<IValidator<EditAssignmentRequestDto>, EditAssignmentRequestValidation>();
 
             //return request
-            service.AddScoped<IReturnRequestServiceAsync, ReturnRequestServiceAsync>();
+            service.AddScoped<IReturnRequestServiceAsync, ReturnRequestService>();
             service.AddScoped<IValidator<AddReturnRequestDto>, AddReturnRequestValidator>();
 
             service.AddAutoMapper(typeof(GeneralProfile));
