@@ -71,7 +71,8 @@ namespace AssetManagement.Infrastructure.Repositories
             var query = _dbContext.Assignments
                         .Include(x => x.Asset)
                         .Where(x => x.AssignedIdTo == userId
-                            && (x.ReturnRequest == null || (x.State != EnumAssignmentState.Returned && !x.ReturnRequest.IsDeleted))
+                            && (x.ReturnRequestId == null || x.State == EnumAssignmentState.WaitingForReturning)
+                            && x.State != EnumAssignmentState.Returned
                             && x.State != EnumAssignmentState.Declined
                             && x.AssignedDate <= DateTime.Now
                             && !x.IsDeleted
@@ -126,7 +127,8 @@ namespace AssetManagement.Infrastructure.Repositories
                         .Include(x => x.AssignedTo)
                         .Where(x => x.Location == location 
                             && !x.IsDeleted
-                            && (x.ReturnRequest == null || (x.State != EnumAssignmentState.Returned && !x.ReturnRequest.IsDeleted))
+                            && (x.ReturnRequestId == null || x.State == EnumAssignmentState.WaitingForReturning)
+                            && x.State != EnumAssignmentState.Returned
                             && x.AssignedDate <= DateTime.Now
                             && (string.IsNullOrEmpty(search) || x.Asset.AssetCode.ToLower().Contains(searchPhraseLower)
                                                             || x.Asset.AssetName.ToLower().Contains(searchPhraseLower)
