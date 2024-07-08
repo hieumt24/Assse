@@ -124,13 +124,15 @@ export const ManageAsset = () => {
   const { setIsLoading } = useLoading();
   const [assetIdToDelete, setAssetIdToDelete] = useState<string>("");
   const handleOpenDisable = async (id: string) => {
+    setIsLoading(true);
+    setAssetIdToDelete(id);
     const result = await checkAssetHasAssignmentService(id);
     if (result.success) {
-      setAssetIdToDelete(id);
       setOpenDisable(true);
     } else {
       setOpenCannotDisable(true);
     }
+    setIsLoading(false);
   };
 
   const handleDelete = async () => {
@@ -307,7 +309,7 @@ export const ManageAsset = () => {
           />
           <GenericDialog
             title="Cannot delete asset"
-            desc="Cannot delete the asset because it belongs to one or more historical assignments. If the asset is not able to be used anymore, please update its state in Edit Asset page."
+            desc={`Cannot delete the asset because it belongs to one or more historical assignments. If the asset is not able to be used anymore, please update its state in <a href='/assets/edit/${assetIdToDelete}' class='text-blue-500 underline'>Edit Asset page.</a>`}
             open={openCannotDisable}
             setOpen={setOpenCannotDisable}
           />

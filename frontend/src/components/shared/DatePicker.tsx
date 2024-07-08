@@ -7,19 +7,26 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { IoCalendar, IoClose } from "react-icons/io5";
 
 interface DatePickerProps {
   formatDate?: string;
-  setValue: Dispatch<SetStateAction<Date | null>>;
+  setValue: any;
   placeholder?: string;
   onChange?: any;
   className?: string;
+  mode?: "multiple" | "default" | "single" | "range" | undefined;
 }
 
 export function DatePicker(props: Readonly<DatePickerProps>) {
-  const { formatDate, setValue, placeholder, onChange, className } = props;
+  const {
+    formatDate,
+    setValue,
+    placeholder,
+    onChange,
+    className,
+  } = props;
   const [date, setDate] = useState<Date>();
 
   const handleDateSelect = (selectedDate: Date | undefined) => {
@@ -32,7 +39,7 @@ export function DatePicker(props: Readonly<DatePickerProps>) {
     } else {
       setValue(null);
     }
-    onChange();
+    onChange && onChange();
   };
 
   const handleClear = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -50,7 +57,7 @@ export function DatePicker(props: Readonly<DatePickerProps>) {
           className={cn(
             "w-48 items-center justify-between font-normal",
             !date && "text-muted-foreground",
-            className
+            className,
           )}
         >
           {date ? (
@@ -72,12 +79,12 @@ export function DatePicker(props: Readonly<DatePickerProps>) {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
-        <Calendar
-          mode="single"
-          selected={date}
-          onSelect={handleDateSelect}
-          initialFocus
-        />
+          <Calendar
+            mode={"single"}
+            selected={date}
+            onSelect={handleDateSelect}
+            initialFocus
+          />
       </PopoverContent>
     </Popover>
   );

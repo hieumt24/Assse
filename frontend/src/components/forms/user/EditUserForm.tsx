@@ -22,7 +22,7 @@ import { GENDERS, ROLES } from "@/constants";
 import { useLoading } from "@/context/LoadingContext";
 import { useAuth } from "@/hooks";
 import { UserRes } from "@/models";
-import { getUserByStaffCodeService, resetPasswordService, updateUserService } from "@/services";
+import { getUserByIdService, resetPasswordService, updateUserService } from "@/services";
 import { updateUserSchema } from "@/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
@@ -34,7 +34,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { z } from "zod";
 
 export const EditUserForm = () => {
-  const { staffCode } = useParams();
+  const { userId } = useParams();
   const { isLoading, setIsLoading } = useLoading();
   const [userDetails, setUserDetails] = useState<UserRes>();
   const { user } = useAuth();
@@ -64,9 +64,9 @@ export const EditUserForm = () => {
   useEffect(() => {
     const fetchUser = async () => {
       setIsLoading(true);
-      const res = await getUserByStaffCodeService(staffCode);
+      const res = await getUserByIdService(userId!);
       if (res.success) {
-        const details = res.data.data;
+        const details = res.data;
         form.reset({
           dateOfBirth: format(details.dateOfBirth, "yyyy-MM-dd"),
           joinedDate: format(details.joinedDate, "yyyy-MM-dd"),
@@ -81,7 +81,7 @@ export const EditUserForm = () => {
       setIsLoading(false);
     };
     fetchUser();
-  }, [staffCode]);
+  }, [userId]);
 
   const onSubmit = async (values: z.infer<typeof updateUserSchema>) => {
     const gender = parseInt(values.gender);
