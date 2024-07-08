@@ -48,7 +48,7 @@ namespace AssetManagement.API.Tests.Controllers
             var route = "/api/v1/reports";
             var response = new PagedResponse<List<ReportResponseDto>> { Succeeded = true, Data = new List<ReportResponseDto>() };
 
-            _mockReportServices.Setup(service => service.GetReportPaginationAsync(reportFilter.Location, reportFilter.Pagination, reportFilter.OrderBy, reportFilter.IsDescending, route))
+            _mockReportServices.Setup(service => service.GetReportPaginationAsync(reportFilter.Location, reportFilter.Pagination, reportFilter.search, reportFilter.OrderBy, reportFilter.IsDescending, route))
                                .ReturnsAsync(response);
             _controller.ControllerContext.HttpContext = CreateHttpContext();
 
@@ -75,7 +75,7 @@ namespace AssetManagement.API.Tests.Controllers
             var route = "/api/v1/reports";
             var response = new PagedResponse<List<ReportResponseDto>> { Succeeded = false };
 
-            _mockReportServices.Setup(service => service.GetReportPaginationAsync(reportFilter.Location, reportFilter.Pagination, reportFilter.OrderBy, reportFilter.IsDescending, route))
+            _mockReportServices.Setup(service => service.GetReportPaginationAsync(reportFilter.Location, reportFilter.Pagination, reportFilter.search ,  reportFilter.OrderBy, reportFilter.IsDescending, route))
                                .ReturnsAsync(response);
             _controller.ControllerContext.HttpContext = CreateHttpContext();
 
