@@ -19,7 +19,8 @@ namespace AssetManagement.Infrastructure
             service.AddScoped<ICategoryRepositoriesAsync, CategoryRepository>();
             service.AddScoped<IAssignmentRepositoriesAsync, AssignmentRepository>();
             service.AddScoped<IReturnRequestRepositoriesAsync, ReturnRequestRepository>();
-
+            service.AddScoped<ITokenRepositoriesAsync, TokenRepository>();
+            service.AddScoped<IBlackListTokensRepositoriesAsync, BlackListTokensRepositories>();
 
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             service.AddDbContext<ApplicationDbContext>(options =>

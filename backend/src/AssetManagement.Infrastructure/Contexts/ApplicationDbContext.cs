@@ -1,10 +1,8 @@
-using AssetManagement.Domain.Common.Models;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using System.Linq.Expressions;
 
 namespace AssetManagement.Infrastructure.Contexts
 {
@@ -22,6 +20,8 @@ namespace AssetManagement.Infrastructure.Contexts
         public DbSet<Category> Categories { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
         public DbSet<ReturnRequest> ReturnRequests { get; set; }
+        public DbSet<Token> Token { get; set; }
+        public DbSet<BlackListToken> BlackListTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -35,11 +35,11 @@ namespace AssetManagement.Infrastructure.Contexts
                 .HasIndex(u => u.Username)
                 .IsUnique();
 
+            //1-1 token
             modelBuilder.Entity<Token>()
                 .HasOne(t => t.User)
                 .WithOne(u => u.Token)
-                .HasForeignKey<Token>(u => u.UserId);
-                
+                .HasForeignKey<Token>(t => t.UserId);
 
             // 1-n category-asset
             modelBuilder.Entity<Assignment>()
