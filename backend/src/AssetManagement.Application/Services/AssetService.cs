@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AssetManagement.Application.Services
 {
-    public class AssetServiceAsync : IAssetServiceAsync
+    public class AssetService : IAssetServiceAsync
     {
         private readonly IMapper _mapper;
         private readonly IAssetRepositoriesAsync _assetRepository;
@@ -24,7 +24,7 @@ namespace AssetManagement.Application.Services
         private readonly IValidator<EditAssetRequestDto> _editAssetValidator;
         private readonly IAssignmentRepositoriesAsync _assignmentRepository;
 
-        public AssetServiceAsync(IAssetRepositoriesAsync assetRepository,
+        public AssetService(IAssetRepositoriesAsync assetRepository,
              IMapper mapper,
               IUriService uriService,
              IValidator<AddAssetRequestDto> addAssetValidator,
