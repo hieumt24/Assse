@@ -10,6 +10,5 @@ namespace AssetManagement.Application.Models.DTOs.Assignments.Reques
         public Guid AssetId { get; set; }
         public DateTime AssignedDate { get; set; }
         public string Note { get; set; } = string.Empty;
-        public byte[] RowVersion { get; set; }
     }
 }
