@@ -19,7 +19,8 @@ import { useAssignments, useAuth, usePagination } from "@/hooks";
 import { deleteAssignmentService } from "@/services/admin/manageAssignmentService";
 import { createReturnRequest } from "@/services/admin/manageReturningRequestService";
 import { format } from "date-fns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { DateRange } from "react-day-picker";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -29,8 +30,7 @@ export const ManageAssignment = () => {
   const [orderBy, setOrderBy] = useState("");
   const [isDescending, setIsDescending] = useState(true);
   const [assignmentState, setAssignmentState] = useState(0);
-  const [assignedDateFrom, setAssignedDateFrom] = useState<Date | null>(null);
-  const [assignedDateTo, setAssignedDateTo] = useState<Date | null>(null);
+  const [assignedDate, setAssignedDate] = useState<DateRange | null>(null);
   const { user } = useAuth();
 
   const {
@@ -47,8 +47,8 @@ export const ManageAssignment = () => {
     user.location,
     isDescending,
     assignmentState,
-    assignedDateFrom ? format(assignedDateFrom, "yyyy-MM-dd") : "",
-    assignedDateTo ? format(assignedDateTo, "yyyy-MM-dd") : "",
+    assignedDate?.from ? format(assignedDate.from, "yyyy-MM-dd") : "",
+    assignedDate?.to ? format(assignedDate.to, "yyyy-MM-dd") : "",
   );
 
   const { setIsLoading } = useLoading();
@@ -95,6 +95,12 @@ export const ManageAssignment = () => {
     setIsLoading(false);
   };
 
+  useEffect(() => {
+    if (assignedDate?.from && assignedDate?.to) {
+      pagination.pageIndex = 1;
+    }
+  }, [assignedDate])
+
   const navigate = useNavigate();
   return (
     <div className="m-16 flex flex-grow flex-col gap-8">
@@ -128,29 +134,14 @@ export const ManageAssignment = () => {
             </SelectContent>
           </Select>
           <div className="flex items-center">
-            From:&nbsp;
             <DatePicker
-              setValue={setAssignedDateFrom}
+              mode="range"
+              setValue={setAssignedDate}
               placeholder="Assigned Date"
-              onChange={() => {
-                pagination.pageIndex = 1;
-                //if (assignedDateTo != null && assignedDateFrom != null && assignedDateFrom > assignedDateTo) setAssignedDateFrom(null);
-              }}
-              className="w-[150px]"
+              className="min-w-[150px]"
             />
           </div>
-          <div className="flex items-center">
-            To:&nbsp;
-            <DatePicker
-              setValue={setAssignedDateTo}
-              placeholder="Assigned Date"
-              onChange={() => {
-                pagination.pageIndex = 1;
-                //if (assignedDateTo != null && assignedDateFrom != null && assignedDateFrom > assignedDateTo) setAssignedDateTo(null);
-              }}
-              className="w-[150px]"
-            />
-          </div>
+          
         </div>
         <div className="flex justify-between gap-4">
           <SearchForm

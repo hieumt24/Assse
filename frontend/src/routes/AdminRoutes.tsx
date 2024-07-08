@@ -28,7 +28,7 @@ export const AdminRoutes = () => {
       element: <CreateUser />,
     },
     {
-      path: "/users/edit/:staffCode",
+      path: "/users/edit/:userId",
       element: <EditUser />,
     },
     {
@@ -40,7 +40,7 @@ export const AdminRoutes = () => {
       element: <CreateAsset />,
     },
     {
-      path: "/assets/edit/:assetCode",
+      path: "/assets/edit/:assetId",
       element: <EditAsset />,
     },
     {

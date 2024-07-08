@@ -15,8 +15,8 @@ import { useLoading } from "@/context/LoadingContext";
 import { removeExtraWhitespace } from "@/lib/utils";
 import { AssetRes } from "@/models";
 import {
-  getAssetByAssetCodeService,
-  updateAssetService,
+  getAssetByIdService,
+  updateAssetService
 } from "@/services/admin/manageAssetService";
 import { updateAssetSchema } from "@/validations/assetSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,7 +29,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { z } from "zod";
 
 export const EditAssetForm: React.FC = () => {
-  const { assetCode } = useParams();
+  const { assetId } = useParams();
 
   const { isLoading, setIsLoading } = useLoading();
   const navigate = useNavigate();
@@ -49,7 +49,7 @@ export const EditAssetForm: React.FC = () => {
   const fetchAsset = async () => {
     try {
       setIsLoading(true);
-      const res = await getAssetByAssetCodeService(assetCode ? assetCode : "");
+      const res = await getAssetByIdService(assetId ? assetId : "");
       const details = res.data;
       if (res.success) {
         setAsset(res.data);
@@ -70,10 +70,10 @@ export const EditAssetForm: React.FC = () => {
   };
 
   useEffect(() => {
-    if (assetCode) {
+    if (assetId) {
       fetchAsset();
     }
-  }, [assetCode]);
+  }, [assetId]);
 
   const onSubmit = async (values: z.infer<typeof updateAssetSchema>) => {
     try {

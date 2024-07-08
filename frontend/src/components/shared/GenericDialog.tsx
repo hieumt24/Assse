@@ -65,7 +65,7 @@ export const GenericDialog = (props: GenericDialogProps) => {
             </p>
           </DialogTitle>
           <DialogDescription>
-            <p className="text-center text-lg">{desc}</p>
+          <p className="text-center text-lg" dangerouslySetInnerHTML={{ __html: desc }} />
           </DialogDescription>
         </DialogHeader>
         <div className="mt-4 flex w-full justify-center gap-4">

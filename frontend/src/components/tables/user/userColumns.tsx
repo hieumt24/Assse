@@ -74,7 +74,7 @@ export const userColumns = ({
             className="text-blue-500 hover:text-blue-700"
             onClick={(e) => {
               e.stopPropagation();
-              navigate(`edit/${userInfo.staffCode}`);
+              navigate(`edit/${userInfo.id}`);
             }}
             disabled={user.id === userInfo.id}
           >
