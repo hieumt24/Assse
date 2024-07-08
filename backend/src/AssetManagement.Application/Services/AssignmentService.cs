@@ -210,15 +210,13 @@ namespace AssetManagement.Application.Services
                     paginationFilter = new PaginationFilter();
                 }
 
-                var filterAsset = await _assignmentRepositoriesAsync.FilterAssignmentOfUserAsync(userId, search, assignmentState, dateFrom, dateTo);
+                var filterAssignment = await _assignmentRepositoriesAsync.FilterAssignmentOfUserAsync(userId, search, assignmentState, dateFrom, dateTo);
 
-                //filterAsset = filterAsset.Where(a => a.State != EnumAssignmentState.Returned);
-
-                var totalRecords = filterAsset.Count();
+                var totalRecords = filterAssignment.Count();
 
                 var specAssignment = AssignmentSpecificationHelper.AssignmentSpecificationWithAsset(paginationFilter, orderBy, isDescending);
 
-                var assignments = await SpecificationEvaluator<Assignment>.GetQuery(filterAsset, specAssignment).ToListAsync();
+                var assignments = await SpecificationEvaluator<Assignment>.GetQuery(filterAssignment, specAssignment).ToListAsync();
 
                 var responseAssignmentDtos = _mapper.Map<List<AssignmentResponseDto>>(assignments);
 
@@ -362,7 +360,7 @@ namespace AssetManagement.Application.Services
             if (assetResponse == null)
             {
                 return new Response<AssignmentDto> { Succeeded = false, Message = "Cannot delete this assignment because can not found the asset of this assignment." };
-            }
+            } 
 
             assetResponse.State = AssetStateType.Available;
             await _assignmentRepositoriesAsync.DeleteAsync(assignmentId);
