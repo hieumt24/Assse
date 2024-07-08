@@ -1,8 +1,8 @@
 import {
-  DatePicker,
+  DateRangePicker,
   GenericDialog,
   SearchForm,
-  assignmentColumns,
+  assignmentColumns
 } from "@/components";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { AssignmentTable } from "@/components/tables/assignment/AssignmentTable";
@@ -134,8 +134,7 @@ export const ManageAssignment = () => {
             </SelectContent>
           </Select>
           <div className="flex items-center">
-            <DatePicker
-              mode="range"
+            <DateRangePicker
               setValue={setAssignedDate}
               placeholder="Assigned Date"
               className="min-w-[150px]"

@@ -8,7 +8,6 @@ import {
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { useState } from "react";
-import { DateRange } from "react-day-picker";
 import { IoCalendar, IoClose } from "react-icons/io5";
 
 interface DatePickerProps {
@@ -27,10 +26,8 @@ export function DatePicker(props: Readonly<DatePickerProps>) {
     placeholder,
     onChange,
     className,
-    mode = "single",
   } = props;
   const [date, setDate] = useState<Date>();
-  const [dateRange, setDateRange] = useState<DateRange | undefined>();
 
   const handleDateSelect = (selectedDate: Date | undefined) => {
     setDate(selectedDate);
@@ -41,15 +38,6 @@ export function DatePicker(props: Readonly<DatePickerProps>) {
       setValue(nextDay);
     } else {
       setValue(null);
-    }
-    onChange && onChange();
-  };
-
-  const handleDateRangeSelect = (selectedDate: DateRange | undefined) => {
-    setDateRange(selectedDate);
-
-    if (selectedDate) {
-      setValue(selectedDate);
     }
     onChange && onChange();
   };
@@ -84,15 +72,6 @@ export function DatePicker(props: Readonly<DatePickerProps>) {
                 <IoClose size={14} />
               </Button>
             </>
-          ) : dateRange?.from ? (
-            dateRange.to ? (
-              <>
-                {format(dateRange.from, "LLL dd, y")} -{" "}
-                {format(dateRange.to, "LLL dd, y")}
-              </>
-            ) : (
-              format(dateRange.from, "LLL dd, y")
-            )
           ) : (
             <span>{placeholder || "Select date"}</span>
           )}
@@ -100,23 +79,12 @@ export function DatePicker(props: Readonly<DatePickerProps>) {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
-        {mode === "single" ? (
           <Calendar
             mode={"single"}
             selected={date}
             onSelect={handleDateSelect}
             initialFocus
           />
-        ) : mode === "range" ? (
-          <Calendar
-            mode={"range"}
-            selected={dateRange}
-            onSelect={handleDateRangeSelect}
-            initialFocus
-          />
-        ) : (
-          <></>
-        )}
       </PopoverContent>
     </Popover>
   );
