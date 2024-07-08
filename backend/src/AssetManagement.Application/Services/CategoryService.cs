@@ -9,7 +9,7 @@ using FluentValidation;
 
 namespace AssetManagement.Application.Services
 {
-    public class CategoryServiceAsync : ICategoryServiceAsync
+    public class CategoryService : ICategoryServiceAsync
     {
         private readonly IMapper _mapper;
         private readonly ICategoryRepositoriesAsync _categoryRepository;
@@ -18,7 +18,7 @@ namespace AssetManagement.Application.Services
         private readonly IValidator<UpdateCategoryRequestDto> _editCategoryValidator;
 
 
-        public CategoryServiceAsync(
+        public CategoryService(
             ICategoryRepositoriesAsync categoryRepository,
             IMapper mapper,
             IValidator<AddCategoryRequestDto> addCategoryValidator,

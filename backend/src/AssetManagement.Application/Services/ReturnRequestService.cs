@@ -17,7 +17,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AssetManagement.Application.Services
 {
-    public class ReturnRequestServiceAsync : IReturnRequestServiceAsync
+    public class ReturnRequestService : IReturnRequestServiceAsync
     {
         private readonly IMapper _mapper;
         private readonly IReturnRequestRepositoriesAsync _returnRequestRepository;
@@ -29,7 +29,7 @@ namespace AssetManagement.Application.Services
         private readonly IAssetServiceAsync _assetService;
         private readonly IAssetRepositoriesAsync _assetRepositoriesAsync;
 
-        public ReturnRequestServiceAsync(
+        public ReturnRequestService(
             IReturnRequestRepositoriesAsync returnRequestRepository,
             IMapper mapper,
             IValidator<AddReturnRequestDto> addReturnRequestValidator,

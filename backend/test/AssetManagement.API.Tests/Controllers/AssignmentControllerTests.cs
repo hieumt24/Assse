@@ -314,7 +314,28 @@ namespace AssetManagement.API.Tests.Controller
             Assert.True(returnValue.Succeeded);
         }
 
-         
+        [Fact]
+        public async Task GetAssignmentById_ReturnsBadRequest_WhenAssignmentIsNotFound()
+        {
+            // Arrange
+            var assignmentId = Guid.NewGuid();
+            var expectedResponse = new PagedResponse<AssignmentResponseDto>
+            {
+                Succeeded = false
+            };
+            _assignmentServiceMock.Setup(x => x.GetAssignmentByIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(expectedResponse);
+
+            // Act
+            var result = await _assignmentController.GetAssignmentById(assignmentId);
+
+            // Assert
+            var badRequest = Assert.IsType<BadRequestObjectResult>(result);
+            var returnValue = Assert.IsType<PagedResponse<AssignmentResponseDto>>(badRequest.Value);
+            Assert.False(returnValue.Succeeded);
+        }
+
+
 
         [Fact]
         public async Task ChangeAssignmentStatus_ReturnsOkResult_WhenStatusIsChangedSuccessfully()

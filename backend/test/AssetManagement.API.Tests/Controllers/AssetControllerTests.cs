@@ -313,5 +313,53 @@ namespace AssetManagement.API.Tests.Controller
             var returnValue = Assert.IsType<Response<AssetDto>>(notFoundResult.Value);
             Assert.False(returnValue.Succeeded);
         }
+
+
+        [Fact]
+        public async Task IsValidDeleteAsset_ReturnsOkResult_WhenServiceSucceeds()
+        {
+            // Arrange
+            var assetId = Guid.NewGuid();
+            var serviceResponse = new Response<bool>
+            {
+                Succeeded = true,
+                Data = true
+            };
+
+            _assetServiceMock.Setup(x => x.IsValidDeleteAsset(assetId)).ReturnsAsync(serviceResponse);
+
+            // Act
+            var result = await _assetController.IsValidDeleteAsset(assetId);
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var returnValue = Assert.IsType<Response<bool>>(okResult.Value);
+            Assert.True(returnValue.Succeeded);
+            Assert.True(returnValue.Data);
+        }
+
+        [Fact]
+        public async Task IsValidDeleteAsset_ReturnsBadRequestResult_WhenServiceFails()
+        {
+            // Arrange
+            var assetId = Guid.NewGuid();
+            var serviceResponse = new Response<bool>
+            {
+                Succeeded = false,
+                Data = false,
+                Errors = new List<string> { "Asset cannot be deleted." }
+            };
+
+            _assetServiceMock.Setup(x => x.IsValidDeleteAsset(assetId)).ReturnsAsync(serviceResponse);
+
+            // Act
+            var result = await _assetController.IsValidDeleteAsset(assetId);
+
+            // Assert
+            var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+            var returnValue = Assert.IsType<Response<bool>>(badRequestResult.Value);
+            Assert.False(returnValue.Succeeded);
+            Assert.Contains("Asset cannot be deleted.", returnValue.Errors);
+        }
     }
 }
