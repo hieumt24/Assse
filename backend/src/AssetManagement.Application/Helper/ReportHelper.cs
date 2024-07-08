@@ -1,7 +1,5 @@
-﻿using AssetManagement.Application.Filter;
-using AssetManagement.Application.Models.DTOs.Reports.Responses;
-using AssetManagement.Domain.Common.Specifications;
-using System.Linq.Expressions;
+﻿using AssetManagement.Application.Models.DTOs.Reports.Responses;
+using System.Reflection;
 
 namespace AssetManagement.Application.Helper
 {
@@ -9,22 +7,21 @@ namespace AssetManagement.Application.Helper
     {
         public static List<ReportResponseDto> ApplySorting(List<ReportResponseDto> reports, string? orderBy, bool? isDescending)
         {
-            if (string.IsNullOrEmpty(orderBy))
+            if (string.IsNullOrWhiteSpace(orderBy))
             {
-                return reports.OrderBy(x => x.CategoryName).ToList();
+                orderBy = "categoryName";
+                isDescending = false;
             }
 
-            return orderBy.ToLower() switch
-            {
-                "categoryname" => isDescending.HasValue && isDescending.Value ? reports.OrderByDescending(x => x.CategoryName).ToList() : reports.OrderBy(x => x.CategoryName).ToList(),
-                "total" => isDescending.HasValue && isDescending.Value ? reports.OrderByDescending(x => x.Total).ToList() : reports.OrderBy(x => x.Total).ToList(),
-                "assigned" => isDescending.HasValue && isDescending.Value ? reports.OrderByDescending(x => x.Assigned).ToList() : reports.OrderBy(x => x.Assigned).ToList(),
-                "available" => isDescending.HasValue && isDescending.Value ? reports.OrderByDescending(x => x.Available).ToList() : reports.OrderBy(x => x.Available).ToList(),
-                "notavailable" => isDescending.HasValue && isDescending.Value ? reports.OrderByDescending(x => x.NotAvailable).ToList() : reports.OrderBy(x => x.NotAvailable).ToList(),
-                "waitingforrecycling" => isDescending.HasValue && isDescending.Value ? reports.OrderByDescending(x => x.WaitingForRecycling).ToList() : reports.OrderBy(x => x.WaitingForRecycling).ToList(),
-                "recycled" => isDescending.HasValue && isDescending.Value ? reports.OrderByDescending(x => x.Recycled).ToList() : reports.OrderBy(x => x.Recycled).ToList(),
-                _ => reports.OrderBy(x => x.CategoryName).ToList(),
-            };
+            var propertyInfo = typeof(ReportResponseDto).GetProperty(orderBy, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+            if (propertyInfo == null)
+                return reports;
+
+            reports = isDescending == true
+                ? reports.OrderByDescending(r => propertyInfo.GetValue(r, null)).ToList()
+                : reports.OrderBy(r => propertyInfo.GetValue(r, null)).ToList();
+
+            return reports;
         }
     }
 }

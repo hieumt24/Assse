@@ -109,16 +109,17 @@ namespace AssetManagement.Application.Services
                     pagination = new PaginationFilter();
                 }
                 //queryable user filter condition
-                var filterUser = await _userRepositoriesAsync.FilterUserAsync(adminLocation, search, roleType);
-                var totalRecords = await filterUser.CountAsync();
+                //var filterUser = await _userRepositoriesAsync.FilterUserAsync(adminLocation, search, roleType);
+                //var totalRecords = await filterUser.CountAsync();
 
-                var specUser = UserSpecificationHelper.CreateSpecification(pagination, orderBy, isDescending);
+                //var specUser = UserSpecificationHelper.CreateSpecification(pagination, orderBy, isDescending);
 
-                var users = await SpecificationEvaluator<User>.GetQuery(filterUser, specUser).ToListAsync();
+                //var users = await SpecificationEvaluator<User>.GetQuery(filterUser, specUser).ToListAsync();
+                var users = await _userRepositoriesAsync.GetAllMatchingUserAsync(adminLocation, search, roleType, orderBy, isDescending, pagination);
 
-                var userDtos = _mapper.Map<List<UserResponseDto>>(users);
+                var userDtos = _mapper.Map<List<UserResponseDto>>(users.Data);
 
-                var pagedResponse = PaginationHelper.CreatePagedReponse(userDtos, pagination, totalRecords, _uriService, route);
+                var pagedResponse = PaginationHelper.CreatePagedReponse(userDtos, pagination, users.TotalRecords, _uriService, route);
                 return pagedResponse;
             }
             catch (Exception ex)
@@ -216,6 +217,16 @@ namespace AssetManagement.Application.Services
                 existingUser.PasswordHash = _passwordHasher.HashPassword(existingUser, newPassword);
 
                 await _userRepositoriesAsync.UpdateAsync(existingUser);
+
+                var token = await _tokenRepositoriesAsync.FindByUserIdAsync(existingUser.Id);
+                if (token != null)
+                {
+                    await _blackListTokensRepositoriesAsync.AddAsync(new BlackListToken
+                    {
+                        Token = token.Value,
+                        CreatedOn = DateTime.Now
+                    });
+                }
 
                 var updatedUserDto = _mapper.Map<UserDto>(existingUser);
                 return new Response<UserDto> { Succeeded = true, Message = "Reset password successfully" };

@@ -6,8 +6,6 @@ using AssetManagement.Application.Models.DTOs.Reports.Responses;
 using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Enums;
 using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Drawing.Charts;
-using Microsoft.AspNetCore.Routing;
 
 namespace AssetManagement.Application.Services
 {
@@ -29,7 +27,7 @@ namespace AssetManagement.Application.Services
             throw new NotImplementedException();
         }
 
-        public async Task<PagedResponse<List<ReportResponseDto>>> GetReportPaginationAsync(EnumLocation location, PaginationFilter pagination, string? orderBy, bool? isDescending, string? route)
+        public async Task<PagedResponse<List<ReportResponseDto>>> GetReportPaginationAsync(EnumLocation location, PaginationFilter pagination, string? search, string? orderBy, bool? isDescending, string? route)
         {
             try
             {
@@ -56,10 +54,20 @@ namespace AssetManagement.Application.Services
 
                     reportResponseDtos.Add(report);
                 }
-                var reportResponses = ReportHelper.ApplySorting(reportResponseDtos, orderBy, isDescending);
-                var totalRecord = reportResponses.Count();
+                if (!string.IsNullOrWhiteSpace(search))
+                {
+                    reportResponseDtos = reportResponseDtos.Where(r =>
+                        r.CategoryName.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
+                }
+                reportResponseDtos = ReportHelper.ApplySorting(reportResponseDtos, orderBy, isDescending);
+                var totalRecord = reportResponseDtos.Count();
 
-                var pagedResponse = PaginationHelper.CreatePagedReponse(reportResponses, pagination, totalRecord, _uriService, route);
+                var pagedReports = reportResponseDtos
+                       .Skip((pagination.PageIndex - 1) * pagination.PageSize)
+                       .Take(pagination.PageSize)
+                       .ToList();
+
+                var pagedResponse = PaginationHelper.CreatePagedReponse(pagedReports, pagination, totalRecord, _uriService, route);
                 return pagedResponse;
             }
             catch (Exception ex)
@@ -78,7 +86,7 @@ namespace AssetManagement.Application.Services
                 var worksheet = workbook.Worksheets.Add("AssetManagementReport");
 
                 // Adding Headers
-                var headers = new[] {"Category Name", "Total", "Assigned", "Available", "Not Available", "Waiting for Recycling", "Recycled" };
+                var headers = new[] { "Category Name", "Total", "Assigned", "Available", "Not Available", "Waiting for Recycling", "Recycled" };
                 for (int i = 0; i < headers.Length; i++)
                 {
                     worksheet.Cell(1, i + 1).Value = headers[i];
@@ -110,8 +118,6 @@ namespace AssetManagement.Application.Services
 
                     row++;
                 }
-
-
 
                 // Adjust column widths
                 worksheet.Columns().AdjustToContents();

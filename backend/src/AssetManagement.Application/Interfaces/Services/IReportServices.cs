@@ -9,8 +9,10 @@ namespace AssetManagement.Application.Interfaces.Services
     {
         Task<PagedResponse<ReportResponseDto>> FilterReportAsync(PaginationFilter pagination, EnumLocation location, string? orderBy, bool? isDescending, string? route);
 
-        Task<PagedResponse<List<ReportResponseDto>>> GetReportPaginationAsync(EnumLocation location, PaginationFilter pagination, string? orderBy, bool? isDescending, string? route);
+        Task<PagedResponse<List<ReportResponseDto>>> GetReportPaginationAsync(EnumLocation location, PaginationFilter pagination, string? search, string? orderBy, bool? isDescending, string? route);
+
         Task<Response<List<ReportResponseDto>>> GetReportAsync(EnumLocation location);
+
         Task<byte[]> ExportReportToExcelAsync(EnumLocation location);
     }
 }

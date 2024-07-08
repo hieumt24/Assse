@@ -23,7 +23,6 @@ namespace AssetManagement.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddHttpContextAccessor();
-            builder.Services.AddScoped<ErrorHandlingMiddleware>();
             builder.Services.AddTransient<ResponseTimeMiddleware>();
 
             //Add Connection To DataBase
@@ -83,10 +82,8 @@ namespace AssetManagement.API
 
             app.UseCors("AllowAllOrigins");
             //middleware
-            //app.UseMiddleware<ErrorHandlingMiddleware>();
-            //app.UseMiddleware<RequestResponseLoggingMiddleware>();
-            //app.UseMiddleware<ResponseTimeMiddleware>();
-            //app.UseMiddleware<CustomAuthenticationMiddleware>();
+            app.UseMiddleware<RequestResponseLoggingMiddleware>();
+            app.UseMiddleware<ResponseTimeMiddleware>();
             app.UseMiddleware<TokenValidationMiddleware>();
             app.UseHttpsRedirection();
 
