@@ -63,6 +63,10 @@ export const AdminRoutes = () => {
       path: "/reports",
       element: <Report />,
     },
+    {
+      path: "*",
+      element: <Navigate to="/notfound" />,
+    },
   ]);
   return elements;
 };
