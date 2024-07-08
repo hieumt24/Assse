@@ -71,26 +71,16 @@ namespace AssetManagement.Infrastructure.Repositories
             var query = _dbContext.Assignments
                         .Include(x => x.Asset)
                         .Where(x => x.AssignedIdTo == userId
-                                 && (x.ReturnRequest == null || x.ReturnRequest.ReturnState != EnumReturnRequestState.Completed)
-                                 && (x.State != EnumAssignmentState.Declined)
-                                 && (x.AssignedDate <= DateTime.Now)
-                                 && !x.IsDeleted);
-            if (!string.IsNullOrEmpty(search))
-            {
-                query = query.Where(x => x.Asset.AssetCode.ToLower().Contains(search.ToLower())
-                                                       || x.Asset.AssetName.ToLower().Contains(search.ToLower())
-                                                       || x.AssignedTo.Username.ToLower().Contains(search.ToLower()));
-            }
-            if (assignmentState.HasValue)
-            {
-                query = query.Where(x => x.State == assignmentState);
-            }
-            if (dateFrom.HasValue && dateTo.HasValue)
-            {
-                query = query.Where(p => p.AssignedDate.Date >= dateFrom && p.AssignedDate.Date <= dateTo);
-            }
-            query = query.Where(x => x.ReturnRequest == null || x.ReturnRequest.ReturnState != EnumReturnRequestState.Completed);
-
+                            && (x.ReturnRequest == null || (x.State != EnumAssignmentState.Returned && !x.ReturnRequest.IsDeleted))
+                            && x.State != EnumAssignmentState.Declined
+                            && x.AssignedDate <= DateTime.Now
+                            && !x.IsDeleted
+                            && (string.IsNullOrEmpty(search) || x.Asset.AssetCode.ToLower().Contains(search.ToLower())
+                                                            || x.Asset.AssetName.ToLower().Contains(search.ToLower())
+                                                            || x.AssignedTo.Username.ToLower().Contains(search.ToLower()))
+                            && !assignmentState.HasValue || x.State == assignmentState
+                            && !(dateFrom.HasValue && dateTo.HasValue) || (x.AssignedDate.Date >= dateFrom && x.AssignedDate.Date <= dateTo)
+                            );
             return query;
         }
 
@@ -130,28 +120,23 @@ namespace AssetManagement.Infrastructure.Repositories
         {
             string searchPhraseLower = search?.ToLower() ?? string.Empty;
 
-            var baseQuery = _dbContext.Assignments
-                .Include(x => x.Asset)
-                .Include(x => x.AssignedBy)
-                .Include(x => x.AssignedTo)
-                .Where(x => x.Location == location && !x.IsDeleted);
+            var query = _dbContext.Assignments
+                        .Include(x => x.Asset)
+                        .Include(x => x.AssignedBy)
+                        .Include(x => x.AssignedTo)
+                        .Where(x => x.Location == location 
+                            && !x.IsDeleted
+                            && (x.ReturnRequest == null || (x.State != EnumAssignmentState.Returned && !x.ReturnRequest.IsDeleted))
+                            && x.AssignedDate <= DateTime.Now
+                            && (string.IsNullOrEmpty(search) || x.Asset.AssetCode.ToLower().Contains(searchPhraseLower)
+                                                            || x.Asset.AssetName.ToLower().Contains(searchPhraseLower)
+                                                            || x.AssignedTo.Username.ToLower().Contains(searchPhraseLower))
+                            && !assignmentState.HasValue || x.State == assignmentState
+                            && !(dateFrom.HasValue && dateTo.HasValue) || (x.AssignedDate.Date >= dateFrom && x.AssignedDate.Date <= dateTo)
+                            );
 
-            var searchQuery = baseQuery.Where(x => x.Asset.AssetCode.ToLower().Contains(searchPhraseLower)
-                                                               || x.Asset.AssetName.ToLower().Contains(searchPhraseLower)
-                                                               || x.AssignedBy.Username.ToLower().Contains(searchPhraseLower)
-                                                               || x.AssignedTo.Username.ToLower().Contains(searchPhraseLower));
-            if (assignmentState.HasValue)
-            {
-                searchQuery = searchQuery.Where(x => x.State == assignmentState);
-            }
-            if (dateFrom.HasValue && dateTo.HasValue)
-            {
-                searchQuery = searchQuery.Where(p => p.AssignedDate.Date >= dateFrom && p.AssignedDate.Date <= dateTo);
-            }
 
-            searchQuery = searchQuery.Where(x => x.ReturnRequest == null || x.ReturnRequest.ReturnState != EnumReturnRequestState.Completed);
-
-            var totalRecords = await searchQuery.CountAsync();
+            var totalRecords = await query.CountAsync();
 
             if (!string.IsNullOrEmpty(orderBy))
             {
@@ -171,7 +156,7 @@ namespace AssetManagement.Infrastructure.Repositories
                 {
                     if (isDescending.HasValue && isDescending.Value)
                     {
-                        searchQuery = searchQuery.OrderByDescending(columnsSelector[orderBy.ToLower()])
+                        query = query.OrderByDescending(columnsSelector[orderBy.ToLower()])
                             .ThenByDescending(x => x.CreatedOn)
                             .ThenByDescending(x => x.AssignedDate)
                             .ThenByDescending(x => x.State)
@@ -182,7 +167,7 @@ namespace AssetManagement.Infrastructure.Repositories
                     }
                     else
                     {
-                        searchQuery = searchQuery.OrderBy(columnsSelector[orderBy.ToLower()])
+                        query = query.OrderBy(columnsSelector[orderBy.ToLower()])
                             .ThenBy(x => x.CreatedOn)
                             .ThenBy(x => x.AssignedDate)
                             .ThenBy(x => x.State)
@@ -195,7 +180,7 @@ namespace AssetManagement.Infrastructure.Repositories
             }
             else
             {
-                searchQuery = searchQuery.OrderBy(x => x.AssignedDate)
+                query = query.OrderBy(x => x.AssignedDate)
                     //.ThenBy(x => x.AssignedDate)
                     .ThenBy(x => x.State)
                     .ThenBy(x => x.Asset.AssetCode)
@@ -204,7 +189,7 @@ namespace AssetManagement.Infrastructure.Repositories
                     .ThenBy(x => x.AssignedBy.Username);
             }
 
-            var assignments = await searchQuery
+            var assignments = await query
                 .Skip((pagination.PageIndex - 1) * pagination.PageSize)
                 .Take(pagination.PageSize)
                 .ToListAsync();
