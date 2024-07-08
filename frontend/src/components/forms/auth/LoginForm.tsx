@@ -14,6 +14,7 @@ import { removeExtraWhitespace } from "@/lib/utils";
 import { loginService } from "@/services";
 import { loginSchema } from "@/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -21,6 +22,13 @@ import "react-toastify/dist/ReactToastify.css";
 import { z } from "zod";
 
 export const LoginForm = () => {
+  useEffect(() => {
+    if (localStorage.getItem("unauthorized")) {
+      localStorage.removeItem("unauthorized");
+      toast.error("Please sign in to continue.");
+      console.log(111);
+    }
+  }, []);
   // Define form
   const form = useForm<z.infer<typeof loginSchema>>({
     mode: "onBlur",

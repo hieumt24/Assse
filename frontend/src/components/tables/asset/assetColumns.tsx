@@ -74,7 +74,7 @@ export const assetColumns = ({
             className="text-blue-500 hover:text-blue-700"
             onClick={(e) => {
               e.stopPropagation();
-              navigate(`edit/${asset.assetCode}`);
+              navigate(`edit/${asset.id}`);
             }}
             disabled={asset.state === 3}
           >

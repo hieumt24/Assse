@@ -123,7 +123,7 @@ namespace AssetManagement.Infrastructure.Repositories
         {
             return _dbContext.Assignments
                   .Include(x => x.Asset)
-                  .Where(x => x.AssetId == assetId && !x.IsDeleted);
+                  .Where(x => x.AssetId == assetId && !x.IsDeleted && x.State != EnumAssignmentState.Declined);
         }
 
         public async Task<(IEnumerable<Assignment> Data, int TotalRecords)> GetAllMatchingAssignmentAsync(EnumLocation location, string? search, EnumAssignmentState? assignmentState, DateTime? dateFrom, DateTime? dateTo, string? orderBy, bool? isDescending, PaginationFilter pagination)

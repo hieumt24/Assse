@@ -60,6 +60,7 @@ export const useAssignments = (
 
   useEffect(() => {
     const fetchAndUpdateAssignments = async () => {
+      if (!dateTo && dateFrom) return;
       setLoading(true);
       try {
         const isAdded = localStorage.getItem("added");

@@ -57,6 +57,13 @@ namespace AssetManagement.Application.Helper
             return spec;
         }
 
+        public static ISpecification<Asset> GetAssetById(Guid id)
+        {
+            var spec = new AssetSpecification(asset => asset.Id == id && !asset.IsDeleted);
+            spec.AddInclude(x => x.Category);
+            return spec;
+        }
+
         public static ISpecification<Asset> GetAllAssets(EnumLocation location)
         {
             var spec = new AssetSpecification(asset => asset.AssetLocation == location && !asset.IsDeleted);
