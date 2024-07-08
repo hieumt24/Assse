@@ -1,4 +1,6 @@
-﻿namespace AssetManagement.Domain.Common.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace AssetManagement.Domain.Common.Models
 {
     public class BaseEntity
     {
@@ -8,5 +10,8 @@
         public string? LastModifiedBy { get; set; }
         public DateTimeOffset? LastModifiedOn { get; set; }
         public bool IsDeleted { get; set; }
+
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
     }
 }

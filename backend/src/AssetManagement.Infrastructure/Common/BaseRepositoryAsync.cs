@@ -2,8 +2,9 @@
 using AssetManagement.Domain.Common.Models;
 using AssetManagement.Domain.Common.Specifications;
 using AssetManagement.Infrastructure.Contexts;
+using AssetManagement.Infrastructure.Exceptions;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.InteropServices;
+using System.Data;
 
 namespace AssetManagement.Infrastructure.Common
 {
@@ -19,7 +20,14 @@ namespace AssetManagement.Infrastructure.Common
         public async Task<T> AddAsync(T entity)
         {
             await _dbContext.Set<T>().AddAsync(entity);
-            await _dbContext.SaveChangesAsync();
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new RepositoryException("An error occurred while adding the entity.", ex);
+            }
             return entity;
         }
 
@@ -81,8 +89,41 @@ namespace AssetManagement.Infrastructure.Common
 
         public async Task<T> UpdateAsync(T entity)
         {
+            _dbContext.Entry(entity).Property("RowVersion").OriginalValue = entity.RowVersion;
             _dbContext.Entry(entity).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                var exceptionEntry = ex.Entries.Single();
+                var clientValues = (T)exceptionEntry.Entity;
+                var databaseEntry = exceptionEntry.GetDatabaseValues();
+
+                if (databaseEntry == null)
+                {
+                    throw new NotFoundRepositoryException("The entity being updated has been deleted by another user.");
+                }
+
+                var databaseValues = (T)databaseEntry.ToObject();
+
+                foreach (var property in exceptionEntry.OriginalValues.Properties)
+                {
+                    var databaseValue = databaseValues.GetType().GetProperty(property.Name).GetValue(databaseValues);
+                    var clientValue = clientValues.GetType().GetProperty(property.Name).GetValue(clientValues);
+
+                    if (databaseValue != null && !databaseValue.Equals(clientValue))
+                    {
+                        exceptionEntry.Property(property.Name).IsModified = true;
+                        exceptionEntry.Property(property.Name).OriginalValue = databaseValue;
+                    }
+                }
+
+                entity.RowVersion = databaseValues.RowVersion;
+
+                throw new ConcurrencyException("The entity has been modified by another user. The current database values have been applied to your entity.", ex);
+            }
             return entity;
         }
 
