@@ -1,4 +1,4 @@
-import { CreateAsset, CreateUser, ManageUser, NotFound, Report } from "@/pages";
+import { CreateAsset, CreateUser, ManageUser, Report } from "@/pages";
 import { MyAssignment } from "@/pages/MyAssignments";
 import { EditAsset } from "@/pages/admin/manage/asset/EditAsset";
 import { ManageAsset } from "@/pages/admin/manage/asset/ManageAsset";
