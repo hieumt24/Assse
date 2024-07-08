@@ -60,35 +60,35 @@ namespace AssetManagement.Infrastructure.Migrations
                     table.PrimaryKey("PK_BlackListTokens", x => x.Id);
                 });
 
-            //migrationBuilder.CreateTable(
-            //    name: "Token",
-            //    columns: table => new
-            //    {
-            //        Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-            //        UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-            //        Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
-            //        CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-            //        CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-            //        LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-            //        LastModifiedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-            //        IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-            //    },
-            //    constraints: table =>
-            //    {
-            //        table.PrimaryKey("PK_Token", x => x.Id);
-            //        table.ForeignKey(
-            //            name: "FK_Token_Users_UserId",
-            //            column: x => x.UserId,
-            //            principalTable: "Users",
-            //            principalColumn: "Id",
-            //            onDelete: ReferentialAction.Cascade);
-            //    });
+            migrationBuilder.CreateTable(
+                name: "Token",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModifiedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Token", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Token_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
-            //migrationBuilder.CreateIndex(
-            //    name: "IX_Token_UserId",
-            //    table: "Token",
-            //    column: "UserId",
-            //    unique: true);
+            migrationBuilder.CreateIndex(
+                name: "IX_Token_UserId",
+                table: "Token",
+                column: "UserId",
+                unique: true);
         }
 
         /// <inheritdoc />
