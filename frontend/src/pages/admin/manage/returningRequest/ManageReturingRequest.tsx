@@ -1,4 +1,4 @@
-import { DatePicker, GenericDialog, SearchForm } from "@/components";
+import { DateRangePicker, GenericDialog, SearchForm } from "@/components";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import {
   Select,
@@ -110,8 +110,7 @@ export const ManageReturningRequest = () => {
             </SelectContent>
           </Select>
           <div className="flex items-center">
-            <DatePicker
-              mode="range"
+            <DateRangePicker
               setValue={setReturnedDate}
               placeholder="Returned Date"
               className="min-w-[150px]"
