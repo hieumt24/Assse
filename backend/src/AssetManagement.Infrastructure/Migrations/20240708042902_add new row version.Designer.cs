@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AssetManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240705094647_add-entity-token")]
-    partial class addentitytoken
+    [Migration("20240708042902_add new row version")]
+    partial class addnewrowversion
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,6 +62,12 @@ namespace AssetManagement.Infrastructure.Migrations
 
                     b.Property<DateTimeOffset?>("LastModifiedOn")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.Property<string>("Specification")
                         .IsRequired()
@@ -120,6 +126,12 @@ namespace AssetManagement.Infrastructure.Migrations
                     b.Property<Guid?>("ReturnRequestId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.Property<int>("State")
                         .HasColumnType("int");
 
@@ -132,6 +144,42 @@ namespace AssetManagement.Infrastructure.Migrations
                     b.HasIndex("AssignedIdTo");
 
                     b.ToTable("Assignments");
+                });
+
+            modelBuilder.Entity("AssetManagement.Domain.Entites.BlackListToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("LastModifiedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BlackListTokens");
                 });
 
             modelBuilder.Entity("AssetManagement.Domain.Entites.Category", b =>
@@ -162,6 +210,12 @@ namespace AssetManagement.Infrastructure.Migrations
                     b.Property<string>("Prefix")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.HasKey("Id");
 
@@ -213,6 +267,12 @@ namespace AssetManagement.Infrastructure.Migrations
                     b.Property<DateTime?>("ReturnedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AcceptedBy");
@@ -246,10 +306,17 @@ namespace AssetManagement.Infrastructure.Migrations
                     b.Property<DateTimeOffset?>("LastModifiedOn")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Value")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -312,6 +379,12 @@ namespace AssetManagement.Infrastructure.Migrations
 
                     b.Property<int>("Role")
                         .HasColumnType("int");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.Property<string>("StaffCode")
                         .IsRequired()
