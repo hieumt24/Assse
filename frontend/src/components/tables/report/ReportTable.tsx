@@ -29,6 +29,7 @@ interface ReportTableProps<TData, TValue> {
   >;
   pageCount?: number;
   totalRecords: number;
+  withIndex?: boolean;
 }
 
 export function ReportTable<TData, TValue>({
@@ -37,6 +38,7 @@ export function ReportTable<TData, TValue>({
   pagination,
   onPaginationChange,
   pageCount,
+  withIndex = true,
   totalRecords,
 }: Readonly<ReportTableProps<TData, TValue>>) {
   const table = useReactTable({
@@ -64,9 +66,12 @@ export function ReportTable<TData, TValue>({
           <TableHeader className="bg-zinc-200 font-bold">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
+                {withIndex && (
+                  <TableHead className="text-center">No.</TableHead>
+                )}
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead className="text-center" key={header.id}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -81,13 +86,19 @@ export function ReportTable<TData, TValue>({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+              table.getRowModel().rows.map((row, index) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                  {withIndex && (
+                    <TableCell className="text-center">{index + 1}</TableCell>
+                  )}
+                  {row.getVisibleCells().map((cell, i) => (
+                    <TableCell
+                      className={` ${i == 0 ? "pl-20 text-left" : "pr-5 text-center"}`}
+                      key={cell.id}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
