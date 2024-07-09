@@ -92,7 +92,6 @@ export const EditAssignmentForm = () => {
   assetsPagination.pageSize = 5;
   const {
     assets,
-    setAssets,
     loading: assetsLoading,
     pageCount: assetsPageCount,
     totalRecords: assetsTotalRecords,
@@ -107,7 +106,6 @@ export const EditAssignmentForm = () => {
   );
 
   const navigate = useNavigate();
-
   const fetchAssignment = async () => {
     setIsLoading(true);
     const res = await getAssignmentByIdService(
