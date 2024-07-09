@@ -281,6 +281,15 @@ namespace AssetManagement.Application.Services
                 };
             }
 
+            if (assignment.AssignedIdTo != request.AssignedIdTo)
+            {
+                return new Response<AssignmentDto>
+                {
+                    Succeeded = false,
+                    Message = "Assignment has assigned for other staff."
+                };
+            }
+
             if (assignment.State == EnumAssignmentState.Accepted || assignment.State == EnumAssignmentState.Declined)
             {
                 return new Response<AssignmentDto>

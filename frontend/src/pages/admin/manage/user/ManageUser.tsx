@@ -41,6 +41,7 @@ export const ManageUser = () => {
     );
   const [openDisable, setOpenDisable] = useState(false);
   const [openCannotDisable, setOpenCannotDisable] = useState(false);
+  const [borderColor, setBorderColor] = useState("");
 
   const navigate = useNavigate();
   const { setIsLoading } = useLoading();
@@ -74,17 +75,17 @@ export const ManageUser = () => {
     }
   };
 
+  const handleValueChange = (value: any) => {
+    setRoleType(parseInt(value));
+    setBorderColor("double red 2px");
+    pagination.pageIndex = 1;
+  };
   return (
     <div className="m-16 flex flex-grow flex-col gap-8">
       <p className="text-2xl font-bold text-red-600">User List</p>
       <div className="flex items-center justify-between">
-        <Select
-          onValueChange={(value) => {
-            setRoleType(parseInt(value));
-            pagination.pageIndex = 1;
-          }}
-        >
-          <SelectTrigger className="w-32">
+        <Select onValueChange={handleValueChange}>
+          <SelectTrigger style={{ border: borderColor }} className="w-32">
             <SelectValue placeholder="Role" />
           </SelectTrigger>
           <SelectContent>

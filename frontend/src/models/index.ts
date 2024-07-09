@@ -191,6 +191,7 @@ export interface EditAssignmentReq {
 export interface UpdateAssignmentStateReq {
   assignmentId: string;
   newState: number;
+  assignedIdTo: string;
 }
 
 export interface ReturningRequestRes {

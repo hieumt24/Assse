@@ -70,6 +70,7 @@ export const MyAssignment = () => {
     setIsLoading(true);
     const res = await updateAssignmentStateService({
       assignmentId: assignmentId,
+      assignedIdTo: user.id,
       newState: 3,
     });
     if (res.success) {
@@ -103,6 +104,7 @@ export const MyAssignment = () => {
     setIsLoading(true);
     const res = await updateAssignmentStateService({
       assignmentId: assignmentId,
+      assignedIdTo: user.id,
       newState: 1,
     });
     if (res.success) {

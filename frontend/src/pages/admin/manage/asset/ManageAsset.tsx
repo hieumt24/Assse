@@ -53,6 +53,7 @@ export const ManageAsset = () => {
       assetStateType,
       selectedCategory,
     );
+  const [borderColor, setBorderColor] = useState("");
   const [isStateListOpen, setIsStateListOpen] = useState(false);
   const [categories, setCategories] = useState(Array<CategoryRes>);
   const [filteredCategories, setFilteredCategories] = useState(
@@ -154,6 +155,12 @@ export const ManageAsset = () => {
     }
   };
 
+  const handleValueChange = (value: any) => {
+    setSelectedCategory(value);
+    setBorderColor("double red 2px");
+    pagination.pageIndex = 1;
+  };
+
   const stateListRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(
@@ -224,13 +231,8 @@ export const ManageAsset = () => {
             </CollapsibleContent>
           </Collapsible>
           <div ref={selectRef} className="w-[150px]">
-            <Select
-              onValueChange={(value) => {
-                setSelectedCategory(value);
-                pagination.pageIndex = 1;
-              }}
-            >
-              <SelectTrigger>
+            <Select onValueChange={handleValueChange}>
+              <SelectTrigger style={{ border: borderColor }}>
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent>
