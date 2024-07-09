@@ -109,6 +109,7 @@ export const returningRequestColumns = ({
               handleOpenComplete(request.id);
             }}
             disabled={request.state === 2}
+            title="Complete Return Request"
           >
             {request.state === 2 ? (
               <FaCheck
@@ -126,6 +127,7 @@ export const returningRequestColumns = ({
               handleOpenCancel(request.id);
             }}
             disabled={request.state === 2}
+            title="Cancel Return Request"
           >
             {request.state === 2 ? (
               <IoCloseCircleOutline

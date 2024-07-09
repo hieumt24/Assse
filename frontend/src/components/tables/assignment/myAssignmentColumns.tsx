@@ -91,6 +91,7 @@ export const myAssignmentColumns = ({
               handleOpenAccept(assignment.id!);
             }}
             disabled={assignment.state !== 2}
+            title="Accept Assignment"
           >
             {assignment.state !== 2 ? (
               <FaCheck
@@ -108,6 +109,7 @@ export const myAssignmentColumns = ({
               handleOpenDecline(assignment.id!);
             }}
             disabled={assignment.state !== 2}
+            title="Decline Assignment"
           >
             {assignment.state !== 2 ? (
               <IoCloseCircleOutline
@@ -125,6 +127,7 @@ export const myAssignmentColumns = ({
               handleOpenCreateRequest(assignment.id!);
             }}
             disabled={assignment.state !== 1}
+            title="Create Return Request"
           >
             {assignment.state !== 1 ? (
               <IoReload

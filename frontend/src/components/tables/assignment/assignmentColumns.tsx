@@ -98,6 +98,7 @@ export const assignmentColumns = ({
               navigate(`/assignments/edit/${assignment.id}`);
             }}
             disabled={assignment.state !== 2}
+            title="Edit Assignment"
           >
             {assignment.state !== 2 ? (
               <FiEdit2
@@ -115,6 +116,7 @@ export const assignmentColumns = ({
               handleOpenDelete && handleOpenDelete(assignment.id!);
             }}
             disabled={assignment.state === 1 || assignment.state === 4}
+            title="Delete Assignment"
           >
             {assignment.state === 1 || assignment.state === 4 ? (
               <IoCloseCircleOutline
@@ -133,6 +135,7 @@ export const assignmentColumns = ({
                 handleOpenCreateRequest(assignment.id!);
             }}
             disabled={assignment.state !== 1}
+            title="Create Return Request"
           >
             {assignment.state !== 1 ? (
               <IoReload
