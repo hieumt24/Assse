@@ -38,6 +38,7 @@ interface UserTableProps<TData, TValue> {
   totalRecords: number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onRowClick?: any;
+  withIndex?: boolean;
 }
 
 export function UserTable<TData, TValue>({
@@ -48,6 +49,7 @@ export function UserTable<TData, TValue>({
   pageCount,
   totalRecords,
   onRowClick,
+  withIndex = true,
 }: Readonly<UserTableProps<TData, TValue>>) {
   const table = useReactTable({
     data,
@@ -98,6 +100,9 @@ export function UserTable<TData, TValue>({
           <TableHeader className="bg-zinc-200 font-bold">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
+                {withIndex && (
+                  <TableHead className="text-center">No.</TableHead>
+                )}
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
@@ -115,7 +120,7 @@ export function UserTable<TData, TValue>({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+              table.getRowModel().rows.map((row, index) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
@@ -128,6 +133,9 @@ export function UserTable<TData, TValue>({
                       : async () => handleOpenDetails(row.getValue("id"))
                   }
                 >
+                  {withIndex && (
+                    <TableCell className="text-center">{index + 1}</TableCell>
+                  )}
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
