@@ -98,7 +98,7 @@ export const ManageAssignment = () => {
 
   const handleValueChange = (value: any) => {
     setAssignmentState(Number(value));
-    setBorderColor("double red 1px");
+    setBorderColor("double #FFC0CB 2px");
     pagination.pageIndex = 1;
   };
 

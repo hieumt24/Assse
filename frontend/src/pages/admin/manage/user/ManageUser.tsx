@@ -77,7 +77,7 @@ export const ManageUser = () => {
 
   const handleValueChange = (value: any) => {
     setRoleType(parseInt(value));
-    setBorderColor("double red 2px");
+    setBorderColor("double #FFC0CB 2px");
     pagination.pageIndex = 1;
   };
   return (

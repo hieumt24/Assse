@@ -87,7 +87,7 @@ export const ManageReturningRequest = () => {
 
   const handleValueChange = (value: any) => {
     setRequestState(parseInt(value));
-    setBorderColor("double red 1px");
+    setBorderColor("double #FFC0CB 2px");
     pagination.pageIndex = 1;
   };
   const [openCancel, setOpenCancel] = useState(false);
