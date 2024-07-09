@@ -26,7 +26,6 @@ export const LoginForm = () => {
     if (localStorage.getItem("unauthorized")) {
       localStorage.removeItem("unauthorized");
       toast.error("Please sign in to continue.");
-      console.log(111);
     }
   }, []);
   // Define form
