@@ -106,7 +106,7 @@ namespace AssetManagement.Application.Tests.Services
             // Arrange
             var assetId = Guid.NewGuid();
 
-            _assignmentRepositoryMock.Setup(r => r.FindExitingAssignment(assetId)).ReturnsAsync(new Assignment());
+            _assignmentRepositoryMock.Setup(r => r.FindExistingAssignment(assetId)).ReturnsAsync(new Assignment());
 
             // Act
             var result = await _assetService.DeleteAssetAsync(assetId);
@@ -122,7 +122,7 @@ namespace AssetManagement.Application.Tests.Services
             // Arrange
             var assetId = Guid.NewGuid();
 
-            _assignmentRepositoryMock.Setup(r => r.FindExitingAssignment(assetId)).ReturnsAsync((Assignment)null);
+            _assignmentRepositoryMock.Setup(r => r.FindExistingAssignment(assetId)).ReturnsAsync((Assignment)null);
             _assetRepositoryMock.Setup(r => r.DeleteAsync(assetId)).ReturnsAsync((Asset)null);
 
             // Act
@@ -140,7 +140,7 @@ namespace AssetManagement.Application.Tests.Services
             var assetId = Guid.NewGuid();
             var asset = new Asset { Id = assetId };
 
-            _assignmentRepositoryMock.Setup(r => r.FindExitingAssignment(assetId)).ReturnsAsync((Assignment)null);
+            _assignmentRepositoryMock.Setup(r => r.FindExistingAssignment(assetId)).ReturnsAsync((Assignment)null);
             _assetRepositoryMock.Setup(r => r.DeleteAsync(assetId)).ReturnsAsync(asset);
 
             // Act
