@@ -11,5 +11,6 @@ namespace AssetManagement.Application.Models.DTOs.Assignments.Requests
     {
         public Guid AssignmentId { get; set; }
         public EnumAssignmentState NewState { get; set; }
+        public Guid AssignedIdTo {  get; set; }
     }
 }

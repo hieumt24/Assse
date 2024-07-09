@@ -32,6 +32,7 @@ export const ManageReturningRequest = () => {
   const [isDescending, setIsDescending] = useState(true);
   const [requestState, setRequestState] = useState(0);
   const [returnedDate, setReturnedDate] = useState<DateRange | null>(null);
+  const [borderColor, setBorderColor] = useState("");
   const { requests, loading, error, pageCount, fetchRequests, totalRecords } =
     useReturningRequests(
       pagination,
@@ -72,8 +73,7 @@ export const ManageReturningRequest = () => {
     const res = await updateReturnRequest({
       returnRequestId: requestId,
       newState: 2,
-      acceptedBy: user.id
-
+      acceptedBy: user.id,
     });
     if (res.success) {
       toast.success(res.message);
@@ -84,6 +84,12 @@ export const ManageReturningRequest = () => {
     setOpenComplete(false);
     setIsLoading(false);
   };
+
+  const handleValueChange = (value: any) => {
+    setRequestState(parseInt(value));
+    setBorderColor("double red 1px");
+    pagination.pageIndex = 1;
+  };
   const [openCancel, setOpenCancel] = useState(false);
 
   const [openComplete, setOpenComplete] = useState(false);
@@ -93,13 +99,8 @@ export const ManageReturningRequest = () => {
       <p className="text-2xl font-bold text-red-600">Request List</p>
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-center gap-4">
-          <Select
-            onValueChange={(value) => {
-              setRequestState(parseInt(value));
-              pagination.pageIndex = 1;
-            }}
-          >
-            <SelectTrigger className="min-w-24">
+          <Select onValueChange={handleValueChange}>
+            <SelectTrigger style={{ border: borderColor }} className="min-w-24">
               <SelectValue placeholder="State" />
             </SelectTrigger>
             <SelectContent>

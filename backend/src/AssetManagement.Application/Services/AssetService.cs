@@ -46,7 +46,7 @@ namespace AssetManagement.Application.Services
             if (!validationResult.IsValid)
             {
                 var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                return new Response<AssetDto> { Succeeded = false, Errors = errors };
+                return new Response<AssetDto> { Succeeded = false, Message = errors.FirstOrDefault().ToString() };
             }
             try
             {
