@@ -13,7 +13,10 @@ import { ASSET_STATES, LOCATIONS } from "@/constants";
 import { useLoading } from "@/context/LoadingContext";
 import { usePagination } from "@/hooks";
 import { AssetRes, AssignmentRes, PaginationState } from "@/models";
-import { getAssetByAssetCodeService, getAssignmentByAssetService } from "@/services";
+import {
+  getAssetByAssetCodeService,
+  getAssignmentByAssetService,
+} from "@/services";
 import {
   ColumnDef,
   flexRender,
@@ -41,6 +44,7 @@ interface AssetTableProps<TData, TValue> {
   totalRecords: number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onRowClick?: any;
+  withIndex?: boolean;
 }
 
 export function AssetTable<TData, TValue>({
@@ -51,6 +55,7 @@ export function AssetTable<TData, TValue>({
   pageCount,
   totalRecords,
   onRowClick,
+  withIndex = true,
 }: Readonly<AssetTableProps<TData, TValue>>) {
   const table = useReactTable({
     data,
@@ -64,12 +69,16 @@ export function AssetTable<TData, TValue>({
 
   const [openDetails, setOpenDetails] = useState(false);
   const [assetDetails, setAssetDetails] = useState<AssetRes>();
-  const { onPaginationChange: assignmentsOnPaginationChange, pagination: assignmentsPagination } = usePagination();
+  const {
+    onPaginationChange: assignmentsOnPaginationChange,
+    pagination: assignmentsPagination,
+  } = usePagination();
   const [orderBy, setOrderBy] = useState("");
   const [isDescending, setIsDescending] = useState(true);
   const [assignments, setAssignments] = useState<Array<AssignmentRes>>([]);
   const [assignmentsPageCount, setAssignmentsPageCount] = useState<number>(0);
-  const [assignmentsTotalRecords, setAssignmentsTotalRecords] = useState<number>(0);
+  const [assignmentsTotalRecords, setAssignmentsTotalRecords] =
+    useState<number>(0);
 
   assignmentsPagination.pageSize = 3;
 
@@ -83,8 +92,8 @@ export function AssetTable<TData, TValue>({
         pagination: assignmentsPagination,
         assetId: result.data.id,
         orderBy,
-        isDescending
-      })
+        isDescending,
+      });
       if (result1.success) {
         setAssignments(result1.data.data || []);
         setAssignmentsPageCount(result1.data.totalPages);
@@ -105,7 +114,7 @@ export function AssetTable<TData, TValue>({
       ...prev,
       pageIndex: pageIndex,
     }));
-  }; 
+  };
 
   return (
     <div>
@@ -114,6 +123,9 @@ export function AssetTable<TData, TValue>({
           <TableHeader className="bg-zinc-200 font-bold">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
+                {withIndex && (
+                  <TableHead className="text-center">No.</TableHead>
+                )}
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
@@ -131,7 +143,7 @@ export function AssetTable<TData, TValue>({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+              table.getRowModel().rows.map((row, index) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
@@ -144,6 +156,9 @@ export function AssetTable<TData, TValue>({
                       : async () => handleOpenDetails(row.getValue("assetCode"))
                   }
                 >
+                  {withIndex && (
+                    <TableCell className="text-center">{index + 1}</TableCell>
+                  )}
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
@@ -252,21 +267,21 @@ export function AssetTable<TData, TValue>({
                       </tr>
                       <tr>
                         <td colSpan={2} className="pt-2">
-                        <AssignmentTable
-                          columns={assetAssignmentColumns({
-                            setOrderBy,
-                            setIsDescending,
-                            isDescending,
-                            orderBy,
-                          })}
-                          data={assignments!}
-                          pagination={assignmentsPagination}
-                          onPaginationChange={assignmentsOnPaginationChange}
-                          pageCount={assignmentsPageCount}
-                          totalRecords={assignmentsTotalRecords}
-                          withIndex={false}
-                          onRowClick={()=>{}}
-                        />
+                          <AssignmentTable
+                            columns={assetAssignmentColumns({
+                              setOrderBy,
+                              setIsDescending,
+                              isDescending,
+                              orderBy,
+                            })}
+                            data={assignments!}
+                            pagination={assignmentsPagination}
+                            onPaginationChange={assignmentsOnPaginationChange}
+                            pageCount={assignmentsPageCount}
+                            totalRecords={assignmentsTotalRecords}
+                            withIndex={false}
+                            onRowClick={() => {}}
+                          />
                         </td>
                       </tr>
                     </tbody>

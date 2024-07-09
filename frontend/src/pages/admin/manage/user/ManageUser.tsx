@@ -137,7 +137,7 @@ export const ManageUser = () => {
           <GenericDialog
             title="Are you sure?"
             desc="Do you want to disable this user?"
-            confirmText="Yes"
+            confirmText="Disable"
             cancelText="Cancel"
             open={openDisable}
             setOpen={setOpenDisable}

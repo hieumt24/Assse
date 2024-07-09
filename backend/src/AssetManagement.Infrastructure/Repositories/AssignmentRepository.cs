@@ -62,7 +62,7 @@ namespace AssetManagement.Infrastructure.Repositories
 
         public async Task<Assignment> FindExistingAssignment(Guid assetId)
         {
-            return await _dbContext.Set<Assignment>()
+            return await _dbContext.Assignments
                 .FirstOrDefaultAsync(assigment => assigment.AssetId == assetId && !assigment.IsDeleted);
         }
 
@@ -125,7 +125,7 @@ namespace AssetManagement.Infrastructure.Repositories
                         .Include(x => x.Asset)
                         .Include(x => x.AssignedBy)
                         .Include(x => x.AssignedTo)
-                        .Where(x => x.Location == location 
+                        .Where(x => x.Location == location
                             && !x.IsDeleted
                             && (x.ReturnRequestId == null || x.State == EnumAssignmentState.WaitingForReturning)
                             && x.State != EnumAssignmentState.Returned
