@@ -293,7 +293,7 @@ export const EditUserForm = () => {
             <FormItem>
               <FormLabel className="text-md">Types</FormLabel>
               <FormControl>
-                <Select {...field} onValueChange={field.onChange}>
+                <Select {...field} onValueChange={field.onChange} disabled={form.getValues("role") === "1"}>
                   <SelectTrigger>
                     <SelectValue placeholder="Role" />
                   </SelectTrigger>

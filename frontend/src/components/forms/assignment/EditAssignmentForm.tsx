@@ -92,6 +92,7 @@ export const EditAssignmentForm = () => {
   assetsPagination.pageSize = 5;
   const {
     assets,
+    setAssets,
     loading: assetsLoading,
     pageCount: assetsPageCount,
     totalRecords: assetsTotalRecords,
@@ -175,12 +176,8 @@ export const EditAssignmentForm = () => {
       setIsValidDate(true);
     } else {
       if (!isBefore(assignedDate, startOfDay(new Date()))) {
-        console.log(1);
-        
         setIsValidDate(true);
       } else {
-        console.log(2);
-        
         setIsValidDate(false);
       }
     }
@@ -343,7 +340,7 @@ export const EditAssignmentForm = () => {
                             onPaginationChange={onAssetsPaginationChange}
                             pagination={assetsPagination}
                             pageCount={assetsPageCount}
-                            totalRecords={assetsTotalRecords}
+                            totalRecords={assetsTotalRecords + 1}
                             onRowClick={setSelectedAsset}
                           />
                         )}

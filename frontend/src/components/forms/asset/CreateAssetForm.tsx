@@ -119,7 +119,7 @@ export const CreateAssetForm: React.FC = () => {
       });
       if (res.success) {
         toast.success("Asset created successfully!");
-        localStorage.setItem("added", "1");
+        localStorage.setItem("edited", "1");
         navigate("/assets");
       } else {
         toast.error(res.message);
