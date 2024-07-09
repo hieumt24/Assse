@@ -139,7 +139,7 @@ export const MyAssignment = () => {
             </SelectContent>
           </Select>
           <div className="flex items-center">
-          <DateRangePicker
+            <DateRangePicker
               setValue={setAssignedDate}
               placeholder="Assigned Date"
               className="min-w-[150px]"
