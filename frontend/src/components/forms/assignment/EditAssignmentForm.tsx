@@ -26,7 +26,7 @@ import {
 } from "@/services/admin/manageAssignmentService";
 import { updateAssignmentSchema } from "@/validations/assignmentSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format, isBefore, isEqual, startOfDay } from "date-fns";
+import { format, isBefore, isEqual, isValid, startOfDay } from "date-fns";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoIosSearch } from "react-icons/io";
@@ -403,8 +403,13 @@ export const EditAssignmentForm = () => {
                       field.onChange(e);
                     }
                   }}
-                  onBlur={() => {
-                    if (!isValidDate) {
+                  onBlur={(e) => {
+                    if (!isValid(new Date(e.target.value))) {
+                      form.setError("assignedDate", {
+                        message:
+                          "Please select a valid date.",
+                      });
+                    } else if (!isValidDate) {
                       form.setError("assignedDate", {
                         message:
                           "Assigned Date can only be today or in the future.",
@@ -412,7 +417,7 @@ export const EditAssignmentForm = () => {
                     } else {
                       form.clearErrors("assignedDate");
                     }
-                    field.onBlur();
+                    //field.onBlur();
                   }}
                 />
               </FormControl>
