@@ -77,6 +77,7 @@ export const userColumns = ({
               navigate(`edit/${userInfo.id}`);
             }}
             disabled={user.id === userInfo.id}
+            title="Edit User"
           >
             {user.id === userInfo.id ? (
               <FiEdit2 size={18} 
@@ -93,6 +94,7 @@ export const userColumns = ({
               handleOpenDisable(userInfo.id);
             }}
             disabled={userInfo.role === 1}
+            title="Disable User"
           >
             {userInfo.role === 1 || user.id === userInfo.id ? (
               <IoCloseCircleOutline
