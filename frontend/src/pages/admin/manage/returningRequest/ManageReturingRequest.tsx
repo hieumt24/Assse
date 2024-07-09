@@ -77,10 +77,10 @@ export const ManageReturningRequest = () => {
     });
     if (res.success) {
       toast.success(res.message);
-      fetchRequests();
     } else {
       toast.error(res.message);
     }
+    fetchRequests();
     setOpenComplete(false);
     setIsLoading(false);
   };
