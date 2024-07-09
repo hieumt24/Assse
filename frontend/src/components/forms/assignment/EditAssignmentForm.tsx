@@ -410,17 +410,14 @@ export const EditAssignmentForm = () => {
                   }}
                   onBlur={() => {
                     if (!isValidDate) {
-                      console.log(0);
-                      
                       form.setError("assignedDate", {
                         message:
                           "Assigned Date can only be today or in the future.",
                       });
                     } else {
-                      console.log("00")
                       form.clearErrors("assignedDate");
                     }
-                    // field.onBlur();
+                    field.onBlur();
                   }}
                 />
               </FormControl>
