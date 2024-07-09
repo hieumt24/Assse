@@ -114,7 +114,7 @@ export const CreateAssignmentForm = () => {
       });
       if (res.success) {
         toast.success(res.message);
-        localStorage.setItem("added", "1");
+        localStorage.setItem("edited", "1");
         navigate("/assignments");
       } else {
         toast.error(res.message);

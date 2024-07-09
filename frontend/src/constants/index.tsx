@@ -61,7 +61,7 @@ export const BREADCRUMB_COMPONENTS = [
   {
     name: "Edit Assignment",
     path: "/assignments/edit",
-    link: "",
+    link: "#",
   },
 ];
 
