@@ -62,7 +62,7 @@ namespace AssetManagement.Infrastructure.Repositories
 
         public async Task<Assignment> FindExitingAssignment(Guid assetId)
         {
-            return await _dbContext.Set<Assignment>()
+            return await _dbContext.Assignments
                 .FirstOrDefaultAsync(assigment => assigment.AssetId == assetId && !assigment.IsDeleted);
         }
 
@@ -125,7 +125,7 @@ namespace AssetManagement.Infrastructure.Repositories
                         .Include(x => x.Asset)
                         .Include(x => x.AssignedBy)
                         .Include(x => x.AssignedTo)
-                        .Where(x => x.Location == location 
+                        .Where(x => x.Location == location
                             && !x.IsDeleted
                             && (x.ReturnRequestId == null || x.State == EnumAssignmentState.WaitingForReturning)
                             && x.State != EnumAssignmentState.Returned
@@ -136,7 +136,6 @@ namespace AssetManagement.Infrastructure.Repositories
                             && !assignmentState.HasValue || x.State == assignmentState
                             && !(dateFrom.HasValue && dateTo.HasValue) || (x.AssignedDate.Date >= dateFrom && x.AssignedDate.Date <= dateTo)
                             );
-
 
             var totalRecords = await query.CountAsync();
 
