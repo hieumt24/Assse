@@ -40,7 +40,7 @@ export const getAssignmentByUserAssignedService = (
   if (req.assignmentState === 0) {
     delete req.assignmentState;
   }
-  
+
   if (req.dateFrom === "" || req.dateTo === "") {
     delete req.dateFrom;
     delete req.dateTo;
@@ -115,7 +115,8 @@ export const updateAssignmentStateService = (req: UpdateAssignmentStateReq) => {
     .catch((err) => {
       return {
         success: false,
-        message: err.response?.data.message || "Failed to update assignment state.",
+        message:
+          err.response?.data.message || "Failed to update assignment state.",
         data: err,
       };
     });
@@ -134,7 +135,8 @@ export const deleteAssignmentService = (id: string) => {
     .catch((err) => {
       return {
         success: false,
-        message: err.response?.data.message || "Failed to delete assignment state.",
+        message:
+          err.response?.data.message || "Failed to delete assignment state.",
         data: err,
       };
     });
@@ -153,7 +155,7 @@ export const editAssignmentService = (id: string, req: EditAssignmentReq) => {
     .catch((err) => {
       return {
         success: false,
-        message: "Failed to edit assignment.",
+        message: err.response?.data.message || "Failed to edit assignment.",
         data: err,
       };
     });

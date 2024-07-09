@@ -161,6 +161,7 @@ export const EditAssignmentForm = () => {
       navigate("/assignments");
     } else {
       toast.error(res.message);
+      navigate("/assignments");
     }
     setIsLoading(false);
   };
@@ -406,8 +407,7 @@ export const EditAssignmentForm = () => {
                   onBlur={(e) => {
                     if (!isValid(new Date(e.target.value))) {
                       form.setError("assignedDate", {
-                        message:
-                          "Please select a valid date.",
+                        message: "Please select a valid date.",
                       });
                     } else if (!isValidDate) {
                       form.setError("assignedDate", {
@@ -430,9 +430,7 @@ export const EditAssignmentForm = () => {
           name="note"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-md">
-                Note
-              </FormLabel>
+              <FormLabel className="text-md">Note</FormLabel>
               <FormControl>
                 <Textarea
                   placeholder="Enter note"
