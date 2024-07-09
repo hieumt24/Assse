@@ -36,10 +36,10 @@ import { z } from "zod";
 import { CreateCategoryForm } from "./CreateCategoryForm";
 
 export const CreateAssetForm: React.FC = () => {
-  const [categories, setCategories] = useState(Array<CategoryRes>);
-  const [filteredCategories, setFilteredCategories] = useState(
-    Array<CategoryRes>,
-  );
+  const [categories, setCategories] = useState<Array<CategoryRes>>([]);
+  const [filteredCategories, setFilteredCategories] = useState<
+    Array<CategoryRes>
+  >([]);
   const [openCreateCategory, setOpenCreateCategory] = useState(false);
   const [categorySearch, setCategorySearch] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -250,6 +250,7 @@ export const CreateAssetForm: React.FC = () => {
               </FormLabel>
               <FormControl>
                 <Input
+                  id="formatted-date"
                   style={{ justifyContent: "center" }}
                   type="date"
                   {...field}
