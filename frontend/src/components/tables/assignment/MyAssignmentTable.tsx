@@ -35,7 +35,7 @@ interface MyAssignmentTableProps<TData, TValue> {
   >;
   pageCount?: number;
   totalRecords: number;
-  withIndex: boolean;
+  withIndex?: boolean;
 }
 
 export function MyAssignmentTable<TData, TValue>({
