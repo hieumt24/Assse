@@ -14,6 +14,7 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AssetManagement.Application.Services
 {
@@ -143,6 +144,11 @@ namespace AssetManagement.Application.Services
                 if (existingUser == null)
                 {
                     return new Response<UserDto>("User not found");
+                }
+
+                if (existingUser.Role == RoleType.Admin && request.Role == RoleType.Staff)
+                {
+                    return new Response<UserDto> { Succeeded = false, Message = "Cannot edit admin's role." };
                 }
 
                 existingUser.DateOfBirth = request.DateOfBirth;
