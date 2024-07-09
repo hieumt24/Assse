@@ -72,7 +72,7 @@ namespace AssetManagement.Application.Services
 
         public async Task<Response<AssetDto>> DeleteAssetAsync(Guid assetId)
         {
-            var exsitingAssignment = _assignmentRepository.FindExitingAssignment(assetId);
+            var exsitingAssignment = _assignmentRepository.FindExistingAssignment(assetId);
             if (exsitingAssignment != null)
             {
                 return new Response<AssetDto> { Succeeded = true, Message = "This asset cannot be deleted because it is being assigned in assignment." };

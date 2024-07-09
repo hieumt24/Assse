@@ -60,7 +60,7 @@ namespace AssetManagement.Infrastructure.Repositories
                                          .FirstOrDefaultAsync();
         }
 
-        public async Task<Assignment> FindExitingAssignment(Guid assetId)
+        public async Task<Assignment> FindExistingAssignment(Guid assetId)
         {
             return await _dbContext.Set<Assignment>()
                 .FirstOrDefaultAsync(assigment => assigment.AssetId == assetId && !assigment.IsDeleted);
@@ -79,9 +79,9 @@ namespace AssetManagement.Infrastructure.Repositories
                             && (string.IsNullOrEmpty(search) || x.Asset.AssetCode.ToLower().Contains(search.ToLower())
                                                             || x.Asset.AssetName.ToLower().Contains(search.ToLower())
                                                             || x.AssignedTo.Username.ToLower().Contains(search.ToLower()))
-                            && !assignmentState.HasValue || x.State == assignmentState
-                            && !(dateFrom.HasValue && dateTo.HasValue) || (x.AssignedDate.Date >= dateFrom && x.AssignedDate.Date <= dateTo)
-                            );
+                        );
+            query = query.Where(x => !assignmentState.HasValue || x.State == assignmentState
+                                &&  !(dateFrom.HasValue && dateTo.HasValue) || (x.AssignedDate.Date >= dateFrom && x.AssignedDate.Date <= dateTo));
             return query;
         }
 
@@ -133,11 +133,10 @@ namespace AssetManagement.Infrastructure.Repositories
                             && (string.IsNullOrEmpty(search) || x.Asset.AssetCode.ToLower().Contains(searchPhraseLower)
                                                             || x.Asset.AssetName.ToLower().Contains(searchPhraseLower)
                                                             || x.AssignedTo.Username.ToLower().Contains(searchPhraseLower))
-                            && !assignmentState.HasValue || x.State == assignmentState
-                            && !(dateFrom.HasValue && dateTo.HasValue) || (x.AssignedDate.Date >= dateFrom && x.AssignedDate.Date <= dateTo)
-                            );
+                        );
 
-
+            query = query.Where(x => !assignmentState.HasValue || x.State == assignmentState
+                                &&  !(dateFrom.HasValue && dateTo.HasValue) || (x.AssignedDate.Date >= dateFrom && x.AssignedDate.Date <= dateTo));
             var totalRecords = await query.CountAsync();
 
             if (!string.IsNullOrEmpty(orderBy))
