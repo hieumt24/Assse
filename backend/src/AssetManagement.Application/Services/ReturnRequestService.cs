@@ -130,6 +130,7 @@ namespace AssetManagement.Application.Services
                         return new Response<string> { Succeeded = false, Message = "Cancel Return Request failed." };
                     }
                     existingAssignment.State = EnumAssignmentState.Accepted;
+                    existingAssignment.ReturnRequestId = null;
                     await _assignmentRepository.UpdateAsync(existingAssignment);
                 }
                 return new Response<string> { Succeeded = true, Message = "Cancel Return Request Successfully." };
