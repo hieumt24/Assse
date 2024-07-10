@@ -70,15 +70,15 @@ export const MyAssignment = () => {
     setIsLoading(true);
     const res = await updateAssignmentStateService({
       assignmentId: assignmentId,
+      assignedIdTo: user.id,
       newState: 3,
     });
     if (res.success) {
       toast.success(res.message);
-      fetchAssignments();
     } else {
       toast.error(res.message);
     }
-
+    fetchAssignments();
     setOpenDecline(false);
     setIsLoading(false);
   };
@@ -92,10 +92,10 @@ export const MyAssignment = () => {
     });
     if (res.success) {
       toast.success(res.message);
-      fetchAssignments();
     } else {
       toast.error(res.message);
     }
+    fetchAssignments();
     setOpenCreateRequest(false);
     setIsLoading(false);
   };
@@ -104,15 +104,15 @@ export const MyAssignment = () => {
     setIsLoading(true);
     const res = await updateAssignmentStateService({
       assignmentId: assignmentId,
+      assignedIdTo: user.id,
       newState: 1,
     });
     if (res.success) {
       toast.success(res.message);
-      fetchAssignments();
     } else {
       toast.error(res.message);
     }
-
+    fetchAssignments();
     setOpenAccept(false);
     setIsLoading(false);
   };

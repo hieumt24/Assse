@@ -77,6 +77,7 @@ export const assetColumns = ({
               navigate(`edit/${asset.id}`);
             }}
             disabled={asset.state === 3}
+            title="Edit Asset"
           >
             {asset.state == 3 ? (
               <FiEdit2 size={18} 
@@ -93,6 +94,7 @@ export const assetColumns = ({
               handleOpenDisable(asset.id!);
             }}
             disabled={asset.state === 3}
+            title="Delete Asset"
           >
             {asset.state == 3 ? (
               <IoCloseCircleOutline

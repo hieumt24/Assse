@@ -26,7 +26,7 @@ import {
 } from "@/services/admin/manageAssignmentService";
 import { updateAssignmentSchema } from "@/validations/assignmentSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format, isBefore, isEqual, startOfDay } from "date-fns";
+import { format, isBefore, isEqual, isValid, startOfDay } from "date-fns";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoIosSearch } from "react-icons/io";
@@ -106,7 +106,6 @@ export const EditAssignmentForm = () => {
   );
 
   const navigate = useNavigate();
-
   const fetchAssignment = async () => {
     setIsLoading(true);
     const res = await getAssignmentByIdService(
@@ -162,6 +161,7 @@ export const EditAssignmentForm = () => {
       navigate("/assignments");
     } else {
       toast.error(res.message);
+      navigate("/assignments");
     }
     setIsLoading(false);
   };
@@ -175,12 +175,8 @@ export const EditAssignmentForm = () => {
       setIsValidDate(true);
     } else {
       if (!isBefore(assignedDate, startOfDay(new Date()))) {
-        console.log(1);
-        
         setIsValidDate(true);
       } else {
-        console.log(2);
-        
         setIsValidDate(false);
       }
     }
@@ -343,7 +339,7 @@ export const EditAssignmentForm = () => {
                             onPaginationChange={onAssetsPaginationChange}
                             pagination={assetsPagination}
                             pageCount={assetsPageCount}
-                            totalRecords={assetsTotalRecords}
+                            totalRecords={assetsTotalRecords + 1}
                             onRowClick={setSelectedAsset}
                           />
                         )}
@@ -408,8 +404,12 @@ export const EditAssignmentForm = () => {
                       field.onChange(e);
                     }
                   }}
-                  onBlur={() => {
-                    if (!isValidDate) {
+                  onBlur={(e) => {
+                    if (!isValid(new Date(e.target.value))) {
+                      form.setError("assignedDate", {
+                        message: "Please select a valid date.",
+                      });
+                    } else if (!isValidDate) {
                       form.setError("assignedDate", {
                         message:
                           "Assigned Date can only be today or in the future.",
@@ -417,7 +417,7 @@ export const EditAssignmentForm = () => {
                     } else {
                       form.clearErrors("assignedDate");
                     }
-                    field.onBlur();
+                    //field.onBlur();
                   }}
                 />
               </FormControl>
@@ -430,9 +430,7 @@ export const EditAssignmentForm = () => {
           name="note"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-md">
-                Note
-              </FormLabel>
+              <FormLabel className="text-md">Note</FormLabel>
               <FormControl>
                 <Textarea
                   placeholder="Enter note"

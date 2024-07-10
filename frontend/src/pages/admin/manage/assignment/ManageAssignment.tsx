@@ -2,7 +2,7 @@ import {
   DateRangePicker,
   GenericDialog,
   SearchForm,
-  assignmentColumns
+  assignmentColumns,
 } from "@/components";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { AssignmentTable } from "@/components/tables/assignment/AssignmentTable";
@@ -31,6 +31,7 @@ export const ManageAssignment = () => {
   const [isDescending, setIsDescending] = useState(true);
   const [assignmentState, setAssignmentState] = useState(0);
   const [assignedDate, setAssignedDate] = useState<DateRange | null>(null);
+  const [borderColor, setBorderColor] = useState("solid black 1px");
   const { user } = useAuth();
 
   const {
@@ -87,19 +88,25 @@ export const ManageAssignment = () => {
     });
     if (res.success) {
       toast.success(res.message);
-      fetchAssignments();
     } else {
       toast.error(res.message);
     }
+    fetchAssignments();
     setOpenCreateRequest(false);
     setIsLoading(false);
+  };
+
+  const handleValueChange = (value: any) => {
+    setAssignmentState(Number(value));
+    setBorderColor("double #FFC0CB 2px");
+    pagination.pageIndex = 1;
   };
 
   useEffect(() => {
     if (assignedDate?.from && assignedDate?.to) {
       pagination.pageIndex = 1;
     }
-  }, [assignedDate])
+  }, [assignedDate]);
 
   const navigate = useNavigate();
   return (
@@ -116,13 +123,8 @@ export const ManageAssignment = () => {
 
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center justify-center gap-2">
-          <Select
-            onValueChange={(value) => {
-              setAssignmentState(Number(value));
-              pagination.pageIndex = 1;
-            }}
-          >
-            <SelectTrigger className="min-w-24">
+          <Select onValueChange={handleValueChange}>
+            <SelectTrigger style={{ border: borderColor }} className="min-w-24">
               <SelectValue placeholder="State" />
             </SelectTrigger>
             <SelectContent>
@@ -140,7 +142,6 @@ export const ManageAssignment = () => {
               className="min-w-[150px]"
             />
           </div>
-          
         </div>
         <div className="flex justify-between gap-4">
           <SearchForm

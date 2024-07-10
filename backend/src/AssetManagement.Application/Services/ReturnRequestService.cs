@@ -200,6 +200,8 @@ namespace AssetManagement.Application.Services
             }
             returnRequest.ReturnState = request.NewState;
 
+            
+
             if (request.NewState == EnumReturnRequestState.Completed)
             {
                 var assignment = await _assignmentRepository.GetByIdAsync(returnRequest.AssignmentId);
@@ -212,6 +214,8 @@ namespace AssetManagement.Application.Services
                         Message = "Assignment not found."
                     };
                 }
+
+              
                 var assetResponse = await _assetRepositoriesAsync.GetByIdAsync(assignment.AssetId);
 
                 returnRequest.ReturnedDate = DateTime.Now;

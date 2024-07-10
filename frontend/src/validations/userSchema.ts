@@ -200,7 +200,7 @@ export const updateUserSchema = z
     },
   );
 
-const specialCharacters = /[!@#$%^&*(),.?":{}|<>\-_+=;]\['`~]/;
+const specialCharacters = /^(?=.*[!@#$%^&*(),.?":{}|<>\-_+=;'\[\]`~]).*$/;
 
 export const changePasswordSchema = z.object({
   currentPassword: z

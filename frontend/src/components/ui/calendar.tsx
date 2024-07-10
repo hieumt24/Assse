@@ -4,8 +4,9 @@ import { DayPicker, useDayPicker, useNavigation } from "react-day-picker";
 
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { SelectTrigger } from "@radix-ui/react-select";
 import { format, setMonth } from "date-fns";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "./select";
+import { Select, SelectContent, SelectItem } from "./select";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
