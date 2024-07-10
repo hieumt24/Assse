@@ -31,7 +31,7 @@ export const ManageAssignment = () => {
   const [isDescending, setIsDescending] = useState(true);
   const [assignmentState, setAssignmentState] = useState(0);
   const [assignedDate, setAssignedDate] = useState<DateRange | null>(null);
-  const [borderColor, setBorderColor] = useState("solid black 1px");
+  const [borderColor, setBorderColor] = useState("");
   const { user } = useAuth();
 
   const {
