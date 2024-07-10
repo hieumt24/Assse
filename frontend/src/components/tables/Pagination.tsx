@@ -49,7 +49,7 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   return (
-    <div className="flex flex-wrap items-center justify-end space-x-2 py-4">
+    <div className="flex items-center justify-end space-x-2 py-4">
       {totalRecords !== 0 && (
         <div className="text-sm">
           Showing {(pageIndex - 1) * pageSize + 1} -{" "}
