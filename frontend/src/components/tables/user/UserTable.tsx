@@ -39,6 +39,7 @@ interface UserTableProps<TData, TValue> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onRowClick?: any;
   withIndex?: boolean;
+  adjustablePageSize?: boolean;
 }
 
 export function UserTable<TData, TValue>({
@@ -50,6 +51,7 @@ export function UserTable<TData, TValue>({
   totalRecords,
   onRowClick,
   withIndex = true,
+  adjustablePageSize = true
 }: Readonly<UserTableProps<TData, TValue>>) {
   const table = useReactTable({
     data,
@@ -165,6 +167,13 @@ export function UserTable<TData, TValue>({
         setPage={setPage}
         totalRecords={totalRecords}
         pageSize={pagination.pageSize}
+        adjustablePageSize={adjustablePageSize}
+        setPageSize={(value) => {
+          onPaginationChange((prev) => ({
+            ...prev,
+            pageSize: parseInt(value),
+          }));
+        }}
       />
       <FullPageModal show={openDetails}>
         <Dialog open={openDetails} onOpenChange={setOpenDetails}>

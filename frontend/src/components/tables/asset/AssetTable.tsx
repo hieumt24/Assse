@@ -45,6 +45,7 @@ interface AssetTableProps<TData, TValue> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onRowClick?: any;
   withIndex?: boolean;
+  adjustablePageSize?: boolean;
 }
 
 export function AssetTable<TData, TValue>({
@@ -56,6 +57,7 @@ export function AssetTable<TData, TValue>({
   totalRecords,
   onRowClick,
   withIndex = true,
+  adjustablePageSize = true
 }: Readonly<AssetTableProps<TData, TValue>>) {
   const table = useReactTable({
     data,
@@ -117,7 +119,6 @@ export function AssetTable<TData, TValue>({
     const result = await getAssetByAssetCodeService(assetCode);
     if (result.success) {
       setAssetDetails(result.data);
-      
     } else {
       toast.error(result.message);
     }
@@ -205,13 +206,20 @@ export function AssetTable<TData, TValue>({
         setPage={setPage}
         totalRecords={totalRecords}
         pageSize={pagination.pageSize}
+        setPageSize={(value) => {
+          onPaginationChange((prev) => ({
+            ...prev,
+            pageSize: parseInt(value),
+          }));
+        }}
+        adjustablePageSize={adjustablePageSize}
       />
       <FullPageModal show={openDetails}>
         <Dialog open={openDetails} onOpenChange={setOpenDetails}>
           {isLoading ? (
             <LoadingSpinner />
           ) : (
-            <DialogContent className="max-w-lg border-none p-0" title={"white"}>
+            <DialogContent className="max-w-2xl border-none p-0" title={"white"}>
               <div className="overflow-hidden rounded-lg bg-white shadow-lg">
                 <h2 className="bg-red-600 p-6 text-xl font-semibold text-white">
                   Detailed Asset Information
@@ -220,7 +228,7 @@ export function AssetTable<TData, TValue>({
                   <table className="w-full">
                     <tbody>
                       <tr className="border-b border-gray-200 last:border-b-0">
-                        <td className="w-[160px] py-2 pr-4 font-medium text-gray-600">
+                        <td className="w-[200px] py-2 pr-4 font-medium text-gray-600">
                           Asset Code
                         </td>
                         <td className="py-2 text-gray-800">
@@ -228,7 +236,7 @@ export function AssetTable<TData, TValue>({
                         </td>
                       </tr>
                       <tr className="border-b border-gray-200 last:border-b-0">
-                        <td className="w-[160px] py-2 pr-4 font-medium text-gray-600">
+                        <td className="py-2 pr-4 font-medium text-gray-600">
                           Asset Name
                         </td>
                         <td className="overflow-hidden text-ellipsis py-2 text-gray-800">
@@ -236,7 +244,7 @@ export function AssetTable<TData, TValue>({
                         </td>
                       </tr>
                       <tr className="h-20 border-b border-gray-200 last:border-b-0">
-                        <td className="w-[160px] py-2 pr-4 font-medium text-gray-600">
+                        <td className="py-2 pr-4 font-medium text-gray-600">
                           Specification
                         </td>
                         <td className="overflow-hidden text-ellipsis py-2 text-gray-800">
@@ -245,7 +253,7 @@ export function AssetTable<TData, TValue>({
                       </tr>
 
                       <tr className="border-b border-gray-200 last:border-b-0">
-                        <td className="w-[160px] py-2 pr-4 font-medium text-gray-600">
+                        <td className="py-2 pr-4 font-medium text-gray-600">
                           Installed Date
                         </td>
                         <td className="py-2 text-gray-800">
@@ -255,7 +263,7 @@ export function AssetTable<TData, TValue>({
                         </td>
                       </tr>
                       <tr className="border-b border-gray-200 last:border-b-0">
-                        <td className="w-[160px] py-2 pr-4 font-medium text-gray-600">
+                        <td className="py-2 pr-4 font-medium text-gray-600">
                           State
                         </td>
                         <td className="py-2 text-gray-800">
@@ -265,7 +273,7 @@ export function AssetTable<TData, TValue>({
                         </td>
                       </tr>
                       <tr className="border-b border-gray-200 last:border-b-0">
-                        <td className="w-[160px] py-2 pr-4 font-medium text-gray-600">
+                        <td className="py-2 pr-4 font-medium text-gray-600">
                           Asset Location
                         </td>
                         <td className="py-2 text-gray-800">
@@ -276,7 +284,7 @@ export function AssetTable<TData, TValue>({
                         </td>
                       </tr>
                       <tr className="border-b border-gray-200 last:border-b-0">
-                        <td className="w-[160px] py-2 pr-4 font-medium text-gray-600">
+                        <td className="py-2 pr-4 font-medium text-gray-600">
                           Category Name
                         </td>
                         <td className="py-2 text-gray-800">
@@ -302,6 +310,7 @@ export function AssetTable<TData, TValue>({
                               totalRecords={assignmentsTotalRecords}
                               withIndex={false}
                               onRowClick={() => {}}
+                              adjustablePageSize={false}
                             />
                           )}
                         </td>
