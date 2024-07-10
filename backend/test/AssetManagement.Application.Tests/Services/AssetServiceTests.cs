@@ -21,6 +21,7 @@ namespace AssetManagement.Application.Tests.Services
         private readonly Mock<IValidator<AddAssetRequestDto>> _addAssetValidatorMock;
         private readonly Mock<IValidator<EditAssetRequestDto>> _editAssetValidatorMock;
         private readonly Mock<IAssignmentRepositoriesAsync> _assignmentRepositoryMock;
+        private readonly Mock<ICategoryRepositoriesAsync> _categoryRepositoryMock;
         private readonly IMapper _mapper;
         private readonly AssetService _assetService;
 
@@ -31,6 +32,7 @@ namespace AssetManagement.Application.Tests.Services
             _addAssetValidatorMock = new Mock<IValidator<AddAssetRequestDto>>();
             _editAssetValidatorMock = new Mock<IValidator<EditAssetRequestDto>>();
             _assignmentRepositoryMock = new Mock<IAssignmentRepositoriesAsync>();
+            _categoryRepositoryMock = new Mock<ICategoryRepositoriesAsync>();
 
             var config = new MapperConfiguration(cfg =>
             {
@@ -48,7 +50,8 @@ namespace AssetManagement.Application.Tests.Services
                 _uriServiceMock.Object,
                 _addAssetValidatorMock.Object,
                 _editAssetValidatorMock.Object,
-                _assignmentRepositoryMock.Object
+                _assignmentRepositoryMock.Object,
+                _categoryRepositoryMock.Object
             );
         }
 
