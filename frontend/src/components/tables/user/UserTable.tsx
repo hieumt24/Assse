@@ -169,10 +169,10 @@ export function UserTable<TData, TValue>({
         pageSize={pagination.pageSize}
         adjustablePageSize={adjustablePageSize}
         setPageSize={(value) => {
-          onPaginationChange((prev) => ({
-            ...prev,
+          onPaginationChange({
+            pageIndex: 1,
             pageSize: parseInt(value),
-          }));
+          });
         }}
       />
       <FullPageModal show={openDetails}>

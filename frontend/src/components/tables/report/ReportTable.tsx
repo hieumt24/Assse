@@ -127,10 +127,10 @@ export function ReportTable<TData, TValue>({
         totalRecords={totalRecords}
         pageSize={pagination.pageSize}
         setPageSize={(value) => {
-          onPaginationChange((prev) => ({
-            ...prev,
+          onPaginationChange({
+            pageIndex: 1,
             pageSize: parseInt(value),
-          }));
+          });
         }}
       />
     </div>
