@@ -24,7 +24,7 @@ namespace AssetManagement.Infrastructure.Repositories
 
         public async Task<List<Category>> ListAllActiveAsync()
         {
-            return await _dbContext.Set<Category>().Where(c => !c.IsDeleted).ToListAsync();
+            return await _dbContext.Set<Category>().AsNoTracking().Where(c => !c.IsDeleted).ToListAsync();
         }
     }
 }

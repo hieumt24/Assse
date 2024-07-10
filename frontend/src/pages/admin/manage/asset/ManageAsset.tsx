@@ -27,8 +27,8 @@ import {
   deleteAssetByIdService,
   getAllCategoryService,
 } from "@/services";
-import { CaretSortIcon } from "@radix-ui/react-icons";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { FaFilter } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AssetTable } from "../../../../components/tables/asset/AssetTable";
@@ -195,7 +195,7 @@ export const ManageAsset = () => {
                 className="flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm font-normal shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1"
               >
                 State
-                <CaretSortIcon className="h-4 w-4 opacity-50" />
+                <FaFilter className="h-4 w-4 opacity-50" />
               </Button>
             </CollapsibleTrigger>
             <CollapsibleContent className="absolute z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover bg-white p-1 font-semibold text-popover-foreground shadow-md transition-all data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2">

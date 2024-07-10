@@ -125,6 +125,7 @@ namespace AssetManagement.Infrastructure.Repositories
                         .Include(x => x.Asset)
                         .Include(x => x.AssignedBy)
                         .Include(x => x.AssignedTo)
+                        .AsNoTracking()
                         .Where(x => x.Location == location
                             && !x.IsDeleted
                             && (x.ReturnRequestId == null || x.State == EnumAssignmentState.WaitingForReturning)
