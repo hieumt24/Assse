@@ -19,9 +19,10 @@ export const useUsers = (
   const [pageCount, setPageCount] = useState<number>(0);
   const [totalRecords, setTotalRecords] = useState<number>(0);
 
-  const fetchUsers = useCallback(async () => {
+  const fetchUsers = useCallback(async (isEdited: string | null) => {
     setLoading(true);
     try {
+      isEdited && (pagination.pageSize -= 1)
       const data = await getAllUserService({
         pagination,
         search,
@@ -34,6 +35,7 @@ export const useUsers = (
       setUsers(data.data.data || []);
       setPageCount(data.data.totalPages);
       setTotalRecords(data.data.totalRecords);
+      isEdited && (pagination.pageSize += 1)
       return data.data.data || [];
     } catch (error) {
       console.error("Error in fetchUsers:", error);
@@ -48,21 +50,18 @@ export const useUsers = (
     const fetchAndUpdateUsers = async () => {
       setLoading(true);
       try {
-        const isAdded = localStorage.getItem("added");
         const isEdited = localStorage.getItem("edited");
 
         // Always fetch the latest data
-        const currentUsers = await fetchUsers();
+        const currentUsers = await fetchUsers(isEdited);
 
-        if (isAdded || isEdited) {
+        if (isEdited) {
           const newUserData = await getAllUserService({
             pagination,
             search,
             roleType,
             adminLocation,
-            orderBy: isAdded
-              ? "createdOn"
-              : isEdited
+            orderBy: isEdited
                 ? "lastModifiedOn"
                 : orderBy,
             isDescending: true, // Ensure we get the most recent user
@@ -76,7 +75,6 @@ export const useUsers = (
             ]);
           }
 
-          localStorage.removeItem("added");
           localStorage.removeItem("edited");
         }
       } catch (error) {
