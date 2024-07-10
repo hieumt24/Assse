@@ -31,7 +31,6 @@ export const ManageAssignment = () => {
   const [isDescending, setIsDescending] = useState(true);
   const [assignmentState, setAssignmentState] = useState(0);
   const [assignedDate, setAssignedDate] = useState<DateRange | null>(null);
-  const [borderColor, setBorderColor] = useState("");
   const { user } = useAuth();
 
   const {
@@ -98,7 +97,6 @@ export const ManageAssignment = () => {
 
   const handleValueChange = (value: any) => {
     setAssignmentState(Number(value));
-    setBorderColor("double #FFC0CB 2px");
     pagination.pageIndex = 1;
   };
 
@@ -124,7 +122,7 @@ export const ManageAssignment = () => {
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center justify-center gap-2">
           <Select onValueChange={handleValueChange}>
-            <SelectTrigger style={{ border: borderColor }} className="min-w-24">
+            <SelectTrigger className="min-w-24">
               <SelectValue placeholder="State" />
             </SelectTrigger>
             <SelectContent>

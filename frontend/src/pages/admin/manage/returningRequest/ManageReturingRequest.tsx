@@ -32,7 +32,6 @@ export const ManageReturningRequest = () => {
   const [isDescending, setIsDescending] = useState(true);
   const [requestState, setRequestState] = useState(0);
   const [returnedDate, setReturnedDate] = useState<DateRange | null>(null);
-  const [borderColor, setBorderColor] = useState("");
   const { requests, loading, error, pageCount, fetchRequests, totalRecords } =
     useReturningRequests(
       pagination,
@@ -87,7 +86,6 @@ export const ManageReturningRequest = () => {
 
   const handleValueChange = (value: any) => {
     setRequestState(parseInt(value));
-    setBorderColor("double #FFC0CB 2px");
     pagination.pageIndex = 1;
   };
   const [openCancel, setOpenCancel] = useState(false);
@@ -100,7 +98,7 @@ export const ManageReturningRequest = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-center gap-4">
           <Select onValueChange={handleValueChange}>
-            <SelectTrigger style={{ border: borderColor }} className="min-w-24">
+            <SelectTrigger className="min-w-24">
               <SelectValue placeholder="State" />
             </SelectTrigger>
             <SelectContent>

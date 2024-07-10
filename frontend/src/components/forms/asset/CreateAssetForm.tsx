@@ -34,6 +34,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { z } from "zod";
 import { CreateCategoryForm } from "./CreateCategoryForm";
+import { CaretSortIcon } from "@radix-ui/react-icons";
 
 export const CreateAssetForm: React.FC = () => {
   const [categories, setCategories] = useState<Array<CategoryRes>>([]);
@@ -173,7 +174,9 @@ export const CreateAssetForm: React.FC = () => {
               </FormLabel>
               <FormControl>
                 <Select {...field} onValueChange={field.onChange}>
-                  <SelectTrigger>
+                  <SelectTrigger
+                    icon={<CaretSortIcon className="ml-3 h-4 w-4 opacity-50" />}
+                  >
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
                   <SelectContent>

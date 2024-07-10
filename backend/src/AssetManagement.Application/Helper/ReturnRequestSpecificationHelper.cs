@@ -46,6 +46,8 @@ namespace AssetManagement.Application.Helper
                 "acceptedby" => u => u.AcceptedUser.Username,
                 "returneddate" => u => u.ReturnedDate,
                 "state" => u => u.ReturnState,
+                "createOn" => u => u.CreatedOn,
+                "lastModified" => u => u.LastModifiedOn,
                 "" => u => u.CreatedOn
             };
         }

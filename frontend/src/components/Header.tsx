@@ -21,8 +21,10 @@ export const Header = () => {
   const [openChangePassword, setOpenChangePassword] = useState(false);
   const collapsibleRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.setItem("logout", Date.now().toString()); // Trigger storage event
     setIsAuthenticated(false);
     navigate("/auth/login");
     toast.success("You have been logged out");
