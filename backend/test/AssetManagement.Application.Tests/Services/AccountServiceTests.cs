@@ -209,5 +209,44 @@ namespace AssetManagement.Application.Tests.Services
             Assert.Equal(token, result.Data.Token);
             _tokenRepositoriesMock.Verify(tr => tr.AddAsync(It.Is<Token>(t => t.Value == token && t.UserId == user.Id)), Times.Once);
         }
+
+        [Fact]
+        public async Task LoginAsync_FirstTimeLogin_ReturnsFirstTimeLoginResponse()
+        {
+            // Arrange
+            var password = "password";
+            var request = new AuthenticationRequest { Username = "newuser", Password = password };
+
+            // Tạo một hash mật khẩu thực tế
+            var passwordHasher = new PasswordHasher<User>();
+            var hashedPassword = passwordHasher.HashPassword(null, password);
+
+            var user = new User
+            {
+                Id = Guid.NewGuid(),
+                Username = "newuser",
+                PasswordHash = hashedPassword,
+                IsFirstTimeLogin = true,
+                Role = RoleType.Staff
+            };
+            var token = "jwt_token";
+
+            _userRepositoriesMock.Setup(r => r.FindByUsernameAsync(request.Username)).ReturnsAsync(user);
+            _mockPasswordHasher.Setup(ph => ph.VerifyHashedPassword(It.IsAny<User>(), hashedPassword, password))
+                .Returns(PasswordVerificationResult.Success);
+            _userRepositoriesMock.Setup(r => r.GetRoleAsync(user.Id)).ReturnsAsync(user.Role);
+            _tokenServiceMock.Setup(ts => ts.GenerateJwtToken(user, user.Role)).Returns(token);
+
+            // Act
+            var result = await _accountService.LoginAsync(request);
+
+            // Assert
+            Assert.True(result.Succeeded);
+            Assert.Equal("You need to change your password before login", result.Message);
+            Assert.Equal(user.Username, result.Data.Username);
+            Assert.Equal(user.Role.ToString(), result.Data.Role);
+            Assert.True(result.Data.IsFirstTimeLogin);
+            Assert.Equal(token, result.Data.Token);
+        }
     }
 }
