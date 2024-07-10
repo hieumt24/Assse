@@ -119,6 +119,12 @@ namespace AssetManagement.Application.Services
                 };
             }
 
+            var existingAssignedIdTo = await _userRepository.GetByIdAsync(request.AssignedIdTo);
+            if (existingAssignedIdTo == null)
+            {
+                return new Response<AssignmentDto> { Succeeded = false, Message = "User not found" };
+            }
+
             var existingAssignment = await _assignmentRepositoriesAsync.GetByIdAsync(assignmentId);
             if (existingAssignment == null)
             {
