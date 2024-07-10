@@ -26,7 +26,7 @@ const Pagination: React.FC<PaginationProps> = ({
   pageCount,
   pageSize,
   setPage,
-  totalRecords,
+  totalRecords = 0,
   adjustablePageSize = true,
   setPageSize,
 }) => {
