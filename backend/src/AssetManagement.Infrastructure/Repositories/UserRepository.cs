@@ -167,7 +167,9 @@ namespace AssetManagement.Infrastructure.Repositories
                     { "staffcode", x => x.StaffCode },
                     { "username", x => x.Username },
                     { "joineddate", x => x.JoinedDate },
-                    { "role", x => x.Role }
+                    { "role", x => x.Role },
+                    {"createdon", x => x.CreatedOn },
+                    { "lastmodifiedon", x => x.LastModifiedOn }
                 };
 
                 if (columnsSelector.ContainsKey(orderBy.ToLower()))
