@@ -16,7 +16,7 @@ export const createAssetSchema = z.object({
     .regex(nameFormat, {
       message: "The asset name must not contain accent marks.",
     }),
-  category: z.string(),
+  category: z.string().min(1, "Category is required."),
   specification: z
     .string()
     .trim()
