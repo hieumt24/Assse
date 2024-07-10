@@ -25,6 +25,6 @@ namespace AssetManagement.Application.Models.DTOs.Assets.Requests
         public EnumLocation AssetLocation { get; set; }
 
         // relationship
-        public Guid? CategoryId { get; set; }
+        public Guid CategoryId { get; set; }
     }
 }
