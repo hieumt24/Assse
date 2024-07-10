@@ -28,7 +28,7 @@ const Pagination: React.FC<PaginationProps> = ({
   setPage,
   totalRecords,
   adjustablePageSize = true,
-  setPageSize = (pageSize) => {},
+  setPageSize,
 }) => {
   const getPaginationNumbers = () => {
     const pageNumbers: (number | string)[] = [];
