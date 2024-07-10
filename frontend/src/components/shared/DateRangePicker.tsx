@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
@@ -45,7 +45,7 @@ export function DateRangePicker(props: Readonly<DateRangePickerProps>) {
         <Button
           variant={"outline"}
           className={cn(
-            "w-48 items-center justify-between font-normal",
+            "min-w-48 items-center justify-between font-normal",
             !dateRange && "text-muted-foreground",
             className,
           )}
@@ -58,7 +58,7 @@ export function DateRangePicker(props: Readonly<DateRangePickerProps>) {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-4 w-4 p-0"
+                  className="h-4 w-4 p-0 mx-1"
                   onClick={handleClear}
                 >
                   <IoClose size={14} />

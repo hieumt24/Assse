@@ -165,7 +165,7 @@ export const CreateAssignmentForm = () => {
                     <IoIosSearch />
                   </DialogTrigger>
                   <DialogContent className="max-w-2xl">
-                    <div className="w-full px-6">
+                    <div className="max-w-[622px] px-6">
                       <div className="flex w-full justify-between">
                         <div className="flex items-center text-lg font-bold text-red-600">
                           Select User
@@ -259,7 +259,7 @@ export const CreateAssignmentForm = () => {
                     <IoIosSearch />
                   </DialogTrigger>
                   <DialogContent className="max-w-2xl">
-                    <div className="w-full px-6">
+                    <div className="max-w-[622px] px-6">
                       <div className="flex w-full justify-between">
                         <div className="flex items-center text-lg font-bold text-red-600">
                           Select Asset

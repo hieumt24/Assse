@@ -94,7 +94,7 @@ export function UserTable<TData, TValue>({
   };
 
   return (
-    <div>
+    <div className="max-w-full">
       <div className="relative rounded-md border">
         <Table>
           <TableHeader className="bg-zinc-200 font-bold">
