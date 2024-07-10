@@ -237,7 +237,7 @@ export const ManageAsset = () => {
               ))}
             </CollapsibleContent>
           </Collapsible>
-          <div ref={selectRef} className="w-[120px]">
+          <div ref={selectRef} className="min-w-[120px]">
             <Select onValueChange={handleValueChange}>
               <SelectTrigger>
                 <SelectValue placeholder="Category" />
