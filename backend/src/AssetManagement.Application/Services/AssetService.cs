@@ -21,13 +21,15 @@ namespace AssetManagement.Application.Services
         private readonly IValidator<AddAssetRequestDto> _addAssetValidator;
         private readonly IValidator<EditAssetRequestDto> _editAssetValidator;
         private readonly IAssignmentRepositoriesAsync _assignmentRepository;
+        private readonly ICategoryRepositoriesAsync _categoryRepositoriesAsync;
 
         public AssetService(IAssetRepositoriesAsync assetRepository,
              IMapper mapper,
               IUriService uriService,
              IValidator<AddAssetRequestDto> addAssetValidator,
              IValidator<EditAssetRequestDto> editAssetValidator,
-             IAssignmentRepositoriesAsync assignmentRepository
+             IAssignmentRepositoriesAsync assignmentRepository,
+             ICategoryRepositoriesAsync categoryRepositoriesAsync
             )
         {
             _mapper = mapper;
@@ -36,6 +38,7 @@ namespace AssetManagement.Application.Services
             _addAssetValidator = addAssetValidator;
             _editAssetValidator = editAssetValidator;
             _assignmentRepository = assignmentRepository;
+            _categoryRepositoriesAsync = categoryRepositoriesAsync;
         }
 
         public async Task<Response<AssetDto>> AddAssetAsync(AddAssetRequestDto request)
@@ -55,7 +58,11 @@ namespace AssetManagement.Application.Services
                 newAsset.LastModifiedOn = DateTime.Now;
 
                 newAsset.Specification = string.Join(" ", request.Specification.Split(' ', StringSplitOptions.RemoveEmptyEntries));
-
+                var existingCategory = _categoryRepositoriesAsync.GetByIdAsync(newAsset.CategoryId);
+                if(existingCategory == null)
+                {
+                    return new Response<AssetDto> { Succeeded = false, Message = "Category not found" };
+                }
                 var asset = await _assetRepository.AddAsync(newAsset);
 
                 var assetDto = _mapper.Map<AssetDto>(asset);
