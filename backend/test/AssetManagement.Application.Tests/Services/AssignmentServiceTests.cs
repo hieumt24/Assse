@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AssetManagement.Application.Filter;
 using AssetManagement.Application.Interfaces.Repositories;
 using AssetManagement.Application.Interfaces.Services;
 using AssetManagement.Application.Models.DTOs.Assignments;
@@ -14,6 +15,7 @@ using AssetManagement.Application.Wrappers;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
 using AutoMapper;
+using FluentAssertions;
 using FluentValidation;
 using Moq;
 using Xunit;
@@ -292,7 +294,387 @@ namespace AssetManagement.Application.Tests.Services
             Assert.Equal("Assignment cannot be found.", result.Message);
         }
 
-        // Additional test methods can be added here as needed.
+        [Fact]
+        public async Task ChangeAssignmentStateAsync_ValidRequest_ReturnsSuccessResponse()
+        {
+            // Arrange
+            var assignmentId = Guid.NewGuid();
+            var request = new ChangeStateAssignmentDto
+            {
+                AssignmentId = assignmentId,
+                AssignedIdTo = Guid.NewGuid(),
+                NewState = EnumAssignmentState.Accepted
+            };
+
+            var assignment = new Assignment
+            {
+                Id = assignmentId,
+                AssignedIdTo = request.AssignedIdTo,
+                State = EnumAssignmentState.WaitingForAcceptance,
+                AssetId = Guid.NewGuid()
+            };
+
+            _assignmentRepositoryMock.Setup(r => r.GetByIdAsync(assignmentId))
+                .ReturnsAsync(assignment);
+
+            // Act
+            var result = await _assignmentService.ChangeAssignmentStateAsync(request);
+
+            // Assert
+            Assert.True(result.Succeeded);
+            Assert.Equal("Assignment state changed successfully.", result.Message);
+            Assert.Equal(request.NewState, assignment.State);
+        }
+
+        [Fact]
+        public async Task ChangeAssignmentStateAsync_AssignmentNotFound_ReturnsErrorResponse()
+        {
+            // Arrange
+            var assignmentId = Guid.NewGuid();
+            var request = new ChangeStateAssignmentDto
+            {
+                AssignmentId = assignmentId,
+                AssignedIdTo = Guid.NewGuid(),
+                NewState = EnumAssignmentState.Accepted
+            };
+
+            _assignmentRepositoryMock.Setup(r => r.GetByIdAsync(assignmentId))
+                .ReturnsAsync((Assignment)null);
+
+            // Act
+            var result = await _assignmentService.ChangeAssignmentStateAsync(request);
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.Equal("The assignment no longer exists.", result.Message);
+        }
+
+        [Fact]
+        public async Task ChangeAssignmentStateAsync_AssignedToDifferentStaff_ReturnsErrorResponse()
+        {
+            // Arrange
+            var assignmentId = Guid.NewGuid();
+            var request = new ChangeStateAssignmentDto
+            {
+                AssignmentId = assignmentId,
+                AssignedIdTo = Guid.NewGuid(),
+                NewState = EnumAssignmentState.Accepted
+            };
+
+            var assignment = new Assignment
+            {
+                Id = assignmentId,
+                AssignedIdTo = Guid.NewGuid(), // Different from request.AssignedIdTo
+                State = EnumAssignmentState.WaitingForAcceptance,
+                AssetId = Guid.NewGuid()
+            };
+
+            _assignmentRepositoryMock.Setup(r => r.GetByIdAsync(assignmentId))
+                .ReturnsAsync(assignment);
+
+            // Act
+            var result = await _assignmentService.ChangeAssignmentStateAsync(request);
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.Equal("Assignment has assigned for other staff.", result.Message);
+        }
+
+        [Fact]
+        public async Task ChangeAssignmentStateAsync_InvalidState_ReturnsErrorResponse()
+        {
+            // Arrange
+            var assignmentId = Guid.NewGuid();
+            var request = new ChangeStateAssignmentDto
+            {
+                AssignmentId = assignmentId,
+                AssignedIdTo = Guid.NewGuid(),
+                NewState = EnumAssignmentState.Accepted
+            };
+
+            var assignment = new Assignment
+            {
+                Id = assignmentId,
+                AssignedIdTo = request.AssignedIdTo,
+                State = EnumAssignmentState.Accepted, // Already in Accepted state
+                AssetId = Guid.NewGuid()
+            };
+
+            _assignmentRepositoryMock.Setup(r => r.GetByIdAsync(assignmentId))
+                .ReturnsAsync(assignment);
+
+            // Act
+            var result = await _assignmentService.ChangeAssignmentStateAsync(request);
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.Equal("Assignment state cannot be changed.", result.Message);
+        }
+
+        [Fact]
+        public async Task ChangeAssignmentStateAsync_DeclineAssetNotFound_ReturnsErrorResponse()
+        {
+            // Arrange
+            var assignmentId = Guid.NewGuid();
+            var request = new ChangeStateAssignmentDto
+            {
+                AssignmentId = assignmentId,
+                AssignedIdTo = Guid.NewGuid(),
+                NewState = EnumAssignmentState.Declined
+            };
+
+            var assignment = new Assignment
+            {
+                Id = assignmentId,
+                AssignedIdTo = request.AssignedIdTo,
+                State = EnumAssignmentState.WaitingForAcceptance,
+                AssetId = Guid.NewGuid()
+            };
+
+            _assignmentRepositoryMock.Setup(r => r.GetByIdAsync(assignmentId))
+                .ReturnsAsync(assignment);
+
+            _assetRepositoryMock.Setup(r => r.GetByIdAsync(assignment.AssetId))
+                .ReturnsAsync((Asset)null);
+
+            // Act
+            var result = await _assignmentService.ChangeAssignmentStateAsync(request);
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.Equal("Asset not found.", result.Message);
+        }
+
+        [Fact]
+        public async Task ChangeAssignmentStateAsync_DeclineAssetUpdateError_ReturnsErrorResponse()
+        {
+            // Arrange
+            var assignmentId = Guid.NewGuid();
+            var request = new ChangeStateAssignmentDto
+            {
+                AssignmentId = assignmentId,
+                AssignedIdTo = Guid.NewGuid(),
+                NewState = EnumAssignmentState.Declined
+            };
+
+            var assignment = new Assignment
+            {
+                Id = assignmentId,
+                AssignedIdTo = request.AssignedIdTo,
+                State = EnumAssignmentState.WaitingForAcceptance,
+                AssetId = Guid.NewGuid()
+            };
+
+            var asset = new Asset
+            {
+                Id = assignment.AssetId,
+                State = AssetStateType.Assigned
+            };
+
+            _assignmentRepositoryMock.Setup(r => r.GetByIdAsync(assignmentId))
+                .ReturnsAsync(assignment);
+
+            _assetRepositoryMock.Setup(r => r.GetByIdAsync(assignment.AssetId))
+                .ReturnsAsync(asset);
+
+            _assetRepositoryMock.Setup(r => r.UpdateAsync(It.IsAny<Asset>()))
+                .ThrowsAsync(new Exception("Update error"));
+
+            // Act
+            var result = await _assignmentService.ChangeAssignmentStateAsync(request);
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.Equal("An error occurred while updating the asset state.", result.Message);
+            Assert.Contains("Update error", result.Errors);
+        }
+
+        [Fact]
+        public async Task GetAssignmentsOfUser_ValidRequest_ReturnsPagedResponse()
+        {
+            // Arrange
+            var paginationFilter = new PaginationFilter();
+            var userId = Guid.NewGuid();
+            var search = "test";
+            var assignmentState = EnumAssignmentState.Accepted;
+            var dateFrom = DateTime.UtcNow.AddDays(-7);
+            var dateTo = DateTime.UtcNow;
+            var orderBy = "AssignmentDate";
+            var isDescending = true;
+            var route = "api/assignments";
+
+            var assignmentsList = new List<Assignment>
+            {
+                new Assignment { Id = Guid.NewGuid(), AssignedIdTo = userId },
+                new Assignment { Id = Guid.NewGuid(), AssignedIdTo = userId }
+            };
+
+            var pagedResponse = new PagedResponse<List<AssignmentResponseDto>>
+            {
+                Succeeded = true,
+                Data = _mapper.Map<List<AssignmentResponseDto>>(assignmentsList),
+                Message = "Assignments retrieved successfully."
+            };
+
+            _assignmentRepositoryMock.Setup(r => r.FilterAssignmentOfUserAsync(userId, search, assignmentState, dateFrom, dateTo))
+                .ReturnsAsync(assignmentsList.AsQueryable());
+
+            _uriServiceMock.Setup(u => u.GetPageUri(paginationFilter, route))
+                .Returns(new Uri("http://localhost/api/assignments?pageNumber=1&pageSize=10"));
+
+            // Act
+            var result = await _assignmentService.GetAssignmentsOfUser(paginationFilter, userId, search, assignmentState, dateFrom, dateTo, orderBy, isDescending, route);
+
+            // Assert
+            result.Should().BeEquivalentTo(pagedResponse);
+        }
+
+        [Fact]
+        public async Task GetAssignmentsOfUser_DateFromGreaterThanDateTo_ReturnsFailedResponse()
+        {
+            // Arrange
+            var paginationFilter = new PaginationFilter();
+            var userId = Guid.NewGuid();
+            var search = "test";
+            var assignmentState = EnumAssignmentState.Accepted;
+            var dateFrom = DateTime.UtcNow;
+            var dateTo = DateTime.UtcNow.AddDays(-7);
+            var orderBy = "AssignmentDate";
+            var isDescending = true;
+            var route = "api/assignments";
+
+            // Act
+            var result = await _assignmentService.GetAssignmentsOfUser(paginationFilter, userId, search, assignmentState, dateFrom, dateTo, orderBy, isDescending, route);
+
+            // Assert
+            result.Succeeded.Should().BeFalse();
+            result.Message.Should().Be("Date from must be before date to");
+        }
+
+        [Fact]
+        public async Task GetAssetAssign_ValidRequest_ReturnsPagedResponse()
+        {
+            // Arrange
+            var paginationFilter = new PaginationFilter();
+            var assetId = Guid.NewGuid();
+            var search = "test";
+            var assignmentState = EnumAssignmentState.Accepted;
+            var dateFrom = DateTime.UtcNow.AddDays(-7);
+            var dateTo = DateTime.UtcNow;
+            var orderBy = "AssignmentDate";
+            var isDescending = true;
+            var route = "api/assignments";
+
+            var assignmentsList = new List<Assignment>
+            {
+                new Assignment { Id = Guid.NewGuid(), AssetId = assetId },
+                new Assignment { Id = Guid.NewGuid(), AssetId = assetId }
+            };
+
+            var pagedResponse = new PagedResponse<List<AssignmentResponseDto>>
+            {
+                Succeeded = true,
+                Data = _mapper.Map<List<AssignmentResponseDto>>(assignmentsList),
+                Message = "Assignments retrieved successfully."
+            };
+
+            _assignmentRepositoryMock.Setup(r => r.FilterAssignmentByAssetIdAsync(assetId, search, assignmentState, dateFrom, dateTo))
+                .ReturnsAsync(assignmentsList.AsQueryable());
+
+            _uriServiceMock.Setup(u => u.GetPageUri(paginationFilter, route))
+                .Returns(new Uri("http://localhost/api/assignments?pageNumber=1&pageSize=10"));
+
+            // Act
+            var result = await _assignmentService.GetAssetAssign(paginationFilter, assetId, search, assignmentState, dateFrom, dateTo, orderBy, isDescending, route);
+
+            // Assert
+            result.Should().BeEquivalentTo(pagedResponse);
+        }
+
+        [Fact]
+        public async Task GetAssetAssign_DateFromGreaterThanDateTo_ReturnsFailedResponse()
+        {
+            // Arrange
+            var paginationFilter = new PaginationFilter();
+            var assetId = Guid.NewGuid();
+            var search = "test";
+            var assignmentState = EnumAssignmentState.Accepted;
+            var dateFrom = DateTime.UtcNow;
+            var dateTo = DateTime.UtcNow.AddDays(-7);
+            var orderBy = "AssignmentDate";
+            var isDescending = true;
+            var route = "api/assignments";
+
+            // Act
+            var result = await _assignmentService.GetAssetAssign(paginationFilter, assetId, search, assignmentState, dateFrom, dateTo, orderBy, isDescending, route);
+
+            // Assert
+            result.Succeeded.Should().BeFalse();
+            result.Message.Should().Be("Date from must be before date to");
+        }
+
+        //[Fact]
+        //public async Task GetAllAssignmentsAsync_ValidRequest_ReturnsPagedResponse()
+        //{
+        //    // Arrange
+        //    var paginationFilter = new PaginationFilter();
+        //    var search = "test";
+        //    var assignmentState = EnumAssignmentState.Accepted;
+        //    var dateFrom = DateTime.UtcNow.AddDays(-7);
+        //    var dateTo = DateTime.UtcNow;
+        //    var location = EnumLocation.HaNoi;
+        //    var orderBy = "AssignmentDate";
+        //    var isDescending = true;
+        //    var route = "api/assignments";
+
+        //    var assignmentsList = new PagedResponse<List<Assignment>>
+        //    {
+        //        Succeeded = true,
+        //        Data = new List<Assignment>
+        //        {
+        //            new Assignment { Id = Guid.NewGuid(), Location = location },
+        //            new Assignment { Id = Guid.NewGuid(), Location = location }
+        //        },
+        //        Message = "Assignments retrieved successfully.",
+        //        TotalRecords = 2
+        //    };
+
+        //    _assignmentRepositoryMock.Setup(r => r.GetAllMatchingAssignmentAsync(location, search, assignmentState, dateFrom, dateTo, orderBy, isDescending, paginationFilter))
+        //        .ReturnsAsync(assignmentsList);
+
+        //    _uriServiceMock.Setup(u => u.GetPageUri(paginationFilter, route))
+        //        .Returns(new Uri("http://localhost/api/assignments?pageNumber=1&pageSize=10"));
+
+        //    // Act
+        //    var result = await _assignmentService.GetAllAssignmentsAsync(paginationFilter, search, assignmentState, dateFrom, dateTo, location, orderBy, isDescending, route);
+
+        //    // Assert
+        //    result.Should().BeEquivalentTo(assignmentsList);
+        //}
+
+        [Fact]
+        public async Task GetAllAssignmentsAsync_DateFromGreaterThanDateTo_ReturnsFailedResponse()
+        {
+            // Arrange
+            var paginationFilter = new PaginationFilter();
+            var search = "test";
+            var assignmentState = EnumAssignmentState.Accepted;
+            var dateFrom = DateTime.UtcNow;
+            var dateTo = DateTime.UtcNow.AddDays(-7);
+            var location = EnumLocation.HaNoi;
+            var orderBy = "AssignmentDate";
+            var isDescending = true;
+            var route = "api/assignments";
+
+            // Act
+            var result = await _assignmentService.GetAllAssignmentsAsync(paginationFilter, search, assignmentState, dateFrom, dateTo, location, orderBy, isDescending, route);
+
+            // Assert
+            result.Succeeded.Should().BeFalse();
+            result.Message.Should().Be("Date from must be before date to");
+        }
+
+
     }
 }
 
