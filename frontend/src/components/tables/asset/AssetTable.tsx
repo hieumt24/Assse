@@ -211,21 +211,22 @@ export function AssetTable<TData, TValue>({
                         </td>
                       </tr>
                       <tr className="border-b border-gray-200 last:border-b-0">
-                        <td className="w-[160px] py-2 pr-4 font-medium text-gray-600">
+                        <td className="w-[160px] whitespace-normal break-all py-2 pr-4 font-medium text-gray-600">
                           Asset Name
                         </td>
-                        <td className="py-2 text-gray-800">
+                        <td className="whitespace-normal break-all py-2 text-gray-800">
                           {assetDetails?.assetName}
                         </td>
                       </tr>
-                      <tr className="border-b border-gray-200 last:border-b-0">
-                        <td className="w-[160px] py-2 pr-4 font-medium text-gray-600">
+                      <tr className="h-20 border-b border-gray-200 last:border-b-0">
+                        <td className="w-[160px] whitespace-normal break-all py-2 pr-4 font-medium text-gray-600">
                           Specification
                         </td>
-                        <td className="py-2 text-gray-800">
+                        <td className="whitespace-normal break-all py-2 text-gray-800">
                           {assetDetails?.specification}
                         </td>
                       </tr>
+
                       <tr className="border-b border-gray-200 last:border-b-0">
                         <td className="w-[160px] py-2 pr-4 font-medium text-gray-600">
                           Installed Date
