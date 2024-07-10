@@ -34,7 +34,7 @@ namespace AssetManagement.Application.Helper
             return spec;
         }
 
-        private static Expression<Func<User, object>> GetOrderByExpression(string orderBy)
+        public static Expression<Func<User, object>> GetOrderByExpression(string orderBy)
         {
             switch (orderBy.ToLower())
             {

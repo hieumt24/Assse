@@ -20,7 +20,7 @@ import { usePagination } from "@/hooks/usePagination";
 import { checkUserHasAssignmentService, disableUserService } from "@/services";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 export const ManageUser = () => {
   const { user } = useAuth();
@@ -39,7 +39,7 @@ export const ManageUser = () => {
       orderBy,
       isDescending,
     );
-  
+
   const [openDisable, setOpenDisable] = useState(false);
   const [openCannotDisable, setOpenCannotDisable] = useState(false);
 
@@ -75,13 +75,23 @@ export const ManageUser = () => {
     }
   };
 
-  const handleValueChange = (value: any) => {
+  const handleValueChange = (value: string) => {
     setRoleType(parseInt(value));
     pagination.pageIndex = 1;
   };
+
   return (
     <div className="m-16 flex flex-grow flex-col gap-8">
-      <p className="text-2xl font-bold text-red-600">User List</p>
+      <div className="flex justify-between">
+        <p className="text-2xl font-bold text-red-600">User List</p>
+        <Button
+          variant={"destructive"}
+          onClick={() => navigate("/users/create")}
+        >
+          <span className="capitalize">Create new user</span>
+        </Button>
+      </div>
+
       <div className="flex items-center justify-between">
         <Select onValueChange={handleValueChange}>
           <SelectTrigger className="w-32">
@@ -106,12 +116,6 @@ export const ManageUser = () => {
             placeholder="Staff code, username, full name"
             className="w-[300px]"
           />
-          <Button
-            variant={"destructive"}
-            onClick={() => navigate("/users/create")}
-          >
-            <span className="capitalize">Create new user</span>
-          </Button>
         </div>
       </div>
       {loading ? (
@@ -126,7 +130,7 @@ export const ManageUser = () => {
               setOrderBy,
               setIsDescending,
               isDescending,
-              orderBy
+              orderBy,
             })}
             data={users!}
             onPaginationChange={onPaginationChange}

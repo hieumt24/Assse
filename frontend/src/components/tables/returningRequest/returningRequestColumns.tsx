@@ -31,6 +31,7 @@ export const returningRequestColumns = ({
     accessorKey: "assetName",
     header: ({ column }) =>
       renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),
+    cell: ({row}) => <p className="max-w-[200px]">{row.original.assetName}</p>
   },
   {
     accessorKey: "requestedBy",

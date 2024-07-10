@@ -20,7 +20,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { Dispatch, SetStateAction, useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import Pagination from "../Pagination";
 
 interface MyAssignmentTableProps<TData, TValue> {
@@ -146,6 +146,12 @@ export function MyAssignmentTable<TData, TValue>({
         setPage={setPage}
         totalRecords={totalRecords}
         pageSize={pagination.pageSize}
+        setPageSize={(value) => {
+          onPaginationChange({
+            pageIndex: 1,
+            pageSize: parseInt(value),
+          });
+        }}
       />
       <FullPageModal show={openDetails}>
         <Dialog open={openDetails} onOpenChange={setOpenDetails}>

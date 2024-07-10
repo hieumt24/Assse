@@ -52,7 +52,6 @@ namespace AssetManagement.Application.Tests.Services
                 _editAssetValidatorMock.Object,
                 _assignmentRepositoryMock.Object,
                 _categoryRepositoryMock.Object
-
             );
         }
 

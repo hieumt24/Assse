@@ -18,8 +18,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Dispatch, SetStateAction } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+
+import { toast } from "sonner";
 import { z } from "zod";
 
 export const ChangePasswordForm = (props: {
