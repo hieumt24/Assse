@@ -70,7 +70,7 @@ export const myAssignmentColumns = ({
         case 3:
           return <p className="text-red-600">Declined</p>;
         case 4:
-          return <p className="text-yellow-600">Waiting for returning</p>;
+          return <p className="text-blue-600">Waiting for returning</p>;
 
         default:
           return <p>Not found state</p>;

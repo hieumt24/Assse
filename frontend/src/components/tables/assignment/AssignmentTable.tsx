@@ -20,7 +20,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { Dispatch, SetStateAction, useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import Pagination from "../Pagination";
 
 interface AssignmentTableProps<TData, TValue> {
@@ -97,7 +97,9 @@ export function AssignmentTable<TData, TValue>({
           <TableHeader className="bg-zinc-200 font-bold">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {withIndex && <TableHead className="text-center">No.</TableHead>}
+                {withIndex && (
+                  <TableHead className="text-center">No.</TableHead>
+                )}
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
@@ -120,9 +122,15 @@ export function AssignmentTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className="hover:cursor-pointer"
-                  onClick={onRowClick ? onRowClick() : async () => handleOpenDetails(row.getValue("id"))}
+                  onClick={
+                    onRowClick
+                      ? onRowClick()
+                      : async () => handleOpenDetails(row.getValue("id"))
+                  }
                 >
-                  {withIndex && <TableCell className="text-center">{index + 1}</TableCell>}
+                  {withIndex && (
+                    <TableCell className="text-center">{index + 1}</TableCell>
+                  )}
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(

@@ -1,65 +1,71 @@
-﻿//using Xunit;
-//using Moq;
-//using Microsoft.AspNetCore.Mvc;
-//using Microsoft.AspNetCore.Mvc.Filters;
-//using System.Collections.Generic;
-//using AssetManagement.API.CustomActionFilters;
-//using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using AssetManagement.API.CustomActionFilters;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Routing;
+using Moq;
+using Xunit;
 
-//namespace AssetManagement.API.Tests.CustomActionFilters
-//{
-//    public class ValidateModelAttributeTests
-//    {
-//        private readonly ValidateModelAttribute _validateModelAttribute;
+namespace AssetManagement.Tests
+{
+    public class ValidateModelAttributeTests
+    {
+        [Fact]
+        public void OnActionExecuted_ModelStateIsInvalid_SetsResultToBadRequest()
+        {
+            // Arrange
+            var modelState = new ModelStateDictionary();
+            var actionContext = new ActionContext(
+                new DefaultHttpContext(),
+                new RouteData(),
+                new ActionDescriptor(),
+                modelState
+            );
 
-//        public ValidateModelAttributeTests()
-//        {
-//            _validateModelAttribute = new ValidateModelAttribute();
-//        }
+            var context = new ActionExecutedContext(
+                actionContext,
+                new List<IFilterMetadata>(),
+                new Mock<Controller>().Object
+            );
 
-//        [Fact]
-//        public void OnActionExecuted_SetsBadRequestResult_WhenModelStateIsInvalid()
-//        {
-//            // Arrange
-//            var actionContext = new ActionContext
-//            {
-//                ModelState = new ModelStateDictionary()
-//            };
-//            actionContext.ModelState.AddModelError("Test", "Test error");
+            context.ModelState.AddModelError("key", "error message");
 
-//            var actionExecutedContext = new ActionExecutedContext(
-//                actionContext,
-//                new List<IFilterMetadata>(),
-//                new Mock<Controller>().Object
-//            );
+            var filter = new ValidateModelAttribute();
 
-//            // Act
-//            _validateModelAttribute.OnActionExecuted(actionExecutedContext);
+            // Act
+            filter.OnActionExecuted(context);
 
-//            // Assert
-//            Assert.IsType<BadRequestResult>(actionExecutedContext.Result);
-//        }
+            // Assert
+            Assert.IsType<BadRequestResult>(context.Result);
+        }
 
-//        [Fact]
-//        public void OnActionExecuted_DoesNotSetResult_WhenModelStateIsValid()
-//        {
-//            // Arrange
-//            var actionContext = new ActionContext
-//            {
-//                ModelState = new ModelStateDictionary()
-//            };
+        [Fact]
+        public void OnActionExecuted_ModelStateIsValid_DoesNotSetResult()
+        {
+            // Arrange
+            var modelState = new ModelStateDictionary();
+            var actionContext = new ActionContext(
+                new DefaultHttpContext(),
+                new RouteData(),
+                new ActionDescriptor(),
+                modelState
+            );
 
-//            var actionExecutedContext = new ActionExecutedContext(
-//                actionContext,
-//                new List<IFilterMetadata>(),
-//                new Mock<Controller>().Object
-//            );
+            var context = new ActionExecutedContext(
+                actionContext,
+                new List<IFilterMetadata>(),
+                new Mock<Controller>().Object
+            );
 
-//            // Act
-//            _validateModelAttribute.OnActionExecuted(actionExecutedContext);
+            var filter = new ValidateModelAttribute();
 
-//            // Assert
-//            Assert.Null(actionExecutedContext.Result);
-//        }
-//    }
-//}
+            // Act
+            filter.OnActionExecuted(context);
+
+            // Assert
+            Assert.Null(context.Result);
+        }
+    }
+}

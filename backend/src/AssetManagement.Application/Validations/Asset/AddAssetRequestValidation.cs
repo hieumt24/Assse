@@ -1,5 +1,4 @@
 ﻿using AssetManagement.Application.Models.DTOs.Assets.Requests;
-using AssetManagement.Application.Models.DTOs.Category.Requests;
 using AssetManagement.Domain.Enums;
 using FluentValidation;
 
@@ -33,8 +32,6 @@ namespace AssetManagement.Application.Validations.Asset
                 .Must(BeAValidDate).WithMessage("Please select a valid Installed Date")
                 .GreaterThanOrEqualTo(new DateTime(2000, 1, 1)).WithMessage("Installed Date must be from the year 2000 or later.")
                 .LessThanOrEqualTo(DateTime.Now).WithMessage("Installed Date cannot be a future date.");
-
-
         }
 
         private bool BeAValidDate(DateTime date)

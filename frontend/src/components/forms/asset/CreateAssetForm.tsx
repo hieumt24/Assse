@@ -31,8 +31,8 @@ import { CaretSortIcon } from "@radix-ui/react-icons";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+
+import { toast } from "sonner";
 import { z } from "zod";
 import { CreateCategoryForm } from "./CreateCategoryForm";
 
@@ -190,7 +190,7 @@ export const CreateAssetForm: React.FC = () => {
                         setCategorySearch(e.target.value);
                       }}
                     />
-                    <div className="max-h-[100px] overflow-y-scroll">
+                    <div className="max-h-[155px] overflow-y-scroll">
                       {filteredCategories?.map((category) => (
                         <SelectItem key={category.id} value={category.id}>
                           {category.categoryName} ({category.prefix})
