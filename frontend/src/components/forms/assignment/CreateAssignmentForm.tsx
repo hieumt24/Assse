@@ -128,11 +128,11 @@ export const CreateAssignmentForm = () => {
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     setUserSearchQuery("");
   }, [openChooseUser]);
 
-  useEffect(()=>{
+  useEffect(() => {
     setAssetSearchQuery("");
   }, [openChooseAsset]);
 
@@ -154,7 +154,15 @@ export const CreateAssignmentForm = () => {
                 User <span className="text-red-600">*</span>
               </FormLabel>
               <FormControl>
-                <Dialog open={openChooseUser} onOpenChange={setOpenChooseUser}>
+                <Dialog
+                  open={openChooseUser}
+                  onOpenChange={async (open) => {
+                    setOpenChooseUser(open);
+                    if (!open) {
+                      await form.trigger("userId");
+                    }
+                  }}
+                >
                   <DialogTrigger className="flex min-h-10 w-full items-center justify-between rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors">
                     <span className="w-full text-left text-zinc-500">
                       {form.getValues("userId") !== ""
@@ -247,7 +255,12 @@ export const CreateAssignmentForm = () => {
               <FormControl>
                 <Dialog
                   open={openChooseAsset}
-                  onOpenChange={setOpenChooseAsset}
+                  onOpenChange={async (open) => {
+                    setOpenChooseAsset(open);
+                    if (!open) {
+                      await form.trigger("assetId");
+                    }
+                  }}
                 >
                   <DialogTrigger className="flex min-h-10 w-full items-center justify-between rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors">
                     <span className="w-full text-left text-zinc-500">
@@ -372,9 +385,7 @@ export const CreateAssignmentForm = () => {
           name="note"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-md">
-                Note
-              </FormLabel>
+              <FormLabel className="text-md">Note</FormLabel>
               <FormControl>
                 <Textarea
                   placeholder="Enter note"
