@@ -157,7 +157,7 @@ export const ManageAsset = () => {
 
   const handleValueChange = (value: any) => {
     setSelectedCategory(value);
-    setBorderColor("double red 2px");
+    setBorderColor("double #FFC0CB 2px");
     pagination.pageIndex = 1;
   };
 
