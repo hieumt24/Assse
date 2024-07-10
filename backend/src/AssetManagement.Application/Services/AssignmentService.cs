@@ -67,23 +67,23 @@ namespace AssetManagement.Application.Services
             var existingAsset = await _assetRepository.GetByIdAsync(request.AssetId);
             if (existingAsset == null)
             {
-                return new Response<AssignmentDto> { Succeeded = false, Message = "Asset not found." };
+                return new Response<AssignmentDto> { Succeeded = false, Message = "Asset not found. Creating new asset failed." };
             }
 
             var existingAssignedIdTo = await _userRepository.GetByIdAsync(request.AssignedIdTo);
             if (existingAssignedIdTo == null)
             {
-                return new Response<AssignmentDto> { Succeeded = false, Message = "User assigned to not found" };
+                return new Response<AssignmentDto> { Succeeded = false, Message = "User assigned to not found. Creating new asset failed." };
             }
 
             var existingAssignedIdBy = await _userRepository.GetByIdAsync(request.AssignedIdBy);
             if (existingAssignedIdBy == null)
             {
-                return new Response<AssignmentDto> { Succeeded = false, Message = "User assigned by not found." };
+                return new Response<AssignmentDto> { Succeeded = false, Message = "User assigned by not found. Creating new asset failed." };
             }
             if (existingAssignedIdBy.JoinedDate > request.AssignedDate)
             {
-                return new Response<AssignmentDto> { Succeeded = false, Message = "Assigned Date must be greater than Joined Date." };
+                return new Response<AssignmentDto> { Succeeded = false, Message = "Assigned Date must be greater than Joined Date. Creating new asset failed." };
             }
 
             try
@@ -122,17 +122,17 @@ namespace AssetManagement.Application.Services
             var existingAssignedIdTo = await _userRepository.GetByIdAsync(request.AssignedIdTo);
             if (existingAssignedIdTo == null)
             {
-                return new Response<AssignmentDto> { Succeeded = false, Message = "User not found" };
+                return new Response<AssignmentDto> { Succeeded = false, Message = "User not found. Editing new asset failed." };
             }
 
             var existingAssignment = await _assignmentRepositoriesAsync.GetByIdAsync(assignmentId);
             if (existingAssignment == null)
             {
-                return new Response<AssignmentDto> { Succeeded = false, Message = "Assignment not found." };
+                return new Response<AssignmentDto> { Succeeded = false, Message = "Assignment not found. Editing new asset failed." };
             }
             if (existingAssignment.State != EnumAssignmentState.WaitingForAcceptance)
             {
-                return new Response<AssignmentDto> { Succeeded = false, Message = "Assignment can no longer be edited." };
+                return new Response<AssignmentDto> { Succeeded = false, Message = "Assignment can no longer be edited. Editing new asset failed." };
             }
             if (existingAssignment.AssetId != request.AssetId)
             {
@@ -370,7 +370,7 @@ namespace AssetManagement.Application.Services
             var exsittingAssigment = await _assignmentRepositoriesAsync.GetAssignemntByIdAsync(assignmentId);
             if (exsittingAssigment == null)
             {
-                return new Response<AssignmentDto> { Succeeded = false, Message = "Assignment cannot be found." };
+                return new Response<AssignmentDto> { Succeeded = false, Message = "Assignment cannot be found. Deleting new asset failed." };
             }
             if (exsittingAssigment.State == EnumAssignmentState.Accepted)
             {
