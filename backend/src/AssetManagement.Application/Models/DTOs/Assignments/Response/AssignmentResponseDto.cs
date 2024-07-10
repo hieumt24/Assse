@@ -20,5 +20,7 @@ namespace AssetManagement.Application.Models.DTOs.Assignments.Response
         public EnumLocation Location { get; set; }
         public EnumAssignmentState State { get; set; }
         public string? Note { get; set; }
+        public DateTimeOffset CreatedOn { get; set; }
+        public DateTimeOffset? LastModifiedOn { get; set; }
     }
 }
