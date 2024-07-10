@@ -1,6 +1,5 @@
 import { LoginForm } from "@/components";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { Card, CardContent } from "@/components/ui/card";
 import { useLoading } from "@/context/LoadingContext";
 import { useAuth } from "@/hooks";
 import { Navigate } from "react-router-dom";
@@ -19,11 +18,9 @@ export const Login: React.FC = () => {
           Rookies - Group 4
         </p>
       </div>
-      <Card className="mb-60 w-full max-w-xl shadow-lg">
-        <CardContent className="p-6">
-          {isLoading ? <LoadingSpinner className="" /> : <LoginForm />}
-        </CardContent>
-      </Card>
+      <div className="mb-48 flex w-full justify-center border">
+        {isLoading ? <LoadingSpinner /> : <LoginForm />}
+      </div>
     </div>
   );
 };
