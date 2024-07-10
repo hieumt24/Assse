@@ -14,7 +14,7 @@ export const createUserSchema = z
       .min(2, { message: "First Name must be at least 2 letters long." })
       .max(50, { message: "First Name must be no longer than 50 letters." })
       .regex(nameFormat, {
-        message: "First Name must only contain letters and spaces.",
+        message: "First Name must only contain letters",
       })
       .regex(firstNameFormat, {
         message: "First Name must contain only 1 word.",

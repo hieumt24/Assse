@@ -2,7 +2,7 @@ import { isAfter, isBefore, isValid } from "date-fns";
 import { z } from "zod";
 
 const dateFormat = /^\d{4}-?\d{2}-?\d{2}$/;
-const nameFormat = /^(?=.*[a-zA-Z])[a-zA-Z0-9\s()-_!@#$%^&*=+]*$/;
+const nameFormat = /^(?=.*[a-zA-ZÀ-ÿĀ-žḀ-ỿơư])[\p{L}\p{N}\p{P}\p{S} ]+$/u;
 
 export const createAssetSchema = z.object({
   name: z
@@ -12,11 +12,8 @@ export const createAssetSchema = z.object({
     .min(2, { message: "The asset name must be at least 2 characters long." })
     .max(50, {
       message: "The asset name must be no longer than 50 characters.",
-    })
-    .regex(/^[a-zA-Z\s]*$/, "The asset name must contain letters.")
-    .regex(nameFormat, {
-      message: "The asset name must not contain accent marks.",
-    }),
+    }) 
+    .regex(nameFormat, "The asset name must contain letters."),
   category: z.string().min(1, "Category is required."),
   specification: z
     .string()
@@ -25,7 +22,8 @@ export const createAssetSchema = z.object({
     .min(2, { message: "Specification must be at least 2 characters long." })
     .max(100, {
       message: "Specification must be no longer than 100 characters.",
-    }),
+    })
+  .regex(nameFormat, "Specification must contain letters."),
   installedDate: z
     .string()
     .regex(dateFormat, { message: "Please select a valid Installed Date." })
@@ -62,9 +60,8 @@ export const updateAssetSchema = z.object({
     .max(50, {
       message: "The asset name must be no longer than 50 characters.",
     })
-    .regex(/^[a-zA-Z\s]*$/, "The asset name must contain letters.")
     .regex(nameFormat, {
-      message: "The asset name must not contain accent marks.",
+      message: "The asset name must contain letters.",
     }),
   specification: z
     .string()
@@ -73,7 +70,8 @@ export const updateAssetSchema = z.object({
     .min(2, { message: "Specification must be at least 2 characters long." })
     .max(100, {
       message: "Specification must be no longer than 100 characters.",
-    }),
+    })
+    .regex(nameFormat, "Specification must contain letters."),
   installedDate: z
     .string()
     .regex(dateFormat, { message: "Please select a valid Installed Date." })
