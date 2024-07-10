@@ -53,9 +53,9 @@ export const assetColumns = ({
         case 3:
           return <p className="text-red-600">Assigned</p>;
         case 4:
-          return <p className="text-red-600">Waiting For Recycling</p>;
+          return <p className="text-blue-600">Waiting For Recycling</p>;
         case 5:
-          return <p className="text-red-600">Recycled</p>;
+          return <p className="text-gray-600">Recycled</p>;
         default:
           return <p>{}</p>;
       }
@@ -80,7 +80,8 @@ export const assetColumns = ({
             title="Edit Asset"
           >
             {asset.state == 3 ? (
-              <FiEdit2 size={18} 
+              <FiEdit2
+                size={18}
                 className="text-black opacity-25 hover:text-black"
               />
             ) : (

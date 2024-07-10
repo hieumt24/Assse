@@ -1,4 +1,3 @@
-using AssetManagement.Application.Common;
 using AssetManagement.Application.Filter;
 using AssetManagement.Application.Helper;
 using AssetManagement.Application.Interfaces.Repositories;
@@ -11,7 +10,6 @@ using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
 using AutoMapper;
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
 
 namespace AssetManagement.Application.Services
 {

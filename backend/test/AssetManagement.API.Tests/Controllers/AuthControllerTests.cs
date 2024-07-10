@@ -167,6 +167,8 @@ namespace AssetManagement.API.Tests.Controllers
             Assert.False(responseModel.Succeeded);
             Assert.Equal("Current password is incorrect", responseModel.Message);
         }
+
+
     }
 
 }

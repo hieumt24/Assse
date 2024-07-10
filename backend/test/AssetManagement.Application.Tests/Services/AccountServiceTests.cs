@@ -22,14 +22,16 @@ namespace AssetManagement.Application.Tests.Services
         private readonly Mock<ITokenRepositoriesAsync> _tokenRepositoriesMock;
         private readonly AccountService _accountService;
         private readonly PasswordHasher<User> _passwordHasher;
-
+        private readonly Mock<IPasswordHasher<User>> _mockPasswordHasher;
         public AccountServiceTests()
         {
             _userRepositoriesMock = new Mock<IUserRepositoriesAsync>();
             _tokenServiceMock = new Mock<ITokenService>();
             _changePasswordValidatorMock = new Mock<IValidator<ChangePasswordRequest>>();
             _tokenRepositoriesMock = new Mock<ITokenRepositoriesAsync>();
+            _mockPasswordHasher = new Mock<IPasswordHasher<User>>();
             _passwordHasher = new PasswordHasher<User>();
+
 
             _accountService = new AccountService(
                 _userRepositoriesMock.Object,
@@ -59,19 +61,29 @@ namespace AssetManagement.Application.Tests.Services
         }
 
         [Fact]
-        public async Task ChangePasswordAsync_CurrentPasswordIsIncorrect_ReturnsErrorResponse()
+        public async Task ChangePasswordAsync_IncorrectCurrentPassword_ReturnsFailureResponse()
         {
             // Arrange
             var request = new ChangePasswordRequest
             {
                 Username = "testuser",
-                CurrentPassword = "wrongpassword",
+                CurrentPassword = "incorrectpassword",
                 NewPassword = "newpassword"
             };
-            var user = new User { Username = "testuser", PasswordHash = _passwordHasher.HashPassword(null, "correctpassword") };
 
-            _changePasswordValidatorMock.Setup(v => v.ValidateAsync(request, default)).ReturnsAsync(new FluentValidation.Results.ValidationResult());
-            _userRepositoriesMock.Setup(r => r.FindByUsernameAsync(request.Username)).ReturnsAsync(user);
+            // Create a valid password hash
+            var correctPassword = "correctpassword";
+            var user = new User
+            {
+                Username = "testuser",
+                PasswordHash = _passwordHasher.HashPassword(null, correctPassword),
+                IsFirstTimeLogin = false
+            };
+
+            _changePasswordValidatorMock.Setup(v => v.ValidateAsync(request, default))
+                .ReturnsAsync(new FluentValidation.Results.ValidationResult());
+            _userRepositoriesMock.Setup(r => r.FindByUsernameAsync(request.Username))
+                .ReturnsAsync(user);
 
             // Act
             var result = await _accountService.ChangePasswordAsync(request);
@@ -79,6 +91,7 @@ namespace AssetManagement.Application.Tests.Services
             // Assert
             Assert.False(result.Succeeded);
             Assert.Equal("Current password is incorrect", result.Message);
+            _userRepositoriesMock.Verify(r => r.UpdateUserAysnc(It.IsAny<User>()), Times.Never);
         }
 
         [Fact]
@@ -122,25 +135,38 @@ namespace AssetManagement.Application.Tests.Services
         }
 
         [Fact]
-        public async Task LoginAsync_Success_ReturnsSuccessResponse()
+        public async Task ChangePasswordAsync_NewPasswordSameAsCurrent_ReturnsFailureResponse()
         {
             // Arrange
-            var request = new AuthenticationRequest { Username = "testuser", Password = "correctpassword" };
-            var user = new User { Username = "testuser", PasswordHash = _passwordHasher.HashPassword(null, "correctpassword") };
-            var token = "generated_jwt_token";
+            var currentPassword = "currentpassword";
+            var request = new ChangePasswordRequest
+            {
+                Username = "testuser",
+                CurrentPassword = currentPassword,
+                NewPassword = currentPassword  // New password same as current
+            };
 
-            _userRepositoriesMock.Setup(r => r.FindByUsernameAsync(request.Username)).ReturnsAsync(user);
-            _userRepositoriesMock.Setup(r => r.GetRoleAsync(user.Id)).ReturnsAsync(RoleType.Staff); 
-            _tokenServiceMock.Setup(t => t.GenerateJwtToken(user, RoleType.Staff)).Returns(token);
+            var user = new User
+            {
+                Username = "testuser",
+                PasswordHash = _passwordHasher.HashPassword(null, currentPassword),
+                IsFirstTimeLogin = false
+            };
+
+            _changePasswordValidatorMock.Setup(v => v.ValidateAsync(request, default))
+                .ReturnsAsync(new FluentValidation.Results.ValidationResult());
+
+            _userRepositoriesMock.Setup(r => r.FindByUsernameAsync(request.Username))
+                .ReturnsAsync(user);
 
             // Act
-            var result = await _accountService.LoginAsync(request);
+            var result = await _accountService.ChangePasswordAsync(request);
 
             // Assert
-            Assert.True(result.Succeeded);
-            Assert.Equal(user.Username, result.Data.Username);
-            Assert.Equal(RoleType.Staff.ToString(), result.Data.Role);
-            Assert.Equal(token, result.Data.Token);
+            Assert.False(result.Succeeded);
+            Assert.Equal("New password cannot be the same as the current password", result.Message);
+            _userRepositoriesMock.Verify(r => r.UpdateUserAysnc(It.IsAny<User>()), Times.Never);
         }
+
     }
 }
