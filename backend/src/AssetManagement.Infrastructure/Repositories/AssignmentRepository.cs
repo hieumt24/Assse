@@ -183,7 +183,7 @@ namespace AssetManagement.Infrastructure.Repositories
             }
             else
             {
-                query = query.OrderBy(x => x.AssignedDate)
+                query = query.OrderByDescending(x => x.AssignedDate)
                     //.ThenBy(x => x.AssignedDate)
                     .ThenBy(x => x.State)
                     .ThenBy(x => x.Asset.AssetCode)
