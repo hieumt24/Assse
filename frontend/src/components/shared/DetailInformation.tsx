@@ -79,26 +79,29 @@ export const DetailInformation = <T extends UserRes | AssetRes>({
           Detailed {variant} Information
         </h2>
         <div className="px-6 py-4">
-          {info ? 
-          <table className="w-full">
-            <tbody>
-              {Object.entries(info)
-                .filter(([key]) => !excludedKeys.includes(key))
-                .map(([key, value]) => (
-                  <tr
-                    key={key}
-                    className="border-b border-gray-200 last:border-b-0"
-                  >
-                    <td className="py-2 pr-4 font-medium text-gray-600 w-[160px]">
-                      {formatKey(key)}
-                    </td>
-                    <td className="py-2 text-gray-800">
-                      {formatValue(key, value)}
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table> : <div>No information available</div>}
+          {info ? (
+            <table className="w-full">
+              <tbody>
+                {Object.entries(info)
+                  .filter(([key]) => !excludedKeys.includes(key))
+                  .map(([key, value]) => (
+                    <tr
+                      key={key}
+                      className="border-b border-gray-200 last:border-b-0"
+                    >
+                      <td className="w-[160px] py-2 pr-4 font-medium text-gray-600">
+                        {formatKey(key)}
+                      </td>
+                      <td className="break-all py-2 text-gray-800">
+                        {formatValue(key, value)}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          ) : (
+            <div>No information available</div>
+          )}
         </div>
       </div>
     </DialogContent>
