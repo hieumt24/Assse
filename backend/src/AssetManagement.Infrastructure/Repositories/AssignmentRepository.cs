@@ -150,7 +150,8 @@ namespace AssetManagement.Infrastructure.Repositories
                     { "assetcode", x => x.Asset.AssetCode },
                     { "assetname", x => x.Asset.AssetName },
                     { "assignedto", x => x.AssignedTo.Username },
-                    { "assignedby", x => x.AssignedBy.Username }
+                    { "assignedby", x => x.AssignedBy.Username },
+                    { "lastmodifiedon", x => x.LastModifiedOn }
                 };
 
                 if (columnsSelector.ContainsKey(orderBy.ToLower()))
