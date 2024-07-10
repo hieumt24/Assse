@@ -17,7 +17,7 @@ import { createReturnRequest } from "@/services/admin/manageReturningRequestServ
 import { format } from "date-fns";
 import { useState } from "react";
 import { DateRange } from "react-day-picker";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 export const MyAssignment = () => {
   const { onPaginationChange, pagination } = usePagination();

@@ -22,7 +22,7 @@ import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { DateRange } from "react-day-picker";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 export const ManageAssignment = () => {
   const { onPaginationChange, pagination } = usePagination();

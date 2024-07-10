@@ -16,7 +16,7 @@ import { removeExtraWhitespace } from "@/lib/utils";
 import { AssetRes } from "@/models";
 import {
   getAssetByIdService,
-  updateAssetService
+  updateAssetService,
 } from "@/services/admin/manageAssetService";
 import { updateAssetSchema } from "@/validations/assetSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,8 +24,8 @@ import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+
+import { toast } from "sonner";
 import { z } from "zod";
 
 export const EditAssetForm: React.FC = () => {

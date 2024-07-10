@@ -20,7 +20,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { Dispatch, SetStateAction, useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import Pagination from "../Pagination";
 
 interface MyAssignmentTableProps<TData, TValue> {

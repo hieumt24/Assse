@@ -17,8 +17,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+
+import { toast } from "sonner";
 import { z } from "zod";
 
 export const LoginForm = () => {
@@ -66,9 +66,9 @@ export const LoginForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-1/3 space-y-5 rounded-2xl border bg-white p-6 text-lg shadow-lg"
+        className="w-full space-y-5 rounded-2xl bg-white p-6 text-lg"
       >
-        <h1 className="text-xl font-bold text-red-600">Login</h1>
+        <h1 className="text-2xl font-bold text-red-600">Login</h1>
         {/* Username */}
         <FormField
           control={form.control}

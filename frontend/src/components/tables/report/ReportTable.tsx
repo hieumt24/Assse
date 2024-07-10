@@ -67,11 +67,14 @@ export function ReportTable<TData, TValue>({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {withIndex && (
-                  <TableHead className="text-center">No.</TableHead>
+                  <TableHead className="w-16 text-center">No.</TableHead>
                 )}
-                {headerGroup.headers.map((header) => {
+                {headerGroup.headers.map((header, index) => {
                   return (
-                    <TableHead className="text-center" key={header.id}>
+                    <TableHead
+                      key={header.id}
+                      className={index === 0 ? "pl-4 text-left" : "text-center"}
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -86,18 +89,21 @@ export function ReportTable<TData, TValue>({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row, index) => (
+              table.getRowModel().rows.map((row, rowIndex) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className="hover:cursor-pointer"
                 >
                   {withIndex && (
-                    <TableCell className="text-center">{index + 1}</TableCell>
+                    <TableCell className="w-16 text-center">
+                      {rowIndex + 1}
+                    </TableCell>
                   )}
-                  {row.getVisibleCells().map((cell, i) => (
+                  {row.getVisibleCells().map((cell, cellIndex) => (
                     <TableCell
-                      className={` ${i == 0 ? "pl-20 text-left" : "pr-5 text-center"}`}
                       key={cell.id}
+                      className={`break-all ${cellIndex === 0 ? "pl-4 text-left" : "text-center"}`}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
@@ -110,7 +116,7 @@ export function ReportTable<TData, TValue>({
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length}
+                  colSpan={columns.length + (withIndex ? 1 : 0)}
                   className="h-24 text-center"
                 >
                   No results.
