@@ -71,9 +71,9 @@ const Pagination: React.FC<PaginationProps> = ({
             <SelectValue placeholder="Per page" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={pageSize.toString()}>{pageSize}</SelectItem>
-            <SelectItem value={(pageSize+5).toString()}>{pageSize+5}</SelectItem>
-            <SelectItem value={(pageSize+10).toString()}>{pageSize+10}</SelectItem>
+            <SelectItem value="10">10</SelectItem>
+            <SelectItem value="15">15</SelectItem>
+            <SelectItem value="20">20</SelectItem>
           </SelectContent>
         </Select>
       </div>)}
