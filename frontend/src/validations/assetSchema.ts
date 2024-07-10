@@ -13,6 +13,7 @@ export const createAssetSchema = z.object({
     .max(50, {
       message: "The asset name must be no longer than 50 characters.",
     })
+    .regex(/^[a-zA-Z\s]*$/, "The asset name must contain letters.")
     .regex(nameFormat, {
       message: "The asset name must not contain accent marks.",
     }),
@@ -61,6 +62,7 @@ export const updateAssetSchema = z.object({
     .max(50, {
       message: "The asset name must be no longer than 50 characters.",
     })
+    .regex(/^[a-zA-Z\s]*$/, "The asset name must contain letters.")
     .regex(nameFormat, {
       message: "The asset name must not contain accent marks.",
     }),

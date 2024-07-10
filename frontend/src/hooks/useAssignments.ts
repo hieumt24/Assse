@@ -22,7 +22,7 @@ export const useAssignments = (
   const [totalRecords, setTotalRecords] = useState<number>(0);
 
   // Function to fetch assignments
-  const fetchAssignments = useCallback(async (isEdited: string | null) => {
+  const fetchAssignments = useCallback(async (isEdited?: string | null) => {
     setLoading(true);
     try {
       isEdited && (pagination.pageSize -= 1)

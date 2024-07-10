@@ -21,7 +21,7 @@ export const useAssets = (
   const [totalRecords, setTotalRecords] = useState<number>(0);
 
   // Function to fetch assets
-  const fetchAssets = useCallback(async (isEdited: string | null) => {
+  const fetchAssets = useCallback(async (isEdited?: string | null) => {
     setLoading(true);
     try {
       isEdited && (pagination.pageSize -= 1);
