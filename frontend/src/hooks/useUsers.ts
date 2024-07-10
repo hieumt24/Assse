@@ -19,7 +19,7 @@ export const useUsers = (
   const [pageCount, setPageCount] = useState<number>(0);
   const [totalRecords, setTotalRecords] = useState<number>(0);
 
-  const fetchUsers = useCallback(async (isEdited: string | null) => {
+  const fetchUsers = useCallback(async (isEdited?: string | null) => {
     setLoading(true);
     try {
       isEdited && (pagination.pageSize -= 1)
