@@ -142,7 +142,7 @@ namespace AssetManagement.Infrastructure.Repositories
         {
             string searchPhraseLower = search?.ToLower() ?? string.Empty;
 
-            var baseQuery = _dbContext.Users
+            var baseQuery = _dbContext.Users.AsNoTracking()
                 .Where(x => x.Location == admimLocation && !x.IsDeleted);
 
             var searchQuery = baseQuery.Where(x => x.FirstName.ToLower().Contains(searchPhraseLower)
