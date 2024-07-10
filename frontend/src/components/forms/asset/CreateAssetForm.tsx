@@ -189,7 +189,7 @@ export const CreateAssetForm: React.FC = () => {
                         setCategorySearch(e.target.value);
                       }}
                     />
-                    <div className="max-h-[100px] overflow-y-scroll">
+                    <div className="max-h-[155px] overflow-y-scroll">
                       {filteredCategories?.map((category) => (
                         <SelectItem key={category.id} value={category.id}>
                           {category.categoryName} ({category.prefix})
