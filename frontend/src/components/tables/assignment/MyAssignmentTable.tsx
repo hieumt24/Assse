@@ -146,6 +146,12 @@ export function MyAssignmentTable<TData, TValue>({
         setPage={setPage}
         totalRecords={totalRecords}
         pageSize={pagination.pageSize}
+        setPageSize={(value) => {
+          onPaginationChange((prev) => ({
+            ...prev,
+            pageSize: parseInt(value),
+          }));
+        }}
       />
       <FullPageModal show={openDetails}>
         <Dialog open={openDetails} onOpenChange={setOpenDetails}>

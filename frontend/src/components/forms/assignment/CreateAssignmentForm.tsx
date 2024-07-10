@@ -211,6 +211,7 @@ export const CreateAssignmentForm = () => {
                             totalRecords={totalRecords}
                             onRowClick={setSelectedUser}
                             withIndex={false}
+                            adjustablePageSize={false}
                           />
                         )}
                       </div>
@@ -310,6 +311,7 @@ export const CreateAssignmentForm = () => {
                             totalRecords={assetsTotalRecords}
                             onRowClick={setSelectedAsset}
                             withIndex={false}
+                            adjustablePageSize={false}
                           />
                         )}
                       </div>
