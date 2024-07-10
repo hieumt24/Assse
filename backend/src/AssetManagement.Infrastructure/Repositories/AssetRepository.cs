@@ -19,7 +19,7 @@ namespace AssetManagement.Infrastructure.Repositories
         {
             //check asset by adminLocation
 
-            var query = _dbContext.Assets.Where(x => x.AssetLocation == adminLocation && !x.IsDeleted);
+            var query = _dbContext.Assets.AsNoTracking().Where(x => x.AssetLocation == adminLocation && !x.IsDeleted);
             if (!string.IsNullOrEmpty(search))
             {
                 query = query.Where(x => x.AssetName.ToLower().Contains(search.ToLower()) || x.AssetCode.ToLower().Contains(search.ToLower()));
