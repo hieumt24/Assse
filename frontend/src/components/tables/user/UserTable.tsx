@@ -39,6 +39,7 @@ interface UserTableProps<TData, TValue> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onRowClick?: any;
   withIndex?: boolean;
+  adjustablePageSize?: boolean;
 }
 
 export function UserTable<TData, TValue>({
@@ -50,6 +51,7 @@ export function UserTable<TData, TValue>({
   totalRecords,
   onRowClick,
   withIndex = true,
+  adjustablePageSize = true
 }: Readonly<UserTableProps<TData, TValue>>) {
   const table = useReactTable({
     data,
@@ -137,7 +139,7 @@ export function UserTable<TData, TValue>({
                     <TableCell className="text-center">{index + 1}</TableCell>
                   )}
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="break-all">
+                    <TableCell key={cell.id} className="max-w-[200px]">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
@@ -165,6 +167,13 @@ export function UserTable<TData, TValue>({
         setPage={setPage}
         totalRecords={totalRecords}
         pageSize={pagination.pageSize}
+        adjustablePageSize={adjustablePageSize}
+        setPageSize={(value) => {
+          onPaginationChange({
+            pageIndex: 1,
+            pageSize: parseInt(value),
+          });
+        }}
       />
       <FullPageModal show={openDetails}>
         <Dialog open={openDetails} onOpenChange={setOpenDetails}>

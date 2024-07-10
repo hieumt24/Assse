@@ -37,6 +37,7 @@ interface AssignmentTableProps<TData, TValue> {
   totalRecords: number;
   withIndex?: boolean;
   onRowClick?: any;
+  adjustablePageSize?: boolean;
 }
 
 export function AssignmentTable<TData, TValue>({
@@ -46,8 +47,9 @@ export function AssignmentTable<TData, TValue>({
   onPaginationChange,
   pageCount,
   totalRecords,
-  withIndex = true,
+  withIndex=true,
   onRowClick,
+  adjustablePageSize=true
 }: Readonly<AssignmentTableProps<TData, TValue>>) {
   const table = useReactTable({
     data,
@@ -158,6 +160,13 @@ export function AssignmentTable<TData, TValue>({
         setPage={setPage}
         totalRecords={totalRecords}
         pageSize={pagination.pageSize}
+        setPageSize={(value) => {
+          onPaginationChange({
+            pageIndex: 1,
+            pageSize: parseInt(value),
+          });
+        }}
+        adjustablePageSize={adjustablePageSize}
       />
       <FullPageModal show={openDetails}>
         <Dialog open={openDetails} onOpenChange={setOpenDetails}>

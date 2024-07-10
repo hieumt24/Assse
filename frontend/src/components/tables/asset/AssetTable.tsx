@@ -24,8 +24,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "sonner";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Pagination from "../Pagination";
 import { AssignmentTable } from "../assignment/AssignmentTable";
 import { assetAssignmentColumns } from "../assignment/assetAssignmentColumns";
@@ -45,6 +45,7 @@ interface AssetTableProps<TData, TValue> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onRowClick?: any;
   withIndex?: boolean;
+  adjustablePageSize?: boolean;
 }
 
 export function AssetTable<TData, TValue>({
@@ -56,6 +57,7 @@ export function AssetTable<TData, TValue>({
   totalRecords,
   onRowClick,
   withIndex = true,
+  adjustablePageSize = true
 }: Readonly<AssetTableProps<TData, TValue>>) {
   const table = useReactTable({
     data,
@@ -67,6 +69,7 @@ export function AssetTable<TData, TValue>({
     pageCount,
   });
 
+  const [assignmentsIsLoading, setAssignmentsIsLoading] = useState(false);
   const [openDetails, setOpenDetails] = useState(false);
   const [assetDetails, setAssetDetails] = useState<AssetRes>();
   const {
@@ -82,25 +85,40 @@ export function AssetTable<TData, TValue>({
 
   assignmentsPagination.pageSize = 3;
 
+  const fetchAssignments = async () => {
+    if (assetDetails) {
+      setAssignmentsIsLoading(true);
+      const result = await getAssignmentByAssetService({
+        pagination: assignmentsPagination,
+        assetId: assetDetails.id || "",
+        orderBy,
+        isDescending,
+      });
+      if (result.success) {
+        setAssignments(result.data.data || []);
+        setAssignmentsPageCount(result.data.totalPages);
+        setAssignmentsTotalRecords(result.data.totalRecords);
+      } else {
+        toast.error(result.message);
+      }
+      setAssignmentsIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAssignments();
+  }, [assignmentsPagination, assetDetails]);
+
   const handleOpenDetails = async (assetCode: string) => {
+    setAssignmentsPageCount(0);
+    setAssignmentsTotalRecords(0);
+    assignmentsPagination.pageIndex = 1;
+    assignmentsPagination.pageSize = 10;
     setOpenDetails(true);
     setIsLoading(true);
     const result = await getAssetByAssetCodeService(assetCode);
     if (result.success) {
       setAssetDetails(result.data);
-      const result1 = await getAssignmentByAssetService({
-        pagination: assignmentsPagination,
-        assetId: result.data.id,
-        orderBy,
-        isDescending,
-      });
-      if (result1.success) {
-        setAssignments(result1.data.data || []);
-        setAssignmentsPageCount(result1.data.totalPages);
-        setAssignmentsTotalRecords(result1.data.totalRecords);
-      } else {
-        toast.error(result1.message);
-      }
     } else {
       toast.error(result.message);
     }
@@ -188,13 +206,20 @@ export function AssetTable<TData, TValue>({
         setPage={setPage}
         totalRecords={totalRecords}
         pageSize={pagination.pageSize}
+        setPageSize={(value) => {
+          onPaginationChange({
+            pageIndex: 1,
+            pageSize: parseInt(value),
+          });
+        }}
+        adjustablePageSize={adjustablePageSize}
       />
       <FullPageModal show={openDetails}>
         <Dialog open={openDetails} onOpenChange={setOpenDetails}>
           {isLoading ? (
             <LoadingSpinner />
           ) : (
-            <DialogContent className="max-w-lg border-none p-0" title={"white"}>
+            <DialogContent className="max-w-2xl border-none p-0" title={"white"}>
               <div className="overflow-hidden rounded-lg bg-white shadow-lg">
                 <h2 className="bg-red-600 p-6 text-xl font-semibold text-white">
                   Detailed Asset Information
@@ -203,7 +228,7 @@ export function AssetTable<TData, TValue>({
                   <table className="w-full">
                     <tbody>
                       <tr className="border-b border-gray-200 last:border-b-0">
-                        <td className="w-[160px] py-2 pr-4 font-medium text-gray-600">
+                        <td className="w-[200px] py-2 pr-4 font-medium text-gray-600">
                           Asset Code
                         </td>
                         <td className="py-2 text-gray-800">
@@ -211,24 +236,24 @@ export function AssetTable<TData, TValue>({
                         </td>
                       </tr>
                       <tr className="border-b border-gray-200 last:border-b-0">
-                        <td className="w-[160px] whitespace-normal break-all py-2 pr-4 font-medium text-gray-600">
+                        <td className="py-2 pr-4 font-medium text-gray-600">
                           Asset Name
                         </td>
-                        <td className="whitespace-normal break-all py-2 text-gray-800">
+                        <td className="overflow-hidden text-ellipsis py-2 text-gray-800">
                           {assetDetails?.assetName}
                         </td>
                       </tr>
                       <tr className="h-20 border-b border-gray-200 last:border-b-0">
-                        <td className="w-[160px] whitespace-normal break-all py-2 pr-4 font-medium text-gray-600">
+                        <td className="py-2 pr-4 font-medium text-gray-600">
                           Specification
                         </td>
-                        <td className="whitespace-normal break-all py-2 text-gray-800">
+                        <td className="overflow-hidden text-ellipsis py-2 text-gray-800">
                           {assetDetails?.specification}
                         </td>
                       </tr>
 
                       <tr className="border-b border-gray-200 last:border-b-0">
-                        <td className="w-[160px] py-2 pr-4 font-medium text-gray-600">
+                        <td className="py-2 pr-4 font-medium text-gray-600">
                           Installed Date
                         </td>
                         <td className="py-2 text-gray-800">
@@ -238,7 +263,7 @@ export function AssetTable<TData, TValue>({
                         </td>
                       </tr>
                       <tr className="border-b border-gray-200 last:border-b-0">
-                        <td className="w-[160px] py-2 pr-4 font-medium text-gray-600">
+                        <td className="py-2 pr-4 font-medium text-gray-600">
                           State
                         </td>
                         <td className="py-2 text-gray-800">
@@ -248,7 +273,7 @@ export function AssetTable<TData, TValue>({
                         </td>
                       </tr>
                       <tr className="border-b border-gray-200 last:border-b-0">
-                        <td className="w-[160px] py-2 pr-4 font-medium text-gray-600">
+                        <td className="py-2 pr-4 font-medium text-gray-600">
                           Asset Location
                         </td>
                         <td className="py-2 text-gray-800">
@@ -259,7 +284,7 @@ export function AssetTable<TData, TValue>({
                         </td>
                       </tr>
                       <tr className="border-b border-gray-200 last:border-b-0">
-                        <td className="w-[160px] py-2 pr-4 font-medium text-gray-600">
+                        <td className="py-2 pr-4 font-medium text-gray-600">
                           Category Name
                         </td>
                         <td className="py-2 text-gray-800">
@@ -268,21 +293,26 @@ export function AssetTable<TData, TValue>({
                       </tr>
                       <tr>
                         <td colSpan={2} className="pt-2">
-                          <AssignmentTable
-                            columns={assetAssignmentColumns({
-                              setOrderBy,
-                              setIsDescending,
-                              isDescending,
-                              orderBy,
-                            })}
-                            data={assignments!}
-                            pagination={assignmentsPagination}
-                            onPaginationChange={assignmentsOnPaginationChange}
-                            pageCount={assignmentsPageCount}
-                            totalRecords={assignmentsTotalRecords}
-                            withIndex={false}
-                            onRowClick={() => {}}
-                          />
+                          {assignmentsIsLoading ? (
+                            <LoadingSpinner />
+                          ) : (
+                            <AssignmentTable
+                              columns={assetAssignmentColumns({
+                                setOrderBy,
+                                setIsDescending,
+                                isDescending,
+                                orderBy,
+                              })}
+                              data={assignments!}
+                              pagination={assignmentsPagination}
+                              onPaginationChange={assignmentsOnPaginationChange}
+                              pageCount={assignmentsPageCount}
+                              totalRecords={assignmentsTotalRecords}
+                              withIndex={false}
+                              onRowClick={() => {}}
+                              adjustablePageSize={false}
+                            />
+                          )}
                         </td>
                       </tr>
                     </tbody>

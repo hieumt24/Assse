@@ -132,6 +132,12 @@ export function ReportTable<TData, TValue>({
         setPage={setPage}
         totalRecords={totalRecords}
         pageSize={pagination.pageSize}
+        setPageSize={(value) => {
+          onPaginationChange({
+            pageIndex: 1,
+            pageSize: parseInt(value),
+          });
+        }}
       />
     </div>
   );

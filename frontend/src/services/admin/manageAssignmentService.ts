@@ -1,10 +1,10 @@
 import axiosInstance from "@/api/axiosInstance";
 import {
   CreateAssignmentReq,
+  EditAssignmentReq,
   GetAssignmentByUserAssignedReq,
   GetAssignmentReq,
   UpdateAssignmentStateReq,
-  EditAssignmentReq,
 } from "@/models";
 export const getAllAssignmentService = (req: GetAssignmentReq) => {
   if (req.assignmentState === 0) {

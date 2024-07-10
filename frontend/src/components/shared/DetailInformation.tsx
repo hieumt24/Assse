@@ -86,10 +86,11 @@ export const DetailInformation = <T extends UserRes | AssetRes>({
                         index % 2 === 0 ? "bg-white" : "bg-gray-100",
                       )}
                     >
-                      <td className="w-[160px] py-3 pr-4 font-semibold text-gray-700">
+                      <td className="w-[30%] py-3 pr-4 font-semibold text-gray-700">
                         {formatKey(key)}
                       </td>
-                      <td className="break-all py-3 text-gray-800">
+                      <td className="max-w-[200px] py-2 text-gray-800 overflow-hidden text-ellipsis">
+
                         {formatValue(key, value)}
                       </td>
                     </tr>

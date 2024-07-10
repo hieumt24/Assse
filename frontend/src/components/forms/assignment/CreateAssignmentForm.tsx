@@ -164,7 +164,7 @@ export const CreateAssignmentForm = () => {
                   }}
                 >
                   <DialogTrigger className="flex min-h-10 w-full items-center justify-between rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors">
-                    <span className="w-full text-left text-zinc-500">
+                    <span className="w-full text-left text-zinc-500 break-all">
                       {form.getValues("userId") !== ""
                         ? `${selectedUser?.staffCode} - ${selectedUser?.firstName} ${selectedUser?.lastName}`
                         : "Choose user"}
@@ -211,6 +211,7 @@ export const CreateAssignmentForm = () => {
                             totalRecords={totalRecords}
                             onRowClick={setSelectedUser}
                             withIndex={false}
+                            adjustablePageSize={false}
                           />
                         )}
                       </div>
@@ -263,7 +264,7 @@ export const CreateAssignmentForm = () => {
                   }}
                 >
                   <DialogTrigger className="flex min-h-10 w-full items-center justify-between rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors">
-                    <span className="w-full text-left text-zinc-500">
+                    <span className="w-full text-left text-zinc-500 break-all">
                       {form.getValues("assetId") !== ""
                         ? `${selectedAsset?.assetCode} - ${selectedAsset?.assetName}`
                         : "Select asset"}
@@ -310,6 +311,7 @@ export const CreateAssignmentForm = () => {
                             totalRecords={assetsTotalRecords}
                             onRowClick={setSelectedAsset}
                             withIndex={false}
+                            adjustablePageSize={false}
                           />
                         )}
                       </div>

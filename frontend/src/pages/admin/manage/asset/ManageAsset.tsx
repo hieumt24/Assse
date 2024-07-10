@@ -179,7 +179,16 @@ export const ManageAsset = () => {
 
   return (
     <div className="m-16 flex flex-grow flex-col gap-8">
-      <p className="text-2xl font-bold text-red-600">Asset List</p>
+      <div className="flex justify-between">
+        <p className="text-2xl font-bold text-red-600">Asset List</p>
+        <Button
+          variant={"destructive"}
+          onClick={() => navigate("/assets/create")}
+        >
+          <span className="capitalize">Create new asset</span>
+        </Button>
+      </div>
+
       <div className="flex items-center justify-between">
         <div className="flex gap-2">
           <Collapsible
@@ -198,7 +207,7 @@ export const ManageAsset = () => {
                 <FaFilter className="h-4 w-4 opacity-50" />
               </Button>
             </CollapsibleTrigger>
-            <CollapsibleContent className="absolute z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover bg-white p-1 font-semibold text-popover-foreground shadow-md transition-all data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2">
+            <CollapsibleContent className="absolute z-50 max-h-96 w-[200px] overflow-hidden rounded-md border bg-popover bg-white p-1 font-semibold text-popover-foreground shadow-md transition-all data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2">
               <div className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm font-normal text-zinc-900 transition-all hover:bg-zinc-100">
                 <Checkbox
                   value="select-all"
@@ -228,7 +237,7 @@ export const ManageAsset = () => {
               ))}
             </CollapsibleContent>
           </Collapsible>
-          <div ref={selectRef} className="w-[150px]">
+          <div ref={selectRef} className="w-[120px]">
             <Select onValueChange={handleValueChange}>
               <SelectTrigger>
                 <SelectValue placeholder="Category" />
@@ -257,7 +266,6 @@ export const ManageAsset = () => {
             </Select>
           </div>
         </div>
-
         <div className="flex justify-between gap-6">
           <SearchForm
             setSearch={setSearch}
@@ -270,12 +278,6 @@ export const ManageAsset = () => {
             placeholder="Asset code, asset name"
             className="w-[300px]"
           />
-          <Button
-            variant={"destructive"}
-            onClick={() => navigate("/assets/create")}
-          >
-            <span className="capitalize">Create new asset</span>
-          </Button>
         </div>
       </div>
       {loading ? (

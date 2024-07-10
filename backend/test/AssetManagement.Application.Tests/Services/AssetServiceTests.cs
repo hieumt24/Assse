@@ -5,6 +5,7 @@ using AssetManagement.Application.Models.DTOs.Assets;
 using AssetManagement.Application.Models.DTOs.Assets.Requests;
 using AssetManagement.Application.Models.DTOs.Assets.Responses;
 using AssetManagement.Application.Services;
+using AssetManagement.Domain.Common.Specifications;
 using AssetManagement.Domain.Entites;
 using AssetManagement.Domain.Enums;
 using AutoMapper;
@@ -20,6 +21,7 @@ namespace AssetManagement.Application.Tests.Services
         private readonly Mock<IValidator<AddAssetRequestDto>> _addAssetValidatorMock;
         private readonly Mock<IValidator<EditAssetRequestDto>> _editAssetValidatorMock;
         private readonly Mock<IAssignmentRepositoriesAsync> _assignmentRepositoryMock;
+        private readonly Mock<ICategoryRepositoriesAsync> _categoryRepositoryMock;
         private readonly IMapper _mapper;
         private readonly AssetService _assetService;
 
@@ -30,6 +32,7 @@ namespace AssetManagement.Application.Tests.Services
             _addAssetValidatorMock = new Mock<IValidator<AddAssetRequestDto>>();
             _editAssetValidatorMock = new Mock<IValidator<EditAssetRequestDto>>();
             _assignmentRepositoryMock = new Mock<IAssignmentRepositoriesAsync>();
+            _categoryRepositoryMock = new Mock<ICategoryRepositoriesAsync>();
 
             var config = new MapperConfiguration(cfg =>
             {
@@ -47,7 +50,8 @@ namespace AssetManagement.Application.Tests.Services
                 _uriServiceMock.Object,
                 _addAssetValidatorMock.Object,
                 _editAssetValidatorMock.Object,
-                _assignmentRepositoryMock.Object
+                _assignmentRepositoryMock.Object,
+                _categoryRepositoryMock.Object
             );
         }
 
@@ -71,34 +75,6 @@ namespace AssetManagement.Application.Tests.Services
             Assert.Contains("Asset name is required", result.Errors);
         }
 
-        //[Fact]
-        //public async Task AddAssetAsync_ValidRequest_ReturnsSuccessResponse()
-        //{
-        //    // Arrange
-        //    var request = new AddAssetRequestDto
-        //    {
-        //        AdminId = Guid.NewGuid().ToString(),
-        //        AssetName = "Test Asset",
-        //        CategoryId = Guid.NewGuid(),
-        //        Specification = "Spec1 Spec2"
-        //    };
-
-        //    var asset = _mapper.Map<Asset>(request);
-        //    asset.Id = Guid.NewGuid();
-        //    asset.AssetCode = "ASSET123";
-
-        //    _addAssetValidatorMock.Setup(v => v.ValidateAsync(request, default)).ReturnsAsync(new FluentValidation.Results.ValidationResult());
-        //    _assetRepositoryMock.Setup(r => r.GenerateAssetCodeAsync(request.CategoryId)).ReturnsAsync("ASSET123");
-        //    _assetRepositoryMock.Setup(r => r.AddAsync(It.IsAny<Asset>())).ReturnsAsync(asset);
-
-        //    // Act
-        //    var result = await _assetService.AddAssetAsync(request);
-
-        //    // Assert
-        //    Assert.True(result.Succeeded);
-        //    Assert.Equal("Create New Asset Successfully.", result.Message);
-        //    _assetRepositoryMock.Verify(r => r.AddAsync(It.IsAny<Asset>()), Times.Once);
-        //}
 
         [Fact]
         public async Task DeleteAssetAsync_AssetInUse_ReturnsErrorResponse()
@@ -250,26 +226,214 @@ namespace AssetManagement.Application.Tests.Services
             _assetRepositoryMock.Verify(r => r.UpdateAsync(It.IsAny<Asset>()), Times.Once);
         }
 
+    //    [Fact]
+    //    public async Task GetAllAseets_Success_ReturnsPagedResponse()
+    //    {
+    //        // Arrange
+    //        var pagination = new PaginationFilter { PageIndex = 1, PageSize = 10 };
+    //        var assets = new List<Asset>
+    //{
+    //    new Asset { Id = Guid.NewGuid(), AssetName = "Asset1" },
+    //    new Asset { Id = Guid.NewGuid(), AssetName = "Asset2" }
+    //};
+
+    //        _assetRepositoryMock.Setup(r => r.GetAllMatchingAssetAsync(
+    //            It.IsAny<EnumLocation>(),
+    //            It.IsAny<string>(),
+    //            It.IsAny<Guid?>(),
+    //            It.IsAny<ICollection<AssetStateType?>>(),
+    //            It.IsAny<string>(),
+    //            It.IsAny<bool?>(),
+    //            It.IsAny<PaginationFilter>()
+    //        )).ReturnsAsync(new PagedResult<Asset> { Data = assets, TotalRecords = assets.Count });
+
+    //        // Act
+    //        var result = await _assetService.GetAllAseets(
+    //            pagination,
+    //            null,
+    //            null,
+    //            null,
+    //            EnumLocation.HaNoi,
+    //            null,
+    //            null,
+    //            "http://example.com"
+    //        );
+
+    //        // Assert
+    //        Assert.True(result.Succeeded);
+    //        Assert.Equal(2, result.TotalRecords);
+    //        Assert.Equal("Asset1", result.Data.First().AssetName);
+    //    }
+
+        [Fact]
+        public async Task AddAssetAsync_ValidRequest_ReturnsSuccessResponse()
+        {
+            // Arrange
+            var request = new AddAssetRequestDto
+            {
+                AdminId = Guid.NewGuid().ToString(),
+                AssetName = "Test Asset",
+                CategoryId = Guid.NewGuid(),
+                Specification = "Spec1 Spec2"
+            };
+
+            var asset = _mapper.Map<Asset>(request);
+            asset.Id = Guid.NewGuid();
+            asset.AssetCode = "ASSET123";
+
+            _addAssetValidatorMock.Setup(v => v.ValidateAsync(request, default))
+                .ReturnsAsync(new FluentValidation.Results.ValidationResult());
+            _assetRepositoryMock.Setup(r => r.GenerateAssetCodeAsync(request.CategoryId))
+                .ReturnsAsync("ASSET123");
+            _assetRepositoryMock.Setup(r => r.AddAsync(It.IsAny<Asset>()))
+                .ReturnsAsync(asset);
+
+            // Act
+            var result = await _assetService.AddAssetAsync(request);
+
+            // Assert
+            Assert.True(result.Succeeded);
+            Assert.Equal("Create New Asset Successfully.", result.Message);
+            _assetRepositoryMock.Verify(r => r.AddAsync(It.IsAny<Asset>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task GetAssetByAssetCode_AssetExists_ReturnsAssetDto()
+        {
+            // Arrange
+            var assetCode = "ASSET123";
+            var asset = new Asset { AssetCode = assetCode, AssetName = "Test Asset" };
+
+            _assetRepositoryMock.Setup(r => r.FirstOrDefaultAsync(It.IsAny<ISpecification<Asset>>()))
+                .ReturnsAsync(asset);
+
+            // Act
+            var result = await _assetService.GetAssetByAssetCode(assetCode);
+
+            // Assert
+            Assert.True(result.Succeeded);
+            Assert.Equal("Test Asset", result.Data.AssetName);
+        }
+
+        [Fact]
+        public async Task GetAssetByAssetCode_AssetNotFound_ReturnsErrorResponse()
+        {
+            // Arrange
+            var assetCode = "NONEXISTENT";
+
+            _assetRepositoryMock.Setup(r => r.FirstOrDefaultAsync(It.IsAny<ISpecification<Asset>>()))
+                .ReturnsAsync((Asset)null);
+
+            // Act
+            var result = await _assetService.GetAssetByAssetCode(assetCode);
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.Equal("Asset not found", result.Message);
+        }
+
         //[Fact]
-        //public async Task GetAllAseets_Success_ReturnsPagedResponse()
+        //public async Task IsValidDeleteAsset_AssetHasAssignments_ReturnsFalse()
         //{
         //    // Arrange
-        //    var pagination = new PaginationFilter { PageIndex = 1, PageSize = 10 };
-        //    var assets = new List<Asset>
-        //    {
-        //        new Asset { Id = Guid.NewGuid(), AssetName = "Asset1" },
-        //        new Asset { Id = Guid.NewGuid(), AssetName = "Asset2" }
-        //    }.AsQueryable();
+        //    var assetId = Guid.NewGuid();
+        //    var asset = new Asset { Id = assetId };
+        //    var assignments = new List<Assignment> { new Assignment() };
 
-        //    _assetRepositoryMock.Setup(r => r.FilterAsset(It.IsAny<EnumLocation>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<AssetStateType>(), It.IsAny<Guid?>())).Returns(assets);
+        //    _assetRepositoryMock.Setup(r => r.GetByIdAsync(assetId)).ReturnsAsync(asset);
+        //    _assignmentRepositoryMock.Setup(r => r.GetAssignmentsByAssetId(assetId)).ReturnsAsync(assignments);
 
         //    // Act
-        //    var result = await _assetService.GetAllAssets(pagination, EnumLocation.HaNoi, "", "", AssetStateType.Available, null);
+        //    var result = await _assetService.IsValidDeleteAsset(assetId);
+
+        //    // Assert
+        //    Assert.False(result.Succeeded);
+        //    Assert.Equal("There are valid assignments belonging to this user. Please close all assignments before disabling user.", result.Message);
+        //}
+
+        //[Fact]
+        //public async Task IsValidDeleteAsset_AssetHasNoAssignments_ReturnsTrue()
+        //{
+        //    // Arrange
+        //    var assetId = Guid.NewGuid();
+        //    var asset = new Asset { Id = assetId };
+        //    var assignments = new List<Assignment>();
+
+        //    _assetRepositoryMock.Setup(r => r.GetByIdAsync(assetId)).ReturnsAsync(asset);
+        //    _assignmentRepositoryMock.Setup(r => r.GetAssignmentsByAssetId(assetId)).ReturnsAsync(assignments);
+
+        //    // Act
+        //    var result = await _assetService.IsValidDeleteAsset(assetId);
 
         //    // Assert
         //    Assert.True(result.Succeeded);
-        //    Assert.Equal(2, result.Data.TotalRecords);
-        //    Assert.Equal("Asset1", result.Data.Data.First().AssetName);
         //}
+
+        [Fact]
+        public async Task IsValidDeleteAsset_AssetNotFound_ReturnsFalse()
+        {
+            // Arrange
+            var assetId = Guid.NewGuid();
+            _assetRepositoryMock.Setup(r => r.GetByIdAsync(assetId)).ReturnsAsync((Asset)null);
+
+            // Act
+            var result = await _assetService.IsValidDeleteAsset(assetId);
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.Equal("Asset not found", result.Message);
+        }
+
+        //[Fact]
+        //public async Task IsValidDeleteAsset_AssetHasAssignments_ReturnsFalse()
+        //{
+        //    // Arrange
+        //    var assetId = Guid.NewGuid();
+        //    var asset = new Asset { Id = assetId };
+        //    var assignments = new List<Assignment> { new Assignment() };
+
+        //    _assetRepositoryMock.Setup(r => r.GetByIdAsync(assetId)).ReturnsAsync(asset);
+        //    _assignmentRepositoryMock.Setup(r => r.GetAssignmentsByAssetId(assetId)).ReturnsAsync(assignments);
+
+        //    // Act
+        //    var result = await _assetService.IsValidDeleteAsset(assetId);
+
+        //    // Assert
+        //    Assert.False(result.Succeeded);
+        //    Assert.Equal("There are valid assignments belonging to this user. Please close all assignments before disabling user.", result.Message);
+        //}
+
+        //[Fact]
+        //public async Task IsValidDeleteAsset_AssetHasNoAssignments_ReturnsTrue()
+        //{
+        //    // Arrange
+        //    var assetId = Guid.NewGuid();
+        //    var asset = new Asset { Id = assetId };
+        //    var assignments = new List<Assignment>();
+
+        //    _assetRepositoryMock.Setup(r => r.GetByIdAsync(assetId)).ReturnsAsync(asset);
+        //    _assignmentRepositoryMock.Setup(r => r.GetAssignmentsByAssetId(assetId)).ReturnsAsync(assignments);
+
+        //    // Act
+        //    var result = await _assetService.IsValidDeleteAsset(assetId);
+
+        //    // Assert
+        //    Assert.True(result.Succeeded);
+        //}
+
+        [Fact]
+        public async Task IsValidDeleteAsset_ExceptionThrown_ReturnsFalse()
+        {
+            // Arrange
+            var assetId = Guid.NewGuid();
+            _assetRepositoryMock.Setup(r => r.GetByIdAsync(assetId)).ThrowsAsync(new Exception("Test exception"));
+
+            // Act
+            var result = await _assetService.IsValidDeleteAsset(assetId);
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.Contains("Test exception", result.Errors);
+        }
     }
 }

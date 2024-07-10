@@ -61,21 +61,14 @@ export function MyAssignmentTable<TData, TValue>({
 
   const handleOpenDetails = async (id: string) => {
     setOpenDetails(true);
-    try {
       setIsLoading(true);
       const result = await getAssignmentByIdService(id);
-      console.log(result.data);
       if (result.success) {
         setAssignmentDetails(result.data.data);
       } else {
-        toast.error(result.data.message);
+        toast.error(result.message);
       }
-    } catch (error) {
-      console.log(error);
-      toast.error("Error fetching asset details");
-    } finally {
       setIsLoading(false);
-    }
   };
 
   const { isLoading, setIsLoading } = useLoading();
@@ -153,6 +146,12 @@ export function MyAssignmentTable<TData, TValue>({
         setPage={setPage}
         totalRecords={totalRecords}
         pageSize={pagination.pageSize}
+        setPageSize={(value) => {
+          onPaginationChange({
+            pageIndex: 1,
+            pageSize: parseInt(value),
+          });
+        }}
       />
       <FullPageModal show={openDetails}>
         <Dialog open={openDetails} onOpenChange={setOpenDetails}>
