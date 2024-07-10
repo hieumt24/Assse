@@ -21,7 +21,7 @@ export const Login: React.FC = () => {
       </div>
       <Card className="mb-60 w-full max-w-xl shadow-lg">
         <CardContent className="p-6">
-          {isLoading ? <LoadingSpinner className="mx-auto" /> : <LoginForm />}
+          {isLoading ? <LoadingSpinner className="" /> : <LoginForm />}
         </CardContent>
       </Card>
     </div>
