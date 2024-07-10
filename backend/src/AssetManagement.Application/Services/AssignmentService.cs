@@ -70,6 +70,12 @@ namespace AssetManagement.Application.Services
                 return new Response<AssignmentDto> { Succeeded = false, Message = "Asset not found." };
             }
 
+            var existingAssignedIdTo = await _userRepository.GetByIdAsync(request.AssignedIdTo);
+            if (existingAssignedIdTo == null)
+            {
+                return new Response<AssignmentDto> { Succeeded = false, Message = "User assigned to not found" };
+            }
+
             var existingAssignedIdBy = await _userRepository.GetByIdAsync(request.AssignedIdBy);
             if (existingAssignedIdBy == null)
             {
@@ -369,7 +375,7 @@ namespace AssetManagement.Application.Services
             if (assetResponse == null)
             {
                 return new Response<AssignmentDto> { Succeeded = false, Message = "Cannot delete this assignment because can not found the asset of this assignment." };
-            } 
+            }
 
             assetResponse.State = AssetStateType.Available;
             await _assignmentRepositoriesAsync.DeleteAsync(assignmentId);

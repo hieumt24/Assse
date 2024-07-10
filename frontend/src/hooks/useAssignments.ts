@@ -22,9 +22,10 @@ export const useAssignments = (
   const [totalRecords, setTotalRecords] = useState<number>(0);
 
   // Function to fetch assignments
-  const fetchAssignments = useCallback(async () => {
+  const fetchAssignments = useCallback(async (isEdited?: string | null) => {
     setLoading(true);
     try {
+      isEdited && (pagination.pageSize -= 1)
       const data = await getAllAssignmentService({
         pagination,
         search,
@@ -39,6 +40,7 @@ export const useAssignments = (
       setAssignments(data.data.data || []);
       setPageCount(data.data.totalPages);
       setTotalRecords(data.data.totalRecords);
+      isEdited && (pagination.pageSize += 1)
       return data.data.data || [];
     } catch (error) {
       console.error("Error in fetchAssignments:", error);
@@ -63,16 +65,13 @@ export const useAssignments = (
       if (!dateTo && dateFrom) return;
       setLoading(true);
       try {
-        const isAdded = localStorage.getItem("added");
         const isEdited = localStorage.getItem("edited");
 
         // Always fetch the latest data
-        const currentAssignments = await fetchAssignments();
+        const currentAssignments = await fetchAssignments(isEdited);
 
-        if (isAdded || isEdited) {
-          const orderByField = isAdded
-            ? "createdOn"
-            : isEdited
+        if (isEdited) {
+          const orderByField = isEdited
               ? "lastModifiedOn"
               : orderBy;
           const newAssignmentData = await getAllAssignmentService({
@@ -97,7 +96,6 @@ export const useAssignments = (
             ]);
           }
 
-          localStorage.removeItem("added");
           localStorage.removeItem("edited");
         }
       } catch (error) {

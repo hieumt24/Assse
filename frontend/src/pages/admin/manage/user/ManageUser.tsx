@@ -39,6 +39,7 @@ export const ManageUser = () => {
       orderBy,
       isDescending,
     );
+  
   const [openDisable, setOpenDisable] = useState(false);
   const [openCannotDisable, setOpenCannotDisable] = useState(false);
 
@@ -125,7 +126,7 @@ export const ManageUser = () => {
               setOrderBy,
               setIsDescending,
               isDescending,
-              orderBy,
+              orderBy
             })}
             data={users!}
             onPaginationChange={onPaginationChange}

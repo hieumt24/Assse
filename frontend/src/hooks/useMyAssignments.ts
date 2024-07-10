@@ -23,7 +23,7 @@ export const useMyAssignments = (
 
   const fetchAssignments = async () => {
     if (userId === "") return;
-    if (!dateTo && dateFrom) return;
+    if (dateFrom && !dateTo) return;
     setLoading(true);
     try {
       const data = await getAssignmentByUserAssignedService({

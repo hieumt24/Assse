@@ -130,7 +130,6 @@ namespace AssetManagement.Infrastructure.Repositories
                             && !x.IsDeleted
                             && (x.ReturnRequestId == null || x.State == EnumAssignmentState.WaitingForReturning)
                             && x.State != EnumAssignmentState.Returned
-                            && x.AssignedDate <= DateTime.Now
                             && (string.IsNullOrEmpty(search) || x.Asset.AssetCode.ToLower().Contains(searchPhraseLower)
                                                             || x.Asset.AssetName.ToLower().Contains(searchPhraseLower)
                                                             || x.AssignedTo.Username.ToLower().Contains(searchPhraseLower))
@@ -183,7 +182,7 @@ namespace AssetManagement.Infrastructure.Repositories
             }
             else
             {
-                query = query.OrderBy(x => x.AssignedDate)
+                query = query.OrderByDescending(x => x.AssignedDate)
                     //.ThenBy(x => x.AssignedDate)
                     .ThenBy(x => x.State)
                     .ThenBy(x => x.Asset.AssetCode)
