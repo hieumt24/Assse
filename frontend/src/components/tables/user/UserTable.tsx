@@ -21,7 +21,7 @@ import { useLoading } from "@/context/LoadingContext";
 import { PaginationState, UserRes } from "@/models";
 import { getUserByIdService } from "@/services";
 import { Dispatch, SetStateAction, useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import Pagination from "../Pagination";
 
 interface UserTableProps<TData, TValue> {

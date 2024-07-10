@@ -1,4 +1,5 @@
 import { ASSET_STATES, ASSIGNMENT_STATES, LOCATIONS } from "@/constants";
+import { cn } from "@/lib/utils";
 import { AssetRes, UserRes } from "@/models";
 import { format } from "date-fns";
 import { DialogContent } from "../ui/dialog";
@@ -29,10 +30,11 @@ export const DetailInformation = <T extends UserRes | AssetRes>({
       state: formatState,
     };
 
-    return formatters[key] ? formatters[key](value) : String(value);
+    return formatters[key]?.(value) ?? String(value);
   };
 
-  const formatDate = (value: FormattableValue) => format(value!, "dd/MM/yyyy");
+  const formatDate = (value: FormattableValue) =>
+    value instanceof Date ? format(value, "dd MMM yyyy") : String(value);
 
   const formatGender = (value: FormattableValue) =>
     value === 2 ? "Male" : value === 1 ? "Female" : "Other";
@@ -41,19 +43,11 @@ export const DetailInformation = <T extends UserRes | AssetRes>({
     value === 1 ? "Admin" : value === 2 ? "Staff" : "Unknown";
 
   const formatLocation = (value: FormattableValue) =>
-    LOCATIONS[Number(value) - 1]?.label || "Unknown";
+    LOCATIONS[Number(value) - 1]?.label ?? "Unknown";
 
   const formatState = (value: FormattableValue): string => {
-    switch (variant) {
-      case "Assignment":
-        return (
-          ASSIGNMENT_STATES.find((state) => state.value === value)?.label || ""
-        );
-      case "Asset":
-        return ASSET_STATES.find((state) => state.value === value)?.label || "";
-      default:
-        return "";
-    }
+    const states = variant === "Assignment" ? ASSIGNMENT_STATES : ASSET_STATES;
+    return states.find((state) => state.value === value)?.label ?? "";
   };
 
   const excludedKeys = [
@@ -73,10 +67,10 @@ export const DetailInformation = <T extends UserRes | AssetRes>({
     key.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase());
 
   return (
-    <DialogContent className="max-w-md border-none p-0" title={"white"}>
+    <DialogContent className="max-w-md border-none p-0">
       <div className="overflow-hidden rounded-lg bg-white shadow-lg">
-        <h2 className="bg-red-600 p-6 text-xl font-semibold text-white">
-          Detailed {variant} Information
+        <h2 className="bg-gradient-to-r from-red-600 to-red-800 p-6 text-2xl font-bold text-white">
+          {variant} Details
         </h2>
         <div className="px-6 py-4">
           {info ? (
@@ -84,15 +78,19 @@ export const DetailInformation = <T extends UserRes | AssetRes>({
               <tbody>
                 {Object.entries(info)
                   .filter(([key]) => !excludedKeys.includes(key))
-                  .map(([key, value]) => (
+                  .map(([key, value], index) => (
                     <tr
                       key={key}
-                      className="border-b border-gray-200 last:border-b-0"
+                      className={cn(
+                        "transition-colors hover:bg-gray-50",
+                        index % 2 === 0 ? "bg-white" : "bg-gray-100",
+                      )}
                     >
-                      <td className="w-[30%] py-2 pr-4 font-medium text-gray-600">
+                      <td className="w-[30%] py-3 pr-4 font-semibold text-gray-700">
                         {formatKey(key)}
                       </td>
                       <td className="max-w-[200px] py-2 text-gray-800 overflow-hidden text-ellipsis">
+
                         {formatValue(key, value)}
                       </td>
                     </tr>
@@ -100,7 +98,9 @@ export const DetailInformation = <T extends UserRes | AssetRes>({
               </tbody>
             </table>
           ) : (
-            <div>No information available</div>
+            <div className="text-center text-gray-500">
+              No information available
+            </div>
           )}
         </div>
       </div>

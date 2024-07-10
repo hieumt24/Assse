@@ -22,15 +22,19 @@ import { GENDERS, ROLES } from "@/constants";
 import { useLoading } from "@/context/LoadingContext";
 import { useAuth } from "@/hooks";
 import { UserRes } from "@/models";
-import { getUserByIdService, resetPasswordService, updateUserService } from "@/services";
+import {
+  getUserByIdService,
+  resetPasswordService,
+  updateUserService,
+} from "@/services";
 import { updateUserSchema } from "@/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+
+import { toast } from "sonner";
 import { z } from "zod";
 
 export const EditUserForm = () => {
@@ -120,16 +124,16 @@ export const EditUserForm = () => {
         className="w-1/3 space-y-5 rounded-2xl bg-white p-6 shadow-md"
       >
         <div className="flex justify-between">
-        <h1 className="text-2xl font-bold text-red-600">Edit User</h1>
-        <div>
-          <GenericDialog
-            trigger="Reset password"
-            title="Reset password"
-            desc="Are you sure to reset password of this account?"
-            confirmText="Reset"
-            cancelText="Cancel"
-            onConfirm={handleReset}
-          />
+          <h1 className="text-2xl font-bold text-red-600">Edit User</h1>
+          <div>
+            <GenericDialog
+              trigger="Reset password"
+              title="Reset password"
+              desc="Are you sure to reset password of this account?"
+              confirmText="Reset"
+              cancelText="Cancel"
+              onConfirm={handleReset}
+            />
           </div>
         </div>
         <FormField
@@ -293,7 +297,11 @@ export const EditUserForm = () => {
             <FormItem>
               <FormLabel className="text-md">Types</FormLabel>
               <FormControl>
-                <Select {...field} onValueChange={field.onChange} disabled={form.getValues("role") === "1"}>
+                <Select
+                  {...field}
+                  onValueChange={field.onChange}
+                  disabled={form.getValues("role") === "1"}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Role" />
                   </SelectTrigger>
@@ -314,22 +322,22 @@ export const EditUserForm = () => {
           )}
         />
         <div className="flex justify-end gap-4">
-            <Button
-              type="submit"
-              className="w-[76px] bg-red-500 hover:bg-white hover:text-red-500"
-              disabled={!form.formState.isValid || isLoading}
-            >
-              {isLoading ? "Saving..." : "Save"}
-            </Button>
-            <Button
-              type="button"
-              className="w-[76px] border bg-white text-black shadow-none hover:text-white"
-              onClick={() => {
-                navigate("/users");
-              }}
-            >
-              Cancel
-            </Button>
+          <Button
+            type="submit"
+            className="w-[76px] bg-red-500 hover:bg-white hover:text-red-500"
+            disabled={!form.formState.isValid || isLoading}
+          >
+            {isLoading ? "Saving..." : "Save"}
+          </Button>
+          <Button
+            type="button"
+            className="w-[76px] border bg-white text-black shadow-none hover:text-white"
+            onClick={() => {
+              navigate("/users");
+            }}
+          >
+            Cancel
+          </Button>
         </div>
       </form>
     </Form>

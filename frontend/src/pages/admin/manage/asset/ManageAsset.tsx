@@ -30,7 +30,7 @@ import {
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FaFilter } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { AssetTable } from "../../../../components/tables/asset/AssetTable";
 
 export const ManageAsset = () => {

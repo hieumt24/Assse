@@ -27,14 +27,14 @@ import {
 } from "@/services/admin/manageAssetService";
 import { createAssetSchema } from "@/validations/assetSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CaretSortIcon } from "@radix-ui/react-icons";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+
+import { toast } from "sonner";
 import { z } from "zod";
 import { CreateCategoryForm } from "./CreateCategoryForm";
-import { CaretSortIcon } from "@radix-ui/react-icons";
 
 export const CreateAssetForm: React.FC = () => {
   const [categories, setCategories] = useState<Array<CategoryRes>>([]);

@@ -20,7 +20,7 @@ import { usePagination } from "@/hooks/usePagination";
 import { checkUserHasAssignmentService, disableUserService } from "@/services";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 export const ManageUser = () => {
   const { user } = useAuth();
@@ -75,7 +75,7 @@ export const ManageUser = () => {
     }
   };
 
-  const handleValueChange = (value: any) => {
+  const handleValueChange = (value: string) => {
     setRoleType(parseInt(value));
     pagination.pageIndex = 1;
   };

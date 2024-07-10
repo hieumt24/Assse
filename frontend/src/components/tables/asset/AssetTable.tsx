@@ -24,8 +24,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { format } from "date-fns";
+import { toast } from "sonner";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import Pagination from "../Pagination";
 import { AssignmentTable } from "../assignment/AssignmentTable";
 import { assetAssignmentColumns } from "../assignment/assetAssignmentColumns";

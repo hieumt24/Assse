@@ -1,25 +1,35 @@
+import { HiDocumentReport } from "react-icons/hi";
+import { LuComputer, LuHome, LuListChecks, LuUserCog } from "react-icons/lu";
+import { MdAssignmentReturn } from "react-icons/md";
+
 export const ADMIN_NAV_FUNCTIONS = [
   {
+    icon: <LuHome />,
     name: "Home",
     path: "/home",
   },
   {
+    icon: <LuUserCog />,
     name: "Manage User",
     path: "/users",
   },
   {
+    icon: <LuComputer />,
     name: "Manage Asset",
     path: "/assets",
   },
   {
+    icon: <LuListChecks />,
     name: "Manage Assignment",
     path: "/assignments",
   },
   {
+    icon: <MdAssignmentReturn />,
     name: "Request for Returning",
     path: "/returning-request",
   },
   {
+    icon: <HiDocumentReport />,
     name: "Report",
     path: "/reports",
   },
@@ -27,6 +37,7 @@ export const ADMIN_NAV_FUNCTIONS = [
 
 export const STAFF_NAV_FUNCTIONS = [
   {
+    icon: <LuHome />,
     name: "Home",
     path: "/home",
   },
@@ -140,12 +151,12 @@ export const ASSIGNMENT_STATES = [
   },
   {
     value: 4,
-    label: "Waiting for returning"
+    label: "Waiting for returning",
   },
   {
     value: 5,
-    label: "Returned"
-  }
+    label: "Returned",
+  },
 ];
 
 export const RETURNING_REQUEST_STATES = [

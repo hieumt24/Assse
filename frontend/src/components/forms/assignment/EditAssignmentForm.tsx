@@ -31,7 +31,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoIosSearch } from "react-icons/io";
 import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { z } from "zod";
 
 export const EditAssignmentForm = () => {

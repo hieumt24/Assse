@@ -1,89 +1,90 @@
-import { Button } from "@/components/ui/button";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 import { useAuth } from "@/hooks";
-import useClickOutside from "@/hooks/useClickOutside";
-import { useCallback, useRef, useState } from "react";
+import { useState } from "react";
+import { LuKeyRound, LuLogOut, LuUser } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { MyBreadcrumb } from "./MyBreadcrumb";
+import { toast } from "sonner";
+
 import { ChangePasswordForm } from "./forms/user/ChangePasswordForm";
+import { MyBreadcrumb } from "./MyBreadcrumb";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+
 import { GenericDialog } from "./shared";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 
 export const Header = () => {
+  const navigate = useNavigate();
   const { user, setIsAuthenticated } = useAuth();
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [openLogout, setOpenLogout] = useState(false);
   const [openChangePassword, setOpenChangePassword] = useState(false);
-  const collapsibleRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.setItem("logout", Date.now().toString()); // Trigger storage event
+    localStorage.setItem("logout", Date.now().toString());
     setIsAuthenticated(false);
     navigate("/auth/login");
     toast.success("You have been logged out");
   };
 
-  const handleClickOutside = useCallback(() => {
-    if (openChangePassword || openLogout) return;
-    setIsUserMenuOpen(false);
-  }, [openLogout, openChangePassword]);
-
-  useClickOutside(collapsibleRef, handleClickOutside);
-
   return (
-    <div className="flex w-full justify-between bg-red-600 p-6">
-      <MyBreadcrumb />
-      <Collapsible
-        open={isUserMenuOpen}
-        onOpenChange={setIsUserMenuOpen}
-        className="relative"
-        ref={collapsibleRef}
-      >
-        <CollapsibleTrigger asChild>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-xl text-white hover:bg-white hover:text-red-600"
-          >
-            <span className="mr-2">{user.username}</span>
-            <span className="text-xs">&#9660;</span>
-          </Button>
-        </CollapsibleTrigger>
-        <CollapsibleContent className="absolute right-0 mt-1 w-40 rounded-md bg-white font-semibold shadow-md">
-          <div
-            onClick={() => {
-              setOpenChangePassword(true);
-            }}
-            className="block rounded-t-md px-4 py-3 text-sm font-medium transition-all hover:cursor-pointer hover:bg-zinc-200"
-          >
-            Change password
-          </div>
-          <Separator />
-          <ChangePasswordForm
-            open={openChangePassword}
-            onOpenChange={setOpenChangePassword}
-          />
-          <GenericDialog
-            trigger="Log out"
-            title="Are you sure?"
-            desc="Do you want to logout?"
-            confirmText="Log out"
-            cancelText="Cancel"
-            onConfirm={handleLogout}
-            open={openLogout}
-            setOpen={setOpenLogout}
-            variant={"outline"}
-            classButton="border-none w-full justify-start"
-          />
-        </CollapsibleContent>
-      </Collapsible>
-    </div>
+    <header className="sticky top-0 z-10 w-full bg-red-600 p-4 shadow-md md:p-6">
+      <div className="mx-auto flex items-center justify-between">
+        <MyBreadcrumb />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              className="flex items-center space-x-2 px-1 py-5 text-white hover:bg-red-700 hover:text-white"
+            >
+              <Avatar className="h-8 w-8 md:h-10 md:w-10">
+                <AvatarImage src="/default_avatar.png" alt={user?.username} />
+                <AvatarFallback>
+                  {user?.username?.charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <span className="hidden text-sm font-medium md:inline-block">
+                {user?.username}
+              </span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-48 space-y-1">
+            <DropdownMenuItem className="md:hidden">
+              <LuUser className="mr-2 h-4 w-4" />
+              <span className="text-sm font-medium">{user?.username}</span>
+            </DropdownMenuItem>
+            <Separator className="md:hidden" />
+            <DropdownMenuItem onClick={() => setOpenChangePassword(true)}>
+              <LuKeyRound className="mr-2 h-4 w-4" />
+              <span>Change Password</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setOpenLogout(true)}>
+              <LuLogOut className="mr-2 h-4 w-4" />
+              <span>Logout</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <ChangePasswordForm
+          open={openChangePassword}
+          onOpenChange={setOpenChangePassword}
+        />
+
+        <GenericDialog
+          title="Are you sure?"
+          desc="Do you want to logout?"
+          confirmText="Log out"
+          cancelText="Cancel"
+          onConfirm={handleLogout}
+          open={openLogout}
+          setOpen={setOpenLogout}
+        />
+      </div>
+    </header>
   );
 };
