@@ -1,12 +1,15 @@
-import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
+import {
+  CaretSortIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from "@radix-ui/react-icons";
 import * as React from "react";
 import { DayPicker, useDayPicker, useNavigation } from "react-day-picker";
 
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { SelectTrigger } from "@radix-ui/react-select";
 import { format, setMonth } from "date-fns";
-import { Select, SelectContent, SelectItem } from "./select";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "./select";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
@@ -74,12 +77,19 @@ function Calendar({
               label: format(setMonth(new Date(), i), "MMM"),
             }));
             return (
-              <Select value={props.value?.toString()} onValueChange={(newValue) => {
-                const newDate = new Date(currentMonth);
-                newDate.setMonth(parseInt(newValue));
-                goToMonth(newDate);
-              }}>
-                <SelectTrigger>{format(currentMonth, "MMM")}</SelectTrigger>
+              <Select
+                value={props.value?.toString()}
+                onValueChange={(newValue) => {
+                  const newDate = new Date(currentMonth);
+                  newDate.setMonth(parseInt(newValue));
+                  goToMonth(newDate);
+                }}
+              >
+                <SelectTrigger
+                  icon={<CaretSortIcon className="ml-3 h-4 w-4 opacity-50" />}
+                >
+                  {format(currentMonth, "MMM")}
+                </SelectTrigger>
                 <SelectContent className="h-[200px]">
                   {selectItems.map((selectItem) => (
                     <SelectItem value={selectItem.value}>
@@ -110,9 +120,12 @@ function Calendar({
                   goToMonth(newDate);
                 }}
                 value={props.value?.toString()}
-                
               >
-                <SelectTrigger>{currentMonth.getFullYear()}</SelectTrigger>
+                <SelectTrigger
+                  icon={<CaretSortIcon className="ml-3 h-4 w-4 opacity-50" />}
+                >
+                  {currentMonth.getFullYear()}
+                </SelectTrigger>
                 <SelectContent className="h-[200px]">
                   {selectItems.map((selectItem) => (
                     <SelectItem value={selectItem.value}>
@@ -134,4 +147,3 @@ function Calendar({
 Calendar.displayName = "Calendar";
 
 export { Calendar };
-

@@ -53,7 +53,6 @@ export const ManageAsset = () => {
       assetStateType,
       selectedCategory,
     );
-  const [borderColor, setBorderColor] = useState("");
   const [isStateListOpen, setIsStateListOpen] = useState(false);
   const [categories, setCategories] = useState(Array<CategoryRes>);
   const [filteredCategories, setFilteredCategories] = useState(
@@ -157,7 +156,6 @@ export const ManageAsset = () => {
 
   const handleValueChange = (value: any) => {
     setSelectedCategory(value);
-    setBorderColor("double #FFC0CB 2px");
     pagination.pageIndex = 1;
   };
 
@@ -232,7 +230,7 @@ export const ManageAsset = () => {
           </Collapsible>
           <div ref={selectRef} className="w-[150px]">
             <Select onValueChange={handleValueChange}>
-              <SelectTrigger style={{ border: borderColor }}>
+              <SelectTrigger>
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent>
@@ -245,7 +243,7 @@ export const ManageAsset = () => {
                     setCategorySearch(e.target.value);
                   }}
                 />
-                <div className="max-h-[100px] overflow-y-scroll">
+                <div className="max-h-[155px] overflow-y-scroll">
                   <SelectItem key={0} value="all">
                     All categories
                   </SelectItem>

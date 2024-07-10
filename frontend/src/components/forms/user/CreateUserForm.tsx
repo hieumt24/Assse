@@ -23,6 +23,7 @@ import { removeExtraWhitespace } from "@/lib/utils";
 import { createUserService } from "@/services";
 import { createUserSchema } from "@/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CaretSortIcon } from "@radix-ui/react-icons";
 import { ChangeEvent } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -238,7 +239,9 @@ export const CreateUserForm = () => {
               <FormLabel className="text-md">Types</FormLabel>
               <FormControl>
                 <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger>
+                  <SelectTrigger
+                    icon={<CaretSortIcon className="ml-3 h-4 w-4 opacity-50" />}
+                  >
                     <SelectValue placeholder="Role" />
                   </SelectTrigger>
                   <SelectContent>
