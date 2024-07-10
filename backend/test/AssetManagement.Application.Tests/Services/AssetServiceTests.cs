@@ -21,6 +21,7 @@ namespace AssetManagement.Application.Tests.Services
         private readonly Mock<IValidator<AddAssetRequestDto>> _addAssetValidatorMock;
         private readonly Mock<IValidator<EditAssetRequestDto>> _editAssetValidatorMock;
         private readonly Mock<IAssignmentRepositoriesAsync> _assignmentRepositoryMock;
+        private readonly Mock<ICategoryRepositoriesAsync> _categoryRepositoryMock;
         private readonly IMapper _mapper;
         private readonly AssetService _assetService;
 
@@ -31,6 +32,7 @@ namespace AssetManagement.Application.Tests.Services
             _addAssetValidatorMock = new Mock<IValidator<AddAssetRequestDto>>();
             _editAssetValidatorMock = new Mock<IValidator<EditAssetRequestDto>>();
             _assignmentRepositoryMock = new Mock<IAssignmentRepositoriesAsync>();
+            _categoryRepositoryMock = new Mock<ICategoryRepositoriesAsync>();
 
             var config = new MapperConfiguration(cfg =>
             {
@@ -48,7 +50,9 @@ namespace AssetManagement.Application.Tests.Services
                 _uriServiceMock.Object,
                 _addAssetValidatorMock.Object,
                 _editAssetValidatorMock.Object,
-                _assignmentRepositoryMock.Object
+                _assignmentRepositoryMock.Object,
+                _categoryRepositoryMock.Object
+
             );
         }
 
@@ -71,7 +75,6 @@ namespace AssetManagement.Application.Tests.Services
             Assert.False(result.Succeeded);
             Assert.Contains("Asset name is required", result.Errors);
         }
-
 
         [Fact]
         public async Task DeleteAssetAsync_AssetInUse_ReturnsErrorResponse()
@@ -223,44 +226,44 @@ namespace AssetManagement.Application.Tests.Services
             _assetRepositoryMock.Verify(r => r.UpdateAsync(It.IsAny<Asset>()), Times.Once);
         }
 
-    //    [Fact]
-    //    public async Task GetAllAseets_Success_ReturnsPagedResponse()
-    //    {
-    //        // Arrange
-    //        var pagination = new PaginationFilter { PageIndex = 1, PageSize = 10 };
-    //        var assets = new List<Asset>
-    //{
-    //    new Asset { Id = Guid.NewGuid(), AssetName = "Asset1" },
-    //    new Asset { Id = Guid.NewGuid(), AssetName = "Asset2" }
-    //};
+        //    [Fact]
+        //    public async Task GetAllAseets_Success_ReturnsPagedResponse()
+        //    {
+        //        // Arrange
+        //        var pagination = new PaginationFilter { PageIndex = 1, PageSize = 10 };
+        //        var assets = new List<Asset>
+        //{
+        //    new Asset { Id = Guid.NewGuid(), AssetName = "Asset1" },
+        //    new Asset { Id = Guid.NewGuid(), AssetName = "Asset2" }
+        //};
 
-    //        _assetRepositoryMock.Setup(r => r.GetAllMatchingAssetAsync(
-    //            It.IsAny<EnumLocation>(),
-    //            It.IsAny<string>(),
-    //            It.IsAny<Guid?>(),
-    //            It.IsAny<ICollection<AssetStateType?>>(),
-    //            It.IsAny<string>(),
-    //            It.IsAny<bool?>(),
-    //            It.IsAny<PaginationFilter>()
-    //        )).ReturnsAsync(new PagedResult<Asset> { Data = assets, TotalRecords = assets.Count });
+        //        _assetRepositoryMock.Setup(r => r.GetAllMatchingAssetAsync(
+        //            It.IsAny<EnumLocation>(),
+        //            It.IsAny<string>(),
+        //            It.IsAny<Guid?>(),
+        //            It.IsAny<ICollection<AssetStateType?>>(),
+        //            It.IsAny<string>(),
+        //            It.IsAny<bool?>(),
+        //            It.IsAny<PaginationFilter>()
+        //        )).ReturnsAsync(new PagedResult<Asset> { Data = assets, TotalRecords = assets.Count });
 
-    //        // Act
-    //        var result = await _assetService.GetAllAseets(
-    //            pagination,
-    //            null,
-    //            null,
-    //            null,
-    //            EnumLocation.HaNoi,
-    //            null,
-    //            null,
-    //            "http://example.com"
-    //        );
+        //        // Act
+        //        var result = await _assetService.GetAllAseets(
+        //            pagination,
+        //            null,
+        //            null,
+        //            null,
+        //            EnumLocation.HaNoi,
+        //            null,
+        //            null,
+        //            "http://example.com"
+        //        );
 
-    //        // Assert
-    //        Assert.True(result.Succeeded);
-    //        Assert.Equal(2, result.TotalRecords);
-    //        Assert.Equal("Asset1", result.Data.First().AssetName);
-    //    }
+        //        // Assert
+        //        Assert.True(result.Succeeded);
+        //        Assert.Equal(2, result.TotalRecords);
+        //        Assert.Equal("Asset1", result.Data.First().AssetName);
+        //    }
 
         [Fact]
         public async Task AddAssetAsync_ValidRequest_ReturnsSuccessResponse()
