@@ -179,7 +179,16 @@ export const ManageAsset = () => {
 
   return (
     <div className="m-16 flex flex-grow flex-col gap-8">
-      <p className="text-2xl font-bold text-red-600">Asset List</p>
+      <div className="flex justify-between">
+        <p className="text-2xl font-bold text-red-600">Asset List</p>
+        <Button
+          variant={"destructive"}
+          onClick={() => navigate("/assets/create")}
+        >
+          <span className="capitalize">Create new asset</span>
+        </Button>
+      </div>
+
       <div className="flex items-center justify-between">
         <div className="flex gap-2">
           <Collapsible
@@ -257,7 +266,6 @@ export const ManageAsset = () => {
             </Select>
           </div>
         </div>
-
         <div className="flex justify-between gap-6">
           <SearchForm
             setSearch={setSearch}
@@ -270,12 +278,6 @@ export const ManageAsset = () => {
             placeholder="Asset code, asset name"
             className="w-[300px]"
           />
-          <Button
-            variant={"destructive"}
-            onClick={() => navigate("/assets/create")}
-          >
-            <span className="capitalize">Create new asset</span>
-          </Button>
         </div>
       </div>
       {loading ? (

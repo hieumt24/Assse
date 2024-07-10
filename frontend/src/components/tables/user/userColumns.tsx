@@ -40,6 +40,7 @@ export const userColumns = ({
     accessorKey: "username",
     header: ({ column }) =>
       renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),
+    cell: ({row}) => <p>{row.original.username}</p>
   },
   {
     accessorKey: "joinedDate",

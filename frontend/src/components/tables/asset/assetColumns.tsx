@@ -31,7 +31,7 @@ export const assetColumns = ({
       renderHeader(column, setOrderBy, setIsDescending, isDescending, orderBy),
     cell: ({ row }) => {
       const asset = row.original;
-      return <p>{`${asset.assetName}`}</p>;
+      return <p className="max-w-[200px] overflow-hidden text-ellipsis" >{`${asset.assetName}`}</p>;
     },
   },
   {

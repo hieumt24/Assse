@@ -137,7 +137,7 @@ export function UserTable<TData, TValue>({
                     <TableCell className="text-center">{index + 1}</TableCell>
                   )}
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="break-all">
+                    <TableCell key={cell.id} className="max-w-[200px]">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
