@@ -256,6 +256,7 @@ export const EditAssignmentForm = () => {
                             pageCount={pageCount}
                             totalRecords={totalRecords}
                             onRowClick={setSelectedUser}
+                            adjustablePageSize={false}
                           />
                         )}
                       </div>
@@ -354,6 +355,7 @@ export const EditAssignmentForm = () => {
                             pageCount={assetsPageCount}
                             totalRecords={assetsTotalRecords + 1}
                             onRowClick={setSelectedAsset}
+                            adjustablePageSize={false}
                           />
                         )}
                       </div>
