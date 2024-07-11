@@ -34,7 +34,7 @@ export const DetailInformation = <T extends UserRes | AssetRes>({
   };
 
   const formatDate = (value: FormattableValue) =>
-    value instanceof Date ? format(value, "dd MMM yyyy") : String(value);
+    (value instanceof Date) || (typeof value === "string") ? format(value, "dd/MM/yyyy") : String(value);
 
   const formatGender = (value: FormattableValue) =>
     value === 2 ? "Male" : value === 1 ? "Female" : "Other";
@@ -86,7 +86,7 @@ export const DetailInformation = <T extends UserRes | AssetRes>({
                         index % 2 === 0 ? "bg-white" : "bg-gray-100",
                       )}
                     >
-                      <td className="w-[30%] py-3 pr-4 font-semibold text-gray-700">
+                      <td className="w-[40%] py-3 pr-4 font-semibold text-gray-700">
                         {formatKey(key)}
                       </td>
                       <td className="max-w-[200px] py-2 text-gray-800 overflow-hidden text-ellipsis">
