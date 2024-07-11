@@ -132,7 +132,7 @@ namespace AssetManagement.Infrastructure.Repositories
                             && x.State != EnumAssignmentState.Returned
                             && (string.IsNullOrEmpty(search) || x.Asset.AssetCode.ToLower().Contains(searchPhraseLower)
                                                             || x.Asset.AssetName.ToLower().Contains(searchPhraseLower)
-                                                            || x.AssignedTo.Username.ToLower().Contains(searchPhraseLower))
+                                                            || x.AssignedBy.Username.ToLower().Contains(searchPhraseLower))
                         );
 
             query = query.Where(x => !assignmentState.HasValue || x.State == assignmentState);
