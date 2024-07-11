@@ -63,7 +63,7 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between space-x-2 py-4">
       {adjustablePageSize && (<div className="flex items-center gap-2">
         <div className="text-sm">Records per page</div>
         <Select onValueChange={setPageSize} value={pageSize.toString()}>
@@ -77,7 +77,7 @@ const Pagination: React.FC<PaginationProps> = ({
           </SelectContent>
         </Select>
       </div>)}
-      <div className="flex items-center justify-end space-x-2 py-4 flex-grow">
+      <div className="flex items-center justify-end space-x-2 flex-grow">
         {totalRecords !== 0 && (
           <div className="text-sm">
             Showing {(pageIndex - 1) * pageSize + 1} -{" "}

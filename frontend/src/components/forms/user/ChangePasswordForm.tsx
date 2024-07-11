@@ -39,7 +39,7 @@ export const ChangePasswordForm = (props: {
 
   const navigate = useNavigate();
   const onSubmit = async (values: z.infer<typeof changePasswordSchema>) => {
-    const result = await firstTimeService({ ...values });
+    const result = await firstTimeService({ ...values, username: user.username });
     if (result.success) {
       setIsAuthenticated(false);
       localStorage.removeItem("token");
