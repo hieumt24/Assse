@@ -165,7 +165,11 @@ export const EditAssetForm: React.FC = () => {
                 Specification <span className="text-red-600">*</span>
               </FormLabel>
               <FormControl>
-                <Textarea placeholder="Enter specification" {...field} />
+                <Textarea placeholder="Enter specification" {...field} onBlur={(e) => {
+                    const cleanedValue = removeExtraWhitespace(e.target.value);
+                    field.onChange(cleanedValue);
+                    field.onBlur();
+                  }}/>
               </FormControl>
               <FormMessage>
                 {form.formState.errors.specification?.message}
