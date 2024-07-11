@@ -34,7 +34,7 @@ export const DetailInformation = <T extends UserRes | AssetRes>({
   };
 
   const formatDate = (value: FormattableValue) =>
-    value instanceof Date ? format(value, "dd MMM yyyy") : String(value);
+    (value instanceof Date) || (typeof value === "string") ? format(value, "dd/MM/yyyy") : String(value);
 
   const formatGender = (value: FormattableValue) =>
     value === 2 ? "Male" : value === 1 ? "Female" : "Other";
@@ -67,7 +67,7 @@ export const DetailInformation = <T extends UserRes | AssetRes>({
     key.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase());
 
   return (
-    <DialogContent className="max-w-md border-none p-0">
+    <DialogContent className="max-w-lg border-none p-0">
       <div className="overflow-hidden rounded-lg bg-white shadow-lg">
         <h2 className="bg-gradient-to-r from-red-600 to-red-800 p-6 text-2xl font-bold text-white">
           {variant} Details
@@ -86,10 +86,10 @@ export const DetailInformation = <T extends UserRes | AssetRes>({
                         index % 2 === 0 ? "bg-white" : "bg-gray-100",
                       )}
                     >
-                      <td className="w-[30%] py-3 pr-4 font-semibold text-gray-700">
+                      <td className="w-[40%] py-3 pr-4 font-semibold text-gray-700">
                         {formatKey(key)}
                       </td>
-                      <td className="max-w-[200px] py-2 text-gray-800 overflow-hidden text-ellipsis">
+                      <td className="py-2 text-gray-800 overflow-auto whitespace-pre-wrap max-h-[120px] block">
 
                         {formatValue(key, value)}
                       </td>

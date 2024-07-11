@@ -34,7 +34,7 @@ const NavLink: React.FC<NavLinkProps> = ({
         : "text-black hover:bg-red-600 hover:text-white"
     }`}
   >
-    {collapsed && <span className="text-lg">{item.icon}</span>}
+    {collapsed && <span className="text-lg" title={item.name}>{item.icon}</span>}
     {!collapsed && (
       <span className={`${isDesktop ? "text-lg font-medium" : "text-sm"}`}>
         {item.name}
@@ -95,7 +95,7 @@ export const Sidebar: React.FC = () => {
       </div>
 
       <ScrollArea className="mx-2 bg-zinc-100">
-        <nav className="mt-4 px-2">
+        <nav className="my-4 px-2">
           {navItems.map((item) => (
             <NavLink
               key={item.path}

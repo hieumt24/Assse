@@ -155,7 +155,7 @@ export const MyAssignment = () => {
                 pageIndex: 1,
               }));
             }}
-            placeholder="Asset code, asset name, assigned by"
+            placeholder="Asset code, asset name, assigner"
             className="w-[350px]"
           />
         </div>

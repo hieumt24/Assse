@@ -13,7 +13,7 @@ import { searchSchema } from "@/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { MdSearch } from "react-icons/md";
+import { MdClose, MdSearch } from "react-icons/md";
 
 import { z } from "zod";
 
@@ -25,7 +25,6 @@ interface SearchFormProps {
 }
 
 export const SearchForm = (props: SearchFormProps) => {
-  // Define form
   const form = useForm<z.infer<typeof searchSchema>>({
     mode: "all",
     resolver: zodResolver(searchSchema),
@@ -53,28 +52,35 @@ export const SearchForm = (props: SearchFormProps) => {
     500,
   );
 
-  // Function handle onSubmit
   const onSubmit = async (values: z.infer<typeof searchSchema>) => {
     props.setSearch(values.searchTerm);
     if (props.onSubmit) {
       props.onSubmit();
     }
   };
+
+  const clearSearch = () => {
+    form.reset({ searchTerm: "" });
+    props.setSearch("");
+    if (props.onSubmit) {
+      props.onSubmit();
+    }
+  };
+
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className={`flex justify-between rounded-lg border border-zinc-200 text-lg ${props.className}`}
       >
-        {/* Search term */}
         <FormField
           control={form.control}
           name="searchTerm"
           render={({ field }) => (
-            <FormItem className="w-full">
+            <FormItem className="relative w-full">
               <FormControl>
                 <Input
-                  className="border-none focus-visible:ring-0 w-full"
+                  className="w-full border-none pr-16 focus-visible:ring-0"
                   placeholder={props.placeholder || "Search"}
                   {...field}
                   onBlur={(e) => {
@@ -84,14 +90,24 @@ export const SearchForm = (props: SearchFormProps) => {
                   }}
                 />
               </FormControl>
+              {field.value && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={clearSearch}
+                  className="absolute -top-[22%] right-0 rounded-none px-3 py-1"
+                >
+                  <MdClose />
+                </Button>
+              )}
               <FormMessage />
             </FormItem>
           )}
         />
         <Button
           type="submit"
-          variant={"outline"}
-          className="border-none p-2 hover:bg-transparent"
+          variant="outline"
+          className="rounded-s-none border-none p-2"
         >
           <MdSearch />
         </Button>
