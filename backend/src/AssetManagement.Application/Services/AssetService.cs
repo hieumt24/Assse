@@ -58,7 +58,7 @@ namespace AssetManagement.Application.Services
                 newAsset.LastModifiedOn = DateTime.Now;
 
                 newAsset.Specification = string.Join(" ", request.Specification.Split(' ', StringSplitOptions.RemoveEmptyEntries));
-                var existingCategory = _categoryRepositoriesAsync.GetByIdAsync(newAsset.CategoryId);
+                var existingCategory = await _categoryRepositoriesAsync.GetByIdAsync(newAsset.CategoryId);
                 if (existingCategory == null)
                 {
                     return new Response<AssetDto> { Succeeded = false, Message = "Category not found. Create New Asset Failed" };
