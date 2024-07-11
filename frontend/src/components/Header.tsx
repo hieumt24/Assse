@@ -23,6 +23,7 @@ export const Header = () => {
   const { user, setIsAuthenticated } = useAuth();
   const [openLogout, setOpenLogout] = useState(false);
   const [openChangePassword, setOpenChangePassword] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -32,11 +33,21 @@ export const Header = () => {
     toast.success("You have been logged out");
   };
 
+  const handleChangePassword = () => {
+    setOpenChangePassword(true);
+    setDropdownOpen(false);
+  };
+
+  const handleLogoutClick = () => {
+    setOpenLogout(true);
+    setDropdownOpen(false);
+  };
+
   return (
     <header className="sticky top-0 z-10 w-full bg-red-600 p-4 shadow-md md:p-6">
       <div className="mx-auto flex items-center justify-between">
         <MyBreadcrumb />
-        <DropdownMenu>
+        <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
@@ -59,11 +70,11 @@ export const Header = () => {
               <span className="text-sm font-medium">{user?.username}</span>
             </DropdownMenuItem>
             <Separator className="md:hidden" />
-            <DropdownMenuItem onClick={() => setOpenChangePassword(true)}>
+            <DropdownMenuItem onClick={handleChangePassword}>
               <LuKeyRound className="mr-2 h-4 w-4" />
               <span>Change Password</span>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setOpenLogout(true)}>
+            <DropdownMenuItem onClick={handleLogoutClick}>
               <LuLogOut className="mr-2 h-4 w-4" />
               <span>Logout</span>
             </DropdownMenuItem>
