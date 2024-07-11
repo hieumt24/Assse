@@ -35,6 +35,8 @@ namespace AssetManagement.Application.Services
             }
 
             var user = await _userRepositoriesAsync.FindByUsernameAsync(request.Username);
+            if (user == null) return new Response<string> { Succeeded = false, Message = "User doesn't exist." };
+           
             if (user.IsFirstTimeLogin)
             {
                 user.IsFirstTimeLogin = false;

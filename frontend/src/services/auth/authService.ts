@@ -32,6 +32,7 @@ export const firstTimeService = (req: FirstTimeLoginReq) => {
       };
     })
     .catch((err) => {
+      console.log(err.response);
       return {
         success: false,
         message: err.response.data.message,
