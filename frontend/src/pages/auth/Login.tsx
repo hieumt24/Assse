@@ -1,12 +1,9 @@
 import { LoginForm } from "@/components";
-import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { useLoading } from "@/context/LoadingContext";
 import { useAuth } from "@/hooks";
 import { Navigate } from "react-router-dom";
 
 export const Login: React.FC = () => {
   const { isAuthenticated } = useAuth();
-  const { isLoading } = useLoading();
 
   if (isAuthenticated) return <Navigate to="/" />;
 
@@ -19,7 +16,7 @@ export const Login: React.FC = () => {
         </p>
       </div>
       <div className="mb-24 flex w-full justify-center border md:mb-48">
-        {isLoading ? <LoadingSpinner /> : <LoginForm />}
+        <LoginForm />
       </div>
     </div>
   );
