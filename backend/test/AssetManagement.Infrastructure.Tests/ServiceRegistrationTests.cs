@@ -24,7 +24,11 @@ namespace AssetManagement.Infrastructure.Tests
             var serviceCollection = new ServiceCollection();
             var configurationMock = new Mock<IConfiguration>();
             var connectionString = "Server=.\\SQLEXPRESS;Database=Test;TrustServerCertificate=True; Integrated Security=True;";
-            configurationMock.Setup(c => c.GetConnectionString("DefaultConnection")).Returns(connectionString);
+
+            // Set up the configuration mock to return the connection string
+            var configurationSectionMock = new Mock<IConfigurationSection>();
+            configurationSectionMock.Setup(c => c["DefaultConnection"]).Returns(connectionString);
+            configurationMock.Setup(c => c.GetSection("ConnectionStrings")).Returns(configurationSectionMock.Object);
 
             // Act
             ServiceRegistration.Configure(serviceCollection, configurationMock.Object);
@@ -47,6 +51,7 @@ namespace AssetManagement.Infrastructure.Tests
 
             Assert.Equal(connectionString, actualConnectionString);
         }
+
 
         [Fact]
         public void ConfigureServices_ConfiguresJWTAuthentication()
