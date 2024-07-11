@@ -150,7 +150,7 @@ export const ManageAssignment = () => {
                 pageIndex: 1,
               }));
             }}
-            placeholder="Asset code, asset name, assignee"
+            placeholder="Asset code, asset name, assignee, assigner"
             className="w-[352px]"
           />
         </div>
