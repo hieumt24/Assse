@@ -191,12 +191,12 @@ namespace AssetManagement.Application.Services
                 return new Response<ReturnRequestDto>
                 {
                     Succeeded = false,
-                    Message = "Return request not found."
+                    Message = "The return request is already cancelled."
                 };
             }
             if (returnRequest.ReturnState == EnumReturnRequestState.Completed)
             {
-                return new Response<ReturnRequestDto> { Succeeded = false, Message = "Return request state cannot be changed." };
+                return new Response<ReturnRequestDto> { Succeeded = false, Message = "This return request is already accepted." };
             }
             returnRequest.ReturnState = request.NewState;
 
