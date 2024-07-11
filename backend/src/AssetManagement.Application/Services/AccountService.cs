@@ -89,21 +89,6 @@ namespace AssetManagement.Application.Services
                 Role = role.ToString(),
                 Token = token
             };
-            if (user.IsFirstTimeLogin)
-            {
-                return new Response<AuthenticationResponse>
-                {
-                    Succeeded = true,
-                    Message = "You need to change your password before login",
-                    Data = new AuthenticationResponse
-                    {
-                        Username = user.Username,
-                        Role = user.Role.ToString(),
-                        IsFirstTimeLogin = user.IsFirstTimeLogin,
-                        Token = token
-                    }
-                };
-            }
             var exsitingToken = await _tokenRepositoriesAsync.FindByUserIdAsync(user.Id);
             if (exsitingToken != null)
             {
@@ -118,6 +103,22 @@ namespace AssetManagement.Application.Services
                     UserId = user.Id,
                     Value = token
                 });
+            }
+            
+            if (user.IsFirstTimeLogin)
+            {
+                return new Response<AuthenticationResponse>
+                {
+                    Succeeded = true,
+                    Message = "You need to change your password before login",
+                    Data = new AuthenticationResponse
+                    {
+                        Username = user.Username,
+                        Role = user.Role.ToString(),
+                        IsFirstTimeLogin = user.IsFirstTimeLogin,
+                        Token = token
+                    }
+                };
             }
             return new Response<AuthenticationResponse>
             {
