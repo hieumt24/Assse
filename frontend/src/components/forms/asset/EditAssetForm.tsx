@@ -165,7 +165,7 @@ export const EditAssetForm: React.FC = () => {
                 Specification <span className="text-red-600">*</span>
               </FormLabel>
               <FormControl>
-                <Textarea placeholder="Enter specification" onBlur={(e) => {
+                <Textarea placeholder="Enter specification" {...field} onBlur={(e) => {
                     field.onChange(e.target.value.trim());
                     field.onBlur();
                   }}/>
