@@ -28,7 +28,7 @@ import {
 import { createAssetSchema } from "@/validations/assetSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CaretSortIcon } from "@radix-ui/react-icons";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
@@ -59,7 +59,8 @@ export const CreateAssetForm: React.FC = () => {
     );
   }, [categorySearch]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    console.log(inputRef?.current)
     inputRef?.current?.focus();
   }, [filteredCategories]);
 

@@ -24,8 +24,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { toast } from "sonner";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { toast } from "sonner";
 import Pagination from "../Pagination";
 import { AssignmentTable } from "../assignment/AssignmentTable";
 import { assetAssignmentColumns } from "../assignment/assetAssignmentColumns";
@@ -239,7 +239,7 @@ export function AssetTable<TData, TValue>({
                         <td className="py-2 pr-4 font-medium text-gray-600">
                           Asset Name
                         </td>
-                        <td className="overflow-hidden text-ellipsis py-2 text-gray-800">
+                        <td className="break-all py-2 text-gray-800">
                           {assetDetails?.assetName}
                         </td>
                       </tr>

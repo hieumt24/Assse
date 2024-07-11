@@ -59,9 +59,9 @@ namespace AssetManagement.Application.Services
 
                 newAsset.Specification = string.Join(" ", request.Specification.Split(' ', StringSplitOptions.RemoveEmptyEntries));
                 var existingCategory = _categoryRepositoriesAsync.GetByIdAsync(newAsset.CategoryId);
-                if(existingCategory == null)
+                if (existingCategory == null)
                 {
-                    return new Response<AssetDto> { Succeeded = false, Message = "Category not found" };
+                    return new Response<AssetDto> { Succeeded = false, Message = "Category not found. Create New Asset Failed" };
                 }
                 var asset = await _assetRepository.AddAsync(newAsset);
 
@@ -82,7 +82,7 @@ namespace AssetManagement.Application.Services
                 var exsitingAsset = await _assetRepository.GetByIdAsync(assetId);
                 if (exsitingAsset == null)
                 {
-                    return new Response<AssetDto> { Succeeded = false, Message = "Asset not found." };
+                    return new Response<AssetDto> { Succeeded = false, Message = "Asset not found. Delete asset failed" };
                 }
                 if (exsitingAsset.State == AssetStateType.Assigned)
                 {
@@ -176,7 +176,7 @@ namespace AssetManagement.Application.Services
                 var exsitingAsset = await _assetRepository.GetByIdAsync(assetId);
                 if (exsitingAsset == null)
                 {
-                    return new Response<AssetDto> { Succeeded = false, Message = "Asset not found" };
+                    return new Response<AssetDto> { Succeeded = false, Message = "Asset not found. Asset can't be edited" };
                 }
 
                 //Check validation
