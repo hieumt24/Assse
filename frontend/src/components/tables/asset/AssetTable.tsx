@@ -243,11 +243,11 @@ export function AssetTable<TData, TValue>({
                           {assetDetails?.assetName}
                         </td>
                       </tr>
-                      <tr className="h-20 border-b border-gray-200 last:border-b-0">
+                      <tr className="h-20 border-b border-gray-200 last:border-b-0 ">
                         <td className="py-2 pr-4 font-medium text-gray-600">
                           Specification
                         </td>
-                        <td className="overflow-hidden text-ellipsis py-2 text-gray-800">
+                        <td className="text-ellipsis py-2 text-gray-800 whitespace-pre-wrap max-h-[120px] overflow-auto block">
                           {assetDetails?.specification}
                         </td>
                       </tr>
