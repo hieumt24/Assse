@@ -230,8 +230,7 @@ export const CreateAssetForm: React.FC = () => {
                   placeholder="Enter specification"
                   {...field}
                   onBlur={(e) => {
-                    const cleanedValue = removeExtraWhitespace(e.target.value);
-                    field.onChange(cleanedValue);
+                    field.onChange(e.target.value.trim());
                     field.onBlur();
                   }}
                 />
