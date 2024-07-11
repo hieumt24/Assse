@@ -194,6 +194,7 @@ export const checkAssetHasAssignmentService = (id: string) => {
       success: res.data.succeeded,
       message: res.data.message,
       data: res.data.data,
+      status: 200
     };
   })
   .catch((err) => {
@@ -201,6 +202,7 @@ export const checkAssetHasAssignmentService = (id: string) => {
       success: false,
       message: err.response.data.message || "Failed to check if asset has assignment.",
       data: err,
+      status: 404,
     };
   });
 }
