@@ -24,14 +24,14 @@ namespace AssetManagement.Infrastructure.Repositories
             var queryByAdmin = query.AsNoTracking().Where(x => x.Location == adminLocation && !x.IsDeleted);
             if (!string.IsNullOrEmpty(search))
             {
-                queryByAdmin = query.Where(x => x.Assignment.Asset.AssetCode.ToLower().Contains(search.ToLower())
+                queryByAdmin = queryByAdmin.Where(x => x.Assignment.Asset.AssetCode.ToLower().Contains(search.ToLower())
                 || x.Assignment.Asset.AssetName.ToLower().Contains(search.ToLower())
                 || x.RequestedUser.Username.ToLower().Contains(search.ToLower())
                 );
             }
             if (returnState.HasValue)
             {
-                queryByAdmin = query.Where(x => x.ReturnState == returnState);
+                queryByAdmin = queryByAdmin.Where(x => x.ReturnState == returnState);
             }
             if (returnedDateFrom.HasValue && returnedDateTo.HasValue)
             {
