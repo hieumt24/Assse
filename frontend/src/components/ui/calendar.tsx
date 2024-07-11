@@ -86,7 +86,7 @@ function Calendar({
                 }}
               >
                 <SelectTrigger
-                  icon={<CaretSortIcon className="ml-3 h-4 w-4 opacity-50" />}
+                  icon={<CaretSortIcon className="h-4 w-4 opacity-50" />}
                 >
                   {format(currentMonth, "MMM")}
                 </SelectTrigger>
@@ -122,7 +122,7 @@ function Calendar({
                 value={props.value?.toString()}
               >
                 <SelectTrigger
-                  icon={<CaretSortIcon className="ml-3 h-4 w-4 opacity-50" />}
+                  icon={<CaretSortIcon className="h-4 w-4 opacity-50" />}
                 >
                   {currentMonth.getFullYear()}
                 </SelectTrigger>
