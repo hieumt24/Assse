@@ -78,7 +78,7 @@ namespace AssetManagement.Infrastructure.Repositories
                             && !x.IsDeleted
                             && (string.IsNullOrEmpty(search) || x.Asset.AssetCode.ToLower().Contains(search.ToLower())
                                                             || x.Asset.AssetName.ToLower().Contains(search.ToLower())
-                                                            || x.AssignedTo.Username.ToLower().Contains(search.ToLower()))
+                                                            || x.AssignedBy.Username.ToLower().Contains(search.ToLower()))
                         );
             query = query.Where(x => !assignmentState.HasValue || x.State == assignmentState);
             query = query.Where(x => !(dateFrom.HasValue && dateTo.HasValue) || (x.AssignedDate.Date >= dateFrom && x.AssignedDate.Date <= dateTo));
@@ -132,7 +132,9 @@ namespace AssetManagement.Infrastructure.Repositories
                             && x.State != EnumAssignmentState.Returned
                             && (string.IsNullOrEmpty(search) || x.Asset.AssetCode.ToLower().Contains(searchPhraseLower)
                                                             || x.Asset.AssetName.ToLower().Contains(searchPhraseLower)
-                                                            || x.AssignedBy.Username.ToLower().Contains(searchPhraseLower))
+                                                            || x.AssignedBy.Username.ToLower().Contains(searchPhraseLower)
+                                                            || x.AssignedTo.Username.ToLower().Contains(searchPhraseLower))
+
                         );
 
             query = query.Where(x => !assignmentState.HasValue || x.State == assignmentState);
