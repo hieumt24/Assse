@@ -26,7 +26,7 @@ const Pagination: React.FC<PaginationProps> = ({
   pageCount,
   pageSize,
   setPage,
-  totalRecords,
+  totalRecords = 0,
   adjustablePageSize = true,
   setPageSize,
 }) => {
@@ -86,7 +86,7 @@ const Pagination: React.FC<PaginationProps> = ({
           </div>
         )}
         {pageCount > 1 && (
-          <div className="flex space-x-2">
+          <div className="flex space-x-2 items-center">
             <Button
               variant="destructive"
               size="sm"
@@ -101,9 +101,9 @@ const Pagination: React.FC<PaginationProps> = ({
                 key={idx}
                 className={`rounded-md border px-3 py-1 transition-all ${
                   page === pageIndex
-                    ? "bg-red-500 text-white"
+                    ? "bg-red-600 text-white"
                     : "border-gray-300"
-                } ${typeof page === "number" ? "hover:bg-red-400" : "cursor-default"}`}
+                } ${typeof page === "number" ? "hover:bg-red-300" : "cursor-default"}`}
                 onClick={() => {
                   typeof page === "number" && setPage(page);
                 }}

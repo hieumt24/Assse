@@ -60,6 +60,7 @@ export const CreateAssetForm: React.FC = () => {
   }, [categorySearch]);
 
   useEffect(() => {
+    console.log(inputRef?.current)
     inputRef?.current?.focus();
   }, [filteredCategories]);
 
