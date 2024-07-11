@@ -70,6 +70,10 @@ namespace AssetManagement.Application.Services
                 return new Response<AssignmentDto> { Succeeded = false, Message = "Asset not found. Creating new asset failed." };
             }
 
+            if (existingAsset.State != AssetStateType.Available)
+            {
+                return new Response<AssignmentDto> { Succeeded = false, Message = "Asset is not available to assign." };
+            }
             var existingAssignedIdTo = await _userRepository.GetByIdAsync(request.AssignedIdTo);
             if (existingAssignedIdTo == null)
             {
