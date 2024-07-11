@@ -13,11 +13,11 @@
             Succeeded = true;
         }
 
-        public Response(T data, string message = null)
+        public Response(T data, string message = null, List<string> errors = null)
         {
             Succeeded = true;
             Message = message;
-            Errors = null;
+            Errors = errors;
             Data = data;
         }
 

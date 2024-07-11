@@ -28,7 +28,7 @@ import {
 import { createAssetSchema } from "@/validations/assetSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CaretSortIcon } from "@radix-ui/react-icons";
-import { ChangeEvent, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
@@ -44,7 +44,6 @@ export const CreateAssetForm: React.FC = () => {
   const [openCreateCategory, setOpenCreateCategory] = useState(false);
   const [categorySearch, setCategorySearch] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
-  const selectRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
   const { isLoading, setIsLoading } = useLoading();
   const navigate = useNavigate();
@@ -59,9 +58,10 @@ export const CreateAssetForm: React.FC = () => {
     );
   }, [categorySearch]);
 
-  useLayoutEffect(() => {
-    console.log(inputRef?.current)
-    inputRef?.current?.focus();
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
   }, [filteredCategories]);
 
   const fetchCategories = async () => {
@@ -76,22 +76,6 @@ export const CreateAssetForm: React.FC = () => {
 
   useEffect(() => {
     fetchCategories();
-  }, []);
-
-  const handleClickOutside = (event: MouseEvent) => {
-    if (
-      selectRef.current &&
-      !selectRef.current.contains(event.target as Node)
-    ) {
-      setCategorySearch("");
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
   }, []);
 
   const form = useForm<z.infer<typeof createAssetSchema>>({
@@ -169,12 +153,12 @@ export const CreateAssetForm: React.FC = () => {
           control={form.control}
           name="category"
           render={({ field }) => (
-            <FormItem ref={selectRef}>
+            <FormItem>
               <FormLabel className="text-md">
                 Category <span className="text-red-600">*</span>
               </FormLabel>
               <FormControl>
-                <Select {...field} onValueChange={field.onChange}>
+                <Select {...field} onValueChange={field.onChange} onOpenChange={()=>{setCategorySearch("")}}>
                   <SelectTrigger
                     icon={<CaretSortIcon className="ml-3 h-4 w-4 opacity-50" />}
                   >
@@ -191,8 +175,16 @@ export const CreateAssetForm: React.FC = () => {
                       }}
                     />
                     <div className="max-h-[155px] overflow-y-scroll">
-                      {filteredCategories?.map((category) => (
-                        <SelectItem key={category.id} value={category.id}>
+                      {categories.map((category) => (
+                        <SelectItem
+                          key={category.id}
+                          value={category.id}
+                          className={
+                            filteredCategories.some((c) => c.id === category.id)
+                              ? ""
+                              : "hidden"
+                          }
+                        >
                           {category.categoryName} ({category.prefix})
                         </SelectItem>
                       ))}

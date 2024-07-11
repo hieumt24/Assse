@@ -44,7 +44,7 @@ export const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-10 w-full bg-red-600 p-4 shadow-md md:p-6">
+    <header className="sticky top-0 z-50 w-full bg-red-600 p-4 shadow-md md:p-6">
       <div className="mx-auto flex items-center justify-between">
         <MyBreadcrumb />
         <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
