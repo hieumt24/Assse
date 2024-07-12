@@ -300,7 +300,7 @@ export const EditUserForm = () => {
                 <Select
                   {...field}
                   onValueChange={field.onChange}
-                  disabled={form.getValues("role") === "1"}
+                  disabled={userDetails?.role === 1}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Role" />
