@@ -210,10 +210,7 @@ namespace AssetManagement.Application.Services
             try
             {
                 var exsitingAsset = await _assetRepository.GetByIdAsync(assetId);
-                if (exsitingAsset == null)
-                {
-                    return new Response<bool> { Succeeded = false, Message = "Asset not found", Errors = ["404"]};
-                }
+               
                 var assignment = await _assignmentRepository.GetAssignmentsByAssetId(exsitingAsset.Id);
                 if (assignment.Any())
                 {

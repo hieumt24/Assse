@@ -113,9 +113,7 @@ export const ManageAsset = () => {
     if (result.success) {
       setOpenDisable(true);
     } else {
-      console.log(result);
-      if (result.status == 404) {toast.error("Asset not found."); fetchAssets();}
-      else setOpenCannotDisable(true);
+      setOpenCannotDisable(true);
     }
     setIsLoading(false);
   };
