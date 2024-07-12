@@ -104,6 +104,7 @@ namespace AssetManagement.API.Controllers
             var response = await _assetService.IsValidDeleteAsset(assetId);
             if (!response.Succeeded)
             {
+                if (response.Errors.Contains("404")) return NotFound(response);
                 return BadRequest(response);
             }
             return Ok(response);
